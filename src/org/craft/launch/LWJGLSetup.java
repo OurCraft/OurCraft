@@ -2,7 +2,7 @@ package org.craft.launch;
 
 import java.io.*;
 
-import utils.*;
+import org.craft.utils.*;
 
 public class LWJGLSetup
 {

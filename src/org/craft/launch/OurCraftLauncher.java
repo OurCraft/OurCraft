@@ -2,7 +2,7 @@ package org.craft.launch;
 
 import java.io.*;
 
-import org.craft.*;
+import org.craft.client.*;
 
 public class OurCraftLauncher
 {

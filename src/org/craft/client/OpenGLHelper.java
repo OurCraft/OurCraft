@@ -19,14 +19,14 @@ public class OpenGLHelper
             for(int x = 0; x < w; x++ )
             {
                 int color = pixels[x + y * w];
-                float a = ((color >> 24) & 0xFF) / 255f;
-                float r = ((color >> 16) & 0xFF) / 255f;
-                float g = ((color >> 8) & 0xFF) / 255f;
-                float b = ((color >> 0) & 0xFF) / 255f;
-                pixelBuf.put((byte)(r * 255f));
-                pixelBuf.put((byte)(g * 255f));
-                pixelBuf.put((byte)(b * 255f));
-                pixelBuf.put((byte)(a * 255f));
+                int a = color >> 24 & 0xFF;
+                int r = color >> 16 & 0xFF;
+                int g = color >> 8 & 0xFF;
+                int b = color >> 0 & 0xFF;
+                pixelBuf.put((byte)r);
+                pixelBuf.put((byte)g);
+                pixelBuf.put((byte)b);
+                pixelBuf.put((byte)a);
             }
         }
         pixelBuf.flip();

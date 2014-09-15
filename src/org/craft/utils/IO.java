@@ -1,4 +1,4 @@
-package utils;
+package org.craft.utils;
 
 import java.io.*;
 
