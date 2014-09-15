@@ -1,0 +1,53 @@
+apply plugin: 'java'
+tasks.withType(Compile) {
+	options.encoding = 'UTF-8'
+}
+
+apply plugin: 'eclipse'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: '*.zip')
+}
+
+def filteredSourceDir = file("${buildDir}/filtered") 
+
+sourceSets { 
+    // This source set will contain all sources that we filter 
+    filtered { 
+        java { 
+            srcDirs = [filteredSourceDir] 
+        } 
+    } 
+} 
+
+// tell the compileJava task to compile the filtered source 
+compileJava.source = sourceSets.filtered.java 
+
+archivesBaseName = 'OurCraft'
+version = 'InDev 0.1'
+def versionValue = version
+
+import org.apache.tools.ant.filters.FixCrLfFilter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task processVersion(type: Copy) {
+ 	from sourceSets.main.java 
+    into filteredSourceDir 
+    // Substitute property references in files
+    // Use some of the filters provided by Ant
+    filter(FixCrLfFilter)
+    filter(ReplaceTokens, tokens: ['version': versionValue])
+    // Use a closure to filter each line
+    filter { String line ->
+        ("$line".replaceAll('"OurCraft:BuildNumber"', versionValue))
+    }
+}
+
+compileJava.dependsOn processVersion 
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version
+    }
+}
