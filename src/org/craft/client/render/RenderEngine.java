@@ -5,17 +5,19 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import org.craft.client.*;
+import org.lwjgl.opengl.*;
 
 public class RenderEngine
 {
 
     public RenderEngine()
     {
-
+        glEnable(GL_DEPTH_TEST);
     }
 
     public void renderBuffer(OpenGLBuffer buffer, Texture texture)
     {
+        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 0);
         texture.bind();
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableVertexAttribArray(0);

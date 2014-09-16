@@ -38,7 +38,11 @@ public class OpenGLBuffer
             verticesBuffer.put(vertex.getPos().getX());
             verticesBuffer.put(vertex.getPos().getY());
             verticesBuffer.put(vertex.getPos().getZ());
+
+            verticesBuffer.put(vertex.getTexCoords().getX());
+            verticesBuffer.put(vertex.getTexCoords().getY());
         }
+        verticesBuffer.flip();
         GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
@@ -47,6 +51,7 @@ public class OpenGLBuffer
         {
             indicesBuffer.put(indice);
         }
+        indicesBuffer.flip();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
