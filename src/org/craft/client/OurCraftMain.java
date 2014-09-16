@@ -24,6 +24,7 @@ public class OurCraftMain
     private OpenGLBuffer testBuffer;
     private Matrix4      modelMatrix;
     private Shader       basicShader;
+    private Matrix4      projectionMatrix;
 
     public OurCraftMain()
     {
@@ -46,22 +47,46 @@ public class OurCraftMain
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        openglTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraftMain.class.getResourceAsStream("/assets/textures/OpenGL_Logo.png")));
+        openglTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraftMain.class.getResourceAsStream("/assets/textures/terrain.png")));
         renderEngine = new RenderEngine();
 
         testBuffer = new OpenGLBuffer();
-        testBuffer.addVertex(new Vertex(new Vector3f(0, 0, 0), new Vector2f(0, 0)));
-        testBuffer.addVertex(new Vertex(new Vector3f(300, 0, 0), new Vector2f(1, 0)));
-        testBuffer.addVertex(new Vertex(new Vector3f(300, 100, 0), new Vector2f(1, 1)));
-        testBuffer.addVertex(new Vertex(new Vector3f(0, 100, 0), new Vector2f(0, 1)));
+        testBuffer.addVertex(new Vertex(new Vector3f(0, 0, 0), new Vector2f(0, 0))); // 0
+        testBuffer.addVertex(new Vertex(new Vector3f(0, 0, 1), new Vector2f(16f / 256f, 0))); // 1
+        testBuffer.addVertex(new Vertex(new Vector3f(0, 1, 0), new Vector2f(0, 16f / 256f))); // 2
+        testBuffer.addVertex(new Vertex(new Vector3f(0, 1, 1), new Vector2f(16f / 256f, 16f / 256f))); // 3
+        testBuffer.addVertex(new Vertex(new Vector3f(1, 0, 0), new Vector2f(16f / 256f, 0))); // 4
+        testBuffer.addVertex(new Vertex(new Vector3f(1, 0, 1), new Vector2f(0, 0))); // 5
+        testBuffer.addVertex(new Vertex(new Vector3f(1, 1, 0), new Vector2f(16f / 256f, 16f / 256f))); // 6
+        testBuffer.addVertex(new Vertex(new Vector3f(1, 1, 1), new Vector2f(0, 16f / 256f))); // 7
 
         testBuffer.addIndex(0);
         testBuffer.addIndex(2);
-        testBuffer.addIndex(3);
+        testBuffer.addIndex(4);
+        testBuffer.addIndex(2);
+        testBuffer.addIndex(4);
+        testBuffer.addIndex(6);
+
+        testBuffer.addIndex(0 + 1);
+        testBuffer.addIndex(2 + 1);
+        testBuffer.addIndex(4 + 1);
+        testBuffer.addIndex(2 + 1);
+        testBuffer.addIndex(4 + 1);
+        testBuffer.addIndex(6 + 1);
 
         testBuffer.addIndex(0);
         testBuffer.addIndex(1);
         testBuffer.addIndex(2);
+        testBuffer.addIndex(2);
+        testBuffer.addIndex(3);
+        testBuffer.addIndex(1);
+
+        testBuffer.addIndex(0 + 4);
+        testBuffer.addIndex(1 + 4);
+        testBuffer.addIndex(2 + 4);
+        testBuffer.addIndex(2 + 4);
+        testBuffer.addIndex(3 + 4);
+        testBuffer.addIndex(1 + 4);
 
         testBuffer.upload();
 
@@ -71,9 +96,10 @@ public class OurCraftMain
                 "attribute vec2 texCoords;" + "\n" + //
                 "varying vec2 texCoord0;" + "\n" + //
                 "uniform mat4 modelview;" + "\n" + //
+                "uniform mat4 projection;" + "\n" + //
                 "void main(){" + "\n" + //
                 "texCoord0 = texCoords;" + "\n" + //
-                "gl_Position = modelview * vec4(pos,1);" + "\n" + //
+                "gl_Position = projection * modelview * vec4(pos,1);" + "\n" + //
                 "}" + "\n" + //
                 "" + "\n"//
         , "" + //
@@ -85,7 +111,9 @@ public class OurCraftMain
                 "}" + "\n" + //
                 "" + "\n"//
         );
-        modelMatrix = new Matrix4().initOrthographic(0, displayWidth, displayHeight, 0, -1, 1);
+        projectionMatrix = new Matrix4().initPerspective((float)Math.toRadians(90), 16f / 9f, 0.0001f, 100);
+        modelMatrix = new Matrix4().initIdentity();
+        modelMatrix.translate(0, 0, 5);
 
         while(running)
         {
@@ -99,9 +127,13 @@ public class OurCraftMain
 
     private void tick()
     {
+        modelMatrix.rotate(Vector3.yAxis, (float)Math.toRadians(1));
+        modelMatrix.rotate(Vector3.xAxis, (float)Math.toRadians(2));
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         basicShader.bind();
         basicShader.setUniform("modelview", this.modelMatrix);
+        basicShader.setUniform("projection", this.projectionMatrix);
+
         renderEngine.renderBuffer(testBuffer, openglTexture);
     }
 
