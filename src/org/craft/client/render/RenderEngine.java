@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import org.craft.client.*;
 import org.lwjgl.opengl.*;
 
 public class RenderEngine
@@ -15,7 +14,7 @@ public class RenderEngine
         glEnable(GL_DEPTH_TEST);
     }
 
-    public void renderBuffer(OpenGLBuffer buffer, Texture texture)
+    public void renderBuffer(OpenGLBuffer buffer, ITextureObject texture)
     {
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 0);
         texture.bind();

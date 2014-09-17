@@ -99,7 +99,7 @@ public class LWJGLSetup
         String diskFileName = split[split.length - 1];
         try(FileOutputStream in = new FileOutputStream(new File(folder, diskFileName)))
         {
-            IO.copy(LWJGLSetup.class.getResourceAsStream(fileName), in);
+            IOUtils.copy(LWJGLSetup.class.getResourceAsStream(fileName), in);
         }
         catch(Exception e)
         {

@@ -1,4 +1,4 @@
-package org.craft.client;
+package org.craft.client.render;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -7,7 +7,7 @@ import java.nio.*;
 
 import org.lwjgl.opengl.*;
 
-public class Texture
+public class Texture implements ITextureObject
 {
 
     private int texID;

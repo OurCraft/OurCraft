@@ -3,6 +3,7 @@ package org.craft.client;
 import java.awt.image.*;
 import java.nio.*;
 
+import org.craft.client.render.*;
 import org.lwjgl.*;
 
 public class OpenGLHelper

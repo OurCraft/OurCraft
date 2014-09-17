@@ -6,29 +6,36 @@ import java.io.*;
 
 import javax.imageio.*;
 
+import org.craft.blocks.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
+import org.craft.resources.*;
+import org.craft.world.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
 
-public class OurCraftMain
+public class OurCraft
 {
 
-    private File         gameFolder;
-    private int          displayWidth  = 960;
-    private int          displayHeight = 540;
-    private boolean      running       = false;
-    private Texture      openglTexture;
-    private RenderEngine renderEngine  = null;
-    private OpenGLBuffer testBuffer;
-    private Matrix4      modelMatrix;
-    private Shader       basicShader;
-    private Matrix4      projectionMatrix;
+    private File                          gameFolder;
+    private int                           displayWidth  = 960;
+    private int                           displayHeight = 540;
+    private boolean                       running       = false;
+    private Texture                       openglTexture;
+    private RenderEngine                  renderEngine  = null;
+    private OpenGLBuffer                  testBuffer;
+    private Matrix4                       modelMatrix;
+    private Shader                        basicShader;
+    private Matrix4                       projectionMatrix;
+    private ClasspathSimpleResourceLoader classpathLoader;
+    private RenderBlocks                  renderBlocks;
+    private World                         testWorld;
+    private static OurCraft               instance;
 
-    public OurCraftMain()
+    public OurCraft()
     {
-
+        instance = this;
+        classpathLoader = new ClasspathSimpleResourceLoader();
     }
 
     public void start() throws LWJGLException, IOException
@@ -47,48 +54,21 @@ public class OurCraftMain
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        openglTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraftMain.class.getResourceAsStream("/assets/textures/terrain.png")));
+        openglTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/textures/terrain.png")));
         renderEngine = new RenderEngine();
 
-        testBuffer = new OpenGLBuffer();
-        testBuffer.addVertex(new Vertex(new Vector3f(0, 0, 0), new Vector2f(0, 0))); // 0
-        testBuffer.addVertex(new Vertex(new Vector3f(0, 0, 1), new Vector2f(16f / 256f, 0))); // 1
-        testBuffer.addVertex(new Vertex(new Vector3f(0, 1, 0), new Vector2f(0, 16f / 256f))); // 2
-        testBuffer.addVertex(new Vertex(new Vector3f(0, 1, 1), new Vector2f(16f / 256f, 16f / 256f))); // 3
-        testBuffer.addVertex(new Vertex(new Vector3f(1, 0, 0), new Vector2f(16f / 256f, 0))); // 4
-        testBuffer.addVertex(new Vertex(new Vector3f(1, 0, 1), new Vector2f(0, 0))); // 5
-        testBuffer.addVertex(new Vertex(new Vector3f(1, 1, 0), new Vector2f(16f / 256f, 16f / 256f))); // 6
-        testBuffer.addVertex(new Vertex(new Vector3f(1, 1, 1), new Vector2f(0, 16f / 256f))); // 7
+        Blocks.init();
 
-        testBuffer.addIndex(0);
-        testBuffer.addIndex(2);
-        testBuffer.addIndex(4);
-        testBuffer.addIndex(2);
-        testBuffer.addIndex(4);
-        testBuffer.addIndex(6);
+        testWorld = new World();
+        testWorld.setChunk(0, 0, 0, new Chunk());
+        testWorld.setBlock(0, 0, 0, Blocks.dirt);
+        testWorld.setBlock(0, 1, 0, Blocks.grass);
+        renderBlocks = new RenderBlocks(renderEngine);
 
-        testBuffer.addIndex(0 + 1);
-        testBuffer.addIndex(2 + 1);
-        testBuffer.addIndex(4 + 1);
-        testBuffer.addIndex(2 + 1);
-        testBuffer.addIndex(4 + 1);
-        testBuffer.addIndex(6 + 1);
+        renderBlocks.drawAllFaces(Blocks.dirt, testWorld, 0, 0, 0);
+        renderBlocks.drawAllFaces(Blocks.grass, testWorld, 0, 1, 0);
 
-        testBuffer.addIndex(0);
-        testBuffer.addIndex(1);
-        testBuffer.addIndex(2);
-        testBuffer.addIndex(2);
-        testBuffer.addIndex(3);
-        testBuffer.addIndex(1);
-
-        testBuffer.addIndex(0 + 4);
-        testBuffer.addIndex(1 + 4);
-        testBuffer.addIndex(2 + 4);
-        testBuffer.addIndex(2 + 4);
-        testBuffer.addIndex(3 + 4);
-        testBuffer.addIndex(1 + 4);
-
-        testBuffer.upload();
+        renderBlocks.flush();
 
         basicShader = new Shader("" + //
                 "#version 120" + "\n" + //
@@ -134,7 +114,7 @@ public class OurCraftMain
         basicShader.setUniform("modelview", this.modelMatrix);
         basicShader.setUniform("projection", this.projectionMatrix);
 
-        renderEngine.renderBuffer(testBuffer, openglTexture);
+        renderBlocks.render(openglTexture);
     }
 
     public File getGameFolder()
@@ -148,5 +128,15 @@ public class OurCraftMain
                 gameFolder = new File(System.getProperty("user.home"), ".ourcraft");
         }
         return gameFolder;
+    }
+
+    public static OurCraft getOurCraft()
+    {
+        return instance;
+    }
+
+    public ResourceLoader getBaseLoader()
+    {
+        return classpathLoader;
     }
 }

@@ -9,7 +9,7 @@ public class OurCraftLauncher
 
     public static void main(String[] args)
     {
-        OurCraftMain instance = new OurCraftMain();
+        OurCraft instance = new OurCraft();
         try
         {
             LWJGLSetup.load(new File(instance.getGameFolder(), "natives"));

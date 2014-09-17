@@ -6,7 +6,7 @@ import java.io.*;
  * VERY VERY OLD, NEEDS TO BE UPDATED
  * but I put it there because it's shorter
  */
-public final class IO
+public final class IOUtils
 {
 
     /**

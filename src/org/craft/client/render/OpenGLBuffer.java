@@ -100,4 +100,11 @@ public class OpenGLBuffer
     {
         return indices.size();
     }
+
+    public void clear()
+    {
+        indices.clear();
+        vertices.clear();
+        upload();
+    }
 }
