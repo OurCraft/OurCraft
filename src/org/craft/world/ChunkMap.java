@@ -2,7 +2,7 @@ package org.craft.world;
 
 import java.util.*;
 
-public class ChunkMap
+public class ChunkMap implements Iterable<Chunk>
 {
 
     private HashMap<ChunkCoord, Chunk> map;
@@ -17,8 +17,14 @@ public class ChunkMap
         return map.get(new ChunkCoord(chunkX, chunkY, chunkZ));
     }
 
-    public void setAt(int chunkX, int chunkY, int chunkZ, Chunk chunk)
+    @Override
+    public Iterator<Chunk> iterator()
     {
-        map.put(new ChunkCoord(chunkX, chunkY, chunkZ), chunk);
+        return map.values().iterator();
+    }
+
+    public void add(Chunk c)
+    {
+        map.put(c.getCoords(), c);
     }
 }

@@ -12,21 +12,26 @@ public class World
         this.chunkMap = new ChunkMap();
     }
 
-    public void setChunk(int chunkX, int chunkY, int chunkZ, Chunk c)
+    public Chunk getChunk(int x, int y, int z)
     {
-        chunkMap.setAt(chunkX, chunkY, chunkZ, c);
+        return chunkMap.getAt((int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
+    }
+
+    public void addChunk(Chunk c)
+    {
+        chunkMap.add(c);
     }
 
     public Block getBlock(int x, int y, int z)
     {
-        Chunk c = chunkMap.getAt((int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
+        Chunk c = getChunk(x, y, z);
         if(c == null) return null;
         return c.getBlock(this, x, y, z);
     }
 
     public void setBlock(int x, int y, int z, Block block)
     {
-        Chunk c = chunkMap.getAt((int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
+        Chunk c = getChunk(x, y, z);
         if(c == null) return;
         c.setBlock(this, x, y, z, block);
     }

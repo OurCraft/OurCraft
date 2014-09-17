@@ -1,5 +1,7 @@
 package org.craft.client.render;
 
+import java.util.*;
+
 import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.resources.*;
@@ -40,6 +42,38 @@ public class RenderBlocks
     public void startRendering()
     {
         buffer.clear();
+    }
+
+    public void prepare(World w, List<Chunk> visiblesChunks)
+    {
+        boolean shouldRedo = false;
+        for(Chunk c : visiblesChunks)
+        {
+            if(c.isDirty())
+            {
+                shouldRedo = true;
+                break;
+            }
+        }
+        if(shouldRedo)
+        {
+            startRendering();
+            for(Chunk c : visiblesChunks)
+            {
+                for(int x = 0; x < 16; x++ )
+                {
+                    for(int y = 0; y < 16; y++ )
+                    {
+                        for(int z = 0; z < 16; z++ )
+                        {
+                            Block b = c.getBlock(w, x + c.getCoords().x, y + c.getCoords().y, z + c.getCoords().z);
+                            drawAllFaces(b, w, x + c.getCoords().x, y + c.getCoords().y, z + c.getCoords().z);
+                        }
+                    }
+                }
+            }
+            flush();
+        }
     }
 
     public void drawAllFaces(Block block, World world, int x, int y, int z)
