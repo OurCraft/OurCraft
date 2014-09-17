@@ -292,6 +292,7 @@ public class Vector3
 
     public static Vector3 get(float x, float y, float z)
     {
+        // TODO: Pooling
         return new Vector3(x, y, z);
     }
 }

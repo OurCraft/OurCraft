@@ -163,7 +163,7 @@ public class RenderBlocks
         buffer.upload();
     }
 
-    public void render(Texture test)
+    public void render()
     {
         renderEngine.renderBuffer(buffer, blockMap);
     }

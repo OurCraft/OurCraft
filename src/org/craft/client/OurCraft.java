@@ -5,15 +5,15 @@ import static org.lwjgl.opengl.GL11.*;
 import java.io.*;
 import java.util.*;
 
-import javax.imageio.*;
-
 import org.craft.blocks.*;
 import org.craft.client.render.*;
+import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.lwjgl.*;
+import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 
 public class OurCraft
@@ -23,15 +23,14 @@ public class OurCraft
     private int                           displayWidth  = 960;
     private int                           displayHeight = 540;
     private boolean                       running       = false;
-    private Texture                       openglTexture;
     private RenderEngine                  renderEngine  = null;
-    private OpenGLBuffer                  testBuffer;
     private Matrix4                       modelMatrix;
     private Shader                        basicShader;
-    private Matrix4                       projectionMatrix;
     private ClasspathSimpleResourceLoader classpathLoader;
     private RenderBlocks                  renderBlocks;
-    private World                         testWorld;
+    private World                         clientWorld;
+    private MouseHandler                  mouseHandler;
+    private EntityPlayer                  playerTest;
     private static OurCraft               instance;
 
     public OurCraft()
@@ -46,6 +45,8 @@ public class OurCraft
         Display.setTitle("OurCraft");
         Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
         Display.create();
+        mouseHandler = new MouseHandler();
+        mouseHandler.grab();
         running = true;
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
@@ -56,15 +57,14 @@ public class OurCraft
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        openglTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/textures/terrain.png")));
         renderEngine = new RenderEngine();
 
         Blocks.init();
 
-        testWorld = new World();
-        testWorld.addChunk(new Chunk(new ChunkCoord(0, 0, 0)));
-        testWorld.addChunk(new Chunk(new ChunkCoord(0, 1, 0)));
-        testWorld.addChunk(new Chunk(new ChunkCoord(-1, 0, 0)));
+        clientWorld = new World();
+        clientWorld.addChunk(new Chunk(new ChunkCoord(0, 0, 0)));
+        clientWorld.addChunk(new Chunk(new ChunkCoord(0, 1, 0)));
+        clientWorld.addChunk(new Chunk(new ChunkCoord(-1, 0, 0)));
         for(int y = 0; y < 4; y++ )
         {
             Block block = null;
@@ -72,38 +72,40 @@ public class OurCraft
                 block = Blocks.grass;
             else
                 block = Blocks.dirt;
-            testWorld.setBlock(0, y, 0, block);
-            testWorld.setBlock(0, y, 1, block);
-            testWorld.setBlock(0, y, 2, block);
-            testWorld.setBlock(0, y, 3, block);
-            testWorld.setBlock(1, y, 3, block);
-            testWorld.setBlock(2, y, 3, block);
-            testWorld.setBlock(3, y, 3, block);
+            clientWorld.setBlock(0, y, 0, block);
+            clientWorld.setBlock(0, y, 1, block);
+            clientWorld.setBlock(0, y, 2, block);
+            clientWorld.setBlock(0, y, 3, block);
+            clientWorld.setBlock(1, y, 3, block);
+            clientWorld.setBlock(2, y, 3, block);
+            clientWorld.setBlock(3, y, 3, block);
 
-            testWorld.setBlock(0, y, 0, block);
-            testWorld.setBlock(1, y, 0, block);
-            testWorld.setBlock(2, y, 0, block);
-            testWorld.setBlock(3, y, 0, block);
+            clientWorld.setBlock(0, y, 0, block);
+            clientWorld.setBlock(1, y, 0, block);
+            clientWorld.setBlock(2, y, 0, block);
+            clientWorld.setBlock(3, y, 0, block);
         }
 
-        testWorld.setBlock(-1, 0, 0, Blocks.grass);
+        clientWorld.setBlock(-1, 0, 0, Blocks.grass);
 
-        Log.message("Block at (0,0,0) is " + testWorld.getBlock(0, 0, 0).getID());
-        Log.message("Block at (0,1,0) is " + testWorld.getBlock(0, 1, 0).getID());
-        Log.message("Block at (-1,0,0) is " + testWorld.getBlock(-1, 0, 0).getID());
+        Log.message("Block at (0,0,0) is " + clientWorld.getBlock(0, 0, 0).getID());
+        Log.message("Block at (0,1,0) is " + clientWorld.getBlock(0, 1, 0).getID());
+        Log.message("Block at (-1,0,0) is " + clientWorld.getBlock(-1, 0, 0).getID());
         renderBlocks = new RenderBlocks(renderEngine);
 
         ArrayList<Chunk> visiblesChunks = new ArrayList<>();
-        visiblesChunks.add(testWorld.getChunk(0, 0, 0));
-        visiblesChunks.add(testWorld.getChunk(0, 1, 0));
-        visiblesChunks.add(testWorld.getChunk(-1, 0, 0));
-        renderBlocks.prepare(testWorld, visiblesChunks);
+        visiblesChunks.add(clientWorld.getChunk(0, 0, 0));
+        visiblesChunks.add(clientWorld.getChunk(0, 1, 0));
+        visiblesChunks.add(clientWorld.getChunk(-1, 0, 0));
+        renderBlocks.prepare(clientWorld, visiblesChunks);
 
         basicShader = new Shader(IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.vsh"), "UTF-8"), IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.fsh"), "UTF-8"));
-        projectionMatrix = new Matrix4().initPerspective((float)Math.toRadians(90), 16f / 9f, 0.0001f, 100);
         modelMatrix = new Matrix4().initIdentity();
         modelMatrix.translate(0, 0, 8);
 
+        playerTest = new EntityPlayer(clientWorld);
+        clientWorld.spawn(playerTest);
+        renderEngine.setRenderViewEntity(playerTest);
         while(running)
         {
             tick();
@@ -116,15 +118,38 @@ public class OurCraft
 
     private void tick()
     {
+        render();
+        update();
+    }
+
+    private void update()
+    {
+        mouseHandler.update();
+        if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+        {
+            running = false;
+            return;
+        }
+        if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+        {
+            playerTest.setLocation(0, 20, 0);
+        }
+        clientWorld.update();
+    }
+
+    private void render()
+    {
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
-        modelMatrix.rotate(Vector3.yAxis, (float)Math.toRadians(1));
-        modelMatrix.rotate(Vector3.xAxis, (float)Math.toRadians(2));
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        renderEngine.enableGLCap(GL_DEPTH_TEST);
         basicShader.bind();
         basicShader.setUniform("modelview", this.modelMatrix);
-        basicShader.setUniform("projection", this.projectionMatrix);
+        basicShader.setUniform("projection", this.renderEngine.getProjectionMatrix());
+        renderBlocks.render();
 
-        renderBlocks.render(openglTexture);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        renderEngine.disableGLCap(GL_DEPTH_TEST);
+
     }
 
     public File getGameFolder()
@@ -148,5 +173,10 @@ public class OurCraft
     public ResourceLoader getBaseLoader()
     {
         return classpathLoader;
+    }
+
+    public MouseHandler getMouseHandler()
+    {
+        return mouseHandler;
     }
 }
