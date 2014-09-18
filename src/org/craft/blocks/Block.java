@@ -59,4 +59,9 @@ public class Block
     {
         normalCubeAABB = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
     }
+
+    public AABB getSelectionBox(World world, int x, int y, int z)
+    {
+        return getCollisionBox(world, x, y, z);
+    }
 }

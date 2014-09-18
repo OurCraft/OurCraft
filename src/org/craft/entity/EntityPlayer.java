@@ -2,6 +2,7 @@ package org.craft.entity;
 
 import org.craft.client.*;
 import org.craft.maths.*;
+import org.craft.util.*;
 import org.craft.world.*;
 import org.lwjgl.input.*;
 
@@ -37,6 +38,9 @@ public class EntityPlayer extends Entity
 
         rotate(Vector3.yAxis, (float)Math.toRadians(OurCraft.getOurCraft().getMouseHandler().getDX()));
         rotate(getRotation().getRight(), (float)Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY()));
+
+        CollisionInfos infos = getObjectInFront(5f);
+        System.out.println(infos.type + " at " + infos.x + "," + infos.y + "," + infos.z + " " + infos.value);
     }
 
     public float getEyeOffset()

@@ -2,6 +2,7 @@ package org.craft.entity;
 
 import org.craft.blocks.*;
 import org.craft.maths.*;
+import org.craft.util.*;
 import org.craft.world.*;
 
 public class Entity
@@ -222,5 +223,17 @@ public class Entity
     public boolean isOnGround()
     {
         return onGround;
+    }
+
+    public CollisionInfos getObjectInFront(float maxDist)
+    {
+        CollisionInfos infos = new CollisionInfos();
+        getWorld().performRayCast(this, infos, maxDist);
+        return infos;
+    }
+
+    public float dist(Entity sender)
+    {
+        return sender.getPos().sub(getPos()).length();
     }
 }
