@@ -65,6 +65,7 @@ public class OurCraft
         clientWorld.addChunk(new Chunk(new ChunkCoord(0, 0, 0)));
         clientWorld.addChunk(new Chunk(new ChunkCoord(0, 1, 0)));
         clientWorld.addChunk(new Chunk(new ChunkCoord(-1, 0, 0)));
+        clientWorld.addChunk(new Chunk(new ChunkCoord(0, 0, -1)));
         for(int y = 0; y < 4; y++ )
         {
             Block block = null;
@@ -84,8 +85,13 @@ public class OurCraft
             clientWorld.setBlock(1, y, 0, block);
             clientWorld.setBlock(2, y, 0, block);
             clientWorld.setBlock(3, y, 0, block);
+
+            clientWorld.setBlock(2, 4, -y, Blocks.grass);
         }
 
+        clientWorld.setBlock(0, 2, 0, Blocks.air);
+        clientWorld.setBlock(0, 3, 0, Blocks.air);
+        clientWorld.setBlock(1, 3, 0, Blocks.air);
         clientWorld.setBlock(-1, 0, 0, Blocks.grass);
 
         Log.message("Block at (0,0,0) is " + clientWorld.getBlock(0, 0, 0).getID());
@@ -97,13 +103,14 @@ public class OurCraft
         visiblesChunks.add(clientWorld.getChunk(0, 0, 0));
         visiblesChunks.add(clientWorld.getChunk(0, 1, 0));
         visiblesChunks.add(clientWorld.getChunk(-1, 0, 0));
+        visiblesChunks.add(clientWorld.getChunk(0, 0, -1));
         renderBlocks.prepare(clientWorld, visiblesChunks);
 
         basicShader = new Shader(IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.vsh"), "UTF-8"), IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.fsh"), "UTF-8"));
         modelMatrix = new Matrix4().initIdentity();
-        modelMatrix.translate(0, 0, 8);
 
         playerTest = new EntityPlayer(clientWorld);
+        playerTest.setLocation(0, 0, -4);
         clientWorld.spawn(playerTest);
         renderEngine.setRenderViewEntity(playerTest);
         while(running)
@@ -132,7 +139,7 @@ public class OurCraft
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
         {
-            playerTest.setLocation(0, 20, 0);
+            playerTest.jump();
         }
         clientWorld.update();
     }

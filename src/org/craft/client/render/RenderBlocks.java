@@ -66,8 +66,8 @@ public class RenderBlocks
                     {
                         for(int z = 0; z < 16; z++ )
                         {
-                            Block b = c.getBlock(w, x + c.getCoords().x, y + c.getCoords().y, z + c.getCoords().z);
-                            drawAllFaces(b, w, x + c.getCoords().x, y + c.getCoords().y, z + c.getCoords().z);
+                            Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
+                            drawAllFaces(b, w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
                         }
                     }
                 }

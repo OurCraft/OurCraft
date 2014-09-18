@@ -1,6 +1,7 @@
 package org.craft.blocks;
 
 import org.craft.client.render.*;
+import org.craft.maths.*;
 import org.craft.util.*;
 import org.craft.world.*;
 
@@ -25,5 +26,10 @@ public class BlockAir extends Block
     public void registerIcons(IconGenerator register)
     {
         ;
+    }
+
+    public AABB getCollisionBox(World w, int x, int y, int z)
+    {
+        return null;
     }
 }

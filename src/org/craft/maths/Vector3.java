@@ -295,4 +295,9 @@ public class Vector3
         // TODO: Pooling
         return new Vector3(x, y, z);
     }
+
+    public float min()
+    {
+        return (float)Math.min(getX(), Math.min(getY(), getZ()));
+    }
 }

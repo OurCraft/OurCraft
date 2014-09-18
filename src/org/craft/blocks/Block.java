@@ -3,6 +3,7 @@ package org.craft.blocks;
 import java.util.*;
 
 import org.craft.client.render.*;
+import org.craft.maths.*;
 import org.craft.util.*;
 import org.craft.world.*;
 
@@ -12,6 +13,7 @@ public class Block
     public static final HashMap<String, Block> registry = new HashMap<>();
     private String                             id;
     private TextureIcon                        blockIcon;
+    private static AABB                        normalCubeAABB;
 
     public Block(String id)
     {
@@ -46,5 +48,15 @@ public class Block
     public boolean shouldRender()
     {
         return true;
+    }
+
+    public AABB getCollisionBox(World w, int x, int y, int z)
+    {
+        return normalCubeAABB.translate(Vector3.get(x, y, z));
+    }
+
+    static
+    {
+        normalCubeAABB = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
     }
 }
