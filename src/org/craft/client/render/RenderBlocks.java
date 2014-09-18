@@ -41,6 +41,7 @@ public class RenderBlocks
 
     public void startRendering()
     {
+        index = 0;
         buffer.clear();
     }
 
@@ -60,6 +61,7 @@ public class RenderBlocks
             startRendering();
             for(Chunk c : visiblesChunks)
             {
+                c.cleanUpDirtiness();
                 for(int x = 0; x < 16; x++ )
                 {
                     for(int y = 0; y < 16; y++ )

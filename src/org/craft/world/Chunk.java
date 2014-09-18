@@ -54,4 +54,14 @@ public class Chunk
     {
         return coords;
     }
+
+    public void markDirty()
+    {
+        isDirty = true;
+    }
+
+    public void cleanUpDirtiness()
+    {
+        isDirty = false;
+    }
 }

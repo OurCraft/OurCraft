@@ -8,6 +8,7 @@ import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.util.*;
 import org.craft.util.CollisionInfos.CollisionType;
+import org.craft.utils.*;
 
 public class World
 {
@@ -63,8 +64,13 @@ public class World
     public void setBlock(int x, int y, int z, Block block)
     {
         Chunk c = getChunk(x, y, z);
-        if(c == null) return;
+        if(c == null)
+        {
+            Log.error("Couldn't place block at " + x + "," + y + "," + z);
+            return;
+        }
         c.setBlock(this, x, y, z, block);
+        c.markDirty();
     }
 
     public void spawn(Entity e)
@@ -97,18 +103,18 @@ public class World
          */
 
         float step = 0.4f;
-        Vector3 startPos = sender.getPos().add(0.5f, sender.getEyeOffset() + 0.5f, 0.5f);
+        Vector3 startPos = sender.getPos().add(0.5f, sender.getEyeOffset(), 0.5f);
         Vector3 look = sender.getRotation().getForward().normalize();
         Vector3 currentPos = startPos;
         AABB bb = new AABB(Vector3.get(-1f, -1f, -1f), Vector3.get(1, 1, 1));
         int x = (int)Math.floor(currentPos.getX());
         int y = (int)Math.round(currentPos.getY());
         int z = (int)Math.floor(currentPos.getZ());
-        int lastX = -10000 + x; // in order not to make the algorithm skip the
-                                // first
-                                // case, and so every case after
-        int lastY = -10000 + y;
-        int lastZ = -10000 + z;
+        int lastX = x - 1; // in order not to make the algorithm skip the
+                           // first
+                           // case, and so every case after
+        int lastY = y - 1;
+        int lastZ = z - 1;
         Vector3 blockPos = Vector3.NULL.copy();
         for(float dist = 0; dist <= maxDist + step; dist += step)
         {
@@ -136,9 +142,36 @@ public class World
             if(blockDist < maxReachedDist && blockBB.intersectAABB(bb.translate(currentPos)).doesIntersects())
             {
                 maxReachedDist = blockDist;
+                Vector3 dir = sender.getPos().sub(blockPos);
+                float max = Math.max(Math.abs(dir.getX()), Math.max(Math.abs(dir.getY()), Math.abs(dir.getZ())));
+                if(max == Math.abs(dir.getZ()))
+                {
+                    if(dir.getZ() < 0)
+                    {
+                        infos.side = EnumSide.NORTH;
+                    }
+                    else
+                        infos.side = EnumSide.SOUTH;
+                }
+                if(max == Math.abs(dir.getX()))
+                {
+                    if(dir.getX() < 0)
+                    {
+                        infos.side = EnumSide.EAST;
+                    }
+                    else
+                        infos.side = EnumSide.WEST;
+                }
+                if(max == Math.abs(dir.getY()))
+                {
+                    if(dir.getY() < 0)
+                    {
+                        infos.side = EnumSide.BOTTOM;
+                    }
+                    else
+                        infos.side = EnumSide.TOP;
+                }
                 infos.type = CollisionType.BLOCK;
-                Vector3 dir = blockPos.sub(sender.getPos());
-                infos.side = EnumSide.BOTTOM;
                 infos.distance = maxReachedDist;
                 infos.value = b;
                 infos.x = x;

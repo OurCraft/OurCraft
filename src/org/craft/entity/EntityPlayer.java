@@ -1,8 +1,10 @@
 package org.craft.entity;
 
+import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.maths.*;
 import org.craft.util.*;
+import org.craft.util.CollisionInfos.CollisionType;
 import org.craft.world.*;
 import org.lwjgl.input.*;
 
@@ -40,7 +42,12 @@ public class EntityPlayer extends Entity
         rotate(getRotation().getRight(), (float)Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY()));
 
         CollisionInfos infos = getObjectInFront(5f);
-        System.out.println(infos.type + " at " + infos.x + "," + infos.y + "," + infos.z + " " + infos.value);
+        if(infos.type == CollisionType.BLOCK)
+        {
+            if(Mouse.isButtonDown(0))
+                getWorld().setBlock((int)Math.round(infos.x + infos.side.getTranslationX()), (int)Math.round(infos.y + infos.side.getTranslationY()), (int)Math.round(infos.z + infos.side.getTranslationZ()), Blocks.dirt);
+            else if(Mouse.isButtonDown(1)) getWorld().setBlock((int)Math.round(infos.x), (int)Math.round(infos.y), (int)Math.round(infos.z), Blocks.air);
+        }
     }
 
     public float getEyeOffset()

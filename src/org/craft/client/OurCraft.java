@@ -146,6 +146,12 @@ public class OurCraft
 
     private void render()
     {
+        ArrayList<Chunk> visiblesChunks = new ArrayList<>();
+        visiblesChunks.add(clientWorld.getChunk(0, 0, 0));
+        visiblesChunks.add(clientWorld.getChunk(0, 1, 0));
+        visiblesChunks.add(clientWorld.getChunk(-1, 0, 0));
+        visiblesChunks.add(clientWorld.getChunk(0, 0, -1));
+        renderBlocks.prepare(clientWorld, visiblesChunks);
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);
