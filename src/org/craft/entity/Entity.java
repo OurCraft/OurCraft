@@ -18,7 +18,7 @@ public class Entity
     private AABB              boundingBox;
     private boolean           onGround;
 
-    public static final float G = 9.81f / 140f;
+    public static final float G = 9.81f / 360f;
 
     public Entity(World world)
     {
@@ -216,7 +216,7 @@ public class Entity
     {
         if(onGround)
         {
-            velocity.setY(0.5f);
+            velocity.setY(0.30f);
         }
     }
 
