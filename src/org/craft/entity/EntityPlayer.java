@@ -14,7 +14,7 @@ public class EntityPlayer extends Entity
     public EntityPlayer(World world)
     {
         super(world);
-        setSize(0.85f, 1.80f, 0.85f);
+        setSize(0.75f, 1.80f, 0.75f);
     }
 
     public void onEntityUpdate()

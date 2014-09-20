@@ -189,4 +189,16 @@ public class World
     {
         return chunkProvider;
     }
+
+    public boolean canBlockSeeSky(int x, int y, int z)
+    {
+        for(int y1 = y + 1; y1 < 256; y1++ )
+        {
+            if(!getBlock(x, y1, z).letLightGoThrough())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

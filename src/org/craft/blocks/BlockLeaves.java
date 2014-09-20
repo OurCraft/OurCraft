@@ -26,4 +26,9 @@ public class BlockLeaves extends Block
         Block next = w.getBlockNextTo(x, y, z, side);
         return next != this;
     }
+
+    public boolean letLightGoThrough()
+    {
+        return true;
+    }
 }

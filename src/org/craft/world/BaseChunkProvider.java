@@ -35,7 +35,7 @@ public class BaseChunkProvider extends ChunkProvider
     @Override
     public Chunk create(World world, int chunkX, int chunkY, int chunkZ)
     {
-        Chunk newChunk = new Chunk(new ChunkCoord(chunkX, chunkY, chunkZ));
+        Chunk newChunk = new Chunk(world, new ChunkCoord(chunkX, chunkY, chunkZ));
         addChunk(world, newChunk);
         newChunk.markDirty();
         world.getGenerator().populateChunk(world, newChunk);

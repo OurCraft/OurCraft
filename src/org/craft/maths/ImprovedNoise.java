@@ -5,6 +5,7 @@ import java.util.*;
 /**
  * Thanks to Markus 'Notch' Personn and his Mario-competition game :3<br/>
  * Credits go directly to him
+ * And Kerl Perlin for his algorithm
  */
 public final class ImprovedNoise
 {

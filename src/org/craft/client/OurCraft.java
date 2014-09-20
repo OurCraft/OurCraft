@@ -63,7 +63,6 @@ public class OurCraft implements Runnable
             frame.add(canvas);
             canvas.setPreferredSize(new Dimension(displayWidth, displayHeight));
             frame.pack();
-            frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
             Display.setParent(canvas);

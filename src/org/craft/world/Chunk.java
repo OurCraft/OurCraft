@@ -12,16 +12,18 @@ public class Chunk
     public float[][][] lightValues;
     private ChunkCoord coords;
     private boolean    isDirty;
+    private World      owner;
 
-    public Chunk(ChunkCoord coords)
+    public Chunk(World owner, ChunkCoord coords)
     {
+        this.owner = owner;
         this.coords = coords;
         this.blocks = new Block[16][16][16];
         this.highest = new int[16][16];
         this.lightValues = new float[16][16][16];
         for(int x = 0; x < 16; x++ )
         {
-            Arrays.fill(highest[x], 0);
+            Arrays.fill(highest[x], -1);
             for(int y = 0; y < 16; y++ )
             {
                 Arrays.fill(blocks[x][y], Blocks.air);
@@ -78,42 +80,6 @@ public class Chunk
         if(y < 0) y = 16 + y;
         if(z < 0) z = 16 + z;
         setChunkBlock(x, y, z, block);
-
-        if(x == 0)
-        {
-            Chunk c = world.getChunkProvider().get(world, coords.x - 1, coords.y, coords.z);
-            if(c != null) c.markDirty();
-        }
-
-        if(x == 15)
-        {
-            Chunk c = world.getChunkProvider().get(world, coords.x + 1, coords.y, coords.z);
-            if(c != null) c.markDirty();
-        }
-
-        if(y == 0)
-        {
-            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y - 1, coords.z);
-            if(c != null) c.markDirty();
-        }
-
-        if(y == 15)
-        {
-            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y + 1, coords.z);
-            if(c != null) c.markDirty();
-        }
-
-        if(z == 0)
-        {
-            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y, coords.z - 1);
-            if(c != null) c.markDirty();
-        }
-
-        if(z == 15)
-        {
-            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y, coords.z + 1);
-            if(c != null) c.markDirty();
-        }
     }
 
     public boolean isDirty()
@@ -157,6 +123,46 @@ public class Chunk
     {
         lightValues[x][y][z] = lightValue;
         markDirty();
+        makeNeighbors(x, y, z);
+    }
+
+    private void makeNeighbors(int x, int y, int z)
+    {
+        if(x == 0)
+        {
+            Chunk c = owner.getChunkProvider().get(owner, coords.x - 1, coords.y, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(x == 15)
+        {
+            Chunk c = owner.getChunkProvider().get(owner, coords.x + 1, coords.y, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(y == 0)
+        {
+            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y - 1, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(y == 15)
+        {
+            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y + 1, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(z == 0)
+        {
+            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z - 1);
+            if(c != null) c.markDirty();
+        }
+
+        if(z == 15)
+        {
+            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z + 1);
+            if(c != null) c.markDirty();
+        }
     }
 
     public Block getChunkBlock(int x, int y, int z)
@@ -181,7 +187,7 @@ public class Chunk
             }
             else if(y == highest[x][z])
             {
-                for(; y >= 0; y-- )
+                for(; y >= 0; --y)
                 {
                     if(getChunkBlock(x, y, z) != Blocks.air)
                     {
@@ -192,10 +198,12 @@ public class Chunk
             }
         }
         markDirty();
+        makeNeighbors(x, y, z);
     }
 
     public Block getHighestBlock(int x, int z)
     {
+        if(highest[x][z] < 0) return null;
         return getChunkBlock(x, highest[x][z], z);
     }
 

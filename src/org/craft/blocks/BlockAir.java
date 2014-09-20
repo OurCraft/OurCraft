@@ -37,4 +37,9 @@ public class BlockAir extends Block
     {
         return null;
     }
+
+    public boolean letLightGoThrough()
+    {
+        return true;
+    }
 }

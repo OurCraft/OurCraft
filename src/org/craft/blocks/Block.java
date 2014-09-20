@@ -74,4 +74,9 @@ public class Block
     {
         return pass == 0;
     }
+
+    public boolean letLightGoThrough()
+    {
+        return false;
+    }
 }
