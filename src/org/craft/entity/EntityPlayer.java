@@ -3,9 +3,8 @@ package org.craft.entity;
 import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.maths.*;
-import org.craft.util.*;
 import org.craft.utils.*;
-import org.craft.utils.CollisionInfos.*;
+import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
 import org.lwjgl.input.*;
 

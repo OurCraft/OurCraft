@@ -2,7 +2,6 @@ package org.craft.entity;
 
 import org.craft.blocks.*;
 import org.craft.maths.*;
-import org.craft.util.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 

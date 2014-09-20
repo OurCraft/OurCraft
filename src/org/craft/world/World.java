@@ -6,9 +6,8 @@ import java.util.concurrent.*;
 import org.craft.blocks.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
-import org.craft.util.*;
 import org.craft.utils.*;
-import org.craft.utils.CollisionInfos.*;
+import org.craft.utils.CollisionInfos.CollisionType;
 
 public class World
 {
