@@ -62,7 +62,8 @@ public class RenderBlocks
     {
         EnumSide side = EnumSide.NORTH;
         Chunk chunk = world.getChunk(x, y, z);
-        if(chunk == null) return;
+        if(chunk == null)
+            return;
         float lightValue = chunk.getLightValue(world, x, y, z);
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
@@ -102,61 +103,67 @@ public class RenderBlocks
 
     public void drawNorthFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
-        if(!block.shouldRender()) return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), new Vector2((float)icon.getMinU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), new Vector2((float)icon.getMinU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        if(!block.shouldRender())
+            return;
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), new Vector2((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), new Vector2((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
     public void drawSouthFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
-        if(!block.shouldRender()) return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        if(!block.shouldRender())
+            return;
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
     public void drawWestFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
-        if(!block.shouldRender()) return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        if(!block.shouldRender())
+            return;
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
     public void drawEastFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
-        if(!block.shouldRender()) return;
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        if(!block.shouldRender())
+            return;
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
     public void drawTopFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
-        if(!block.shouldRender()) return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), new Vector2((float)icon.getMinU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        if(!block.shouldRender())
+            return;
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), new Vector2((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
     public void drawBottomFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
-        if(!block.shouldRender()) return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), new Vector2((float)icon.getMinU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), new Vector2((float)icon.getMinU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), new Vector2((float)icon.getMaxU(), (float)icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        if(!block.shouldRender())
+            return;
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), new Vector2((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), new Vector2((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), new Vector2((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
@@ -190,12 +197,12 @@ public class RenderBlocks
                     float adx = a.getCoords().x * 16 - renderEngine.getRenderViewEntity().getPos().x;
                     float ady = a.getCoords().y * 16 - renderEngine.getRenderViewEntity().getPos().x;
                     float adz = a.getCoords().z * 16 - renderEngine.getRenderViewEntity().getPos().z;
-                    float adist = (float)Math.sqrt(adx * adx + ady * ady + adz * adz);
+                    float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
 
                     float bdx = b.getCoords().x * 16 - renderEngine.getRenderViewEntity().getPos().x;
                     float bdy = b.getCoords().y * 16 - renderEngine.getRenderViewEntity().getPos().x;
                     float bdz = b.getCoords().z * 16 - renderEngine.getRenderViewEntity().getPos().z;
-                    float bdist = (float)Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
+                    float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
                     return Float.compare(bdist, adist);
                 }
             });
@@ -286,12 +293,12 @@ public class RenderBlocks
                                     float adx = a.x - renderEngine.getRenderViewEntity().getPos().x;
                                     float ady = a.y - renderEngine.getRenderViewEntity().getPos().x;
                                     float adz = a.z - renderEngine.getRenderViewEntity().getPos().z;
-                                    float adist = (float)Math.sqrt(adx * adx + ady * ady + adz * adz);
+                                    float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
 
                                     float bdx = b.x - renderEngine.getRenderViewEntity().getPos().x;
                                     float bdy = b.y - renderEngine.getRenderViewEntity().getPos().x;
                                     float bdz = b.z - renderEngine.getRenderViewEntity().getPos().z;
-                                    float bdist = (float)Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
+                                    float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
                                     return Float.compare(bdist, adist);
                                 }
                             });
@@ -302,7 +309,8 @@ public class RenderBlocks
                         }
                         flush(buffer);
 
-                        if(pass == 1) c.cleanUpDirtiness();
+                        if(pass == 1)
+                            c.cleanUpDirtiness();
                     }
                     renderEngine.renderBuffer(buffer, blockMap);
                 }

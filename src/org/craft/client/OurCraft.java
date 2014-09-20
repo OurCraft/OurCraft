@@ -166,9 +166,9 @@ public class OurCraft implements Runnable
         if(player != null)
         {
             int renderDistance = 8;
-            int ox = (int)renderEngine.getRenderViewEntity().getPos().x;
-            int oy = (int)renderEngine.getRenderViewEntity().getPos().y;
-            int oz = (int)renderEngine.getRenderViewEntity().getPos().z;
+            int ox = (int) renderEngine.getRenderViewEntity().getPos().x;
+            int oy = (int) renderEngine.getRenderViewEntity().getPos().y;
+            int oz = (int) renderEngine.getRenderViewEntity().getPos().z;
             for(int x = -renderDistance; x < renderDistance; x++ )
             {
                 for(int y = -renderDistance; y < renderDistance; y++ )
@@ -178,11 +178,13 @@ public class OurCraft implements Runnable
                         int fx = x * 16 + ox;
                         int fy = y * 16 + oy;
                         int fz = z * 16 + oz;
-                        if(fy < 0) continue;
+                        if(fy < 0)
+                            continue;
                         synchronized(clientWorld)
                         {
-                            Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int)Math.floor((float)fx / 16f), (int)Math.floor((float)fy / 16f), (int)Math.floor((float)fz / 16f));
-                            if(c != null) visiblesChunks.add(c);
+                            Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
+                            if(c != null)
+                                visiblesChunks.add(c);
                         }
                     }
                 }

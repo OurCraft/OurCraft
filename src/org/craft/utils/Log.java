@@ -29,14 +29,18 @@ public class Log
             elementsIteration: for(int i = 1; i < elems.length; i++ )
             {
                 StackTraceElement elem = elems[i];
-                if(elem.getClassName().contains(Log.class.getCanonicalName())) continue;
+                if(elem.getClassName().contains(Log.class.getCanonicalName()))
+                    continue;
                 try
                 {
                     Class<?> c = Class.forName(elem.getClassName());
-                    if(c.isAnnotationPresent(NonLoggable.class)) continue;
+                    if(c.isAnnotationPresent(NonLoggable.class))
+                        continue;
                     for(Method method : c.getDeclaredMethods())
                     {
-                        if(method.getName().equals(elem.getMethodName())) if(method.isAnnotationPresent(NonLoggable.class)) continue elementsIteration;
+                        if(method.getName().equals(elem.getMethodName()))
+                            if(method.isAnnotationPresent(NonLoggable.class))
+                                continue elementsIteration;
                     }
                     String s = elem.getClassName() + "." + elem.getMethodName() + ":" + elem.getLineNumber();
                     return s;

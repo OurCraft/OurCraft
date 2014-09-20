@@ -38,9 +38,12 @@ public class Chunk
         int y = worldY % 16;
         int z = worldZ % 16;
 
-        if(x < 0) x = 16 + x;
-        if(y < 0) y = 16 + y;
-        if(z < 0) z = 16 + z;
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
         return lightValues[x][y][z];
     }
 
@@ -50,10 +53,14 @@ public class Chunk
         int y = worldY % 16;
         int z = worldZ % 16;
 
-        if(x < 0) x = 16 + x;
-        if(y < 0) y = 16 + y;
-        if(z < 0) z = 16 + z;
-        if(blocks[x][y][z] == null) blocks[x][y][z] = Blocks.air;
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        if(blocks[x][y][z] == null)
+            blocks[x][y][z] = Blocks.air;
         return blocks[x][y][z];
     }
 
@@ -63,9 +70,12 @@ public class Chunk
         int y = worldY % 16;
         int z = worldZ % 16;
 
-        if(x < 0) x = 16 + x;
-        if(y < 0) y = 16 + y;
-        if(z < 0) z = 16 + z;
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
         lightValues[x][y][z] = lightValue;
         isDirty = true;
     }
@@ -76,9 +86,12 @@ public class Chunk
         int y = worldY % 16;
         int z = worldZ % 16;
 
-        if(x < 0) x = 16 + x;
-        if(y < 0) y = 16 + y;
-        if(z < 0) z = 16 + z;
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
         setChunkBlock(x, y, z, block);
     }
 
@@ -131,44 +144,51 @@ public class Chunk
         if(x == 0)
         {
             Chunk c = owner.getChunkProvider().get(owner, coords.x - 1, coords.y, coords.z);
-            if(c != null) c.markDirty();
+            if(c != null)
+                c.markDirty();
         }
 
         if(x == 15)
         {
             Chunk c = owner.getChunkProvider().get(owner, coords.x + 1, coords.y, coords.z);
-            if(c != null) c.markDirty();
+            if(c != null)
+                c.markDirty();
         }
 
         if(y == 0)
         {
             Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y - 1, coords.z);
-            if(c != null) c.markDirty();
+            if(c != null)
+                c.markDirty();
         }
 
         if(y == 15)
         {
             Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y + 1, coords.z);
-            if(c != null) c.markDirty();
+            if(c != null)
+                c.markDirty();
         }
 
         if(z == 0)
         {
             Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z - 1);
-            if(c != null) c.markDirty();
+            if(c != null)
+                c.markDirty();
         }
 
         if(z == 15)
         {
             Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z + 1);
-            if(c != null) c.markDirty();
+            if(c != null)
+                c.markDirty();
         }
     }
 
     public Block getChunkBlock(int x, int y, int z)
     {
         Block b = blocks[x][y][z];
-        if(b == null) return Blocks.air;
+        if(b == null)
+            return Blocks.air;
         return b;
     }
 
@@ -185,17 +205,18 @@ public class Chunk
             {
                 highest[x][z] = y;
             }
-            else if(y == highest[x][z])
-            {
-                for(; y >= 0; --y)
+            else
+                if(y == highest[x][z])
                 {
-                    if(getChunkBlock(x, y, z) != Blocks.air)
+                    for(; y >= 0; --y)
                     {
-                        break;
+                        if(getChunkBlock(x, y, z) != Blocks.air)
+                        {
+                            break;
+                        }
                     }
+                    highest[x][z] = y;
                 }
-                highest[x][z] = y;
-            }
         }
         markDirty();
         makeNeighbors(x, y, z);
@@ -203,7 +224,8 @@ public class Chunk
 
     public Block getHighestBlock(int x, int z)
     {
-        if(highest[x][z] < 0) return null;
+        if(highest[x][z] < 0)
+            return null;
         return getChunkBlock(x, highest[x][z], z);
     }
 

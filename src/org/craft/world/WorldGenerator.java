@@ -24,7 +24,8 @@ public abstract class WorldGenerator
 
     public boolean populateChunk(World world, Chunk chunk)
     {
-        if(chunk == null) return false;
+        if(chunk == null)
+            return false;
         for(IWorldPopulator populator : populators)
         {
             populator.populate(world, chunk, rng);

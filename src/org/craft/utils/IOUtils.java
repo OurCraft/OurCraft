@@ -52,16 +52,17 @@ public final class IOUtils
     public static void deleteFolderContents(File folder)
     {
         File[] files = folder.listFiles();
-        if(files != null) for(File f : files)
-        {
-            if(f.isDirectory())
+        if(files != null)
+            for(File f : files)
             {
-                deleteFolderContents(f);
-                f.delete();
+                if(f.isDirectory())
+                {
+                    deleteFolderContents(f);
+                    f.delete();
+                }
+                else
+                    f.delete();
             }
-            else
-                f.delete();
-        }
     }
 
 }

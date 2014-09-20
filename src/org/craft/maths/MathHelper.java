@@ -15,7 +15,7 @@ public class MathHelper
 
     public static double roundToNearestMultiple(double number, double multiple)
     {
-        return (int)(number / multiple) * multiple;
+        return (int) (number / multiple) * multiple;
     }
 
     public static double roundToNthDecimal(double number, int decimals)
@@ -25,8 +25,9 @@ public class MathHelper
 
     public static double roundToNearest(double number)
     {
-        if((int)(number + .5) >= (int)(number)) return (int)number + 1;
-        return (int)number;
+        if((int) (number + .5) >= (int) (number))
+            return (int) number + 1;
+        return (int) number;
     }
 
     /**
@@ -47,7 +48,7 @@ public class MathHelper
 
     public static float perlinNoise(float x, float y, long seed)
     {
-        return (float)new ImprovedNoise(seed).perlinNoise(x, y);
+        return (float) new ImprovedNoise(seed).perlinNoise(x, y);
     }
 
     public static int[] shuffle(int[] perm, long seed)

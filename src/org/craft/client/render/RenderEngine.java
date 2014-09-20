@@ -17,7 +17,7 @@ public class RenderEngine
     public RenderEngine()
     {
         glEnable(GL_DEPTH_TEST);
-        projection = new Matrix4().initPerspective((float)Math.toRadians(90), 16f / 9f, 0.001f, 1000);
+        projection = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
     }
 
     public void renderBuffer(OpenGLBuffer buffer, ITextureObject texture)

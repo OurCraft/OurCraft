@@ -69,7 +69,8 @@ public class TextureMap implements IconGenerator, ITextureObject
                 for(int y = 0; y < 16; y++ )
                 {
                     int color = 0xFF000000;
-                    if((x >= 8 && y >= 8) || (x < 8 && y < 8)) color = 0xFFFF00DC;
+                    if((x >= 8 && y >= 8) || (x < 8 && y < 8))
+                        color = 0xFFFF00DC;
                     nullImage.setRGB(x, y, color);
                 }
             }
@@ -109,7 +110,8 @@ public class TextureMap implements IconGenerator, ITextureObject
     @Override
     public TextureIcon generateIcon(ResourceLocation loc)
     {
-        if(registredLocations.contains(loc)) return registredIcons.get(registredLocations.indexOf(loc));
+        if(registredLocations.contains(loc))
+            return registredIcons.get(registredLocations.indexOf(loc));
         TextureMapIcon icon = new TextureMapIcon(0, 0, 0, 0, 0, 0);
         registredIcons.add(icon);
         registredLocations.add(loc);
@@ -143,12 +145,12 @@ public class TextureMap implements IconGenerator, ITextureObject
         {
             int index = indexesIt.next();
             TextureIcon icon = indexes.get(index);
-            ((TextureMapIcon)icon).setMinU(stitcher.getMinU(index));
-            ((TextureMapIcon)icon).setMinV(stitcher.getMinV(index));
-            ((TextureMapIcon)icon).setMaxU(stitcher.getMaxU(index));
-            ((TextureMapIcon)icon).setMaxV(stitcher.getMaxV(index));
-            ((TextureMapIcon)icon).setWidth(stitcher.getWidth(index));
-            ((TextureMapIcon)icon).setHeight(stitcher.getHeight(index));
+            ((TextureMapIcon) icon).setMinU(stitcher.getMinU(index));
+            ((TextureMapIcon) icon).setMinV(stitcher.getMinV(index));
+            ((TextureMapIcon) icon).setMaxU(stitcher.getMaxU(index));
+            ((TextureMapIcon) icon).setMaxV(stitcher.getMaxV(index));
+            ((TextureMapIcon) icon).setWidth(stitcher.getWidth(index));
+            ((TextureMapIcon) icon).setHeight(stitcher.getHeight(index));
         }
 
         if(true) // TODO: needs to know if we are in a debug mode

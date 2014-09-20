@@ -48,13 +48,13 @@ public class ImageUtils
         float[][] colorMatrix =
         {
                 {
-                        ((float)sc.getRed()) / 255f, 0, 0, 0
+                        ((float) sc.getRed()) / 255f, 0, 0, 0
                 },
                 {
-                        ((float)sc.getGreen()) / 255f, 0, 0, 0
+                        ((float) sc.getGreen()) / 255f, 0, 0, 0
                 },
                 {
-                        ((float)sc.getBlue()) / 255f, 0, 0, 0
+                        ((float) sc.getBlue()) / 255f, 0, 0, 0
                 },
                 {
                         0f, 0f, 0f, 1f
@@ -69,7 +69,8 @@ public class ImageUtils
 
     public static BufferedImage getFromClasspath(String path)
     {
-        if(path == null || path.trim().equals("")) return null;
+        if(path == null || path.trim().equals(""))
+            return null;
         try
         {
             if(!imgs.containsKey(path))
@@ -140,48 +141,49 @@ public class ImageUtils
                 n -= 1;
             }
         }
-        else if(buf[2] == 0x02 && buf[16] == 0x18)
-        { // uncompressed BGR
-            while(n > 0)
-            {
-                int b = read(buf);
-                int g = read(buf);
-                int r = read(buf);
-                int a = 255; // opaque pixel
-                int v = (a << 24) | (r << 16) | (g << 8) | b;
-                pixels[idx++ ] = v;
-                n -= 1;
-            }
-        }
         else
-        {
-            // RLE compressed
-            while(n > 0)
-            {
-                int nb = read(buf); // num of pixels
-                if((nb & 0x80) == 0)
-                { // 0x80=dec 128, bits 10000000
-                    for(int i = 0; i <= nb; i++ )
-                    {
-                        int b = read(buf);
-                        int g = read(buf);
-                        int r = read(buf);
-                        pixels[idx++ ] = 0xff000000 | (r << 16) | (g << 8) | b;
-                    }
-                }
-                else
+            if(buf[2] == 0x02 && buf[16] == 0x18)
+            { // uncompressed BGR
+                while(n > 0)
                 {
-                    nb &= 0x7f;
                     int b = read(buf);
                     int g = read(buf);
                     int r = read(buf);
-                    int v = 0xff000000 | (r << 16) | (g << 8) | b;
-                    for(int i = 0; i <= nb; i++ )
-                        pixels[idx++ ] = v;
+                    int a = 255; // opaque pixel
+                    int v = (a << 24) | (r << 16) | (g << 8) | b;
+                    pixels[idx++ ] = v;
+                    n -= 1;
                 }
-                n -= nb + 1;
             }
-        }
+            else
+            {
+                // RLE compressed
+                while(n > 0)
+                {
+                    int nb = read(buf); // num of pixels
+                    if((nb & 0x80) == 0)
+                    { // 0x80=dec 128, bits 10000000
+                        for(int i = 0; i <= nb; i++ )
+                        {
+                            int b = read(buf);
+                            int g = read(buf);
+                            int r = read(buf);
+                            pixels[idx++ ] = 0xff000000 | (r << 16) | (g << 8) | b;
+                        }
+                    }
+                    else
+                    {
+                        nb &= 0x7f;
+                        int b = read(buf);
+                        int g = read(buf);
+                        int r = read(buf);
+                        int v = 0xff000000 | (r << 16) | (g << 8) | b;
+                        for(int i = 0; i <= nb; i++ )
+                            pixels[idx++ ] = v;
+                    }
+                    n -= nb + 1;
+                }
+            }
 
         BufferedImage bimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         bimg.setRGB(0, 0, width, height, pixels, 0, width);
@@ -190,7 +192,8 @@ public class ImageUtils
 
     public static BufferedImage loadImage(AbstractResource res) throws IOException
     {
-        if(imagesMap.containsKey(res)) return imagesMap.get(res);
+        if(imagesMap.containsKey(res))
+            return imagesMap.get(res);
         BufferedImage img = null;
         if(res.getResourceLocation().getExtension().equalsIgnoreCase("tga"))
         {

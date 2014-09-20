@@ -17,7 +17,8 @@ public class BlockLog extends Block
 
     public TextureIcon getBlockIcon(World world, int x, int y, int z, EnumSide side)
     {
-        if(side == EnumSide.BOTTOM || side == EnumSide.TOP) return topAndBottomIcon;
+        if(side == EnumSide.BOTTOM || side == EnumSide.TOP)
+            return topAndBottomIcon;
         return sideIcon;
     }
 

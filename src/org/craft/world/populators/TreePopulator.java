@@ -19,10 +19,14 @@ public class TreePopulator implements IWorldPopulator
             int z = rng.nextInt(8);
             int y = c.getHighest(x, z);
             boolean noBlockAside = true;
-            if(world.getBlockNextTo(x, y + 1, z, EnumSide.NORTH) == Blocks.log) noBlockAside = false;
-            if(world.getBlockNextTo(x, y + 1, z, EnumSide.SOUTH) == Blocks.log) noBlockAside = false;
-            if(world.getBlockNextTo(x, y + 1, z, EnumSide.EAST) == Blocks.log) noBlockAside = false;
-            if(world.getBlockNextTo(x, y + 1, z, EnumSide.WEST) == Blocks.log) noBlockAside = false;
+            if(world.getBlockNextTo(x, y + 1, z, EnumSide.NORTH) == Blocks.log)
+                noBlockAside = false;
+            if(world.getBlockNextTo(x, y + 1, z, EnumSide.SOUTH) == Blocks.log)
+                noBlockAside = false;
+            if(world.getBlockNextTo(x, y + 1, z, EnumSide.EAST) == Blocks.log)
+                noBlockAside = false;
+            if(world.getBlockNextTo(x, y + 1, z, EnumSide.WEST) == Blocks.log)
+                noBlockAside = false;
             if(c.getHighestBlock(x, z) == Blocks.grass && noBlockAside)
             {
                 for(int yy = 0; yy < 2; yy++ )

@@ -24,7 +24,8 @@ public final class Blocks
 
     public static Block get(String string)
     {
-        if(string == null) return dirt;
+        if(string == null)
+            return dirt;
         return Block.registry.get(string);
     }
 }

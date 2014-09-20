@@ -36,7 +36,8 @@ public class Vector3
     public Vector3 normalize()
     {
         float l = length();
-        if(l == 0) return Vector3.NULL;
+        if(l == 0)
+            return Vector3.NULL;
         float _x = this.x / l;
         float _y = this.y / l;
         float _z = this.z / l;
@@ -121,7 +122,7 @@ public class Vector3
 
     public float length()
     {
-        return (float)Math.sqrt(x * x + y * y + z * z);
+        return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
     public Vector3 set(float x, float y, float z)
@@ -149,9 +150,9 @@ public class Vector3
 
     public void write(FloatBuffer buffer)
     {
-        buffer.put((float)getX());
-        buffer.put((float)getY());
-        buffer.put((float)getZ());
+        buffer.put((float) getX());
+        buffer.put((float) getY());
+        buffer.put((float) getZ());
     }
 
     public int getSize()
@@ -161,8 +162,8 @@ public class Vector3
 
     public Vector3 rotate(float angle, Vector3 axis)
     {
-        float sinAngle = (float)Math.sin(-angle);
-        float cosAngle = (float)Math.cos(-angle);
+        float sinAngle = (float) Math.sin(-angle);
+        float cosAngle = (float) Math.cos(-angle);
         return this.cross(axis.mul(sinAngle)).add( // Rotation on local X
                 (this.mul(cosAngle)).add( // Rotation on local Z
                         axis.mul(this.dot(axis.mul(1 - cosAngle))))); // Rotation
@@ -226,7 +227,7 @@ public class Vector3
 
     public float max()
     {
-        return (float)Math.max(getX(), Math.max(getY(), getZ()));
+        return (float) Math.max(getX(), Math.max(getY(), getZ()));
     }
 
     public Vector3 set(Vector3 v)
@@ -257,15 +258,16 @@ public class Vector3
 
     public boolean equals(Object o)
     {
-        if(o == null) return false;
+        if(o == null)
+            return false;
         if(o instanceof Vector3)
         {
-            Vector3 v = (Vector3)o;
+            Vector3 v = (Vector3) o;
             return v.x == x && v.y == y && v.z == z;
         }
         if(o instanceof float[])
         {
-            float[] array = (float[])o;
+            float[] array = (float[]) o;
             return array[0] == x && array[1] == y && array[2] == z;
         }
         return false;
@@ -284,9 +286,9 @@ public class Vector3
     public static Vector3 max(Vector3 a, Vector3 b)
     {
         Vector3 vec3 = new Vector3();
-        vec3.x = (float)Math.max(a.x, b.x);
-        vec3.y = (float)Math.max(a.y, b.y);
-        vec3.z = (float)Math.max(a.z, b.z);
+        vec3.x = (float) Math.max(a.x, b.x);
+        vec3.y = (float) Math.max(a.y, b.y);
+        vec3.z = (float) Math.max(a.z, b.z);
         return vec3;
     }
 
@@ -298,6 +300,6 @@ public class Vector3
 
     public float min()
     {
-        return (float)Math.min(getX(), Math.min(getY(), getZ()));
+        return (float) Math.min(getX(), Math.min(getY(), getZ()));
     }
 }

@@ -30,7 +30,7 @@ public class ChunkCoord
     {
         if(o instanceof ChunkCoord)
         {
-            ChunkCoord other = (ChunkCoord)o;
+            ChunkCoord other = (ChunkCoord) o;
             return other.x == x && other.y == y && other.z == z;
         }
         return false;

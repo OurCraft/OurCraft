@@ -122,16 +122,16 @@ public class Matrix4
         Matrix4 ry = new Matrix4();
         Matrix4 rz = new Matrix4();
 
-        x = (float)Math.toRadians(x);
-        y = (float)Math.toRadians(y);
-        z = (float)Math.toRadians(z);
+        x = (float) Math.toRadians(x);
+        y = (float) Math.toRadians(y);
+        z = (float) Math.toRadians(z);
 
-        rz._m[0][0] = (float)Math.cos(z);
-        rz._m[0][1] = (float)-Math.sin(z);
+        rz._m[0][0] = (float) Math.cos(z);
+        rz._m[0][1] = (float) -Math.sin(z);
         rz._m[0][2] = 0;
         rz._m[0][3] = 0;
-        rz._m[1][0] = (float)Math.sin(z);
-        rz._m[1][1] = (float)Math.cos(z);
+        rz._m[1][0] = (float) Math.sin(z);
+        rz._m[1][1] = (float) Math.cos(z);
         rz._m[1][2] = 0;
         rz._m[1][3] = 0;
         rz._m[2][0] = 0;
@@ -148,29 +148,29 @@ public class Matrix4
         rx._m[0][2] = 0;
         rx._m[0][3] = 0;
         rx._m[1][0] = 0;
-        rx._m[1][1] = (float)Math.cos(x);
-        rx._m[1][2] = (float)-Math.sin(x);
+        rx._m[1][1] = (float) Math.cos(x);
+        rx._m[1][2] = (float) -Math.sin(x);
         rx._m[1][3] = 0;
         rx._m[2][0] = 0;
-        rx._m[2][1] = (float)Math.sin(x);
-        rx._m[2][2] = (float)Math.cos(x);
+        rx._m[2][1] = (float) Math.sin(x);
+        rx._m[2][2] = (float) Math.cos(x);
         rx._m[2][3] = 0;
         rx._m[3][0] = 0;
         rx._m[3][1] = 0;
         rx._m[3][2] = 0;
         rx._m[3][3] = 1;
 
-        ry._m[0][0] = (float)Math.cos(y);
+        ry._m[0][0] = (float) Math.cos(y);
         ry._m[0][1] = 0;
-        ry._m[0][2] = (float)-Math.sin(y);
+        ry._m[0][2] = (float) -Math.sin(y);
         ry._m[0][3] = 0;
         ry._m[1][0] = 0;
         ry._m[1][1] = 1;
         ry._m[1][2] = 0;
         ry._m[1][3] = 0;
-        ry._m[2][0] = (float)Math.sin(y);
+        ry._m[2][0] = (float) Math.sin(y);
         ry._m[2][1] = 0;
-        ry._m[2][2] = (float)Math.cos(y);
+        ry._m[2][2] = (float) Math.cos(y);
         ry._m[2][3] = 0;
         ry._m[3][0] = 0;
         ry._m[3][1] = 0;
@@ -206,7 +206,7 @@ public class Matrix4
 
     public Matrix4 initPerspective(float fov, float aspectRatio, float zNear, float zFar)
     {
-        float tanHalfFOV = (float)Math.tan(fov / 2);
+        float tanHalfFOV = (float) Math.tan(fov / 2);
         float zRange = zNear - zFar;
 
         _m[0][0] = 1.0f / (tanHalfFOV * aspectRatio);
@@ -306,7 +306,7 @@ public class Matrix4
         {
             for(int j = 0; j < 4; j++ )
             {
-                buffer.put((float)get(i, j));
+                buffer.put((float) get(i, j));
             }
         }
     }

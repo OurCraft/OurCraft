@@ -47,7 +47,7 @@ public class World
 
     public Chunk getChunk(int x, int y, int z)
     {
-        return chunkProvider.get(this, (int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
+        return chunkProvider.get(this, (int) Math.floor((float) x / 16f), (int) Math.floor((float) y / 16f), (int) Math.floor((float) z / 16f));
     }
 
     public void addChunk(Chunk c)
@@ -63,7 +63,8 @@ public class World
     public Block getBlock(int x, int y, int z)
     {
         Chunk c = getChunk(x, y, z);
-        if(c == null) return Blocks.air;
+        if(c == null)
+            return Blocks.air;
         return c.getBlock(this, x, y, z);
     }
 
@@ -116,9 +117,9 @@ public class World
         float dist = 0f;
         while(dist < maxDist)
         {
-            int x = (int)(currentPos.getX());
-            int y = (int)(currentPos.getY());
-            int z = (int)(currentPos.getZ());
+            int x = (int) (currentPos.getX());
+            int y = (int) (currentPos.getY());
+            int z = (int) (currentPos.getZ());
             currentPos = startPos.add(look.mul(dist));
             dist += step;
             Block b = getBlock(x, y, z);
@@ -126,10 +127,10 @@ public class World
             {
                 continue;
             }
-            int dx = (int)(startPos.getX()) - x;
-            int dy = (int)(startPos.getY()) - y;
-            int dz = (int)(startPos.getZ()) - z;
-            float blockDist = (float)Math.sqrt(dx * dx + dy * dy + dz * dz);
+            int dx = (int) (startPos.getX()) - x;
+            int dy = (int) (startPos.getY()) - y;
+            int dz = (int) (startPos.getZ()) - z;
+            float blockDist = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
             blockPos.set(x, y, z);
             AABB blockBB = b.getSelectionBox(this, x, y, z);
             if(blockBB == null)

@@ -98,7 +98,7 @@ public class Vector2
 
     public float length()
     {
-        return (float)Math.sqrt(x * x + y * y);
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     public Vector2 set(float x, float y)
@@ -120,8 +120,8 @@ public class Vector2
 
     public void write(FloatBuffer buffer)
     {
-        buffer.put((float)getX());
-        buffer.put((float)getY());
+        buffer.put((float) getX());
+        buffer.put((float) getY());
     }
 
     public int getSize()
@@ -153,7 +153,7 @@ public class Vector2
     {
         if(o instanceof Vector2)
         {
-            Vector2 other = (Vector2)o;
+            Vector2 other = (Vector2) o;
             return x == other.getX() && y == other.getY();
         }
         return false;

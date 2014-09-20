@@ -24,10 +24,10 @@ public class OpenGLHelper
                 int r = color >> 16 & 0xFF;
                 int g = color >> 8 & 0xFF;
                 int b = color >> 0 & 0xFF;
-                pixelBuf.put((byte)r);
-                pixelBuf.put((byte)g);
-                pixelBuf.put((byte)b);
-                pixelBuf.put((byte)a);
+                pixelBuf.put((byte) r);
+                pixelBuf.put((byte) g);
+                pixelBuf.put((byte) b);
+                pixelBuf.put((byte) a);
             }
         }
         pixelBuf.flip();

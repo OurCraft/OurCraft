@@ -19,7 +19,7 @@ public class AABB
         Vector3 dist = Vector3.max(dist1, dist2);
         float maxDistance = dist.max();
 
-        return new IntersectionInfos(maxDistance < 0.f, (float)maxDistance);
+        return new IntersectionInfos(maxDistance < 0.f, (float) maxDistance);
     }
 
     public Vector3 getMinExtents()

@@ -48,7 +48,8 @@ public class ResourceLocation
     public String getFullPath()
     {
         String prefix = "";
-        if(!section.equals("")) prefix = section + "/";
+        if(!section.equals(""))
+            prefix = section + "/";
         return prefix + path;
     }
 
@@ -111,7 +112,7 @@ public class ResourceLocation
     {
         if(o instanceof ResourceLocation)
         {
-            ResourceLocation res = (ResourceLocation)o;
+            ResourceLocation res = (ResourceLocation) o;
             return res.getFullPath().equals(getFullPath());
         }
         return false;

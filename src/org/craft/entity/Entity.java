@@ -95,9 +95,9 @@ public class Entity
         if(angle > Math.toRadians(89.99f))
         {
             if(getRotation().getForward().getY() > 0.f)
-                rotate(getRotation().getRight(), -(float)(Math.toRadians(89.99f) - angle));
+                rotate(getRotation().getRight(), -(float) (Math.toRadians(89.99f) - angle));
             else
-                rotate(getRotation().getRight(), (float)(Math.toRadians(89.99f) - angle));
+                rotate(getRotation().getRight(), (float) (Math.toRadians(89.99f) - angle));
         }
 
         if(onGround)
@@ -114,12 +114,12 @@ public class Entity
         AABB boundingBox = this.boundingBox.translate(pos);
         Vector3 min = boundingBox.getMinExtents();
         Vector3 max = boundingBox.getMaxExtents();
-        int startX = (int)Math.round(min.getX() - 0.5f);
-        int startY = (int)Math.round(min.getY() - 0.5f);
-        int startZ = (int)Math.round(min.getZ() - 0.5f);
-        int endX = (int)Math.round(max.getX() + 0.5f);
-        int endY = (int)Math.round(max.getY() + 0.5f);
-        int endZ = (int)Math.round(max.getZ() + 0.5f);
+        int startX = (int) Math.round(min.getX() - 0.5f);
+        int startY = (int) Math.round(min.getY() - 0.5f);
+        int startZ = (int) Math.round(min.getZ() - 0.5f);
+        int endX = (int) Math.round(max.getX() + 0.5f);
+        int endY = (int) Math.round(max.getY() + 0.5f);
+        int endZ = (int) Math.round(max.getZ() + 0.5f);
         for(int x = startX; x <= endX; x++ )
         {
             for(int y = startY; y <= endY; y++ )
@@ -127,9 +127,11 @@ public class Entity
                 for(int z = startZ; z <= endZ; z++ )
                 {
                     Block block = getWorld().getBlock(x, y, z);
-                    if(block == null) continue;
+                    if(block == null)
+                        continue;
                     AABB blockBB = block.getCollisionBox(getWorld(), x, y, z);
-                    if(blockBB == null) continue;
+                    if(blockBB == null)
+                        continue;
                     IntersectionInfos interInfos = boundingBox.intersectAABB(blockBB);
                     if(interInfos.doesIntersects() || interInfos.getDistance() <= 0.10f)
                     {

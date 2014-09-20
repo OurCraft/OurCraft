@@ -36,25 +36,26 @@ public class Stitcher
             tileWidth = img.getWidth();
             tileHeight = img.getHeight();
         }
-        else if((img.getWidth() != tileWidth || img.getHeight() != tileHeight))
-        {
-            if(!forceResize)
+        else
+            if((img.getWidth() != tileWidth || img.getHeight() != tileHeight))
             {
-                Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
+                if(!forceResize)
+                {
+                    Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
+                }
+                else
+                {
+                    img = ImageUtils.resize(img, tileWidth, tileHeight);
+                }
             }
-            else
-            {
-                img = ImageUtils.resize(img, tileWidth, tileHeight);
-            }
-        }
         imgs.add(img);
         return imgs.size() - 1;
     }
 
     public BufferedImage stitch()
     {
-        int nbrY = MathHelper.upperPowerOf2((int)Math.floor(Math.sqrt(imgs.size())));
-        int nbrX = (int)Math.round((double)imgs.size() / (double)nbrY);
+        int nbrY = MathHelper.upperPowerOf2((int) Math.floor(Math.sqrt(imgs.size())));
+        int nbrX = (int) Math.round((double) imgs.size() / (double) nbrY);
 
         while((nbrX * nbrY - imgs.size()) >= nbrY)
             nbrY-- ;
@@ -69,7 +70,7 @@ public class Stitcher
             int x = column * tileWidth;
             int y = row * tileHeight;
             g.drawImage(imgs.get(i), column * tileWidth, row * tileHeight, null);
-            slots.add(new Slot((float)x / (float)width, (float)y / (float)height, (float)(x + tileWidth) / (float)width, (float)(y + tileHeight) / (float)height, width, height));
+            slots.add(new Slot((float) x / (float) width, (float) y / (float) height, (float) (x + tileWidth) / (float) width, (float) (y + tileHeight) / (float) height, width, height));
         }
 
         emptySlotImage = ImageUtils.resize(emptySlotImage, tileWidth, tileHeight);

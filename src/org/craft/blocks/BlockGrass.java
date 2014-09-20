@@ -22,12 +22,13 @@ public class BlockGrass extends Block
         {
             return topIcon;
         }
-        else if(side == EnumSide.BOTTOM)
-        {
-            return bottomIcon;
-        }
         else
-            return sideIcon;
+            if(side == EnumSide.BOTTOM)
+            {
+                return bottomIcon;
+            }
+            else
+                return sideIcon;
     }
 
     public void registerIcons(IconGenerator register)

@@ -16,9 +16,9 @@ public final class ImprovedNoise
 
     public double noise(double x, double y, double z)
     {
-        int X = (int)Math.floor(x) & 255, // FIND UNIT CUBE THAT
-        Y = (int)Math.floor(y) & 255, // CONTAINS POINT.
-        Z = (int)Math.floor(z) & 255;
+        int X = (int) Math.floor(x) & 255, // FIND UNIT CUBE THAT
+        Y = (int) Math.floor(y) & 255, // CONTAINS POINT.
+        Z = (int) Math.floor(z) & 255;
         x -= Math.floor(x); // FIND RELATIVE X,Y,Z
         y -= Math.floor(y); // OF POINT IN CUBE.
         z -= Math.floor(z);
