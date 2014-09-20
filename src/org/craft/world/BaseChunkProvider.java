@@ -19,7 +19,7 @@ public class BaseChunkProvider extends ChunkProvider
         if(c == null)
         {
             Chunk newChunk = new Chunk(new ChunkCoord(chunkX, chunkY, chunkZ));
-            world.getGenerator().populateChunk(newChunk);
+            world.getGenerator().populateChunk(world, newChunk);
             addChunk(world, newChunk);
             newChunk.markDirty();
             Log.message("Creating new chunk at " + chunkX + "," + chunkY + "," + chunkZ);
@@ -45,7 +45,7 @@ public class BaseChunkProvider extends ChunkProvider
         Chunk newChunk = new Chunk(new ChunkCoord(chunkX, chunkY, chunkZ));
         newChunk.markDirty();
         addChunk(world, newChunk);
-        world.getGenerator().populateChunk(newChunk);
+        world.getGenerator().populateChunk(world, newChunk);
         Log.message("Creating new chunk at " + chunkX + "," + chunkY + "," + chunkZ);
         return newChunk;
     }

@@ -8,6 +8,7 @@ public class Chunk
 {
 
     public Block[][][] blocks;
+    public float[][][] lightValues;
     private ChunkCoord coords;
     private boolean    isDirty;
 
@@ -17,7 +18,22 @@ public class Chunk
         this.blocks = new Block[16][16][16];
         for(int x = 0; x < 16; x++ )
             for(int y = 0; y < 16; y++ )
+            {
                 Arrays.fill(blocks[x][y], Blocks.air);
+                Arrays.fill(lightValues[x][y], 1f);
+            }
+    }
+
+    public float getLightValue(World w, int worldX, int worldY, int worldZ)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0) x = 16 + x;
+        if(y < 0) y = 16 + y;
+        if(z < 0) z = 16 + z;
+        return lightValues[x][y][z];
     }
 
     public Block getBlock(World w, int worldX, int worldY, int worldZ)
@@ -31,6 +47,19 @@ public class Chunk
         if(z < 0) z = 16 + z;
         if(blocks[x][y][z] == null) blocks[x][y][z] = Blocks.air;
         return blocks[x][y][z];
+    }
+
+    public void setLightValue(World world, int worldX, int worldY, int worldZ, float lightValue)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0) x = 16 + x;
+        if(y < 0) y = 16 + y;
+        if(z < 0) z = 16 + z;
+        lightValues[x][y][z] = lightValue;
+        isDirty = true;
     }
 
     public void setBlock(World world, int worldX, int worldY, int worldZ, Block block)
@@ -115,6 +144,24 @@ public class Chunk
             }
     }
 
+    public float getChunkLightValue(int x, int y, int z, float lightValue)
+    {
+        return lightValues[x][y][z];
+    }
+
+    public void setChunkLightValue(int x, int y, int z, float lightValue)
+    {
+        lightValues[x][y][z] = lightValue;
+        markDirty();
+    }
+
+    public Block getChunkBlock(int x, int y, int z, Block block)
+    {
+        Block b = blocks[x][y][z];
+        if(b == null) return Blocks.air;
+        return b;
+    }
+
     public void setChunkBlock(int x, int y, int z, Block block)
     {
         if(block == null)
@@ -122,6 +169,5 @@ public class Chunk
         else
             blocks[x][y][z] = block;
         markDirty();
-
     }
 }

@@ -8,23 +8,21 @@ public abstract class WorldGenerator
 {
 
     private long                       seed;
-    private World                      world;
     private ArrayList<IWorldPopulator> populators = new ArrayList<>();
     private Random                     rng;
 
-    public WorldGenerator(World w)
+    public WorldGenerator()
     {
-        this(w, System.currentTimeMillis());
+        this(System.currentTimeMillis());
     }
 
-    public WorldGenerator(World w, long seed)
+    public WorldGenerator(long seed)
     {
-        this.world = w;
         this.seed = seed;
         this.rng = new Random(seed);
     }
 
-    public boolean populateChunk(Chunk chunk)
+    public boolean populateChunk(World world, Chunk chunk)
     {
         if(chunk == null) return false;
         for(IWorldPopulator populator : populators)
@@ -47,6 +45,11 @@ public abstract class WorldGenerator
     public void addPopulator(IWorldPopulator populator)
     {
         populators.add(populator);
+    }
+
+    public long getSeed()
+    {
+        return seed;
     }
 
 }

@@ -71,11 +71,12 @@ public class OurCraft implements Runnable
 
             Blocks.init();
 
-            WorldGenerator generator = new WorldGenerator(clientWorld, 0)
+            WorldGenerator generator = new WorldGenerator()
             {
 
             };
             generator.addPopulator(new RockPopulator());
+            generator.addPopulator(new GrassPopulator());
             clientWorld = new World(new BaseChunkProvider(), generator);
             renderBlocks = new RenderBlocks(renderEngine);
 
@@ -83,7 +84,7 @@ public class OurCraft implements Runnable
             modelMatrix = new Matrix4().initIdentity();
 
             player = new EntityPlayer(clientWorld);
-            player.setLocation(0, 101, 0);
+            player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
             renderEngine.setRenderViewEntity(player);
 
