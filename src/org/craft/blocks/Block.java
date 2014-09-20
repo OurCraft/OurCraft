@@ -45,6 +45,11 @@ public class Block
         return true;
     }
 
+    public boolean shouldSideBeRendered(World w, int x, int y, int z, EnumSide side)
+    {
+        return true;
+    }
+
     public boolean shouldRender()
     {
         return true;
@@ -63,5 +68,10 @@ public class Block
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         return getCollisionBox(world, x, y, z);
+    }
+
+    public boolean shouldRenderInPass(int pass)
+    {
+        return pass == 0;
     }
 }

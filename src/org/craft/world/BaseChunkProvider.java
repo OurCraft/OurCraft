@@ -1,7 +1,5 @@
 package org.craft.world;
 
-import org.craft.utils.*;
-
 public class BaseChunkProvider extends ChunkProvider
 {
 
@@ -15,15 +13,10 @@ public class BaseChunkProvider extends ChunkProvider
     @Override
     public Chunk getOrCreate(World world, int chunkX, int chunkY, int chunkZ)
     {
-        Chunk c = chunkMap.getAt(chunkX, chunkY, chunkZ);
+        Chunk c = get(world, chunkX, chunkY, chunkZ);
         if(c == null)
         {
-            Chunk newChunk = new Chunk(new ChunkCoord(chunkX, chunkY, chunkZ));
-            world.getGenerator().populateChunk(world, newChunk);
-            addChunk(world, newChunk);
-            newChunk.markDirty();
-            Log.message("Creating new chunk at " + chunkX + "," + chunkY + "," + chunkZ);
-            return newChunk;
+            return create(world, chunkX, chunkY, chunkZ);
         }
         return c;
     }
@@ -43,8 +36,8 @@ public class BaseChunkProvider extends ChunkProvider
     public Chunk create(World world, int chunkX, int chunkY, int chunkZ)
     {
         Chunk newChunk = new Chunk(new ChunkCoord(chunkX, chunkY, chunkZ));
-        newChunk.markDirty();
         addChunk(world, newChunk);
+        newChunk.markDirty();
         world.getGenerator().populateChunk(world, newChunk);
         return newChunk;
     }

@@ -8,6 +8,8 @@ public final class Blocks
     public static Block air;
     public static Block bedrock;
     public static Block stone;
+    public static Block log;
+    public static Block leaves;
 
     public static void init()
     {
@@ -16,7 +18,8 @@ public final class Blocks
         grass = new BlockGrass("grass");
         bedrock = new Block("bedrock");
         stone = new Block("stone");
-
+        log = new BlockLog("log");
+        leaves = new BlockLeaves("leaves");
     }
 
     public static Block get(String string)

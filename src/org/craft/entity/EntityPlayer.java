@@ -20,7 +20,7 @@ public class EntityPlayer extends Entity
     public void onEntityUpdate()
     {
         float speed = 1f / 10f;
-        if(!isOnGround()) speed /= 2f;
+        if(!isOnGround()) speed /= 50f;
         if(Keyboard.isKeyDown(Keyboard.KEY_Z))
         {
             this.moveForward(speed);

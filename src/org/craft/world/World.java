@@ -72,7 +72,6 @@ public class World
         Chunk c = getChunk(x, y, z);
         if(c == null)
         {
-            Log.error("Couldn't place block at " + x + "," + y + "," + z);
             return;
         }
         c.setBlock(this, x, y, z, block);

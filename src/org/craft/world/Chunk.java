@@ -8,6 +8,7 @@ public class Chunk
 {
 
     public Block[][][] blocks;
+    public int[][]     highest;
     public float[][][] lightValues;
     private ChunkCoord coords;
     private boolean    isDirty;
@@ -16,13 +17,17 @@ public class Chunk
     {
         this.coords = coords;
         this.blocks = new Block[16][16][16];
+        this.highest = new int[16][16];
         this.lightValues = new float[16][16][16];
         for(int x = 0; x < 16; x++ )
+        {
+            Arrays.fill(highest[x], 0);
             for(int y = 0; y < 16; y++ )
             {
                 Arrays.fill(blocks[x][y], Blocks.air);
                 Arrays.fill(lightValues[x][y], 1f);
             }
+        }
     }
 
     public float getLightValue(World w, int worldX, int worldY, int worldZ)
@@ -72,9 +77,7 @@ public class Chunk
         if(x < 0) x = 16 + x;
         if(y < 0) y = 16 + y;
         if(z < 0) z = 16 + z;
-        if(block == null) block = Blocks.air;
-        blocks[x][y][z] = block;
-        isDirty = true;
+        setChunkBlock(x, y, z, block);
 
         if(x == 0)
         {
@@ -145,7 +148,7 @@ public class Chunk
             }
     }
 
-    public float getChunkLightValue(int x, int y, int z, float lightValue)
+    public float getChunkLightValue(int x, int y, int z)
     {
         return lightValues[x][y][z];
     }
@@ -156,7 +159,7 @@ public class Chunk
         markDirty();
     }
 
-    public Block getChunkBlock(int x, int y, int z, Block block)
+    public Block getChunkBlock(int x, int y, int z)
     {
         Block b = blocks[x][y][z];
         if(b == null) return Blocks.air;
@@ -169,6 +172,35 @@ public class Chunk
             block = Blocks.air;
         else
             blocks[x][y][z] = block;
+
+        if(y >= highest[x][z])
+        {
+            if(block != Blocks.air)
+            {
+                highest[x][z] = y;
+            }
+            else if(y == highest[x][z])
+            {
+                for(; y >= 0; y-- )
+                {
+                    if(getChunkBlock(x, y, z) != Blocks.air)
+                    {
+                        break;
+                    }
+                }
+                highest[x][z] = y;
+            }
+        }
         markDirty();
+    }
+
+    public Block getHighestBlock(int x, int z)
+    {
+        return getChunkBlock(x, highest[x][z], z);
+    }
+
+    public int getHighest(int x, int z)
+    {
+        return highest[x][z];
     }
 }

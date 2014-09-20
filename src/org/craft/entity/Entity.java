@@ -49,9 +49,9 @@ public class Entity
 
         velocity = velocity.add(0, -G, 0);
 
-        if(velocity.getY() < -G * 4)
+        if(velocity.getY() < -G * 6)
         {
-            velocity.setY(-G * 4);
+            velocity.setY(-G * 6);
         }
 
         if(canGo(pos.add(velocity.getX(), 0, 0)))
@@ -100,7 +100,12 @@ public class Entity
                 rotate(getRotation().getRight(), (float)(Math.toRadians(89.99f) - angle));
         }
 
-        velocity = velocity.mul(0.12f, 1, 0.12f);
+        if(onGround)
+        {
+            velocity = velocity.mul(0.12f, 1, 0.12f);
+        }
+        else
+            velocity = velocity.mul(0.12f / 2f, 1, 0.12f / 2f);
         lastTickPos = pos.copy();
     }
 
@@ -216,7 +221,7 @@ public class Entity
     {
         if(onGround)
         {
-            velocity.setY(0.30f);
+            velocity.setY(0.25f);
         }
     }
 

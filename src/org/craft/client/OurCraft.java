@@ -89,6 +89,7 @@ public class OurCraft implements Runnable
             };
             generator.addPopulator(new RockPopulator());
             generator.addPopulator(new GrassPopulator());
+            generator.addPopulator(new TreePopulator());
             clientWorld = new World(new BaseChunkProvider(), generator);
             renderBlocks = new RenderBlocks(renderEngine);
 
