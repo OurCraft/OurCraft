@@ -48,7 +48,9 @@ public class RenderBlocks
     public void drawAllFaces(OpenGLBuffer buffer, Block block, World world, int x, int y, int z)
     {
         EnumSide side = EnumSide.NORTH;
-        float lightValue = world.getChunk(x, y, z).getLightValue(world, x, y, z);
+        Chunk chunk = world.getChunk(x, y, z);
+        if(chunk == null) return;
+        float lightValue = chunk.getLightValue(world, x, y, z);
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side))
         {
             drawNorthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.NORTH), x, y, z);
@@ -185,7 +187,7 @@ public class RenderBlocks
                             for(int z = 0; z < 16; z++ )
                             {
                                 Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                drawAllFaces(buffer, b, w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
+                                if(b != null) drawAllFaces(buffer, b, w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
                             }
                         }
                     }

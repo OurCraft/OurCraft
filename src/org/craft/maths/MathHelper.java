@@ -1,5 +1,6 @@
 package org.craft.maths;
 
+import java.util.*;
 
 public class MathHelper
 {
@@ -44,91 +45,21 @@ public class MathHelper
         return v;
     }
 
-    public static float perlinNoise(float x, float y, float res)
+    public static float perlinNoise(float x, float y, long seed)
     {
-        int[] perlinPerm = perm;
-        float tempX, tempY;
-        int x0, y0, ii, jj, gi0, gi1, gi2, gi3;
-        float unit = (float)(1.0 / Math.sqrt(2));
-        float tmp, s, t, u, v, Cx, Cy, Li1, Li2;
-        float gradient[][] =
-        {
-                {
-                        unit, unit
-                },
-                {
-                        -unit, unit
-                },
-                {
-                        unit, -unit
-                },
-                {
-                        -unit, -unit
-                },
-                {
-                        1, 0
-                },
-                {
-                        -1, 0
-                },
-                {
-                        0, 1
-                },
-                {
-                        0, -1
-                }
-        };
+        return (float)new ImprovedNoise(seed).perlinNoise(x, y);
+    }
 
-        // Adapter pour la résolution
-        x /= res;
-        y /= res;
-
-        // On récupère les positions de la grille associée à (x,y)
-        x0 = (int)(x % (perlinPerm.length - 1));
-        y0 = (int)(y % (perlinPerm.length - 1));
-
-        // Masquage
-        ii = (x0 & 255) % (perlinPerm.length - 1);
-        jj = (y0 & 255) % (perlinPerm.length - 1);
-
-        // Pour récupérer les vecteurs
-        int index1 = (ii + perlinPerm[jj]) % (perlinPerm.length - 1);
-        int index2 = (ii + 1 + perlinPerm[jj]) % (perlinPerm.length - 1);
-
-        int index3 = (ii + perlinPerm[jj + 1]) % (perlinPerm.length - 1);
-        int index4 = (ii + 1 + perlinPerm[jj + 1]) % (perlinPerm.length - 1);
-        gi0 = perlinPerm[index1] % 8;
-        gi1 = perlinPerm[index2] % 8;
-        gi2 = perlinPerm[index3] % 8;
-        gi3 = perlinPerm[index4] % 8;
-
-        // on récupère les vecteurs et on pondère
-        tempX = x - x0;
-        tempY = y - y0;
-        s = gradient[gi0][0] * tempX + gradient[gi0][1] * tempY;
-
-        tempX = x - (x0 + 1);
-        tempY = y - y0;
-        t = gradient[gi1][0] * tempX + gradient[gi1][1] * tempY;
-
-        tempX = x - x0;
-        tempY = y - (y0 + 1);
-        u = gradient[gi2][0] * tempX + gradient[gi2][1] * tempY;
-
-        tempX = x - (x0 + 1);
-        tempY = y - (y0 + 1);
-        v = gradient[gi3][0] * tempX + gradient[gi3][1] * tempY;
-
-        // Lissage
-        tmp = x - x0;
-        Cx = 3 * tmp * tmp - 2 * tmp * tmp * tmp;
-
-        Li1 = s + Cx * (t - s);
-        Li2 = u + Cx * (v - u);
-
-        tmp = y - y0;
-        Cy = 3 * tmp * tmp - 2 * tmp * tmp * tmp;
-
-        return Li1 + Cy * (Li2 - Li1);
+    public static int[] shuffle(int[] perm, long seed)
+    {
+        Random rng = new Random(seed);
+        int[] newArray = new int[perm.length];
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int p : perm)
+            list.add(p);
+        Collections.shuffle(list, rng);
+        for(int i = 0; i < list.size(); i++ )
+            newArray[i] = list.get(i);
+        return newArray;
     }
 }
