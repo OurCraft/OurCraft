@@ -3,6 +3,7 @@ package org.craft.blocks;
 public final class Blocks
 {
 
+    public static Block bedrock;
     public static Block dirt;
     public static Block grass;
     public static Block air;
@@ -11,6 +12,7 @@ public final class Blocks
     {
         air = new BlockAir();
         dirt = new Block("dirt");
+        bedrock = new Block("bedrock");
         grass = new BlockGrass("grass");
     }
 

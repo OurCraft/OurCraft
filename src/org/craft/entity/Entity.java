@@ -18,7 +18,7 @@ public class Entity
     private AABB              boundingBox;
     private boolean           onGround;
 
-    public static final float G = 9.81f / 120f;
+    public static final float G = 9.81f / 140f;
 
     public Entity(World world)
     {
@@ -49,9 +49,9 @@ public class Entity
 
         velocity = velocity.add(0, -G, 0);
 
-        if(velocity.getY() < -G * 5)
+        if(velocity.getY() < -G * 4)
         {
-            velocity.setY(-G * 5);
+            velocity.setY(-G * 4);
         }
 
         if(canGo(pos.add(velocity.getX(), 0, 0)))

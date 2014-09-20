@@ -10,6 +10,8 @@ import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
+import org.craft.util.*;
+import org.craft.util.CollisionInfos.CollisionType;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.lwjgl.*;
@@ -30,8 +32,9 @@ public class OurCraft
     private RenderBlocks                  renderBlocks;
     private World                         clientWorld;
     private MouseHandler                  mouseHandler;
-    private EntityPlayer                  playerTest;
+    private EntityPlayer                  player;
     private static OurCraft               instance;
+    private CollisionInfos                objectInFront = null;
 
     public OurCraft()
     {
@@ -61,7 +64,7 @@ public class OurCraft
 
         Blocks.init();
 
-        clientWorld = new World();
+        clientWorld = new World(new BaseChunkProvider());
         clientWorld.addChunk(new Chunk(new ChunkCoord(0, 0, 0)));
         clientWorld.addChunk(new Chunk(new ChunkCoord(0, 1, 0)));
         clientWorld.addChunk(new Chunk(new ChunkCoord(-1, 0, 0)));
@@ -94,25 +97,24 @@ public class OurCraft
         clientWorld.setBlock(1, 3, 0, Blocks.air);
         clientWorld.setBlock(-1, 0, 0, Blocks.grass);
 
-        Log.message("Block at (0,0,0) is " + clientWorld.getBlock(0, 0, 0).getID());
-        Log.message("Block at (0,1,0) is " + clientWorld.getBlock(0, 1, 0).getID());
-        Log.message("Block at (-1,0,0) is " + clientWorld.getBlock(-1, 0, 0).getID());
-        renderBlocks = new RenderBlocks(renderEngine);
+        WorldGenerator generator = new WorldGenerator(clientWorld, 0)
+        {
 
-        ArrayList<Chunk> visiblesChunks = new ArrayList<>();
-        visiblesChunks.add(clientWorld.getChunk(0, 0, 0));
-        visiblesChunks.add(clientWorld.getChunk(0, 1, 0));
-        visiblesChunks.add(clientWorld.getChunk(-1, 0, 0));
-        visiblesChunks.add(clientWorld.getChunk(0, 0, -1));
-        renderBlocks.prepare(clientWorld, visiblesChunks);
+        };
+        generator.populateChunk(clientWorld.getChunk(0, 0, 0));
+        generator.populateChunk(clientWorld.getChunk(0, 1, 0));
+        generator.populateChunk(clientWorld.getChunk(-1, 0, 0));
+        generator.populateChunk(clientWorld.getChunk(0, 0, -1));
+
+        renderBlocks = new RenderBlocks(renderEngine);
 
         basicShader = new Shader(IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.vsh"), "UTF-8"), IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.fsh"), "UTF-8"));
         modelMatrix = new Matrix4().initIdentity();
 
-        playerTest = new EntityPlayer(clientWorld);
-        playerTest.setLocation(0, 0, -4);
-        clientWorld.spawn(playerTest);
-        renderEngine.setRenderViewEntity(playerTest);
+        player = new EntityPlayer(clientWorld);
+        player.setLocation(0, 1, -4);
+        clientWorld.spawn(player);
+        renderEngine.setRenderViewEntity(player);
         while(running)
         {
             tick();
@@ -132,6 +134,10 @@ public class OurCraft
     private void update()
     {
         mouseHandler.update();
+        if(player != null)
+        {
+            objectInFront = player.getObjectInFront(5f);
+        }
         if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
         {
             running = false;
@@ -139,7 +145,7 @@ public class OurCraft
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
         {
-            playerTest.jump();
+            player.jump();
         }
         clientWorld.update();
     }
@@ -147,11 +153,28 @@ public class OurCraft
     private void render()
     {
         ArrayList<Chunk> visiblesChunks = new ArrayList<>();
-        visiblesChunks.add(clientWorld.getChunk(0, 0, 0));
-        visiblesChunks.add(clientWorld.getChunk(0, 1, 0));
-        visiblesChunks.add(clientWorld.getChunk(-1, 0, 0));
-        visiblesChunks.add(clientWorld.getChunk(0, 0, -1));
+        if(player != null)
+        {
+            int renderDistance = 16;
+            int ox = (int)renderEngine.getRenderViewEntity().getPos().x;
+            int oy = (int)renderEngine.getRenderViewEntity().getPos().y;
+            int oz = (int)renderEngine.getRenderViewEntity().getPos().z;
+            for(int x = -renderDistance; x < renderDistance; x++ )
+            {
+                for(int y = -renderDistance; y < renderDistance; y++ )
+                {
+                    for(int z = -renderDistance; z < renderDistance; z++ )
+                    {
+                        Chunk c = clientWorld.getChunk(x * 16 + ox, y * 16 + oy, z * 16 + oz);
+                        if(c == null) continue;
+                        visiblesChunks.add(c);
+                    }
+                }
+            }
+        }
+        renderBlocks.startRendering();
         renderBlocks.prepare(clientWorld, visiblesChunks);
+        renderBlocks.flush();
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);
@@ -162,6 +185,50 @@ public class OurCraft
 
         glClear(GL_DEPTH_BUFFER_BIT);
         renderEngine.disableGLCap(GL_DEPTH_TEST);
+
+        if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
+        {
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glBegin(GL_LINES);
+            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z);
+            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z);
+
+            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z);
+            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z);
+
+            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z + 1);
+            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z + 1);
+            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z);
+            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z);
+            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z);
+            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z);
+            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z);
+            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z);
+
+            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z);
+            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z);
+
+            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z + 1);
+            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z + 1);
+
+            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z + 1);
+            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z + 1);
+
+            glEnd();
+
+        }
 
     }
 
@@ -191,5 +258,10 @@ public class OurCraft
     public MouseHandler getMouseHandler()
     {
         return mouseHandler;
+    }
+
+    public CollisionInfos getObjectInFront()
+    {
+        return objectInFront;
     }
 }

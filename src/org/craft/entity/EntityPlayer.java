@@ -20,7 +20,7 @@ public class EntityPlayer extends Entity
     public void onEntityUpdate()
     {
         float speed = 1f / 10f;
-        if(!isOnGround()) speed /= 3f;
+        if(!isOnGround()) speed /= 2f;
         if(Keyboard.isKeyDown(Keyboard.KEY_Z))
         {
             this.moveForward(speed);
@@ -41,18 +41,18 @@ public class EntityPlayer extends Entity
         rotate(Vector3.yAxis, (float)Math.toRadians(OurCraft.getOurCraft().getMouseHandler().getDX()));
         rotate(getRotation().getRight(), (float)Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY()));
 
-        CollisionInfos infos = getObjectInFront(5f);
+        CollisionInfos infos = OurCraft.getOurCraft().getObjectInFront();
         if(infos.type == CollisionType.BLOCK)
         {
             if(Mouse.isButtonDown(0))
-                getWorld().setBlock((int)Math.round(infos.x + infos.side.getTranslationX()), (int)Math.round(infos.y + infos.side.getTranslationY()), (int)Math.round(infos.z + infos.side.getTranslationZ()), Blocks.dirt);
+                getWorld().setBlock((int)infos.x + infos.side.getTranslationX(), (int)(infos.y) + infos.side.getTranslationY(), (int)(infos.z + infos.side.getTranslationZ()), Blocks.dirt);
             else if(Mouse.isButtonDown(1)) getWorld().setBlock((int)Math.round(infos.x), (int)Math.round(infos.y), (int)Math.round(infos.z), Blocks.air);
         }
     }
 
     public float getEyeOffset()
     {
-        return 1.8f;
+        return 1.7f;
     }
 
 }

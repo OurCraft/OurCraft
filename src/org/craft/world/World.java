@@ -13,15 +13,15 @@ import org.craft.utils.*;
 public class World
 {
 
-    private ChunkMap                    chunkMap;
     private LinkedList<Entity>          entities;
     private LinkedBlockingQueue<Entity> spawingQueue;
     private AABB                        groundBB;
+    private ChunkProvider               chunkProvider;
 
-    public World()
+    public World(ChunkProvider prov)
     {
+        this.chunkProvider = prov;
         spawingQueue = new LinkedBlockingQueue<>();
-        this.chunkMap = new ChunkMap();
         entities = new LinkedList<>();
         groundBB = new AABB(Vector3.get(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY), Vector3.get(Float.POSITIVE_INFINITY, 0, Float.POSITIVE_INFINITY));
     }
@@ -46,12 +46,12 @@ public class World
 
     public Chunk getChunk(int x, int y, int z)
     {
-        return chunkMap.getAt((int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
+        return chunkProvider.getOrCreate(this, (int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
     }
 
     public void addChunk(Chunk c)
     {
-        chunkMap.add(c);
+        chunkProvider.addChunk(this, c);
     }
 
     public Block getBlock(int x, int y, int z)
@@ -102,44 +102,37 @@ public class World
          * }
          */
 
-        float step = 0.4f;
-        Vector3 startPos = sender.getPos().add(0.5f, sender.getEyeOffset(), 0.5f);
-        Vector3 look = sender.getRotation().getForward().normalize();
+        float step = 0.1f;
+        Vector3 startPos = sender.getPos().add(0f, sender.getEyeOffset(), 0f);
+        Vector3 look = sender.getRotation().getForward();
         Vector3 currentPos = startPos;
-        AABB bb = new AABB(Vector3.get(-1f, -1f, -1f), Vector3.get(1, 1, 1));
-        int x = (int)Math.floor(currentPos.getX());
-        int y = (int)Math.round(currentPos.getY());
-        int z = (int)Math.floor(currentPos.getZ());
-        int lastX = x - 1; // in order not to make the algorithm skip the
-                           // first
-                           // case, and so every case after
-        int lastY = y - 1;
-        int lastZ = z - 1;
+        AABB bb = new AABB(Vector3.get(-0.01f, -0.01f, -0.01f), Vector3.get(0.01f, 0.01f, 0.01f));
         Vector3 blockPos = Vector3.NULL.copy();
-        for(float dist = 0; dist <= maxDist + step; dist += step)
+        float dist = 0f;
+        while(dist < maxDist)
         {
+            int x = (int)(currentPos.getX());
+            int y = (int)(currentPos.getY());
+            int z = (int)(currentPos.getZ());
             currentPos = startPos.add(look.mul(dist));
-
-            x = (int)Math.floor(currentPos.getX());
-            y = (int)Math.round(currentPos.getY());
-            z = (int)Math.floor(currentPos.getZ());
-            if(x == lastX && y == lastY && z == lastZ)
+            dist += step;
+            Block b = getBlock(x, y, z);
+            if(b == null)
             {
                 continue;
             }
-            lastX = x;
-            lastY = y;
-            lastZ = z;
-            Block b = getBlock(x, y, z);
-            if(b == null) continue;
-            float dx = currentPos.getX() - x;
-            float dy = currentPos.getY() - y;
-            float dz = currentPos.getZ() - z;
+            int dx = (int)(startPos.getX()) - x;
+            int dy = (int)(startPos.getY()) - y;
+            int dz = (int)(startPos.getZ()) - z;
             float blockDist = (float)Math.sqrt(dx * dx + dy * dy + dz * dz);
             blockPos.set(x, y, z);
             AABB blockBB = b.getSelectionBox(this, x, y, z);
-            if(blockBB == null) continue;
-            if(blockDist < maxReachedDist && blockBB.intersectAABB(bb.translate(currentPos)).doesIntersects())
+            if(blockBB == null)
+            {
+                currentPos = currentPos.add(look.mul(step));
+                continue;
+            }
+            if(blockDist < maxReachedDist && (blockBB.intersectAABB(bb.translate(currentPos)).doesIntersects() || blockBB.intersectAABB(bb.translate(currentPos)).getDistance() < 1f / 16f))
             {
                 maxReachedDist = blockDist;
                 Vector3 dir = sender.getPos().sub(blockPos);
@@ -178,6 +171,7 @@ public class World
                 infos.y = y;
                 infos.z = z;
             }
+            currentPos = currentPos.add(look.mul(step));
         }
     }
 }

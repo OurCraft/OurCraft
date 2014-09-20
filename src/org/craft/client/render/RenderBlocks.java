@@ -56,6 +56,7 @@ public class RenderBlocks
                 break;
             }
         }
+        if(buffer.getIndicesCount() == 0 && visiblesChunks.size() > 0) shouldRedo = true;
         if(shouldRedo)
         {
             startRendering();

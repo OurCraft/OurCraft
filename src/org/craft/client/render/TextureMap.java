@@ -68,8 +68,8 @@ public class TextureMap implements IconGenerator, ITextureObject
             {
                 for(int y = 0; y < 16; y++ )
                 {
-                    int color = 0x000000;
-                    if((x >= 8 && y >= 8) || (x < 8 && y < 8)) color = 0xFF00DC;
+                    int color = 0xFF000000;
+                    if((x >= 8 && y >= 8) || (x < 8 && y < 8)) color = 0xFFFF00DC;
                     nullImage.setRGB(x, y, color);
                 }
             }
@@ -97,9 +97,9 @@ public class TextureMap implements IconGenerator, ITextureObject
                 for(int y = 0; y < 16; y++ )
                 {
                     if(x == 0 || y == 0)
-                        emptyImage.setRGB(x, y, 0x4800FF);
+                        emptyImage.setRGB(x, y, 0xFF4800FF);
                     else
-                        emptyImage.setRGB(x, y, 0xFF00DC);
+                        emptyImage.setRGB(x, y, 0xFFFF00DC);
                 }
             }
             g.dispose();

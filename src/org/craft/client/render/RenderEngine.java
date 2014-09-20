@@ -62,4 +62,9 @@ public class RenderEngine
     {
         glDisable(cap);
     }
+
+    public Entity getRenderViewEntity()
+    {
+        return renderViewEntity;
+    }
 }
