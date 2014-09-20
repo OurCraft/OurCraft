@@ -58,23 +58,22 @@ public class Quaternion
                 y = (rot.get(1, 0) + rot.get(0, 1)) / s;
                 z = (rot.get(2, 0) + rot.get(0, 2)) / s;
             }
+            else if(rot.get(1, 1) > rot.get(2, 2))
+            {
+                float s = 2.0f * (float) Math.sqrt(1.0f + rot.get(1, 1) - rot.get(0, 0) - rot.get(2, 2));
+                w = (rot.get(2, 0) - rot.get(0, 2)) / s;
+                x = (rot.get(1, 0) + rot.get(0, 1)) / s;
+                y = 0.25f * s;
+                z = (rot.get(2, 1) + rot.get(1, 2)) / s;
+            }
             else
-                if(rot.get(1, 1) > rot.get(2, 2))
-                {
-                    float s = 2.0f * (float) Math.sqrt(1.0f + rot.get(1, 1) - rot.get(0, 0) - rot.get(2, 2));
-                    w = (rot.get(2, 0) - rot.get(0, 2)) / s;
-                    x = (rot.get(1, 0) + rot.get(0, 1)) / s;
-                    y = 0.25f * s;
-                    z = (rot.get(2, 1) + rot.get(1, 2)) / s;
-                }
-                else
-                {
-                    float s = 2.0f * (float) Math.sqrt(1.0f + rot.get(2, 2) - rot.get(0, 0) - rot.get(1, 1));
-                    w = (rot.get(0, 1) - rot.get(1, 0)) / s;
-                    x = (rot.get(2, 0) + rot.get(0, 2)) / s;
-                    y = (rot.get(1, 2) + rot.get(2, 1)) / s;
-                    z = 0.25f * s;
-                }
+            {
+                float s = 2.0f * (float) Math.sqrt(1.0f + rot.get(2, 2) - rot.get(0, 0) - rot.get(1, 1));
+                w = (rot.get(0, 1) - rot.get(1, 0)) / s;
+                x = (rot.get(2, 0) + rot.get(0, 2)) / s;
+                y = (rot.get(1, 2) + rot.get(2, 1)) / s;
+                z = 0.25f * s;
+            }
         }
 
         float length = length();

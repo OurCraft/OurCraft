@@ -45,55 +45,52 @@ public class LWJGLSetup
                 Log.message("Natives already exist.");
             }
         }
-        else
-            if(os == OperatingSystem.SOLARIS)
+        else if(os == OperatingSystem.SOLARIS)
+        {
+            if(!new File(folder.getPath() + "/liblwjgl.so").exists())
             {
-                if(!new File(folder.getPath() + "/liblwjgl.so").exists())
-                {
-                    extractFromClasspath("/solaris/liblwjgl.so", folder);
-                    extractFromClasspath("/solaris/liblwjgl64.so", folder);
-                    extractFromClasspath("/solaris/libopenal.so", folder);
-                    extractFromClasspath("/solaris/libopenal64.so", folder);
-                }
-                else
-                {
-                    Log.message("Natives already exist.");
-                }
-
+                extractFromClasspath("/solaris/liblwjgl.so", folder);
+                extractFromClasspath("/solaris/liblwjgl64.so", folder);
+                extractFromClasspath("/solaris/libopenal.so", folder);
+                extractFromClasspath("/solaris/libopenal64.so", folder);
             }
             else
-                if(os == OperatingSystem.LINUX)
-                {
-                    if(!new File(folder.getPath() + "/liblwjgl.so").exists())
-                    {
-                        extractFromClasspath("/linux/liblwjgl.so", folder);
-                        extractFromClasspath("/linux/liblwjgl64.so", folder);
-                        extractFromClasspath("/linux/libopenal.so", folder);
-                        extractFromClasspath("/linux/libopenal64.so", folder);
-                    }
-                    else
-                    {
-                        Log.message("Natives already exist.");
-                    }
+            {
+                Log.message("Natives already exist.");
+            }
 
-                }
-                else
-                    if(os == OperatingSystem.MACOSX)
-                    {
-                        if(!new File(folder.getPath() + "/openal.dylib").exists())
-                        {
-                            extractFromClasspath("/macosx/liblwjgl.jnilib", folder);
-                            extractFromClasspath("/macosx/liblwjgl-osx.jnilib", folder);
-                            extractFromClasspath("/macosx/openal.dylib", folder);
-                        }
-                        else
-                        {
-                            Log.message("Natives already exist.");
-                        }
-                    }
-                    else
-                    {
-                    }
+        }
+        else if(os == OperatingSystem.LINUX)
+        {
+            if(!new File(folder.getPath() + "/liblwjgl.so").exists())
+            {
+                extractFromClasspath("/linux/liblwjgl.so", folder);
+                extractFromClasspath("/linux/liblwjgl64.so", folder);
+                extractFromClasspath("/linux/libopenal.so", folder);
+                extractFromClasspath("/linux/libopenal64.so", folder);
+            }
+            else
+            {
+                Log.message("Natives already exist.");
+            }
+
+        }
+        else if(os == OperatingSystem.MACOSX)
+        {
+            if(!new File(folder.getPath() + "/openal.dylib").exists())
+            {
+                extractFromClasspath("/macosx/liblwjgl.jnilib", folder);
+                extractFromClasspath("/macosx/liblwjgl-osx.jnilib", folder);
+                extractFromClasspath("/macosx/openal.dylib", folder);
+            }
+            else
+            {
+                Log.message("Natives already exist.");
+            }
+        }
+        else
+        {
+        }
         System.setProperty("net.java.games.input.librarypath", folder.getAbsolutePath());
     }
 

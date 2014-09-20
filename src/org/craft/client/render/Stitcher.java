@@ -36,18 +36,17 @@ public class Stitcher
             tileWidth = img.getWidth();
             tileHeight = img.getHeight();
         }
-        else
-            if((img.getWidth() != tileWidth || img.getHeight() != tileHeight))
+        else if((img.getWidth() != tileWidth || img.getHeight() != tileHeight))
+        {
+            if(!forceResize)
             {
-                if(!forceResize)
-                {
-                    Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
-                }
-                else
-                {
-                    img = ImageUtils.resize(img, tileWidth, tileHeight);
-                }
+                Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
             }
+            else
+            {
+                img = ImageUtils.resize(img, tileWidth, tileHeight);
+            }
+        }
         imgs.add(img);
         return imgs.size() - 1;
     }

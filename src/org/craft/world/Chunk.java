@@ -205,18 +205,17 @@ public class Chunk
             {
                 highest[x][z] = y;
             }
-            else
-                if(y == highest[x][z])
+            else if(y == highest[x][z])
+            {
+                for(; y >= 0; --y)
                 {
-                    for(; y >= 0; --y)
+                    if(getChunkBlock(x, y, z) != Blocks.air)
                     {
-                        if(getChunkBlock(x, y, z) != Blocks.air)
-                        {
-                            break;
-                        }
+                        break;
                     }
-                    highest[x][z] = y;
                 }
+                highest[x][z] = y;
+            }
         }
         markDirty();
         makeNeighbors(x, y, z);
