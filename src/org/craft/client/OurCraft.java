@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 
+import javax.imageio.*;
 import javax.swing.*;
 
 import org.craft.blocks.*;
@@ -38,6 +39,9 @@ public class OurCraft implements Runnable
     private EntityPlayer                  player;
     private static OurCraft               instance;
     private CollisionInfos                objectInFront = null;
+    private Matrix4                       projectionHud;
+    private Texture                       crosshairTexture;
+    private OpenGLBuffer                  crosshairBuffer;
 
     public OurCraft()
     {
@@ -96,6 +100,23 @@ public class OurCraft implements Runnable
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
             renderEngine.setRenderViewEntity(player);
+
+            this.crosshairTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/textures/crosshair.png")));
+            projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+            crosshairBuffer = new OpenGLBuffer();
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), new Vector2(0, 0)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), new Vector2(1, 0)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), new Vector2(1, 1)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), new Vector2(0, 1)));
+
+            crosshairBuffer.addIndex(0);
+            crosshairBuffer.addIndex(1);
+            crosshairBuffer.addIndex(2);
+
+            crosshairBuffer.addIndex(2);
+            crosshairBuffer.addIndex(3);
+            crosshairBuffer.addIndex(0);
+            crosshairBuffer.upload();
 
             new ThreadGetChunksFromCamera(this).start();
             running = true;
@@ -179,7 +200,6 @@ public class OurCraft implements Runnable
 
         glClear(GL_DEPTH_BUFFER_BIT);
         renderEngine.disableGLCap(GL_DEPTH_TEST);
-
         if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
         {
             glBindTexture(GL_TEXTURE_2D, 0);
@@ -223,6 +243,12 @@ public class OurCraft implements Runnable
             glEnd();
         }
 
+        basicShader.setUniform("projection", projectionHud);
+
+        renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
+        glLogicOp(GL_XOR);
+        renderEngine.renderBuffer(crosshairBuffer, crosshairTexture);
+        renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
     }
 
     public File getGameFolder()
