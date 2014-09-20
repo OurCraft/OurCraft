@@ -17,9 +17,11 @@ public class World
     private LinkedBlockingQueue<Entity> spawingQueue;
     private AABB                        groundBB;
     private ChunkProvider               chunkProvider;
+    private WorldGenerator              generator;
 
-    public World(ChunkProvider prov)
+    public World(ChunkProvider prov, WorldGenerator generator)
     {
+        this.generator = generator;
         this.chunkProvider = prov;
         spawingQueue = new LinkedBlockingQueue<>();
         entities = new LinkedList<>();
@@ -46,7 +48,7 @@ public class World
 
     public Chunk getChunk(int x, int y, int z)
     {
-        return chunkProvider.getOrCreate(this, (int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
+        return chunkProvider.get(this, (int)Math.floor((float)x / 16f), (int)Math.floor((float)y / 16f), (int)Math.floor((float)z / 16f));
     }
 
     public void addChunk(Chunk c)
@@ -54,10 +56,15 @@ public class World
         chunkProvider.addChunk(this, c);
     }
 
+    public Block getBlockNextTo(int x, int y, int z, EnumSide side)
+    {
+        return getBlock(x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ());
+    }
+
     public Block getBlock(int x, int y, int z)
     {
         Chunk c = getChunk(x, y, z);
-        if(c == null) return null;
+        if(c == null) return Blocks.air;
         return c.getBlock(this, x, y, z);
     }
 
@@ -173,5 +180,15 @@ public class World
             }
             currentPos = currentPos.add(look.mul(step));
         }
+    }
+
+    public WorldGenerator getGenerator()
+    {
+        return generator;
+    }
+
+    public ChunkProvider getChunkProvider()
+    {
+        return chunkProvider;
     }
 }

@@ -23,6 +23,11 @@ public class BlockAir extends Block
         return false;
     }
 
+    public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
+    {
+        return false;
+    }
+
     public void registerIcons(IconGenerator register)
     {
         ;

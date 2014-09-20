@@ -27,21 +27,26 @@ public abstract class WorldGenerator
     public boolean populateChunk(Chunk chunk)
     {
         if(chunk == null) return false;
+        for(IWorldPopulator populator : populators)
+        {
+            populator.populate(world, chunk, rng);
+        }
         if(chunk.getCoords().y == 0) // Temporary Bottom layer
         {
             for(int x = 0; x < 16; x++ )
             {
                 for(int z = 0; z < 16; z++ )
                 {
-                    chunk.setBlock(world, x, 0, z, Blocks.bedrock);
+                    chunk.setChunkBlock(x, 0, z, Blocks.bedrock);
                 }
             }
         }
-        for(IWorldPopulator populator : populators)
-        {
-            populator.populate(chunk, rng);
-        }
         return true;
+    }
+
+    public void addPopulator(IWorldPopulator populator)
+    {
+        populators.add(populator);
     }
 
 }

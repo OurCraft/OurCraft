@@ -9,7 +9,7 @@ public class Chunk
 
     public Block[][][] blocks;
     private ChunkCoord coords;
-    private boolean    isDirty = false;
+    private boolean    isDirty;
 
     public Chunk(ChunkCoord coords)
     {
@@ -29,6 +29,7 @@ public class Chunk
         if(x < 0) x = 16 + x;
         if(y < 0) y = 16 + y;
         if(z < 0) z = 16 + z;
+        if(blocks[x][y][z] == null) blocks[x][y][z] = Blocks.air;
         return blocks[x][y][z];
     }
 
@@ -41,8 +42,45 @@ public class Chunk
         if(x < 0) x = 16 + x;
         if(y < 0) y = 16 + y;
         if(z < 0) z = 16 + z;
+        if(block == null) block = Blocks.air;
         blocks[x][y][z] = block;
         isDirty = true;
+
+        if(x == 0)
+        {
+            Chunk c = world.getChunkProvider().get(world, coords.x - 1, coords.y, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(x == 15)
+        {
+            Chunk c = world.getChunkProvider().get(world, coords.x + 1, coords.y, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(y == 0)
+        {
+            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y - 1, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(y == 15)
+        {
+            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y + 1, coords.z);
+            if(c != null) c.markDirty();
+        }
+
+        if(z == 0)
+        {
+            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y, coords.z - 1);
+            if(c != null) c.markDirty();
+        }
+
+        if(z == 15)
+        {
+            Chunk c = world.getChunkProvider().get(world, coords.x, coords.y, coords.z + 1);
+            if(c != null) c.markDirty();
+        }
     }
 
     public boolean isDirty()
@@ -63,5 +101,27 @@ public class Chunk
     public void cleanUpDirtiness()
     {
         isDirty = false;
+    }
+
+    public void fill(Block block)
+    {
+        for(int x = 0; x < 16; x++ )
+            for(int y = 0; y < 16; y++ )
+            {
+                for(int z = 0; z < 16; z++ )
+                {
+                    setChunkBlock(x, y, z, block);
+                }
+            }
+    }
+
+    public void setChunkBlock(int x, int y, int z, Block block)
+    {
+        if(block == null)
+            block = Blocks.air;
+        else
+            blocks[x][y][z] = block;
+        markDirty();
+
     }
 }
