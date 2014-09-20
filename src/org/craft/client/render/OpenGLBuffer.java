@@ -41,6 +41,10 @@ public class OpenGLBuffer
 
             verticesBuffer.put(vertex.getTexCoords().getX());
             verticesBuffer.put(vertex.getTexCoords().getY());
+
+            verticesBuffer.put(vertex.getColor().getX());
+            verticesBuffer.put(vertex.getColor().getY());
+            verticesBuffer.put(vertex.getColor().getZ());
         }
         verticesBuffer.flip();
         GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);

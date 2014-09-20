@@ -6,10 +6,10 @@ public class Vector2
 {
 
     public static final Vector2 NULL = new Vector2(0, 0);
-    public double               x;
-    public double               y;
+    public float                x;
+    public float                y;
 
-    public Vector2(double x, double y)
+    public Vector2(float x, float y)
     {
         this.x = x;
         this.y = y;
@@ -22,26 +22,26 @@ public class Vector2
 
     public Vector2 normalize()
     {
-        double l = length();
-        double _x = this.x / l;
-        double _y = this.y / l;
+        float l = length();
+        float _x = this.x / l;
+        float _y = this.y / l;
         return new Vector2(_x, _y);
     }
 
     /**
      * @param v
      */
-    public double dot(Vector2 r)
+    public float dot(Vector2 r)
     {
         return x * r.x + y * r.y;
     }
 
-    public Vector2 add(double factor)
+    public Vector2 add(float factor)
     {
         return new Vector2(this.x + factor, this.y + factor);
     }
 
-    public Vector2 add(double x, double y)
+    public Vector2 add(float x, float y)
     {
         return new Vector2(this.x + x, this.y + y);
     }
@@ -51,12 +51,12 @@ public class Vector2
         return new Vector2(this.x + v.x, this.y + v.y);
     }
 
-    public Vector2 sub(double factor)
+    public Vector2 sub(float factor)
     {
         return new Vector2(this.x - factor, this.y - factor);
     }
 
-    public Vector2 sub(double x, double y)
+    public Vector2 sub(float x, float y)
     {
         return new Vector2(this.x - x, this.y - y);
     }
@@ -66,12 +66,12 @@ public class Vector2
         return new Vector2(this.x - v.x, this.y - v.y);
     }
 
-    public Vector2 div(double factor)
+    public Vector2 div(float factor)
     {
         return new Vector2(this.x / factor, this.y / factor);
     }
 
-    public Vector2 div(double x, double y)
+    public Vector2 div(float x, float y)
     {
         return new Vector2(this.x / x, this.y / y);
     }
@@ -81,7 +81,7 @@ public class Vector2
         return new Vector2(this.x / v.x, this.y / v.y);
     }
 
-    public Vector2 mul(double factor)
+    public Vector2 mul(float factor)
     {
         return new Vector2(this.x * factor, this.y * factor);
     }
@@ -91,29 +91,29 @@ public class Vector2
         return new Vector2(this.x * v.x, this.y * v.y);
     }
 
-    public Vector2 mul(double x, double y)
+    public Vector2 mul(float x, float y)
     {
         return new Vector2(this.x * x, this.y * y);
     }
 
-    public double length()
+    public float length()
     {
-        return Math.sqrt(x * x + y * y);
+        return (float)Math.sqrt(x * x + y * y);
     }
 
-    public Vector2 set(double x, double y)
+    public Vector2 set(float x, float y)
     {
         this.x = x;
         this.y = y;
         return this;
     }
 
-    public double getX()
+    public float getX()
     {
         return x;
     }
 
-    public double getY()
+    public float getY()
     {
         return y;
     }
@@ -129,7 +129,7 @@ public class Vector2
         return 2;
     }
 
-    public double cross(Vector2 other)
+    public float cross(Vector2 other)
     {
         return x * other.getY() - y * other.getX();
     }
@@ -144,7 +144,7 @@ public class Vector2
         return new Vector2(-x, -y);
     }
 
-    public Vector2 lerp(Vector2 dest, double factor)
+    public Vector2 lerp(Vector2 dest, float factor)
     {
         return dest.sub(this).mul(factor).add(this);
     }
@@ -159,7 +159,7 @@ public class Vector2
         return false;
     }
 
-    public double max()
+    public float max()
     {
         return Math.max(getX(), getY());
     }
