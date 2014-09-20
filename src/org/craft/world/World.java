@@ -7,8 +7,8 @@ import org.craft.blocks.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.util.*;
-import org.craft.util.CollisionInfos.CollisionType;
 import org.craft.utils.*;
+import org.craft.utils.CollisionInfos.*;
 
 public class World
 {

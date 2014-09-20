@@ -46,7 +46,6 @@ public class BaseChunkProvider extends ChunkProvider
         newChunk.markDirty();
         addChunk(world, newChunk);
         world.getGenerator().populateChunk(world, newChunk);
-        Log.message("Creating new chunk at " + chunkX + "," + chunkY + "," + chunkZ);
         return newChunk;
     }
 

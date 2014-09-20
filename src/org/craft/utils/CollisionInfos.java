@@ -1,4 +1,4 @@
-package org.craft.util;
+package org.craft.utils;
 
 public class CollisionInfos
 {

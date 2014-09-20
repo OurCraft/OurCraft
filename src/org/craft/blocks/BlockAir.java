@@ -3,6 +3,7 @@ package org.craft.blocks;
 import org.craft.client.render.*;
 import org.craft.maths.*;
 import org.craft.util.*;
+import org.craft.utils.*;
 import org.craft.world.*;
 
 public class BlockAir extends Block
