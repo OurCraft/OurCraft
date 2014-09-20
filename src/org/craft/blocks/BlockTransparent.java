@@ -3,10 +3,10 @@ package org.craft.blocks;
 import org.craft.utils.*;
 import org.craft.world.*;
 
-public class BlockLeaves extends Block
+public class BlockTransparent extends Block
 {
 
-    public BlockLeaves(String id)
+    public BlockTransparent(String id)
     {
         super(id);
     }
