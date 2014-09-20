@@ -11,41 +11,52 @@ public class ThreadGetChunksFromCamera extends Thread
     public ThreadGetChunksFromCamera(OurCraft game)
     {
         this.game = game;
+        setDaemon(true);
     }
 
     public void run()
     {
-        World clientWorld = game.getClientWorld();
-        RenderEngine renderEngine = game.getRenderEngine();
-        int renderDistance = 6;
-        while(game.isRunning())
+        try
         {
-            int ox = (int)renderEngine.getRenderViewEntity().getPos().x;
-            int oy = (int)renderEngine.getRenderViewEntity().getPos().y;
-            int oz = (int)renderEngine.getRenderViewEntity().getPos().z;
-            for(int x = -renderDistance; x < renderDistance; x++ )
+            World clientWorld = game.getClientWorld();
+            RenderEngine renderEngine = game.getRenderEngine();
+            int renderDistance = 6;
+            while(game.isRunning())
             {
-                yLoop: for(int y = -renderDistance; y < renderDistance; y++ )
+                int ox = (int)renderEngine.getRenderViewEntity().getPos().x;
+                int oy = (int)renderEngine.getRenderViewEntity().getPos().y;
+                int oz = (int)renderEngine.getRenderViewEntity().getPos().z;
+                for(int x = -renderDistance; x < renderDistance; x++ )
                 {
-                    for(int z = -renderDistance; z < renderDistance; z++ )
+                    yLoop: for(int y = -renderDistance; y < renderDistance; y++ )
                     {
-                        int fx = x * 16 + ox;
-                        int fy = y * 16 + oy;
-                        int fz = z * 16 + oz;
+                        for(int z = -renderDistance; z < renderDistance; z++ )
+                        {
+                            int fx = x * 16 + ox;
+                            int fy = y * 16 + oy;
+                            int fz = z * 16 + oz;
 
-                        if(fy < 0) continue yLoop;
-                        clientWorld.getChunkProvider().getOrCreate(clientWorld, (int)Math.floor((float)fx / 16f), (int)Math.floor((float)fy / 16f), (int)Math.floor((float)fz / 16f));
+                            if(fy < 0) continue yLoop;
+                            synchronized(clientWorld)
+                            {
+                                clientWorld.getChunkProvider().getOrCreate(clientWorld, (int)Math.floor((float)fx / 16f), (int)Math.floor((float)fy / 16f), (int)Math.floor((float)fz / 16f));
+                            }
+                        }
                     }
                 }
+                try
+                {
+                    Thread.sleep(1);
+                }
+                catch(InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
             }
-            try
-            {
-                Thread.sleep(1);
-            }
-            catch(InterruptedException e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

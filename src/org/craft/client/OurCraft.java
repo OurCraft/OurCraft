@@ -2,8 +2,11 @@ package org.craft.client;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.*;
 import java.io.*;
 import java.util.*;
+
+import javax.swing.*;
 
 import org.craft.blocks.*;
 import org.craft.client.render.*;
@@ -24,7 +27,7 @@ public class OurCraft implements Runnable
     private File                          gameFolder;
     private int                           displayWidth  = 960;
     private int                           displayHeight = 540;
-    private boolean                       running       = false;
+    private boolean                       running       = true;
     private RenderEngine                  renderEngine  = null;
     private Matrix4                       modelMatrix;
     private Shader                        basicShader;
@@ -51,13 +54,19 @@ public class OurCraft implements Runnable
     {
         try
         {
-            Display.setResizable(true);
-            Display.setTitle("OurCraft");
-            Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
+            JFrame frame = new JFrame();
+            frame.setTitle("OurCraft");
+            Canvas canvas = new Canvas();
+            frame.add(canvas);
+            canvas.setPreferredSize(new Dimension(displayWidth, displayHeight));
+            frame.pack();
+            frame.setResizable(false);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            Display.setParent(canvas);
             Display.create();
             mouseHandler = new MouseHandler();
             mouseHandler.grab();
-            running = true;
             GL11.glMatrixMode(GL11.GL_PROJECTION);
             GL11.glLoadIdentity();
             glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
@@ -89,16 +98,17 @@ public class OurCraft implements Runnable
             renderEngine.setRenderViewEntity(player);
 
             new ThreadGetChunksFromCamera(this).start();
-            while(running)
+            running = true;
+            while(running && !Display.isCloseRequested())
             {
                 tick();
                 Display.sync(60);
                 Display.update();
-
-                if(Display.isCloseRequested()) running = false;
             }
-            Log.error("BYE");
             Display.destroy();
+            frame.dispose();
+            Log.error("BYE");
+            System.exit(0);
         }
         catch(Exception e)
         {
@@ -122,7 +132,6 @@ public class OurCraft implements Runnable
         if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
         {
             running = false;
-            return;
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
         {
@@ -150,13 +159,17 @@ public class OurCraft implements Runnable
                         int fy = y * 16 + oy;
                         int fz = z * 16 + oz;
                         if(fy < 0) continue;
-                        Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int)Math.floor((float)fx / 16f), (int)Math.floor((float)fy / 16f), (int)Math.floor((float)fz / 16f));
-                        if(c != null) visiblesChunks.add(c);
+                        synchronized(clientWorld)
+                        {
+                            Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int)Math.floor((float)fx / 16f), (int)Math.floor((float)fy / 16f), (int)Math.floor((float)fz / 16f));
+                            if(c != null) visiblesChunks.add(c);
+                        }
                     }
                 }
             }
         }
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
+        glClearColor(0, 0.6666667f, 1, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);
         basicShader.bind();
