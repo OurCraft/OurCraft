@@ -24,7 +24,7 @@ public class BlockLog extends Block
 
     public void registerIcons(IconGenerator register)
     {
-        sideIcon = register.generateIcon(getID() + ".png");
+        sideIcon = register.generateIcon(getID() + "_side.png");
         topAndBottomIcon = register.generateIcon(getID() + "_bottom_and_top.png");
     }
 

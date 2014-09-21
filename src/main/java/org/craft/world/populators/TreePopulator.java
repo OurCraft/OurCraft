@@ -41,6 +41,7 @@ public class TreePopulator implements IWorldPopulator
                 }
                 for(int j = 1; j < 4; j++ )
                     c.setChunkBlock(x, y + j, z, Blocks.log);
+                world.setBlock(x + c.getCoords().x * 16, y + 5 + c.getCoords().y * 16, z + c.getCoords().z * 16, Blocks.leaves);
             }
         }
         return true;
