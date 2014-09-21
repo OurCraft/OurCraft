@@ -23,9 +23,9 @@ public class ThreadGetChunksFromCamera extends Thread
             int renderDistance = 6;
             while(game.isRunning())
             {
-                int ox = (int) renderEngine.getRenderViewEntity().getPos().x;
-                int oy = (int) renderEngine.getRenderViewEntity().getPos().y;
-                int oz = (int) renderEngine.getRenderViewEntity().getPos().z;
+                int ox = (int) renderEngine.getRenderViewEntity().getPos().getX();
+                int oy = (int) renderEngine.getRenderViewEntity().getPos().getY();
+                int oz = (int) renderEngine.getRenderViewEntity().getPos().getZ();
                 for(int x = -renderDistance; x < renderDistance; x++ )
                 {
                     yLoop: for(int y = -renderDistance; y < renderDistance; y++ )
@@ -47,7 +47,7 @@ public class ThreadGetChunksFromCamera extends Thread
                 }
                 try
                 {
-                    Thread.sleep(1);
+                    Thread.sleep(1000);
                 }
                 catch(InterruptedException e)
                 {

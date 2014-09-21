@@ -13,9 +13,9 @@ public class Vector3
 
     public static final Vector3 zAxis = new Vector3(0, 0, 1);
 
-    public float                x;
-    public float                y;
-    public float                z;
+    private float                x;
+    private float                y;
+    private float                z;
 
     private Vector3(float x, float y, float z)
     {

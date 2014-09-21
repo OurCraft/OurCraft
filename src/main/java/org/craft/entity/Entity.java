@@ -72,7 +72,7 @@ public class Entity
         }
         else
             velocity.setX(0);
-        if(velocity.y == 0f)
+        if(velocity.getY() == 0f)
         {
             ;
         }
