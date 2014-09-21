@@ -16,3 +16,7 @@ hs_err_pid*
 *.project
 /.gradle/
 /build/
+
+assets_ourcraft_textures_blocks.png
+assets_textures_blocks.png
+ourcraft_textures_blocks.png
