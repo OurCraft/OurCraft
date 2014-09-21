@@ -90,10 +90,7 @@ public class OurCraft implements Runnable
 
             Blocks.init();
 
-            WorldGenerator generator = new WorldGenerator()
-            {
-
-            };
+            WorldGenerator generator = new WorldGenerator();
             generator.addPopulator(new RockPopulator());
             generator.addPopulator(new GrassPopulator());
             generator.addPopulator(new TreePopulator());

@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.craft.blocks.*;
 
-public abstract class WorldGenerator
+public class WorldGenerator
 {
 
     private long                       seed;
