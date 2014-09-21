@@ -58,7 +58,7 @@ public class OurCraft implements Runnable
         try
         {
             JFrame frame = new JFrame();
-            frame.setTitle("OurCraft");
+            frame.setTitle("OurCraft - " + getVersion());
             Canvas canvas = new Canvas();
             frame.add(canvas);
             canvas.setPreferredSize(new Dimension(displayWidth, displayHeight));
@@ -298,5 +298,10 @@ public class OurCraft implements Runnable
     public RenderEngine getRenderEngine()
     {
         return renderEngine;
+    }
+
+    public static String getVersion()
+    {
+        return "OurCraft:BuildNumber";
     }
 }

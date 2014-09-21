@@ -37,7 +37,7 @@ public class RenderBlocks
         if(blockMap == null)
         {
             blockMap = new TextureMap(OurCraft.getOurCraft().getBaseLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
-            for(Block b : Block.registry.values())
+            for(Block b : Blocks.BLOCK_REGISTRY.values())
             {
                 b.registerIcons(blockMap);
             }
