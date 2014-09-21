@@ -95,14 +95,6 @@ public class Entity
         else
             velocity.setZ(0);
 
-        IntersectionInfos intersectionWithGround = getBoundingBox().intersectAABB(getWorld().getGroundBB());
-        if(intersectionWithGround.doesIntersects())
-        {
-            pos = pos.add(0, Math.abs(intersectionWithGround.getDistance()), 0);
-            velocity.setY(0);
-            onGround = true;
-        }
-
         double angle = Math.acos(getRotation().getUp().dot(Vector3.yAxis));
         if(angle > Math.toRadians(89.99f))
         {
