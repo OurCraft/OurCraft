@@ -54,7 +54,7 @@ public class Stitcher
     public BufferedImage stitch()
     {
         int nbrY = MathHelper.upperPowerOf2((int) Math.floor(Math.sqrt(imgs.size())));
-        int nbrX = (int) Math.round((double) imgs.size() / (double) nbrY);
+        int nbrX = (int) Math.ceil((double) imgs.size() / (double) nbrY);
 
         while((nbrX * nbrY - imgs.size()) >= nbrY)
             nbrY-- ;
