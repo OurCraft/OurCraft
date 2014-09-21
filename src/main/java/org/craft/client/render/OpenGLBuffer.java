@@ -129,4 +129,10 @@ public class OpenGLBuffer
         vertices.clear();
         upload();
     }
+
+    public void dispose()
+    {
+        glDeleteBuffers(iboID);
+        glDeleteBuffers(vboID);
+    }
 }

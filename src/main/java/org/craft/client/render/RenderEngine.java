@@ -4,8 +4,10 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
+import org.craft.client.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
+import org.craft.utils.*;
 import org.lwjgl.opengl.*;
 
 public class RenderEngine
@@ -27,6 +29,14 @@ public class RenderEngine
     {
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 0);
         texture.bind();
+        renderBuffer(buffer);
+    }
+
+    /**
+     * Renders a buffer
+     */
+    public void renderBuffer(OpenGLBuffer buffer)
+    {
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
@@ -80,5 +90,25 @@ public class RenderEngine
     public Entity getRenderViewEntity()
     {
         return renderViewEntity;
+    }
+
+    public void renderSplashScreen()
+    {
+        OpenGLBuffer buffer = new OpenGLBuffer();
+        buffer.addVertex(new Vertex(Vector3.get(0, 0, 0), new Vector2(0, 0)));
+        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), new Vector2(1, 0)));
+        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0), new Vector2(1, 1)));
+        buffer.addVertex(new Vertex(Vector3.get(0, OurCraft.getOurCraft().getDisplayHeight(), 0), new Vector2(0, 1)));
+
+        buffer.addIndex(0);
+        buffer.addIndex(1);
+        buffer.addIndex(2);
+
+        buffer.addIndex(2);
+        buffer.addIndex(3);
+        buffer.addIndex(0);
+        buffer.upload();
+        renderBuffer(buffer, OpenGLHelper.loadTexture(ImageUtils.getFromClasspath("/assets/ourcraft/textures/loadingScreen.png")));
+        buffer.dispose();
     }
 }

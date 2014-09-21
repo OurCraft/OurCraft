@@ -79,6 +79,14 @@ public class OurCraft implements Runnable
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             renderEngine = new RenderEngine();
+            projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+            basicShader = new Shader(new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
+            basicShader.bind();
+            basicShader.setUniform("projection", projectionHud);
+            basicShader.setUniform("modelview", new Matrix4().initIdentity());
+            renderEngine.renderSplashScreen();
+
+            Display.update();
 
             Blocks.init();
 
@@ -92,7 +100,6 @@ public class OurCraft implements Runnable
             clientWorld = new World(new BaseChunkProvider(), generator);
             renderBlocks = new RenderBlocks(renderEngine);
 
-            basicShader = new Shader(new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
             modelMatrix = new Matrix4().initIdentity();
 
             player = new EntityPlayer(clientWorld);
@@ -101,7 +108,6 @@ public class OurCraft implements Runnable
             renderEngine.setRenderViewEntity(player);
 
             this.crosshairTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/ourcraft/textures/crosshair.png")));
-            projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
             crosshairBuffer = new OpenGLBuffer();
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), new Vector2(0, 0)));
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), new Vector2(1, 0)));
@@ -306,5 +312,15 @@ public class OurCraft implements Runnable
     public static String getVersion()
     {
         return "OurCraft:BuildNumber";
+    }
+
+    public int getDisplayWidth()
+    {
+        return displayWidth;
+    }
+
+    public int getDisplayHeight()
+    {
+        return displayHeight;
     }
 }
