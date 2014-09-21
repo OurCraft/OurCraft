@@ -87,6 +87,8 @@ public class Chunk
             z = 16 + z;
         lightValues[x][y][z] = lightValue;
         isDirty = true;
+
+        markNeighbors(x, y, z);
     }
 
     /**
@@ -135,6 +137,7 @@ public class Chunk
                 for(int z = 0; z < 16; z++ )
                 {
                     setChunkBlock(x, y, z, block);
+                    markNeighbors(x, y, z);
                 }
             }
     }
@@ -159,47 +162,29 @@ public class Chunk
 
     private void markNeighbors(int x, int y, int z)
     {
-        if(x == 0)
-        {
-            Chunk c = owner.getChunkProvider().get(owner, coords.x - 1, coords.y, coords.z);
-            if(c != null)
-                c.markDirty();
-        }
+        Chunk c = owner.getChunkProvider().get(owner, coords.x - 1, coords.y, coords.z);
+        if(c != null)
+            c.markDirty();
 
-        if(x == 15)
-        {
-            Chunk c = owner.getChunkProvider().get(owner, coords.x + 1, coords.y, coords.z);
-            if(c != null)
-                c.markDirty();
-        }
+        c = owner.getChunkProvider().get(owner, coords.x + 1, coords.y, coords.z);
+        if(c != null)
+            c.markDirty();
 
-        if(y == 0)
-        {
-            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y - 1, coords.z);
-            if(c != null)
-                c.markDirty();
-        }
+        c = owner.getChunkProvider().get(owner, coords.x, coords.y - 1, coords.z);
+        if(c != null)
+            c.markDirty();
 
-        if(y == 15)
-        {
-            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y + 1, coords.z);
-            if(c != null)
-                c.markDirty();
-        }
+        c = owner.getChunkProvider().get(owner, coords.x, coords.y + 1, coords.z);
+        if(c != null)
+            c.markDirty();
 
-        if(z == 0)
-        {
-            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z - 1);
-            if(c != null)
-                c.markDirty();
-        }
+        c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z - 1);
+        if(c != null)
+            c.markDirty();
 
-        if(z == 15)
-        {
-            Chunk c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z + 1);
-            if(c != null)
-                c.markDirty();
-        }
+        c = owner.getChunkProvider().get(owner, coords.x, coords.y, coords.z + 1);
+        if(c != null)
+            c.markDirty();
     }
 
     /**
