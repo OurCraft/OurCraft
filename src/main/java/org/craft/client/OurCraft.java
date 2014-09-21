@@ -45,7 +45,7 @@ public class OurCraft implements Runnable
     public OurCraft()
     {
         instance = this;
-        classpathLoader = new ClasspathSimpleResourceLoader();
+        classpathLoader = new ClasspathSimpleResourceLoader("assets");
     }
 
     public void start()
@@ -92,7 +92,7 @@ public class OurCraft implements Runnable
             clientWorld = new World(new BaseChunkProvider(), generator);
             renderBlocks = new RenderBlocks(renderEngine);
 
-            basicShader = new Shader(IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.vsh"), "UTF-8"), IOUtils.readString(OurCraft.class.getResourceAsStream("/assets/shaders/base.fsh"), "UTF-8"));
+            basicShader = new Shader(new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
             modelMatrix = new Matrix4().initIdentity();
 
             player = new EntityPlayer(clientWorld);
@@ -100,7 +100,7 @@ public class OurCraft implements Runnable
             clientWorld.spawn(player);
             renderEngine.setRenderViewEntity(player);
 
-            this.crosshairTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/textures/crosshair.png")));
+            this.crosshairTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/ourcraft/textures/crosshair.png")));
             projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
             crosshairBuffer = new OpenGLBuffer();
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), new Vector2(0, 0)));

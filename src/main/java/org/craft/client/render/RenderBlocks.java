@@ -36,7 +36,7 @@ public class RenderBlocks
         chunkBuffersPass1 = new HashMap<>();
         if(blockMap == null)
         {
-            blockMap = new TextureMap(OurCraft.getOurCraft().getBaseLoader(), new ResourceLocation("assets/textures", "blocks"), true);
+            blockMap = new TextureMap(OurCraft.getOurCraft().getBaseLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
             for(Block b : Block.registry.values())
             {
                 b.registerIcons(blockMap);

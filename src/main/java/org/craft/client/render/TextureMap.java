@@ -133,7 +133,7 @@ public class TextureMap implements IconGenerator, ITextureObject
             }
             catch(Exception e)
             {
-                Log.error("Unable to find icon: " + loc.getFullPath());
+                Log.error("Unable to find icon: /" + loc.getFullPath());
                 indexes.put(stitcher.addImage(nullImage, true), icon);
             }
 
