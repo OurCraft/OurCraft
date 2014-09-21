@@ -13,8 +13,8 @@ public class OpenGLBuffer
 
     private int                 vboID;
     private int                 iboID;
-    private LinkedList<Vertex>  vertices = new LinkedList<>();
-    private LinkedList<Integer> indices  = new LinkedList<>();
+    private LinkedList<Vertex>  vertices = new LinkedList<Vertex>();
+    private LinkedList<Integer> indices  = new LinkedList<Integer>();
 
     /**
      * Creates an empty OpenGLBuffer instance

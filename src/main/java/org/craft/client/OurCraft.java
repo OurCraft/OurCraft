@@ -165,7 +165,7 @@ public class OurCraft implements Runnable
 
     private void render()
     {
-        ArrayList<Chunk> visiblesChunks = new ArrayList<>();
+        ArrayList<Chunk> visiblesChunks = new ArrayList<Chunk>();
         if(player != null)
         {
             int renderDistance = 8;

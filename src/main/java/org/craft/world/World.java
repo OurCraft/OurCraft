@@ -21,15 +21,15 @@ public class World
     {
         this.generator = generator;
         this.chunkProvider = prov;
-        spawingQueue = new LinkedBlockingQueue<>();
-        entities = new LinkedList<>();
+        spawingQueue = new LinkedBlockingQueue<Entity>();
+        entities = new LinkedList<Entity>();
     }
 
     public void update()
     {
         while(!spawingQueue.isEmpty())
             entities.add(spawingQueue.poll());
-        ArrayList<Entity> deadEntities = new ArrayList<>();
+        ArrayList<Entity> deadEntities = new ArrayList<Entity>();
         for(Entity e : entities)
         {
             e.update();

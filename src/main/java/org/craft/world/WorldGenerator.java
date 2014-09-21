@@ -8,7 +8,7 @@ public class WorldGenerator
 {
 
     private long                       seed;
-    private ArrayList<IWorldPopulator> populators = new ArrayList<>();
+    private ArrayList<IWorldPopulator> populators = new ArrayList<IWorldPopulator>();
     private Random                     rng;
 
     public WorldGenerator()

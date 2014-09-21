@@ -18,8 +18,8 @@ public class Stitcher
     public Stitcher(BufferedImage emptyImage)
     {
         this.emptySlotImage = emptyImage;
-        slots = new ArrayList<>();
-        imgs = new ArrayList<>();
+        slots = new ArrayList<Slot>();
+        imgs = new ArrayList<BufferedImage>();
         tileWidth = -1;
         tileHeight = -1;
     }

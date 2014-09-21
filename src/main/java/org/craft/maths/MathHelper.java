@@ -47,7 +47,7 @@ public class MathHelper
     {
         Random rng = new Random(seed);
         int[] newArray = new int[perm.length];
-        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> list = new ArrayList<Integer>();
         for(int p : perm)
             list.add(p);
         Collections.shuffle(list, rng);

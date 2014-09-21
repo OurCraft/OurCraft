@@ -32,8 +32,8 @@ public class RenderBlocks
     public RenderBlocks(RenderEngine engine)
     {
         this.renderEngine = engine;
-        chunkBuffersPass0 = new HashMap<>();
-        chunkBuffersPass1 = new HashMap<>();
+        chunkBuffersPass0 = new HashMap<ChunkCoord, OpenGLBuffer>();
+        chunkBuffersPass1 = new HashMap<ChunkCoord, OpenGLBuffer>();
         if(blockMap == null)
         {
             blockMap = new TextureMap(OurCraft.getOurCraft().getBaseLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
@@ -276,7 +276,7 @@ public class RenderBlocks
                             }
                             startRendering(buffer);
 
-                            ArrayList<BlockRenderInfos> infosList = new ArrayList<>();
+                            ArrayList<BlockRenderInfos> infosList = new ArrayList<BlockRenderInfos>();
                             for(int x = 0; x < 16; x++ )
                             {
                                 for(int y = 0; y < 16; y++ )

@@ -9,7 +9,7 @@ public class ChunkMap implements Iterable<Chunk>
 
     public ChunkMap()
     {
-        map = new HashMap<>();
+        map = new HashMap<ChunkCoord, Chunk>();
     }
 
     /**

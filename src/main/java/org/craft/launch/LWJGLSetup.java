@@ -102,8 +102,9 @@ public class LWJGLSetup
 
     private static void extractFromClasspath(String fileName, File folder)
     {
-        try(FileOutputStream in = new FileOutputStream(new File(folder, fileName)))
+        try
         {
+            FileOutputStream in = new FileOutputStream(new File(folder, fileName));
             IOUtils.copy(LWJGLSetup.class.getResourceAsStream("/" + fileName), in);
         }
         catch(Exception e)

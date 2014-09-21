@@ -40,8 +40,8 @@ public class TextureMap implements IconGenerator, ITextureObject
         this.lenient = lenientOnSizes;
         this.loader = loader;
         this.base = base;
-        registredIcons = new ArrayList<>();
-        registredLocations = new ArrayList<>();
+        registredIcons = new ArrayList<TextureIcon>();
+        registredLocations = new ArrayList<ResourceLocation>();
 
         initNullAndEmptyImages();
         stitcher = new Stitcher(emptyImage);
@@ -135,7 +135,7 @@ public class TextureMap implements IconGenerator, ITextureObject
      */
     public void compile() throws Exception
     {
-        HashMap<Integer, TextureIcon> indexes = new HashMap<>();
+        HashMap<Integer, TextureIcon> indexes = new HashMap<Integer, TextureIcon>();
         for(int i = 0; i < registredIcons.size(); i++ )
         {
             ResourceLocation loc = completeLocation(registredLocations.get(i));

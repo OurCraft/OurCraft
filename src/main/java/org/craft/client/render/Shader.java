@@ -17,7 +17,7 @@ public class Shader
 
     public Shader(String vert, String frag)
     {
-        locsMap = new HashMap<>();
+        locsMap = new HashMap<String, Integer>();
         program = glCreateProgram();
         int vertexId = glCreateShader(GL_VERTEX_SHADER);
         int fragmentId = glCreateShader(GL_FRAGMENT_SHADER);

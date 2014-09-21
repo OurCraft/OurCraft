@@ -13,7 +13,7 @@ public final class Blocks
     public static Block                        log;
     public static Block                        leaves;
     public static Block                        glass;
-    public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<>();
+    public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
 
     public static void init()
     {
