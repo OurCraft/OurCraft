@@ -14,7 +14,6 @@ public class World
 
     private LinkedList<Entity>          entities;
     private LinkedBlockingQueue<Entity> spawingQueue;
-    private AABB                        groundBB;
     private ChunkProvider               chunkProvider;
     private WorldGenerator              generator;
 
@@ -24,7 +23,6 @@ public class World
         this.chunkProvider = prov;
         spawingQueue = new LinkedBlockingQueue<>();
         entities = new LinkedList<>();
-        groundBB = new AABB(Vector3.get(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY), Vector3.get(Float.POSITIVE_INFINITY, 0, Float.POSITIVE_INFINITY));
     }
 
     public void update()
@@ -98,12 +96,7 @@ public class World
     {
         this.spawingQueue.add(e);
     }
-
-    public AABB getGroundBB()
-    {
-        return groundBB;
-    }
-
+    
     /**
      * Performs a raycast from {@code sender} to get object in front of it. Results are saved into {@code infos}
      */
