@@ -2,7 +2,6 @@ package org.craft.entity;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
-import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
@@ -39,8 +38,8 @@ public class EntityPlayer extends Entity
             this.moveRight(speed);
         }
 
-        rotate(Vector3.yAxis, (float) Math.toRadians(OurCraft.getOurCraft().getMouseHandler().getDX()));
-        rotate(getRotation().getRight(), (float) Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY()));
+        yaw += (float) Math.toRadians(OurCraft.getOurCraft().getMouseHandler().getDX());
+        pitch += (float) Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY());
 
         CollisionInfos infos = OurCraft.getOurCraft().getObjectInFront();
         if(infos.type == CollisionType.BLOCK)

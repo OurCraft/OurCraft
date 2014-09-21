@@ -41,6 +41,11 @@ public class AABB
     /**
      * Creates a new AABB translated to given position
      */
+    public AABB translate(float x, float y, float z)
+    {
+        return new AABB(minExtents.add(x, y, z), maxExtents.add(x, y, z));
+    }
+
     public AABB translate(Vector3 position)
     {
         return new AABB(minExtents.add(position), maxExtents.add(position));

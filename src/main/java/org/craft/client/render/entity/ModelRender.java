@@ -5,7 +5,6 @@ import java.nio.*;
 import org.craft.client.models.*;
 import org.craft.client.render.*;
 import org.craft.entity.*;
-import org.craft.maths.*;
 import org.lwjgl.*;
 
 public class ModelRender<T extends Entity> extends AbstractRender<T>
@@ -34,7 +33,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
     @Override
     public void render(RenderEngine engine, T e, float entX, float entY, float entZ)
     {
-        Matrix4 tmpMatrix = Matrix4.TMP;
+        /*Matrix4 tmpMatrix = Matrix4.TMP;
         for(ModelBox box : model.getChildren())
         {
             if(box == null)
@@ -50,6 +49,6 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             Shader.getCurrentlyBound().setUniform("modelview", finalMatrix);
             engine.renderBuffer(buffer, getTexture(e));
         }
-        Shader.getCurrentlyBound().setUniform("modelview", new Matrix4().initIdentity());
+        Shader.getCurrentlyBound().setUniform("modelview", new Matrix4().initIdentity());*/
     }
 }

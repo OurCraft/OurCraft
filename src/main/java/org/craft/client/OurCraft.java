@@ -173,9 +173,9 @@ public class OurCraft implements Runnable
         if(player != null)
         {
             int renderDistance = 8;
-            int ox = (int) renderEngine.getRenderViewEntity().getPos().getX();
-            int oy = (int) renderEngine.getRenderViewEntity().getPos().getY();
-            int oz = (int) renderEngine.getRenderViewEntity().getPos().getZ();
+            int ox = (int) renderEngine.getRenderViewEntity().getX();
+            int oy = (int) renderEngine.getRenderViewEntity().getY();
+            int oz = (int) renderEngine.getRenderViewEntity().getZ();
             for(int x = -renderDistance; x < renderDistance; x++ )
             {
                 for(int y = -renderDistance; y < renderDistance; y++ )
@@ -207,7 +207,7 @@ public class OurCraft implements Runnable
         renderBlocks.render(clientWorld, visiblesChunks);
         for(Entity e : clientWorld.getEntitiesList())
         {
-            fallbackRenderer.render(renderEngine, e, e.getPos().getX(), e.getPos().getY(), e.getPos().getZ());
+            fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
         }
 
         glClear(GL_DEPTH_BUFFER_BIT);

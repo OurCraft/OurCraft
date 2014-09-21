@@ -120,7 +120,7 @@ public class World
          */
 
         float step = 0.1f;
-        Vector3 startPos = sender.getPos().add(0f, sender.getEyeOffset(), 0f);
+        Vector3 startPos = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset(), sender.getZ());
         Vector3 look = sender.getRotation().getForward();
         Vector3 currentPos = startPos;
         AABB bb = new AABB(Vector3.get(-0.01f, -0.01f, -0.01f), Vector3.get(0.01f, 0.01f, 0.01f));
@@ -152,7 +152,7 @@ public class World
             if(blockDist < maxReachedDist && (blockBB.intersectAABB(bb.translate(currentPos)).doesIntersects() || blockBB.intersectAABB(bb.translate(currentPos)).getDistance() < 1f / 16f))
             {
                 maxReachedDist = blockDist;
-                Vector3 dir = sender.getPos().sub(blockPos);
+                Vector3 dir = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset(), sender.getZ()).sub(blockPos);
                 float max = Math.max(Math.abs(dir.getX()), Math.max(Math.abs(dir.getY()), Math.abs(dir.getZ())));
                 if(max == Math.abs(dir.getZ()))
                 {

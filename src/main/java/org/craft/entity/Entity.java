@@ -8,11 +8,19 @@ import org.craft.world.*;
 public class Entity
 {
 
-    private Vector3           pos;
-    private Vector3           lastTickPos;
-    private Vector3           velocity;
-    private Quaternion        rotation;
-    private Quaternion        headRotation;
+    protected float           posX;
+    protected float           posY;
+    protected float           posZ;
+    protected float           velX;
+    protected float           velY;
+    protected float           velZ;
+    protected float           yaw;
+    protected float           pitch;
+    protected float           roll;
+
+    protected float           headYaw;
+    protected float           headPitch;
+    protected float           headRoll;
     private World             worldObj;
     private boolean           isDead;
     private AABB              boundingBox;
@@ -26,13 +34,8 @@ public class Entity
     public Entity(World world)
     {
         this.boundingBox = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
-        this.pos = Vector3.get(0, 0, 0);
-        lastTickPos = pos.copy();
-        this.velocity = Vector3.NULL;
         this.isDead = false;
         this.worldObj = world;
-        rotation = new Quaternion();
-        headRotation = new Quaternion();
     }
 
     /**
@@ -48,7 +51,7 @@ public class Entity
      */
     public AABB getBoundingBox()
     {
-        return boundingBox.translate(pos);
+        return boundingBox.translate(Vector3.get(posX, posY, posZ));
     }
 
     /**
@@ -59,66 +62,69 @@ public class Entity
         onGround = true;
         onEntityUpdate();
 
-        velocity = velocity.add(0, -G, 0);
+        velY += -G;
 
-        if(velocity.getY() < -G * 6)
+        if(velY < -G * 6)
         {
-            velocity.setY(-G * 6);
+            velY = -G * 6;
         }
 
-        if(canGo(pos.add(velocity.getX(), 0, 0)))
+        if(canGo(posX + velX, posY, posZ))
         {
-            pos = pos.add(velocity.getX(), 0, 0);
+            posX += velX;
         }
         else
-            velocity.setX(0);
-        if(velocity.getY() == 0f)
+            velX = 0;
+        if(velY == 0f)
         {
             ;
         }
         else
         {
-            if(canGo(pos.add(0, velocity.getY(), 0)))
+            if(canGo(posX, posY + velY, posZ))
             {
-                pos = pos.add(0, velocity.getY(), 0);
+                posY += velY;
                 onGround = false;
             }
             else
             {
-                velocity.setY(0);
+                velY = 0;
             }
         }
-        if(canGo(pos.add(0, 0, velocity.getZ())))
+        if(canGo(posX, posY, posZ + velZ))
         {
-            pos = pos.add(0, 0, velocity.getZ());
+            posZ += velZ;
         }
         else
-            velocity.setZ(0);
+            velZ = 0;
 
-        double angle = Math.acos(getRotation().getUp().dot(Vector3.yAxis));
-        if(angle > Math.toRadians(89.99f))
+        if(pitch > 90)
         {
-            if(getRotation().getForward().getY() > 0.f)
-                rotate(getRotation().getRight(), -(float) (Math.toRadians(89.99f) - angle));
-            else
-                rotate(getRotation().getRight(), (float) (Math.toRadians(89.99f) - angle));
+            pitch = 90;
+        }
+        else if(pitch < -90)
+        {
+            pitch = -90;
         }
 
         if(onGround)
         {
-            velocity = velocity.mul(0.12f, 1, 0.12f);
+            velX *= 0.12f;
+            velZ *= 0.12f;
         }
         else
-            velocity = velocity.mul(0.12f / 2f, 1, 0.12f / 2f);
-        lastTickPos = pos.copy();
+        {
+            velX *= 0.12f / 2f;
+            velZ *= 0.12f / 2f;
+        }
     }
 
     /**
      * Checks if entity can go at given position
      */
-    private boolean canGo(Vector3 pos)
+    private boolean canGo(float nx, float ny, float nz)
     {
-        AABB boundingBox = this.boundingBox.translate(pos);
+        AABB boundingBox = this.boundingBox.translate(nx, ny, nz);
         Vector3 min = boundingBox.getMinExtents();
         Vector3 max = boundingBox.getMaxExtents();
         int startX = (int) Math.round(min.getX() - 0.5f);
@@ -160,7 +166,9 @@ public class Entity
      */
     public void setLocation(float x, float y, float z)
     {
-        pos.set(x, y, z);
+        posX = x;
+        posY = y;
+        posZ = z;
     }
 
     public void moveBackwards(float distance)
@@ -170,7 +178,8 @@ public class Entity
 
     public void moveForward(float distance)
     {
-        velocity = velocity.add(rotation.getForward().setY(0).normalize().mul(distance));
+        velX += (float) (Math.sin(yaw) * distance);
+        velZ += (float) (Math.cos(yaw) * distance);
     }
 
     public void moveLeft(float distance)
@@ -180,18 +189,13 @@ public class Entity
 
     public void moveRight(float distance)
     {
-        velocity = velocity.add(rotation.getRight().setY(0).normalize().mul(distance));
+        velX += (float) (Math.sin(yaw + Math.toRadians(90)) * distance);
+        velZ += (float) (Math.cos(yaw + Math.toRadians(90)) * distance);
     }
 
-    public void rotate(Vector3 axis, float radangle)
+    public Quaternion getRotation()
     {
-        rotation = new Quaternion(axis, radangle).mul(rotation).normalize();
-        headRotation = rotation.copy();
-    }
-
-    public void rotateHeadOnly(Vector3 axis, float radangle)
-    {
-        headRotation = new Quaternion(axis, radangle).mul(headRotation).normalize();
+        return new Quaternion(Vector3.yAxis, this.getYaw()).mul(new Quaternion(Vector3.xAxis, this.getPitch()))/*.mul(new Quaternion(Vector3.zAxis, this.getRoll()))*/;
     }
 
     /**
@@ -210,14 +214,19 @@ public class Entity
 
     }
 
-    public Quaternion getRotation()
+    public float getYaw()
     {
-        return rotation;
+        return yaw;
     }
 
-    public Quaternion getHeadRotation()
+    public float getPitch()
     {
-        return headRotation;
+        return pitch;
+    }
+
+    public float getRoll()
+    {
+        return roll;
     }
 
     public World getWorld()
@@ -225,9 +234,19 @@ public class Entity
         return worldObj;
     }
 
-    public Vector3 getPos()
+    public float getX()
     {
-        return pos;
+        return posX;
+    }
+
+    public float getY()
+    {
+        return posY;
+    }
+
+    public float getZ()
+    {
+        return posZ;
     }
 
     public boolean isDead()
@@ -242,7 +261,7 @@ public class Entity
     {
         if(onGround)
         {
-            velocity.setY(0.25f);
+            velY = 0.25f;
         }
     }
 
@@ -266,6 +285,9 @@ public class Entity
      */
     public float getDistance(Entity other)
     {
-        return other.getPos().sub(getPos()).length();
+        float dx = other.getX() - posX;
+        float dy = other.getY() - posY;
+        float dz = other.getZ() - posZ;
+        return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 }

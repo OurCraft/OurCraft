@@ -59,7 +59,7 @@ public class RenderEngine
     {
         if(renderViewEntity != null)
         {
-            return projection.mul(renderViewEntity.getRotation().conjugate().toRotationMatrix().mul(new Matrix4().initTranslation(-renderViewEntity.getPos().getX() - 0.5f, -renderViewEntity.getPos().getY() - renderViewEntity.getEyeOffset(), -renderViewEntity.getPos().getZ() - 0.5f)));
+            return projection.mul(renderViewEntity.getRotation().conjugate().toRotationMatrix().mul(new Matrix4().initTranslation(-renderViewEntity.getX() - 0.5f, -renderViewEntity.getY() - renderViewEntity.getEyeOffset(), -renderViewEntity.getZ() - 0.5f)));
         }
         return projection;
     }
