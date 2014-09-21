@@ -21,10 +21,15 @@ public class Entity
     protected float           headYaw;
     protected float           headPitch;
     protected float           headRoll;
+
+    protected float           lastYaw;
+    protected float           lastPitch;
+
     private World             worldObj;
     private boolean           isDead;
     private AABB              boundingBox;
     private boolean           onGround;
+    private Quaternion        rotationQuaternion;
 
     public static final float G = 9.81f / 360f;
 
@@ -195,7 +200,22 @@ public class Entity
 
     public Quaternion getRotation()
     {
-        return new Quaternion(Vector3.yAxis, this.getYaw()).mul(new Quaternion(Vector3.xAxis, this.getPitch()))/*.mul(new Quaternion(Vector3.zAxis, this.getRoll()))*/;
+        if(rotationQuaternion == null || hasRotationChanged())
+        {
+            rotationQuaternion = new Quaternion(Vector3.yAxis, this.getYaw()).mul(new Quaternion(Vector3.xAxis, this.getPitch()))/*.mul(new Quaternion(Vector3.zAxis, this.getRoll()))*/;
+        }
+        return rotationQuaternion;
+    }
+
+    private boolean hasRotationChanged()
+    {
+        if(lastPitch != pitch || lastYaw != yaw)
+        {
+            lastPitch = pitch;
+            lastYaw = pitch;
+            return true;
+        }
+        return false;
     }
 
     /**
