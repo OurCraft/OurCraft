@@ -5,8 +5,8 @@ import java.nio.*;
 public class Matrix4
 {
 
-    private static final Matrix4 tmpMatrix = new Matrix4();
-    private float[][]            _m;
+    public static final Matrix4 TMP = new Matrix4();
+    private float[][]           _m;
 
     public Matrix4()
     {
@@ -331,7 +331,7 @@ public class Matrix4
 
     public void translate(float x, float y, float z)
     {
-        this.set(this.mul(tmpMatrix.initTranslation(x, y, z)));
+        this.set(this.mul(TMP.initTranslation(x, y, z)));
     }
 
     public void rotate(Vector3 axis, float radians)

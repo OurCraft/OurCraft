@@ -11,6 +11,7 @@ import javax.swing.*;
 
 import org.craft.blocks.*;
 import org.craft.client.render.*;
+import org.craft.client.render.entity.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
@@ -41,6 +42,7 @@ public class OurCraft implements Runnable
     private Matrix4                       projectionHud;
     private Texture                       crosshairTexture;
     private OpenGLBuffer                  crosshairBuffer;
+    private FallbackRender<Entity>        fallbackRenderer;
 
     public OurCraft()
     {
@@ -121,6 +123,7 @@ public class OurCraft implements Runnable
             crosshairBuffer.upload();
             crosshairBuffer.clearVertices();
 
+            fallbackRenderer = new FallbackRender<Entity>();
             new ThreadGetChunksFromCamera(this).start();
             running = true;
             while(running && !Display.isCloseRequested())
@@ -202,6 +205,10 @@ public class OurCraft implements Runnable
         basicShader.setUniform("modelview", this.modelMatrix);
         basicShader.setUniform("projection", this.renderEngine.getProjectionMatrix());
         renderBlocks.render(clientWorld, visiblesChunks);
+        for(Entity e : clientWorld.getEntitiesList())
+        {
+            fallbackRenderer.render(renderEngine, e, e.getPos().getX(), e.getPos().getY(), e.getPos().getZ());
+        }
 
         glClear(GL_DEPTH_BUFFER_BIT);
         renderEngine.disableGLCap(GL_DEPTH_TEST);

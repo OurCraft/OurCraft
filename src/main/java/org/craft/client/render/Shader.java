@@ -12,6 +12,7 @@ import org.lwjgl.*;
 public class Shader
 {
 
+    private static Shader            current = null;
     private int                      program;
     private HashMap<String, Integer> locsMap;
 
@@ -57,7 +58,13 @@ public class Shader
      */
     public void bind()
     {
+        current = this;
         glUseProgram(program);
+    }
+
+    public static Shader getCurrentlyBound()
+    {
+        return current;
     }
 
     /**

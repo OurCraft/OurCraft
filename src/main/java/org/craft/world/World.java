@@ -96,7 +96,7 @@ public class World
     {
         this.spawingQueue.add(e);
     }
-    
+
     /**
      * Performs a raycast from {@code sender} to get object in front of it. Results are saved into {@code infos}
      */
@@ -215,5 +215,10 @@ public class World
             }
         }
         return true;
+    }
+
+    public List<Entity> getEntitiesList()
+    {
+        return entities;
     }
 }
