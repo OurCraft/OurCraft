@@ -1,8 +1,11 @@
 package org.craft.maths;
 
 import java.nio.*;
+import java.util.*;
 
-public class Vector3
+import org.craft.utils.*;
+
+public class Vector3 extends AbstractReference implements IDisposable
 {
 
     public static final Vector3 NULL  = new Vector3(0, 0, 0);
@@ -292,14 +295,35 @@ public class Vector3
         return vec3;
     }
 
+    private static Stack<Vector3> unused = new Stack<Vector3>();
+
     public static Vector3 get(float x, float y, float z)
     {
-        // TODO: Pooling
-        return new Vector3(x, y, z);
+        Vector3 v = null;
+        if(unused.isEmpty())
+        {
+            v = new Vector3(x, y, z);
+        }
+        else
+        {
+            v = unused.pop();
+            v.set(x, y, z);
+        }
+        v.increaseReferenceCounter();
+        return v;
     }
 
     public float min()
     {
         return (float) Math.min(getX(), Math.min(getY(), getZ()));
+    }
+
+    @Override
+    public void dispose()
+    {
+        if(decreaseReferenceCounter())
+        {
+            unused.push(this);
+        }
     }
 }

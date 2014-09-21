@@ -10,7 +10,7 @@ public class Block
 
     static
     {
-        normalCubeAABB = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
+        normalCubeAABB = new AABB(Vector3.NULL.copy(), Vector3.get(1, 1, 1));
     }
     private static AABB normalCubeAABB;
 
@@ -80,7 +80,10 @@ public class Block
      */
     public AABB getCollisionBox(World w, int x, int y, int z)
     {
-        return normalCubeAABB.translate(Vector3.get(x, y, z));
+        Vector3 translation = Vector3.get(x, y, z);
+        AABB result = normalCubeAABB.translate(translation);
+        translation.dispose();
+        return result;
     }
 
     /**

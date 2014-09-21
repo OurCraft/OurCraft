@@ -1,11 +1,10 @@
 package org.craft.loader;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+import org.craft.utils.*;
 
 public class OurClassLoader extends URLClassLoader
 {
@@ -33,7 +32,7 @@ public class OurClassLoader extends URLClassLoader
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException
     {
-        System.out.println("Loading " + name + " ...");
+        Log.message("Loading " + name + " ...");
         return super.loadClass(name);
     }
 

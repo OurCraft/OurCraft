@@ -119,6 +119,7 @@ public class OurCraft implements Runnable
             crosshairBuffer.addIndex(3);
             crosshairBuffer.addIndex(0);
             crosshairBuffer.upload();
+            crosshairBuffer.clearVertices();
 
             new ThreadGetChunksFromCamera(this).start();
             running = true;

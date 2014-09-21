@@ -1,8 +1,9 @@
 package org.craft.client.render;
 
 import org.craft.maths.*;
+import org.craft.utils.*;
 
-public class Vertex
+public class Vertex implements IDisposable
 {
 
     /**
@@ -51,6 +52,14 @@ public class Vertex
     public Vector3 getColor()
     {
         return color;
+    }
+
+    @Override
+    public void dispose()
+    {
+        pos.dispose();
+        color.dispose();
+        // TODO: texCoords.dispose();
     }
 
 }

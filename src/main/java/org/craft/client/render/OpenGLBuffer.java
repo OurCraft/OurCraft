@@ -82,7 +82,7 @@ public class OpenGLBuffer
 
     public void setVertices(List<Vertex> newVertices)
     {
-        vertices.clear();
+        clearVertices();
         for(Vertex v : newVertices)
         {
             vertices.add(v);
@@ -126,13 +126,27 @@ public class OpenGLBuffer
     public void clear()
     {
         indices.clear();
-        vertices.clear();
+        clearVertices();
         upload();
     }
 
     public void dispose()
     {
+        clearVertices();
         glDeleteBuffers(iboID);
         glDeleteBuffers(vboID);
+    }
+
+    /**
+     * Disposes and clear vertices list.<br/>
+     * Usage: Buffers than require to be uploaded only one time and rendered multiple times.
+     */
+    public void clearVertices()
+    {
+        for(Vertex v : vertices)
+        {
+            v.dispose();
+        }
+        vertices.clear();
     }
 }
