@@ -1,34 +1,23 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-compileJava.options.encoding = 'UTF-8'
-
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile fileTree(dir: 'libs', include: '*.zip')
-}
-
-def filteredSourceDir = file("${buildDir}/filtered") 
-
-sourceSets { 
-    // This source set will contain all sources that we filter 
-    filtered { 
-        java { 
-            srcDirs = [filteredSourceDir] 
-        } 
-    } 
-} 
-
-// tell the compileJava task to compile the filtered source 
-compileJava.source = sourceSets.filtered.java 
-
-archivesBaseName = 'OurCraft'
-version = 'InDev 0.1'
-def versionValue = version
 
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 
+//IDE
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+// Def vars and properties
+def filteredSourceDir = file("${buildDir}/filtered") 
+archivesBaseName = 'OurCraft'
+version = 'InDev 0.1'
+def versionValue = version
+
+repositories {
+    mavenCentral()
+}
+
+//Tasks
 task processVersion(type: Copy) {
  	from sourceSets.main.java 
     into filteredSourceDir 
@@ -42,7 +31,28 @@ task processVersion(type: Copy) {
     }
 }
 
+sourceSets { 
+    // This source set will contain all sources that we filter 
+    filtered { 
+        java { 
+            srcDirs = [filteredSourceDir] 
+        } 
+    } 
+} 
+
+//force UTF-8 to the compileJava task
+compileJava.options.encoding = 'UTF-8'
+
+// tell the compileJava task to compile the filtered source 
+compileJava.source = sourceSets.filtered.java 
+
+// Add dependencies processVersion to compileJava task
 compileJava.dependsOn processVersion 
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+	compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+}
 
 jar {
     manifest {
