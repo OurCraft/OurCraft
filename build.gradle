@@ -12,6 +12,7 @@ def filteredSourceDir = file("${buildDir}/filtered")
 archivesBaseName = 'OurCraft'
 version = 'InDev 0.1'
 def versionValue = version
+def mainClass = "org.craft.launch.OurCraftLauncher";
 
 repositories {
     mavenCentral()
@@ -27,7 +28,7 @@ task processVersion(type: Copy) {
     filter(ReplaceTokens, tokens: ['version': versionValue])
     // Use a closure to filter each line
     filter { String line ->
-        ("$line".replaceAll('"OurCraft:BuildNumber"', versionValue))
+        ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+versionValue+'"'))
     }
 }
 
@@ -56,6 +57,6 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version
+        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': mainClass
     }
 }
