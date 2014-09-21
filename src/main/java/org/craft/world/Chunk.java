@@ -32,6 +32,9 @@ public class Chunk
         }
     }
 
+    /**
+     * Returns light value in Chunk from given world space
+     */
     public float getLightValue(World w, int worldX, int worldY, int worldZ)
     {
         int x = worldX % 16;
@@ -47,6 +50,9 @@ public class Chunk
         return lightValues[x][y][z];
     }
 
+    /**
+     * Returns block in Chunk from given world space
+     */
     public Block getBlock(World w, int worldX, int worldY, int worldZ)
     {
         int x = worldX % 16;
@@ -64,6 +70,9 @@ public class Chunk
         return blocks[x][y][z];
     }
 
+    /**
+     * Sets light value in Chunk from given world space
+     */
     public void setLightValue(World world, int worldX, int worldY, int worldZ, float lightValue)
     {
         int x = worldX % 16;
@@ -80,6 +89,9 @@ public class Chunk
         isDirty = true;
     }
 
+    /**
+     * Set block in Chunk from given world space
+     */
     public void setBlock(World world, int worldX, int worldY, int worldZ, Block block)
     {
         int x = worldX % 16;
@@ -127,19 +139,25 @@ public class Chunk
             }
     }
 
+    /**
+     * Returns light value in Chunk from given chunk space
+     */
     public float getChunkLightValue(int x, int y, int z)
     {
         return lightValues[x][y][z];
     }
 
+    /**
+     * Sets light value in Chunk from given chunk space
+     */
     public void setChunkLightValue(int x, int y, int z, float lightValue)
     {
         lightValues[x][y][z] = lightValue;
         markDirty();
-        makeNeighbors(x, y, z);
+        markNeighbors(x, y, z);
     }
 
-    private void makeNeighbors(int x, int y, int z)
+    private void markNeighbors(int x, int y, int z)
     {
         if(x == 0)
         {
@@ -184,6 +202,9 @@ public class Chunk
         }
     }
 
+    /**
+     * Returns block in Chunk from given chunk space
+     */
     public Block getChunkBlock(int x, int y, int z)
     {
         Block b = blocks[x][y][z];
@@ -192,6 +213,9 @@ public class Chunk
         return b;
     }
 
+    /**
+     * Sets block in Chunk from given chunk space
+     */
     public void setChunkBlock(int x, int y, int z, Block block)
     {
         if(block == null)
@@ -218,9 +242,12 @@ public class Chunk
             }
         }
         markDirty();
-        makeNeighbors(x, y, z);
+        markNeighbors(x, y, z);
     }
 
+    /**
+     * Returns highest block in Chunk from given chunk space
+     */
     public Block getHighestBlock(int x, int z)
     {
         if(highest[x][z] < 0)
@@ -228,6 +255,9 @@ public class Chunk
         return getChunkBlock(x, highest[x][z], z);
     }
 
+    /**
+     * Returns highest y value in Chunk from given chunk space
+     */
     public int getHighest(int x, int z)
     {
         return highest[x][z];

@@ -1,7 +1,6 @@
 package org.craft.resources;
 
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 
 public abstract class AbstractResource
 {
@@ -60,5 +59,8 @@ public abstract class AbstractResource
         throw new IllegalArgumentException("Impossible to retrieve resource as file");
     }
 
+    /**
+     * Returns raw data from resource
+     */
     public abstract byte[] getData();
 }

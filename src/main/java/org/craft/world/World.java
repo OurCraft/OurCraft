@@ -45,6 +45,9 @@ public class World
 
     }
 
+    /**
+     * Returns chunk from given coords in world space
+     */
     public Chunk getChunk(int x, int y, int z)
     {
         return chunkProvider.get(this, (int) Math.floor((float) x / 16f), (int) Math.floor((float) y / 16f), (int) Math.floor((float) z / 16f));
@@ -55,11 +58,17 @@ public class World
         chunkProvider.addChunk(this, c);
     }
 
+    /**
+     * Returns block next to given coords and given side
+     */
     public Block getBlockNextTo(int x, int y, int z, EnumSide side)
     {
         return getBlock(x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ());
     }
 
+    /**
+     * Returns block at given coords
+     */
     public Block getBlock(int x, int y, int z)
     {
         Chunk c = getChunk(x, y, z);
@@ -68,6 +77,9 @@ public class World
         return c.getBlock(this, x, y, z);
     }
 
+    /**
+     * Sets block at given coords
+     */
     public void setBlock(int x, int y, int z, Block block)
     {
         Chunk c = getChunk(x, y, z);
@@ -79,6 +91,9 @@ public class World
         c.markDirty();
     }
 
+    /**
+     * Spawns a new entity in world
+     */
     public void spawn(Entity e)
     {
         this.spawingQueue.add(e);
@@ -89,6 +104,9 @@ public class World
         return groundBB;
     }
 
+    /**
+     * Performs a raycast from {@code sender} to get object in front of it. Results are saved into {@code infos}
+     */
     public void performRayCast(Entity sender, CollisionInfos infos, float maxDist)
     {
         float maxReachedDist = Float.POSITIVE_INFINITY;
@@ -191,6 +209,9 @@ public class World
         return chunkProvider;
     }
 
+    /**
+     * Returns true if given block can see the sky
+     */
     public boolean canBlockSeeSky(int x, int y, int z)
     {
         for(int y1 = y + 1; y1 < 256; y1++ )

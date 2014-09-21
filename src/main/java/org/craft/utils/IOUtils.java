@@ -10,10 +10,6 @@ public final class IOUtils
 {
 
     /**
-     * @param is
-     * @param os
-     * @param bufferLength
-     * @throws IOException
      */
     public static OutputStream copy(InputStream is, OutputStream os) throws IOException
     {

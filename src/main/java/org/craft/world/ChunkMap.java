@@ -12,6 +12,9 @@ public class ChunkMap implements Iterable<Chunk>
         map = new HashMap<>();
     }
 
+    /**
+     * Returns Chunk from given ChunkCoords
+     */
     public Chunk getAt(int chunkX, int chunkY, int chunkZ)
     {
         return map.get(new ChunkCoord(chunkX, chunkY, chunkZ));

@@ -27,6 +27,9 @@ public final class Blocks
         register(glass = new BlockTransparent("glass"));
     }
 
+    /**
+     * Registers a block into the BLOCK_REGISTRY field
+     */
     public static void register(Block block)
     {
         if(BLOCK_REGISTRY.containsKey(block.getID()))
@@ -36,10 +39,13 @@ public final class Blocks
         BLOCK_REGISTRY.put(block.getID(), block);
     }
 
+    /**
+     * Returns the block in BLOCK_REGISTRY with given id
+     */
     public static Block get(String string)
     {
         if(string == null)
-            return dirt;
+            return air;
         return BLOCK_REGISTRY.get(string);
     }
 }

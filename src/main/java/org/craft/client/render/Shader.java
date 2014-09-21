@@ -52,11 +52,17 @@ public class Shader
         }
     }
 
+    /**
+     * Binds this program to OpenGL
+     */
     public void bind()
     {
         glUseProgram(program);
     }
 
+    /**
+     * Sets the given uniform to the value of the given matrix
+     */
     public Shader setUniform(String uniform, Matrix4 m)
     {
         int l = getLocation(uniform);

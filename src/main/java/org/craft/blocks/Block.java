@@ -17,6 +17,9 @@ public class Block
     private String      id;
     private TextureIcon blockIcon;
 
+    /**
+     * Block constructor. Takes in an ID to identify the block
+     */
     public Block(String id)
     {
         this.id = id;
@@ -27,46 +30,78 @@ public class Block
         return id;
     }
 
+    /**
+     * Returns the icon depending on the current block state (side, position, etc.)
+     */
     public TextureIcon getBlockIcon(World world, int x, int y, int z, EnumSide side)
     {
         return blockIcon;
     }
 
+    /**
+     * Registers the required icons of the block.<br/>
+     * Usage: RenderBlocks.blockMap uses this method to create block icons from assets/ourcraft/textures/blocks/
+     * 
+     * @see RenderBlocks
+     */
     public void registerIcons(IconGenerator register)
     {
         blockIcon = register.generateIcon(id + ".png");
     }
 
+    /**
+     * Returns if given side is opaque
+     */
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
     {
         return true;
     }
 
+    /**
+     * Returns if given side should be rendered.<br/>
+     * Usage: BlockTransparent uses it to check if adjacent blocks are the same and hide side if they are.
+     */
     public boolean shouldSideBeRendered(World w, int x, int y, int z, EnumSide side)
     {
         return true;
     }
 
+    /**
+     * Returns if the block should be rendered.<br/>
+     * Usage: Only returns false when called on BlockAir
+     */
     public boolean shouldRender()
     {
         return true;
     }
 
+    /**
+     * Returns collision box depending on the current block state (side, position, etc.)
+     */
     public AABB getCollisionBox(World w, int x, int y, int z)
     {
         return normalCubeAABB.translate(Vector3.get(x, y, z));
     }
 
+    /**
+     * Returns selection box depending on the current block state (side, position, etc.)
+     */
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         return getCollisionBox(world, x, y, z);
     }
 
+    /**
+     * Returns if block should be rendered in given pass
+     */
     public boolean shouldRenderInPass(int pass)
     {
         return pass == 0;
     }
 
+    /**
+     * Returns if block let light go through
+     */
     public boolean letLightGoThrough()
     {
         return false;

@@ -24,11 +24,17 @@ public class TextureMap implements IconGenerator, ITextureObject
     private boolean                     lenient;
     private Stitcher                    stitcher;
 
+    /**
+     * Creates TextureMap with given loader and base
+     */
     public TextureMap(ResourceLoader loader, ResourceLocation base)
     {
         this(loader, base, false);
     }
 
+    /**
+     * Creates TextureMap with given loader and base
+     */
     public TextureMap(ResourceLoader loader, ResourceLocation base, boolean lenientOnSizes)
     {
         this.lenient = lenientOnSizes;
@@ -41,12 +47,18 @@ public class TextureMap implements IconGenerator, ITextureObject
         stitcher = new Stitcher(emptyImage);
     }
 
+    /**
+     * Completes given ResourceLocation to get full ResourceLocation from base
+     */
     public ResourceLocation completeLocation(ResourceLocation loc)
     {
         ResourceLocation newLoc = new ResourceLocation(base.getFullPath(), loc.getFullPath());
         return newLoc;
     }
 
+    /**
+     * Instantiates nullImage and emptyImage
+     */
     private void initNullAndEmptyImages()
     {
         if(loader.doesResourceExists(completeLocation(new ResourceLocation("missigno.png"))))
@@ -118,6 +130,9 @@ public class TextureMap implements IconGenerator, ITextureObject
         return icon;
     }
 
+    /**
+     * Compiles the TextureMap to create icons from given images
+     */
     public void compile() throws Exception
     {
         HashMap<Integer, TextureIcon> indexes = new HashMap<>();

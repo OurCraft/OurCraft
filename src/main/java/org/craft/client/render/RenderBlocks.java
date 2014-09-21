@@ -52,12 +52,18 @@ public class RenderBlocks
         }
     }
 
+    /**
+     * Clears the buffer and setup required informations in order to start rendering
+     */
     public void startRendering(OpenGLBuffer buffer)
     {
         index = 0;
         buffer.clear();
     }
 
+    /**
+     * Draws a full cube from the given block
+     */
     public void drawAllFaces(OpenGLBuffer buffer, Block block, World world, int x, int y, int z)
     {
         EnumSide side = EnumSide.NORTH;
@@ -179,11 +185,17 @@ public class RenderBlocks
         index += 4;
     }
 
+    /**
+     * Uploads buffer data to OpenGL
+     */
     public void flush(OpenGLBuffer buffer)
     {
         buffer.upload();
     }
 
+    /**
+     * Renders visibles chunks from World instance 'w'
+     */
     public void render(World w, List<Chunk> visiblesChunks)
     {
         if(visiblesChunks.size() != 0)

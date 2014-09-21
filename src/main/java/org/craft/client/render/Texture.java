@@ -12,6 +12,9 @@ public class Texture implements ITextureObject
 
     private int texID;
 
+    /**
+     * Creates a texture with given width, height and pixel data
+     */
     public Texture(int w, int h, ByteBuffer pixels)
     {
         texID = glGenTextures();

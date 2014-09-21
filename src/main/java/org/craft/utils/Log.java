@@ -77,6 +77,10 @@ public class Log
     {
         String finalMessage = msg;
         // TODO format
+        if(showCaller)
+        {
+            finalMessage = "[In " + getCaller() + "] " + finalMessage;
+        }
         out.println(finalMessage);
     }
 

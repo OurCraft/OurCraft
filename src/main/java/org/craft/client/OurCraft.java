@@ -252,6 +252,9 @@ public class OurCraft implements Runnable
         renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
     }
 
+    /**
+     * Returns the folder where game data is saved
+     */
     public File getGameFolder()
     {
         if(gameFolder == null)

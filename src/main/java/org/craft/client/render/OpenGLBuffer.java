@@ -16,12 +16,18 @@ public class OpenGLBuffer
     private LinkedList<Vertex>  vertices = new LinkedList<>();
     private LinkedList<Integer> indices  = new LinkedList<>();
 
+    /**
+     * Creates an empty OpenGLBuffer instance
+     */
     public OpenGLBuffer()
     {
         vboID = glGenBuffers();
         iboID = glGenBuffers();
     }
 
+    /**
+     * Creates an OpenGLBuffer instance with given vertices and indices
+     */
     public OpenGLBuffer(List<Vertex> vertices, List<Integer> indices)
     {
         this();
@@ -29,6 +35,9 @@ public class OpenGLBuffer
         this.setIndices(indices);
     }
 
+    /**
+     * Uploads data to OpenGL
+     */
     public void upload()
     {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
@@ -80,11 +89,17 @@ public class OpenGLBuffer
         }
     }
 
+    /**
+     * Adds a new vertex at the end of vertices' list
+     */
     public void addVertex(Vertex v)
     {
         vertices.add(v);
     }
 
+    /**
+     * Adds a new vertex at the end of indices' list
+     */
     public void addIndex(int i)
     {
         indices.add(i);
@@ -105,6 +120,9 @@ public class OpenGLBuffer
         return indices.size();
     }
 
+    /**
+     * Clear indices and vertices lists and update OpenGL Data
+     */
     public void clear()
     {
         indices.clear();

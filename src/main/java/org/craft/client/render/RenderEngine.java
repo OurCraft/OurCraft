@@ -20,6 +20,9 @@ public class RenderEngine
         projection = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
     }
 
+    /**
+     * Renders a buffer with given texture
+     */
     public void renderBuffer(OpenGLBuffer buffer, ITextureObject texture)
     {
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + 0);
@@ -56,11 +59,19 @@ public class RenderEngine
         this.renderViewEntity = e;
     }
 
+    /**
+     * Calls glEnable(cap)<br/>
+     * Will be able to memorize render state in the future
+     */
     public void enableGLCap(int cap)
     {
         glEnable(cap);
     }
 
+    /**
+     * Calls glDisable(cap)<br/>
+     * Will be able to memorize render state in the future
+     */
     public void disableGLCap(int cap)
     {
         glDisable(cap);

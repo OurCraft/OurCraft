@@ -106,6 +106,9 @@ public class ImageUtils
         return btoi(buf[offset++ ]);
     }
 
+    /**
+     * Creates a BufferedImage from given TGA data
+     */
     public static BufferedImage decodeTGA(byte[] buf) throws IOException
     {
         offset = 0;

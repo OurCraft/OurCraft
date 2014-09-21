@@ -77,6 +77,9 @@ public class ResourceLocation
         return path;
     }
 
+    /**
+     * Returns direct parent
+     */
     public ResourceLocation getDirectParent()
     {
         if(parent == null)
@@ -118,8 +121,8 @@ public class ResourceLocation
         return false;
     }
 
-    public ResourceLocation getChild(String scriptName)
+    public ResourceLocation getChild(String child)
     {
-        return new ResourceLocation(getFullPath() + "/" + scriptName);
+        return new ResourceLocation(getFullPath() + "/" + child);
     }
 }

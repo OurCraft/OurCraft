@@ -22,6 +22,9 @@ public abstract class WorldGenerator
         this.rng = new Random(seed);
     }
 
+    /**
+     * Generates and populates given chunk
+     */
     public boolean populateChunk(World world, Chunk chunk)
     {
         if(chunk == null)

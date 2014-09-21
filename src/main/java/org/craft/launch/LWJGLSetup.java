@@ -9,6 +9,9 @@ public class LWJGLSetup
 
     private static boolean loaded;
 
+    /**
+     * Load LWJGL in given folder
+     */
     public static void load(File folder) throws Exception
     {
         if(!loaded)
@@ -24,6 +27,9 @@ public class LWJGLSetup
         }
     }
 
+    /**
+     * Installs natives into given folder
+     */
     private static void installNatives(File folder) throws Exception
     {
         OperatingSystem os = SystemUtils.getOS();

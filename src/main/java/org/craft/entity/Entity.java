@@ -20,6 +20,9 @@ public class Entity
 
     public static final float G = 9.81f / 360f;
 
+    /**
+     * Instantiates an Entity with given world
+     */
     public Entity(World world)
     {
         this.boundingBox = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
@@ -32,16 +35,25 @@ public class Entity
         headRotation = new Quaternion();
     }
 
+    /**
+     * Set entity's bounding box size
+     */
     public void setSize(float width, float height, float depth)
     {
         this.boundingBox = new AABB(Vector3.get(0, 0, 0), Vector3.get(width, height, depth));
     }
 
+    /**
+     * Returns entity's bounding box in world space
+     */
     public AABB getBoundingBox()
     {
         return boundingBox.translate(pos);
     }
 
+    /**
+     * Updates entity (gravity, movements)
+     */
     public void update()
     {
         onGround = true;
@@ -109,6 +121,9 @@ public class Entity
         lastTickPos = pos.copy();
     }
 
+    /**
+     * Checks if entity can go at given position
+     */
     private boolean canGo(Vector3 pos)
     {
         AABB boundingBox = this.boundingBox.translate(pos);
@@ -148,6 +163,9 @@ public class Entity
         return 0.0f;
     }
 
+    /**
+     * Teleport entity to given coordinates
+     */
     public void setLocation(float x, float y, float z)
     {
         pos.set(x, y, z);
@@ -184,11 +202,17 @@ public class Entity
         headRotation = new Quaternion(axis, radangle).mul(headRotation).normalize();
     }
 
+    /**
+     * Updates the isDead flag in order to make the world despawn this entity
+     */
     public void setDead()
     {
         this.isDead = false;
     }
 
+    /**
+     * Updates Entity AI
+     */
     public void onEntityUpdate()
     {
 
@@ -219,6 +243,9 @@ public class Entity
         return isDead;
     }
 
+    /**
+     * Makes the entity jump
+     */
     public void jump()
     {
         if(onGround)
@@ -232,6 +259,9 @@ public class Entity
         return onGround;
     }
 
+    /**
+     * Performs a raycast to get object in front of entity
+     */
     public CollisionInfos getObjectInFront(float maxDist)
     {
         CollisionInfos infos = new CollisionInfos();
@@ -239,8 +269,11 @@ public class Entity
         return infos;
     }
 
-    public float dist(Entity sender)
+    /**
+     * Returns distance in meters between this entity and given one
+     */
+    public float getDistance(Entity other)
     {
-        return sender.getPos().sub(getPos()).length();
+        return other.getPos().sub(getPos()).length();
     }
 }

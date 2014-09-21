@@ -9,6 +9,9 @@ import org.lwjgl.*;
 public class OpenGLHelper
 {
 
+    /**
+     * Loads a OpenGL Texture from given image
+     */
     public static Texture loadTexture(BufferedImage img)
     {
         int w = img.getWidth();

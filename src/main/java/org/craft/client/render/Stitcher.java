@@ -24,11 +24,17 @@ public class Stitcher
         tileHeight = -1;
     }
 
+    /**
+     * Adds a image to the list
+     */
     public int addImage(BufferedImage img)
     {
         return addImage(img, false);
     }
 
+    /**
+     * Adds a image to the list and resizes it if asked
+     */
     public int addImage(BufferedImage img, boolean forceResize)
     {
         if(tileWidth == -1 || tileHeight == -1)
@@ -51,6 +57,9 @@ public class Stitcher
         return imgs.size() - 1;
     }
 
+    /**
+     * Creates a big BufferImage containing all previously given images
+     */
     public BufferedImage stitch()
     {
         int nbrY = MathHelper.upperPowerOf2((int) Math.floor(Math.sqrt(imgs.size())));
