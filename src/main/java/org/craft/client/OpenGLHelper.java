@@ -1,9 +1,12 @@
 package org.craft.client;
 
 import java.awt.image.*;
+import java.io.*;
 import java.nio.*;
 
 import org.craft.client.render.*;
+import org.craft.resources.*;
+import org.craft.utils.*;
 import org.lwjgl.*;
 
 public class OpenGLHelper
@@ -35,5 +38,11 @@ public class OpenGLHelper
         }
         pixelBuf.flip();
         return new Texture(w, h, pixelBuf);
+    }
+
+    public static Texture loadTexture(AbstractResource resource) throws IOException
+    {
+        BufferedImage img = ImageUtils.loadImage(resource);
+        return loadTexture(img);
     }
 }

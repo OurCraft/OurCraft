@@ -11,12 +11,16 @@ public class Texture implements ITextureObject
 {
 
     private int texID;
+    private int width;
+    private int height;
 
     /**
      * Creates a texture with given width, height and pixel data
      */
     public Texture(int w, int h, ByteBuffer pixels)
     {
+        this.width = w;
+        this.height = h;
         texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -43,5 +47,15 @@ public class Texture implements ITextureObject
     public void dispose()
     {
         glDeleteTextures(texID);
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
     }
 }

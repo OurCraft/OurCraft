@@ -13,6 +13,6 @@ public abstract class AbstractReference
     protected boolean decreaseReferenceCounter()
     {
         referenceCounter-- ;
-        return referenceCounter <= 0;
+        return referenceCounter == 0;
     }
 }

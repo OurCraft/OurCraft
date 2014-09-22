@@ -53,6 +53,7 @@ public class RenderEngine
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
 
     public Matrix4 getProjectionMatrix()

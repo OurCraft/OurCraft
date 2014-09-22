@@ -119,7 +119,7 @@ public class World
          * }
          */
 
-        float step = 0.1f;
+        float step = 0.5f;
         Vector3 startPos = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset(), sender.getZ());
         Vector3 look = sender.getRotation().getForward();
         Vector3 currentPos = startPos;
@@ -138,9 +138,9 @@ public class World
             {
                 continue;
             }
-            int dx = (int) (startPos.getX()) - x;
-            int dy = (int) (startPos.getY()) - y;
-            int dz = (int) (startPos.getZ()) - z;
+            float dx = (int) (currentPos.getX()) - (x + 0.5f);
+            float dy = (int) (currentPos.getY()) - (y + 0.5f);
+            float dz = (int) (currentPos.getZ()) - (z + 0.5f);
             float blockDist = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
             blockPos.set(x, y, z);
             AABB blockBB = b.getSelectionBox(this, x, y, z);
@@ -167,10 +167,10 @@ public class World
                 {
                     if(dir.getX() < 0)
                     {
-                        infos.side = EnumSide.EAST;
+                        infos.side = EnumSide.WEST;
                     }
                     else
-                        infos.side = EnumSide.WEST;
+                        infos.side = EnumSide.EAST;
                 }
                 if(max == Math.abs(dir.getY()))
                 {
