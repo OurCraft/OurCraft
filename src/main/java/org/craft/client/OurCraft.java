@@ -178,8 +178,8 @@ public class OurCraft implements Runnable
             if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
                 player.jump();
-                this.resetTime();
             }
+            this.resetTime();
 
         }
         clientWorld.update(time, canUpdate);
