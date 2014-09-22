@@ -4,12 +4,10 @@ import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.resources.*;
 
-public class SimpleFont extends Font
+public class BaseFontRenderer extends FontRenderer
 {
 
-    private static SimpleFont instance;
-
-    private SimpleFont() throws Exception
+    public BaseFontRenderer() throws Exception
     {
         super(new TextureAtlas(OpenGLHelper.loadTexture(OurCraft.getOurCraft().getBaseLoader().getResource(new ResourceLocation("ourcraft", "textures/font.png"))), 16, 16), null);
     }
@@ -29,21 +27,5 @@ public class SimpleFont extends Font
     public float getCharHeight(char c)
     {
         return 16;
-    }
-
-    public static SimpleFont getInstance()
-    {
-        if(instance == null)
-        {
-            try
-            {
-                instance = new SimpleFont();
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        return instance;
     }
 }

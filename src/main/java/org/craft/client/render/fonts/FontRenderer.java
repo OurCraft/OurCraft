@@ -5,20 +5,23 @@ import java.util.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
 
-public abstract class Font
+public abstract class FontRenderer
 {
 
     private TextureAtlas atlas;
     private String       supportedChars;
     private OpenGLBuffer buffer;
 
-    public Font(TextureAtlas atlas, String supportedChars)
+    public FontRenderer(TextureAtlas atlas, String supportedChars)
     {
         this.atlas = atlas;
         this.supportedChars = supportedChars;
         this.buffer = new OpenGLBuffer();
     }
 
+    /**
+     * Draws a given string at given coords with given color
+     */
     public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
         buffer.clearVertices();
@@ -166,6 +169,7 @@ public abstract class Font
         renderEngine.renderBuffer(buffer, atlas.getTexture());
         vertices.clear();
         indices.clear();
+        colorVec.dispose();
     }
 
     private int getIndex(char c)

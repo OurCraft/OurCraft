@@ -1,7 +1,7 @@
 package org.craft.client;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluErrorString;
+import static org.lwjgl.util.glu.GLU.*;
 
 import java.awt.*;
 import java.io.*;
@@ -47,6 +47,7 @@ public class OurCraft implements Runnable
     private OpenGLBuffer                  crosshairBuffer;
     private FallbackRender<Entity>        fallbackRenderer;
     private Runtime                       runtime;
+    private FontRenderer                  fontRenderer;
 
     public OurCraft(File gameFolder)
     {
@@ -96,6 +97,8 @@ public class OurCraft implements Runnable
             basicShader.setUniform("modelview", new Matrix4().initIdentity());
             //INVALID ENUM END
             renderEngine.renderSplashScreen();
+
+            fontRenderer = new BaseFontRenderer();
             Display.update();
 
             Blocks.init();
@@ -136,7 +139,7 @@ public class OurCraft implements Runnable
             running = true;
             while(running && !Display.isCloseRequested())
             {
-                tick(1000/60);
+                tick(1000 / 60);
                 Display.sync(60);
                 Display.update();
             }
@@ -291,19 +294,17 @@ public class OurCraft implements Runnable
 
         int errorFlag = glGetError();
         // If an error has occurred...
-        if (errorFlag != GL_NO_ERROR) {
+        if(errorFlag != GL_NO_ERROR)
+        {
             // Print the error to System.err.
             Log.error("[GL ERROR] " + gluErrorString(errorFlag));
+        }
 
-
-        SimpleFont.getInstance().drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 0, 0, renderEngine);
-        SimpleFont.getInstance().drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 0, 15, renderEngine);
-        SimpleFont.getInstance().drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 0, 30, renderEngine);
-        SimpleFont.getInstance().drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 0, 45, renderEngine);
+        fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 0, 0, renderEngine);
+        fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 0, 15, renderEngine);
+        fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 0, 30, renderEngine);
+        fontRenderer.drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 0, 45, renderEngine);
     }
-    }
-
-
 
     public static OurCraft getOurCraft()
     {
@@ -378,5 +379,10 @@ public class OurCraft implements Runnable
     public long getUsedMemory()
     {
         return runtime.totalMemory() - runtime.freeMemory();
+    }
+
+    public FontRenderer getFontRenderer()
+    {
+        return fontRenderer;
     }
 }
