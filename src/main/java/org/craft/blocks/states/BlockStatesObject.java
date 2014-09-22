@@ -35,4 +35,9 @@ public class BlockStatesObject
     {
         return map.containsKey(state);
     }
+
+    public void clear()
+    {
+        map.clear();
+    }
 }

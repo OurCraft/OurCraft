@@ -47,9 +47,17 @@ public class EntityPlayer extends Entity
             while(Mouse.next())
             {
                 if((Mouse.getEventButton() == 0) && (Mouse.getEventButtonState()))
+                {
                     getWorld().setBlock((int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), Blocks.air);
+                }
                 else if((Mouse.getEventButton() == 1) && (Mouse.getEventButtonState()))
-                    getWorld().setBlock((int) infos.x + infos.side.getTranslationX(), (int) (infos.y) + infos.side.getTranslationY(), (int) (infos.z + infos.side.getTranslationZ()), Blocks.glass);
+                {
+                    int x = (int) infos.x + infos.side.getTranslationX();
+                    int y = (int) (infos.y) + infos.side.getTranslationY();
+                    int z = (int) (infos.z + infos.side.getTranslationZ());
+                    getWorld().setBlock(x, y, z, Blocks.log);
+                    Blocks.log.onBlockAdded(getWorld(), x, y, z, infos.side, this);
+                }
             }
 
         }

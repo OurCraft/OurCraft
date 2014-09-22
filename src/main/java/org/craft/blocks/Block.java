@@ -1,6 +1,7 @@
 package org.craft.blocks;
 
 import org.craft.client.render.*;
+import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -108,5 +109,13 @@ public class Block
     public boolean letLightGoThrough()
     {
         return false;
+    }
+
+    /**
+     * Called when a block is placed by an entity
+     */
+    public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
+    {
+        w.clearStates(x, y, z);
     }
 }

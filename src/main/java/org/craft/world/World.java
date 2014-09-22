@@ -244,4 +244,14 @@ public class World
     {
         return entities;
     }
+
+    public void clearStates(int x, int y, int z)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c == null)
+        {
+            return;
+        }
+        c.clearStates(x, y, z);
+    }
 }

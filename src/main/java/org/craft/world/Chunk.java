@@ -305,4 +305,24 @@ public class Chunk
     {
         return blockStatesObjects[x][y][z].get(state);
     }
+
+    public void clearStates(int worldX, int worldY, int worldZ)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        clearChunkState(x, y, z);
+    }
+
+    public void clearChunkState(int x, int y, int z)
+    {
+        blockStatesObjects[x][y][z].clear();
+    }
 }
