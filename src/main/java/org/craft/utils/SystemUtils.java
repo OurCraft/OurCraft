@@ -1,5 +1,7 @@
 package org.craft.utils;
 
+import java.io.File;
+
 public class SystemUtils
 {
 
@@ -32,5 +34,19 @@ public class SystemUtils
     public static String getUserName()
     {
         return System.getProperty("user.name");
+    }
+    
+    /**
+     * Returns the folder where game data is saved
+     */
+    public static File getGameFolder()
+    {
+        File gameFolder = null;
+        String appdata = System.getenv("APPDATA");
+        if(appdata != null)
+            gameFolder = new File(appdata, ".ourcraft");
+        else
+            gameFolder = new File(System.getProperty("user.home"), ".ourcraft");
+        return gameFolder;
     }
 }

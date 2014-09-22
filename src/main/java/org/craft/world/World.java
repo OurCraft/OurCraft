@@ -30,13 +30,16 @@ public class World
         while(!spawingQueue.isEmpty())
             entities.add(spawingQueue.poll());
         ArrayList<Entity> deadEntities = new ArrayList<Entity>();
-        for(Entity e : entities)
+        if(canUpdate)
         {
-            e.update();
-
-            if(e.isDead())
+            for(Entity e : entities)
             {
-                deadEntities.add(e);
+                e.update();
+
+                if(e.isDead())
+                {
+                    deadEntities.add(e);
+                }
             }
         }
         entities.removeAll(deadEntities);

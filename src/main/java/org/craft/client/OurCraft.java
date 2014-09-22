@@ -1,6 +1,7 @@
 package org.craft.client;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 import java.awt.*;
 import java.io.*;
@@ -45,10 +46,11 @@ public class OurCraft implements Runnable
     private OpenGLBuffer                  crosshairBuffer;
     private FallbackRender<Entity>        fallbackRenderer;
 
-    public OurCraft()
+    public OurCraft(File gameFolder)
     {
         instance = this;
-        classpathLoader = new ClasspathSimpleResourceLoader("assets");
+        this.gameFolder = gameFolder;
+        this.classpathLoader = new ClasspathSimpleResourceLoader("assets");
     }
 
     public void start()
@@ -83,12 +85,13 @@ public class OurCraft implements Runnable
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             renderEngine = new RenderEngine();
             projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+            //INVALID ENUM START
             basicShader = new Shader(new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
             basicShader.bind();
             basicShader.setUniform("projection", projectionHud);
             basicShader.setUniform("modelview", new Matrix4().initIdentity());
+            //INVALID ENUM END
             renderEngine.renderSplashScreen();
-
             Display.update();
 
             Blocks.init();
@@ -129,7 +132,7 @@ public class OurCraft implements Runnable
             running = true;
             while(running && !Display.isCloseRequested())
             {
-                tick(60);
+                tick(1000/60);
                 Display.sync(60);
                 Display.update();
             }
@@ -281,22 +284,12 @@ public class OurCraft implements Runnable
         glLogicOp(GL_XOR);
         renderEngine.renderBuffer(crosshairBuffer, crosshairTexture);
         renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
-    }
-
-    /**
-     * Returns the folder where game data is saved
-     */
-    public File getGameFolder()
-    {
-        if(gameFolder == null)
-        {
-            String appdata = System.getenv("APPDATA");
-            if(appdata != null)
-                gameFolder = new File(appdata, ".ourcraft");
-            else
-                gameFolder = new File(System.getProperty("user.home"), ".ourcraft");
+        int errorFlag = glGetError();
+        // If an error has occurred...
+        if (errorFlag != GL_NO_ERROR) {
+            // Print the error to System.err.
+            Log.error("[GL ERROR] " + gluErrorString(errorFlag));
         }
-        return gameFolder;
     }
 
     public static OurCraft getOurCraft()

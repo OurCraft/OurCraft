@@ -5,6 +5,7 @@ import java.net.URLClassLoader;
 
 import org.craft.client.OurCraft;
 import org.craft.loader.OurClassLoader;
+import org.craft.utils.SystemUtils;
 
 public class OurCraftLauncher
 {
@@ -16,8 +17,9 @@ public class OurCraftLauncher
         Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
-            OurCraft instance = new OurCraft();
-            LWJGLSetup.load(new File(instance.getGameFolder(), "natives"));
+            final File gameFolder = SystemUtils.getGameFolder();
+            LWJGLSetup.load(new File(gameFolder, "natives"));
+            OurCraft instance = new OurCraft(gameFolder);
             instance.start();
         }
         catch(Exception e)
