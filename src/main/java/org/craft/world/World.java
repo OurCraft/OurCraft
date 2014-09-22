@@ -25,7 +25,7 @@ public class World
         entities = new LinkedList<Entity>();
     }
 
-    public void update()
+    public void update(int time, boolean canUpdate)
     {
         while(!spawingQueue.isEmpty())
             entities.add(spawingQueue.poll());

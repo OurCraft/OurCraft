@@ -28,6 +28,7 @@ public class OurCraft implements Runnable
     private File                          gameFolder;
     private int                           displayWidth  = 960;
     private int                           displayHeight = 540;
+    private long                          lastTime      = 0;
     private boolean                       running       = true;
     private RenderEngine                  renderEngine  = null;
     private Matrix4                       modelMatrix;
@@ -128,7 +129,7 @@ public class OurCraft implements Runnable
             running = true;
             while(running && !Display.isCloseRequested())
             {
-                tick();
+                tick(60);
                 Display.sync(60);
                 Display.update();
             }
@@ -143,28 +144,47 @@ public class OurCraft implements Runnable
         }
     }
 
-    private void tick()
+    private void tick(final int time)
     {
         render();
-        update();
+        update(time);
+
     }
 
-    private void update()
+    private void update(final int time)
     {
         mouseHandler.update();
         if(player != null)
         {
             objectInFront = player.getObjectInFront(5f);
         }
-        if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+        boolean canUpdate = (System.currentTimeMillis() - lastTime) >= time;
+        if(canUpdate)
         {
-            running = false;
+
+            if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+            {
+                running = false;
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+            {
+                player.jump();
+                this.resetTime();
+            }
+
         }
-        if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-        {
-            player.jump();
-        }
-        clientWorld.update();
+        clientWorld.update(time, canUpdate);
+
+    }
+    
+    public void resetTime()
+    {
+        lastTime = System.currentTimeMillis();
+    }
+    
+    public long getLastTime()
+    {
+        return lastTime;
     }
 
     private void render()

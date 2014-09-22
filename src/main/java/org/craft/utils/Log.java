@@ -11,13 +11,14 @@ import java.util.logging.Logger;
 public class Log
 {
     private static final Logger log = Logger.getLogger("OurCraft");
-    static {
+    static
+    {
         LogManager.getLogManager().reset();
         LogFormater logformatter = new LogFormater();
         Handler[] ahandler = log.getHandlers();
         int i = ahandler.length;
-        
-        for (int j = 0; j < i; ++j)
+
+        for(int j = 0; j < i; ++j)
         {
             Handler handler = ahandler[j];
             log.removeHandler(handler);
@@ -25,8 +26,8 @@ public class Log
         ConsoleHandler ch = new ConsoleHandler();
         ch.setFormatter(logformatter);
         log.addHandler(ch);
-        log.log(Level.FINEST, "Log initialised");
     }
+
     @Retention(RetentionPolicy.RUNTIME)
     public static @interface NonLoggable
     {
@@ -89,7 +90,7 @@ public class Log
     @NonLoggable
     public static void error(String msg, boolean format)
     {
-        log( msg, Level.SEVERE, format);
+        log(msg, Level.SEVERE, format);
     }
 
     @NonLoggable
