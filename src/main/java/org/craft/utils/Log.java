@@ -1,12 +1,32 @@
 package org.craft.utils;
 
-import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Log
 {
-
+    private static final Logger log = Logger.getLogger("OurCraft");
+    static {
+        LogManager.getLogManager().reset();
+        LogFormater logformatter = new LogFormater();
+        Handler[] ahandler = log.getHandlers();
+        int i = ahandler.length;
+        
+        for (int j = 0; j < i; ++j)
+        {
+            Handler handler = ahandler[j];
+            log.removeHandler(handler);
+        }
+        ConsoleHandler ch = new ConsoleHandler();
+        ch.setFormatter(logformatter);
+        log.addHandler(ch);
+        log.log(Level.FINEST, "Log initialised");
+    }
     @Retention(RetentionPolicy.RUNTIME)
     public static @interface NonLoggable
     {
@@ -42,7 +62,7 @@ public class Log
                             if(method.isAnnotationPresent(NonLoggable.class))
                                 continue elementsIteration;
                     }
-                    String s = elem.getClassName() + "." + elem.getMethodName() + ":" + elem.getLineNumber();
+                    String s = c.getSimpleName() + "." + elem.getMethodName() + ":" + elem.getLineNumber();
                     return s;
                 }
                 catch(ClassNotFoundException e)
@@ -57,7 +77,7 @@ public class Log
     @NonLoggable
     public static void message(String msg, boolean format)
     {
-        log("[INFO] " + msg, System.out, format);
+        log(msg, Level.INFO, format);
     }
 
     @NonLoggable
@@ -69,11 +89,11 @@ public class Log
     @NonLoggable
     public static void error(String msg, boolean format)
     {
-        log("[ERROR] " + msg, System.err, format);
+        log( msg, Level.SEVERE, format);
     }
 
     @NonLoggable
-    private static void log(String msg, PrintStream out, boolean format)
+    private static void log(String msg, Level lvl, boolean format)
     {
         String finalMessage = msg;
         // TODO format
@@ -81,7 +101,7 @@ public class Log
         {
             finalMessage = "[In " + getCaller() + "] " + finalMessage;
         }
-        out.println(finalMessage);
+        log.log(lvl, finalMessage);
     }
 
     @NonLoggable
