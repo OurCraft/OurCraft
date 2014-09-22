@@ -96,10 +96,10 @@ public class RenderEngine
     public void renderSplashScreen()
     {
         OpenGLBuffer buffer = new OpenGLBuffer();
-        buffer.addVertex(new Vertex(Vector3.get(0, 0, 0), new Vector2(0, 0)));
-        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), new Vector2(1, 0)));
-        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0), new Vector2(1, 1)));
-        buffer.addVertex(new Vertex(Vector3.get(0, OurCraft.getOurCraft().getDisplayHeight(), 0), new Vector2(0, 1)));
+        buffer.addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
+        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), Vector2.get(1, 0)));
+        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0), Vector2.get(1, 1)));
+        buffer.addVertex(new Vertex(Vector3.get(0, OurCraft.getOurCraft().getDisplayHeight(), 0), Vector2.get(0, 1)));
 
         buffer.addIndex(0);
         buffer.addIndex(1);

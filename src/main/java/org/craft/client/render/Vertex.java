@@ -59,7 +59,7 @@ public class Vertex implements IDisposable
     {
         pos.dispose();
         color.dispose();
-        // TODO: texCoords.dispose();
+        texCoords.dispose();
     }
 
 }

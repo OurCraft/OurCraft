@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 import java.awt.*;
-import java.io.*;
 import java.util.*;
 
 import javax.imageio.*;
@@ -27,7 +26,6 @@ import org.lwjgl.opengl.*;
 public class OurCraft implements Runnable
 {
 
-    private File                          gameFolder;
     private int                           displayWidth  = 960;
     private int                           displayHeight = 540;
     private long                          lastTime      = 0;
@@ -48,18 +46,19 @@ public class OurCraft implements Runnable
     private FallbackRender<Entity>        fallbackRenderer;
     private Runtime                       runtime;
     private FontRenderer                  fontRenderer;
+    private String                        username;
 
-    public OurCraft(File gameFolder)
+    public OurCraft()
     {
         instance = this;
 
-        this.gameFolder = gameFolder;
         this.classpathLoader = new ClasspathSimpleResourceLoader("assets");
         runtime = Runtime.getRuntime();
     }
 
-    public void start()
+    public void start(HashMap<String, String> properties)
     {
+        username = properties.get("username");
         new Thread(this).start();
     }
 
@@ -119,10 +118,10 @@ public class OurCraft implements Runnable
 
             this.crosshairTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/ourcraft/textures/crosshair.png")));
             crosshairBuffer = new OpenGLBuffer();
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), new Vector2(0, 0)));
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), new Vector2(1, 0)));
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), new Vector2(1, 1)));
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), new Vector2(0, 1)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), Vector2.get(1, 1)));
+            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), Vector2.get(0, 1)));
 
             crosshairBuffer.addIndex(0);
             crosshairBuffer.addIndex(1);
@@ -300,10 +299,11 @@ public class OurCraft implements Runnable
             Log.error("[GL ERROR] " + gluErrorString(errorFlag));
         }
 
-        fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 0, 0, renderEngine);
-        fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 0, 15, renderEngine);
-        fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 0, 30, renderEngine);
-        fontRenderer.drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 0, 45, renderEngine);
+        fontRenderer.drawString("Playing as \"" + username + "\"", 0xFFFFFF, 2, 0, renderEngine);
+        fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
+        fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
+        fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 2, 45, renderEngine);
+        fontRenderer.drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 2, 60, renderEngine);
     }
 
     public static OurCraft getOurCraft()

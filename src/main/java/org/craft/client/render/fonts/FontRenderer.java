@@ -108,10 +108,10 @@ public abstract class FontRenderer
                 int yPos = index / atlas.getXNbr();
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
 
-                vertices.add(new Vertex(Vector3.get(x - 2, y, 0), new Vector2(region.getMinU(), region.getMaxV()), colorVec));
-                vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y, 0), new Vector2(region.getMaxU(), region.getMaxV()), colorVec));
-                vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV()), colorVec));
-                vertices.add(new Vertex(Vector3.get(x - 2, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV()), colorVec));
+                vertices.add(new Vertex(Vector3.get(x - 2, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                vertices.add(new Vertex(Vector3.get(x - 2, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
 
                 indices.add(currentIndex + 0);
                 indices.add(currentIndex + 2);
@@ -136,18 +136,18 @@ public abstract class FontRenderer
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
                 if(!italic)
                 {
-                    vertices.add(new Vertex(Vector3.get(x, y, 0), new Vector2(region.getMinU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y, 0), new Vector2(region.getMaxU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
                 }
                 else
                 {
                     float italicFactor = -2.5f;
-                    vertices.add(new Vertex(Vector3.get(x - italicFactor, y, 0), new Vector2(region.getMinU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c) - italicFactor, y, 0), new Vector2(region.getMaxU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), new Vector2(region.getMaxU(), region.getMinV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + italicFactor, y + getCharHeight(c), 0), new Vector2(region.getMinU(), region.getMinV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x - italicFactor, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c) - italicFactor, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                    vertices.add(new Vertex(Vector3.get(x + italicFactor, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
                 }
 
                 indices.add(currentIndex + 0);

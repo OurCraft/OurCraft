@@ -1,15 +1,18 @@
 package org.craft.maths;
 
 import java.nio.*;
+import java.util.*;
 
-public class Vector2
+import org.craft.utils.*;
+
+public class Vector2 extends AbstractReference implements IDisposable
 {
 
     public static final Vector2 NULL = new Vector2(0, 0);
     public float                x;
     public float                y;
 
-    public Vector2(float x, float y)
+    private Vector2(float x, float y)
     {
         this.x = x;
         this.y = y;
@@ -25,7 +28,7 @@ public class Vector2
         float l = length();
         float _x = this.x / l;
         float _y = this.y / l;
-        return new Vector2(_x, _y);
+        return Vector2.get(_x, _y);
     }
 
     /**
@@ -38,62 +41,62 @@ public class Vector2
 
     public Vector2 add(float factor)
     {
-        return new Vector2(this.x + factor, this.y + factor);
+        return Vector2.get(this.x + factor, this.y + factor);
     }
 
     public Vector2 add(float x, float y)
     {
-        return new Vector2(this.x + x, this.y + y);
+        return Vector2.get(this.x + x, this.y + y);
     }
 
     public Vector2 add(Vector2 v)
     {
-        return new Vector2(this.x + v.x, this.y + v.y);
+        return Vector2.get(this.x + v.x, this.y + v.y);
     }
 
     public Vector2 sub(float factor)
     {
-        return new Vector2(this.x - factor, this.y - factor);
+        return Vector2.get(this.x - factor, this.y - factor);
     }
 
     public Vector2 sub(float x, float y)
     {
-        return new Vector2(this.x - x, this.y - y);
+        return Vector2.get(this.x - x, this.y - y);
     }
 
     public Vector2 sub(Vector2 v)
     {
-        return new Vector2(this.x - v.x, this.y - v.y);
+        return Vector2.get(this.x - v.x, this.y - v.y);
     }
 
     public Vector2 div(float factor)
     {
-        return new Vector2(this.x / factor, this.y / factor);
+        return Vector2.get(this.x / factor, this.y / factor);
     }
 
     public Vector2 div(float x, float y)
     {
-        return new Vector2(this.x / x, this.y / y);
+        return Vector2.get(this.x / x, this.y / y);
     }
 
     public Vector2 div(Vector2 v)
     {
-        return new Vector2(this.x / v.x, this.y / v.y);
+        return Vector2.get(this.x / v.x, this.y / v.y);
     }
 
     public Vector2 mul(float factor)
     {
-        return new Vector2(this.x * factor, this.y * factor);
+        return Vector2.get(this.x * factor, this.y * factor);
     }
 
     public Vector2 mul(Vector2 v)
     {
-        return new Vector2(this.x * v.x, this.y * v.y);
+        return Vector2.get(this.x * v.x, this.y * v.y);
     }
 
     public Vector2 mul(float x, float y)
     {
-        return new Vector2(this.x * x, this.y * y);
+        return Vector2.get(this.x * x, this.y * y);
     }
 
     public float length()
@@ -136,12 +139,12 @@ public class Vector2
 
     public Vector2 copy()
     {
-        return new Vector2(x, y);
+        return Vector2.get(x, y);
     }
 
     public Vector2 negative()
     {
-        return new Vector2(-x, -y);
+        return Vector2.get(-x, -y);
     }
 
     public Vector2 lerp(Vector2 dest, float factor)
@@ -162,5 +165,32 @@ public class Vector2
     public float max()
     {
         return Math.max(getX(), getY());
+    }
+
+    @Override
+    public void dispose()
+    {
+        if(decreaseReferenceCounter())
+        {
+            unused.push(this);
+        }
+    }
+
+    private static Stack<Vector2> unused = new Stack<Vector2>();
+
+    public static Vector2 get(float x, float y)
+    {
+        Vector2 v = null;
+        if(unused.isEmpty())
+        {
+            v = new Vector2(x, y);
+        }
+        else
+        {
+            v = unused.pop();
+            v.set(x, y);
+        }
+        v.increaseReferenceCounter();
+        return v;
     }
 }

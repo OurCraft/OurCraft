@@ -1,11 +1,12 @@
 package org.craft.launch;
 
-import java.io.File;
-import java.net.URLClassLoader;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.craft.client.OurCraft;
-import org.craft.loader.OurClassLoader;
-import org.craft.utils.SystemUtils;
+import org.craft.client.*;
+import org.craft.loader.*;
+import org.craft.utils.*;
 
 public class OurCraftLauncher
 {
@@ -19,13 +20,27 @@ public class OurCraftLauncher
         {
             final File gameFolder = SystemUtils.getGameFolder();
             LWJGLSetup.load(new File(gameFolder, "natives"));
-            OurCraft instance = new OurCraft(gameFolder);
-            instance.start();
+            HashMap<String, String> properties = new HashMap<String, String>();
+            String current = null;
+            properties.put("username", "Player_" + (int) (Math.random() * 100000L));
+            for(int i = 0; i < args.length; i++ )
+            {
+                String arg = args[i];
+                if(arg.startsWith("-"))
+                {
+                    current = arg.substring(1);
+                }
+                else
+                {
+                    properties.put(current, arg);
+                }
+            }
+            OurCraft instance = new OurCraft();
+            instance.start(properties);
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
     }
-
 }

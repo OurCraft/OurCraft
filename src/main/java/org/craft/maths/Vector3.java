@@ -16,9 +16,9 @@ public class Vector3 extends AbstractReference implements IDisposable
 
     public static final Vector3 zAxis = new Vector3(0, 0, 1);
 
-    private float                x;
-    private float                y;
-    private float                z;
+    private float               x;
+    private float               y;
+    private float               z;
 
     private Vector3(float x, float y, float z)
     {
@@ -185,7 +185,7 @@ public class Vector3 extends AbstractReference implements IDisposable
 
     public Vector3 copy()
     {
-        return new Vector3(x, y, z);
+        return Vector3.get(x, y, z);
     }
 
     public Vector3 negative()
@@ -195,32 +195,32 @@ public class Vector3 extends AbstractReference implements IDisposable
 
     public Vector2 xy()
     {
-        return new Vector2(x, y);
+        return Vector2.get(x, y);
     }
 
     public Vector2 xz()
     {
-        return new Vector2(x, z);
+        return Vector2.get(x, z);
     }
 
     public Vector2 zx()
     {
-        return new Vector2(z, x);
+        return Vector2.get(z, x);
     }
 
     public Vector2 yx()
     {
-        return new Vector2(y, x);
+        return Vector2.get(y, x);
     }
 
     public Vector2 zy()
     {
-        return new Vector2(z, y);
+        return Vector2.get(z, y);
     }
 
     public Vector2 yz()
     {
-        return new Vector2(y, z);
+        return Vector2.get(y, z);
     }
 
     public Vector3 lerp(Vector3 dest, float factor)
@@ -288,11 +288,7 @@ public class Vector3 extends AbstractReference implements IDisposable
 
     public static Vector3 max(Vector3 a, Vector3 b)
     {
-        Vector3 vec3 = new Vector3();
-        vec3.x = (float) Math.max(a.x, b.x);
-        vec3.y = (float) Math.max(a.y, b.y);
-        vec3.z = (float) Math.max(a.z, b.z);
-        return vec3;
+        return Vector3.get((float) Math.max(a.x, b.x), (float) Math.max(a.y, b.y), (float) Math.max(a.z, b.z));
     }
 
     private static Stack<Vector3> unused = new Stack<Vector3>();
