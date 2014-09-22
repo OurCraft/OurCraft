@@ -20,7 +20,7 @@ public class BlockLog extends Block
     public TextureIcon getBlockIcon(World world, int x, int y, int z, EnumSide side)
     {
         IBlockStateValue value = world.getBlockState(x, y, z, BlockStates.ORIENTATION);
-        if(value == null)
+        if(value == null || !(value instanceof EnumLogBlockStates))
             value = EnumLogBlockStates.UP;
         if(value == EnumLogBlockStates.UP)
         {
