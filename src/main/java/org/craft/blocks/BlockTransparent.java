@@ -1,5 +1,6 @@
 package org.craft.blocks;
 
+import org.craft.client.render.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
@@ -16,9 +17,9 @@ public class BlockTransparent extends Block
         return false;
     }
 
-    public boolean shouldRenderInPass(int pass)
+    public boolean shouldRenderInPass(EnumRenderPass pass)
     {
-        return pass == 1;
+        return pass == EnumRenderPass.ALPHA;
     }
 
     public boolean shouldSideBeRendered(World w, int x, int y, int z, EnumSide side)

@@ -97,9 +97,9 @@ public class Block
     /**
      * Returns if block should be rendered in given pass
      */
-    public boolean shouldRenderInPass(int pass)
+    public boolean shouldRenderInPass(EnumRenderPass pass)
     {
-        return pass == 0;
+        return pass == EnumRenderPass.NORMAL;
     }
 
     /**

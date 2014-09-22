@@ -219,16 +219,17 @@ public class RenderBlocks
                     return Float.compare(bdist, adist);
                 }
             });
-            for(int pass = 0; pass < 2; pass++ )
+            for(int passId = 0; passId < 2; passId++ )
             {
-                if(pass == 1)
+                EnumRenderPass currentPass = EnumRenderPass.getFromId(passId);
+                if(currentPass == EnumRenderPass.ALPHA)
                 {
                     glDepthMask(false);
                 }
                 for(Chunk c : visiblesChunks)
                 {
                     OpenGLBuffer buffer = null;
-                    if(pass == 0)
+                    if(currentPass == EnumRenderPass.NORMAL)
                     {
                         buffer = chunkBuffersPass0.get(c.getCoords());
                         if(buffer == null)
@@ -237,7 +238,7 @@ public class RenderBlocks
                             buffer = chunkBuffersPass0.get(c.getCoords());
                         }
                     }
-                    if(pass == 1)
+                    if(currentPass == EnumRenderPass.ALPHA)
                     {
                         buffer = chunkBuffersPass1.get(c.getCoords());
                         if(buffer == null)
@@ -250,7 +251,7 @@ public class RenderBlocks
                     {
 
                         startRendering(buffer);
-                        if(pass == 0)
+                        if(currentPass == EnumRenderPass.NORMAL)
                         {
                             for(int x = 0; x < 16; x++ )
                             {
@@ -259,7 +260,7 @@ public class RenderBlocks
                                     for(int z = 0; z < 16; z++ )
                                     {
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                        if(b != null && b.shouldRenderInPass(pass))
+                                        if(b != null && b.shouldRenderInPass(currentPass))
                                         {
                                             drawAllFaces(buffer, b, w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
                                         }
@@ -285,7 +286,7 @@ public class RenderBlocks
                                     for(int z = 0; z < 16; z++ )
                                     {
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                        if(b != null && b.shouldRenderInPass(pass))
+                                        if(b != null && b.shouldRenderInPass(currentPass))
                                         {
                                             BlockRenderInfos infos = new BlockRenderInfos();
                                             infos.block = b;
@@ -322,12 +323,12 @@ public class RenderBlocks
                         }
                         flush(buffer);
 
-                        if(pass == 1)
+                        if(currentPass == EnumRenderPass.ALPHA)
                             c.cleanUpDirtiness();
                     }
                     renderEngine.renderBuffer(buffer, blockMap);
                 }
-                if(pass == 1)
+                if(currentPass == EnumRenderPass.ALPHA)
                 {
                     glDepthMask(true);
                 }

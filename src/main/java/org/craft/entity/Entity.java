@@ -103,13 +103,13 @@ public class Entity
         else
             velZ = 0;
 
-        if(pitch > 90)
+        if(pitch > Math.toRadians(90))
         {
-            pitch = 90;
+            pitch = (float) Math.toRadians(90);
         }
-        else if(pitch < -90)
+        else if(pitch < Math.toRadians(-90))
         {
-            pitch = -90;
+            pitch = (float) Math.toRadians(-90);
         }
 
         if(onGround)
