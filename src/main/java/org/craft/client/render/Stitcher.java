@@ -65,7 +65,7 @@ public class Stitcher
         int nbrY = MathHelper.upperPowerOf2((int) Math.floor(Math.sqrt(imgs.size())));
         int nbrX = (int) Math.ceil((double) imgs.size() / (double) nbrY);
 
-        while((nbrX * nbrY - imgs.size()) >= nbrY)
+        while((nbrX * nbrY - (imgs.size() - 1)) >= nbrY)
             nbrY-- ;
         int width = nbrX * tileWidth;
         int height = nbrY * tileHeight;

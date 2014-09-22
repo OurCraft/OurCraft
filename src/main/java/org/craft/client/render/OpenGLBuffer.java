@@ -83,7 +83,15 @@ public class OpenGLBuffer
 
     public void setVertices(List<Vertex> newVertices)
     {
-        clearVertices();
+        setVertices(newVertices, true);
+    }
+
+    public void setVertices(List<Vertex> newVertices, boolean disposePrevious)
+    {
+        if(disposePrevious)
+            clearVertices();
+        else
+            vertices.clear();
         for(Vertex v : newVertices)
         {
             vertices.add(v);

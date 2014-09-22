@@ -2,15 +2,15 @@ package org.craft.client.render;
 
 public interface TextureIcon
 {
-    public double getWidth();
+    public float getWidth();
 
-    public double getHeight();
+    public float getHeight();
 
-    public double getMinU();
+    public float getMinU();
 
-    public double getMaxU();
+    public float getMaxU();
 
-    public double getMinV();
+    public float getMinV();
 
-    public double getMaxV();
+    public float getMaxV();
 }

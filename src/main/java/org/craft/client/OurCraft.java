@@ -13,6 +13,7 @@ import javax.swing.*;
 import org.craft.blocks.*;
 import org.craft.client.render.*;
 import org.craft.client.render.entity.*;
+import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
@@ -45,12 +46,15 @@ public class OurCraft implements Runnable
     private Texture                       crosshairTexture;
     private OpenGLBuffer                  crosshairBuffer;
     private FallbackRender<Entity>        fallbackRenderer;
+    private Runtime                       runtime;
 
     public OurCraft(File gameFolder)
     {
         instance = this;
+
         this.gameFolder = gameFolder;
         this.classpathLoader = new ClasspathSimpleResourceLoader("assets");
+        runtime = Runtime.getRuntime();
     }
 
     public void start()
@@ -179,12 +183,12 @@ public class OurCraft implements Runnable
         clientWorld.update(time, canUpdate);
 
     }
-    
+
     public void resetTime()
     {
         lastTime = System.currentTimeMillis();
     }
-    
+
     public long getLastTime()
     {
         return lastTime;
@@ -284,13 +288,22 @@ public class OurCraft implements Runnable
         glLogicOp(GL_XOR);
         renderEngine.renderBuffer(crosshairBuffer, crosshairTexture);
         renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
+
         int errorFlag = glGetError();
         // If an error has occurred...
         if (errorFlag != GL_NO_ERROR) {
             // Print the error to System.err.
             Log.error("[GL ERROR] " + gluErrorString(errorFlag));
-        }
+
+
+        SimpleFont.getInstance().drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 0, 0, renderEngine);
+        SimpleFont.getInstance().drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 0, 15, renderEngine);
+        SimpleFont.getInstance().drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 0, 30, renderEngine);
+        SimpleFont.getInstance().drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 0, 45, renderEngine);
     }
+    }
+
+
 
     public static OurCraft getOurCraft()
     {
@@ -340,5 +353,30 @@ public class OurCraft implements Runnable
     public int getDisplayHeight()
     {
         return displayHeight;
+    }
+
+    public Runtime getRuntimeInfos()
+    {
+        return runtime;
+    }
+
+    public long getFreeMemory()
+    {
+        return runtime.freeMemory();
+    }
+
+    public long getMaxMemory()
+    {
+        return runtime.maxMemory();
+    }
+
+    public long getTotalMemory()
+    {
+        return runtime.totalMemory();
+    }
+
+    public long getUsedMemory()
+    {
+        return runtime.totalMemory() - runtime.freeMemory();
     }
 }

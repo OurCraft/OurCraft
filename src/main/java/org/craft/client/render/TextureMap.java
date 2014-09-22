@@ -217,37 +217,37 @@ public class TextureMap implements IconGenerator, ITextureObject
         }
 
         @Override
-        public double getWidth()
+        public float getWidth()
         {
             return width;
         }
 
         @Override
-        public double getHeight()
+        public float getHeight()
         {
             return height;
         }
 
         @Override
-        public double getMinU()
+        public float getMinU()
         {
             return minu;
         }
 
         @Override
-        public double getMaxU()
+        public float getMaxU()
         {
             return maxu;
         }
 
         @Override
-        public double getMinV()
+        public float getMinV()
         {
             return minv;
         }
 
         @Override
-        public double getMaxV()
+        public float getMaxV()
         {
             return maxv;
         }
