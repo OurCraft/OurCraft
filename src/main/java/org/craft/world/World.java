@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
@@ -76,6 +77,25 @@ public class World
         if(c == null)
             return Blocks.air;
         return c.getBlock(this, x, y, z);
+    }
+
+    public IBlockStateValue getBlockState(int x, int y, int z, BlockState state)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c == null)
+            return null;
+        return c.getBlockState(x, y, z, state);
+    }
+
+    /**
+     * Sets block state at given coords
+     */
+    public void setBlockState(int x, int y, int z, BlockState state, IBlockStateValue value)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c == null)
+            return;
+        c.setBlockState(x, y, z, state, value);
     }
 
     /**

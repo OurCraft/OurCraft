@@ -3,6 +3,7 @@ package org.craft.world.populators;
 import java.util.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
@@ -40,7 +41,19 @@ public class TreePopulator implements IWorldPopulator
                     }
                 }
                 for(int j = 1; j < 4; j++ )
+                {
                     c.setChunkBlock(x, y + j, z, Blocks.log);
+                    EnumLogBlockStates o = EnumLogBlockStates.LYING_NS;
+                    if(rng.nextBoolean())
+                    {
+                        o = EnumLogBlockStates.LYING_WE;
+                        if(rng.nextBoolean())
+                        {
+                            o = EnumLogBlockStates.UP;
+                        }
+                    }
+                    c.setChunkBlockState(x, y + j, z, BlockStates.ORIENTATION, o);
+                }
                 world.setBlock(x + c.getCoords().x * 16, y + 5 + c.getCoords().y * 16, z + c.getCoords().z * 16, Blocks.leaves);
             }
         }

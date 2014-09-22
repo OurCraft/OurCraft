@@ -3,16 +3,18 @@ package org.craft.world;
 import java.util.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 
 public class Chunk
 {
 
-    public Block[][][] blocks;
-    public int[][]     highest;
-    public float[][][] lightValues;
-    private ChunkCoord coords;
-    private boolean    isDirty;
-    private World      owner;
+    public Block[][][]             blocks;
+    public int[][]                 highest;
+    public float[][][]             lightValues;
+    public BlockStatesObject[][][] blockStatesObjects;
+    private ChunkCoord             coords;
+    private boolean                isDirty;
+    private World                  owner;
 
     public Chunk(World owner, ChunkCoord coords)
     {
@@ -21,6 +23,7 @@ public class Chunk
         this.blocks = new Block[16][16][16];
         this.highest = new int[16][16];
         this.lightValues = new float[16][16][16];
+        blockStatesObjects = new BlockStatesObject[16][16][16];
         for(int x = 0; x < 16; x++ )
         {
             Arrays.fill(highest[x], -1);
@@ -28,6 +31,7 @@ public class Chunk
             {
                 Arrays.fill(blocks[x][y], Blocks.air);
                 Arrays.fill(lightValues[x][y], 1f);
+                Arrays.fill(blockStatesObjects[x][y], new BlockStatesObject());
             }
         }
     }
@@ -246,5 +250,59 @@ public class Chunk
     public int getHighest(int x, int z)
     {
         return highest[x][z];
+    }
+
+    /**
+     * Sets a block state at given value from coords in world space
+     */
+    public void setBlockState(int worldX, int worldY, int worldZ, BlockState state, IBlockStateValue value)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        setChunkBlockState(x, y, z, state, value);
+    }
+
+    /**
+     * Sets a block state at given value from coords in chunk space
+     */
+    public void setChunkBlockState(int x, int y, int z, BlockState state, IBlockStateValue value)
+    {
+        blockStatesObjects[x][y][z].set(state, value);
+        markNeighbors(x, y, z);
+        markDirty();
+    }
+
+    /**
+     * Returns requested block state value from world space
+     */
+    public IBlockStateValue getBlockState(int worldX, int worldY, int worldZ, BlockState state)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        return getChunkBlockState(x, y, z, state);
+    }
+
+    /**
+     * Returns requested block state value from chunk space
+     */
+    private IBlockStateValue getChunkBlockState(int x, int y, int z, BlockState state)
+    {
+        return blockStatesObjects[x][y][z].get(state);
     }
 }
