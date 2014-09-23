@@ -10,6 +10,7 @@ import javax.imageio.*;
 import javax.swing.*;
 
 import org.craft.blocks.*;
+import org.craft.client.gui.*;
 import org.craft.client.render.*;
 import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
@@ -47,6 +48,9 @@ public class OurCraft implements Runnable
     private Runtime                       runtime;
     private FontRenderer                  fontRenderer;
     private String                        username;
+
+    private Gui                           currentMenu;
+    private Gui                           newMenu;
 
     public OurCraft()
     {
@@ -148,6 +152,8 @@ public class OurCraft implements Runnable
             fallbackRenderer = new FallbackRender<Entity>();
             new ThreadGetChunksFromCamera(this).start();
             running = true;
+
+            openMenu(new GuiIngame(fontRenderer));
             while(running && !Display.isCloseRequested())
             {
                 tick(1000 / 60);
@@ -165,6 +171,11 @@ public class OurCraft implements Runnable
         }
     }
 
+    public void openMenu(Gui gui)
+    {
+        this.newMenu = gui;
+    }
+
     private void tick(final int time)
     {
         render();
@@ -174,6 +185,14 @@ public class OurCraft implements Runnable
 
     private void update(final int time)
     {
+        if(newMenu != currentMenu)
+        {
+            currentMenu = newMenu;
+            if(currentMenu != null)
+                currentMenu.init();
+        }
+        if(currentMenu != null)
+            currentMenu.update();
         mouseHandler.update();
         if(player != null)
         {
@@ -305,11 +324,10 @@ public class OurCraft implements Runnable
 
         printIfGLError();
 
-        fontRenderer.drawString("Playing as \"" + username + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
-        fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
-        fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
-        fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 2, 45, renderEngine);
-        fontRenderer.drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 2, 60, renderEngine);
+        int mx = Mouse.getX();
+        int my = Mouse.getY();
+        if(currentMenu != null)
+            currentMenu.draw(mx, my, renderEngine);
     }
 
     public static void printIfGLError()
@@ -321,6 +339,11 @@ public class OurCraft implements Runnable
             // Print the error to System.err.
             Log.error("[GL ERROR] " + gluErrorString(errorFlag));
         }
+    }
+
+    public String getClientUsername()
+    {
+        return username;
     }
 
     public static OurCraft getOurCraft()

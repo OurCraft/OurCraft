@@ -3,6 +3,7 @@ package org.craft.launch;
 import java.io.*;
 
 import org.craft.utils.*;
+import org.craft.utils.SystemUtils.OperatingSystem;
 
 public class LWJGLSetup
 {

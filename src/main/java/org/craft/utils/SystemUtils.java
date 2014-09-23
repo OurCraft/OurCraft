@@ -1,9 +1,14 @@
 package org.craft.utils;
 
-import java.io.File;
+import java.io.*;
 
 public class SystemUtils
 {
+
+    public static enum OperatingSystem
+    {
+        WINDOWS, LINUX, MACOSX, SOLARIS, UNKNOWN;
+    }
 
     public static OperatingSystem getOS()
     {
@@ -35,7 +40,7 @@ public class SystemUtils
     {
         return System.getProperty("user.name");
     }
-    
+
     /**
      * Returns the folder where game data is saved
      */
