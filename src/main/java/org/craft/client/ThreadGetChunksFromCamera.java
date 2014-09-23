@@ -40,14 +40,15 @@ public class ThreadGetChunksFromCamera extends Thread
                                 continue yLoop;
                             synchronized(clientWorld)
                             {
-                                clientWorld.getChunkProvider().getOrCreate(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
+                                if(!clientWorld.chunkExists((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f)))
+                                    clientWorld.createChunk((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
                             }
                         }
                     }
                 }
                 try
                 {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }
                 catch(InterruptedException e)
                 {

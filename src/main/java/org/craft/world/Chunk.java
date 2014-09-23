@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
+import org.craft.maths.MathHelper;
 
 public class Chunk
 {
@@ -325,4 +326,20 @@ public class Chunk
     {
         blockStatesObjects[x][y][z].clear();
     }
+
+    public void update()
+    {
+        for(int x = 0; x < 16; x++ )
+        {
+            for(int z = 0; z < 16; z++ )
+            {
+                int maxY = (int) Math.round(4f * MathHelper.perlinNoise(x + this.getCoords().x * 16, z + this.getCoords().z * 16, owner.getGenerator().getSeed())) - (this.getCoords().y - 11) * 16 + 1;
+                for(int y = 0; y <= maxY && y < 16; y++ )
+                {
+                    Block b = blocks[x][y][z];
+                    if(b == null) b.updateTick(owner, x, y, z);
+                }
+            }
+    }
+}
 }

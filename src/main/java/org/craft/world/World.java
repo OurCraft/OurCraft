@@ -35,6 +35,8 @@ public class World
         {
             for(Entity e : entities)
             {
+                Chunk c = getChunk((int)e.getX(), (int)e.getY(), (int)e.getZ());
+                if(c != null) c.update();
                 e.update();
 
                 if(e.isDead())
@@ -253,5 +255,41 @@ public class World
             return;
         }
         c.clearStates(x, y, z);
+    }
+    
+    /**
+     * Returns whether a chunk exists at chunk coordinates x, y, z
+     */
+    public boolean chunkExists(int x, int y, int z)
+    {
+        return this.chunkProvider.chunkExists(this, x, y, z);
+    }
+
+    public void createChunk(final int x, final int y, final int z)
+    {
+        final World w = this;
+        if(chunkExists(x, y, z))
+            Log.error("Cannot generate a chunk on a chunk on " + x + ", " + y + ", " + z);
+        else {
+            Thread t = new Thread() {
+                @Override
+                public void run()
+                {
+                    chunkProvider.create(w, x, y, z);
+                }
+            };
+            t.start();
+            try
+            {
+                t.join();
+            }
+            catch(InterruptedException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
+        
     }
 }

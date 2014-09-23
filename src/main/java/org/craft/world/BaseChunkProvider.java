@@ -43,4 +43,10 @@ public class BaseChunkProvider extends ChunkProvider
         return newChunk;
     }
 
+    @Override
+    public boolean chunkExists(World world, int chunkX, int chunkY, int chunkZ)
+    {
+        return get(world, chunkX, chunkY, chunkZ) != null;
+    }
+
 }
