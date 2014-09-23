@@ -34,6 +34,7 @@ public abstract class FontRenderer
         boolean bold = false;
         boolean italic = false;
         boolean underlined = false;
+        boolean obfuscated = false;
 
         int toSkip = 0;
         int currentColor = color;
@@ -68,6 +69,7 @@ public abstract class FontRenderer
                     toSkip = format.getCharsAfter() + 1;
                     if(format == TextFormatting.RESET)
                     {
+                        obfuscated = false;
                         bold = false;
                         italic = false;
                         underlined = false;
@@ -76,6 +78,10 @@ public abstract class FontRenderer
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
                         colorVec = Vector3.get(r, g, b);
+                    }
+                    else if(format == TextFormatting.OBFUSCATED)
+                    {
+                        obfuscated = !obfuscated;
                     }
                     else if(format == TextFormatting.COLOR)
                     {
@@ -106,6 +112,11 @@ public abstract class FontRenderer
                 int index = getIndex('_');
                 int xPos = index % atlas.getXNbr();
                 int yPos = index / atlas.getXNbr();
+                if(obfuscated)
+                {
+                    xPos = (int) (Math.random() * atlas.getXNbr());
+                    yPos = (int) (Math.random() * atlas.getYNbr());
+                }
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
 
                 vertices.add(new Vertex(Vector3.get(x - 2, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
@@ -133,6 +144,11 @@ public abstract class FontRenderer
             {
                 int xPos = index % atlas.getXNbr();
                 int yPos = index / atlas.getXNbr();
+                if(obfuscated)
+                {
+                    xPos = (int) (Math.random() * atlas.getXNbr());
+                    yPos = (int) (Math.random() * atlas.getYNbr());
+                }
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
                 if(!italic)
                 {

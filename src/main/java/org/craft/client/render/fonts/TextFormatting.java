@@ -3,7 +3,7 @@ package org.craft.client.render.fonts;
 public enum TextFormatting
 {
 
-    RESET('r'), ITALIC('i'), BOLD('b'), UNDERLINED('u'), COLOR('c', 8);
+    RESET('r'), ITALIC('i'), BOLD('b'), UNDERLINED('u'), COLOR('c', 8), OBFUSCATED('o');
 
     public static char BEGINNING = '§';
     private char       s;
@@ -27,7 +27,7 @@ public enum TextFormatting
 
     public String toString()
     {
-        return "" + s;
+        return "" + BEGINNING + s;
     }
 
     public static TextFormatting fromString(char id)

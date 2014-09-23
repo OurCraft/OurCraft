@@ -305,7 +305,7 @@ public class OurCraft implements Runnable
 
         printIfGLError();
 
-        fontRenderer.drawString("Playing as \"" + username + "\"", 0xFFFFFF, 2, 0, renderEngine);
+        fontRenderer.drawString("Playing as \"" + username + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
         fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
         fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
         fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 2, 45, renderEngine);
