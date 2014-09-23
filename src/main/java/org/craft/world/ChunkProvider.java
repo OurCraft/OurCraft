@@ -26,7 +26,7 @@ public abstract class ChunkProvider
     /**
      * Checks to see if a chunk exists at x, y, z on specified World
      */
-    public abstract boolean chunkExists(World world, int chunkX, int chunkY, int chunkZ);
+    public abstract boolean doesChunkExists(World world, int chunkX, int chunkY, int chunkZ);
 
     public abstract void addChunk(World w, Chunk c);
 }

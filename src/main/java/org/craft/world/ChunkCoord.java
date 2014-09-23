@@ -35,4 +35,9 @@ public class ChunkCoord
         }
         return false;
     }
+
+    public static ChunkCoord get(int chunkX, int chunkY, int chunkZ)
+    {
+        return new ChunkCoord(chunkX, chunkY, chunkZ);
+    }
 }

@@ -260,15 +260,15 @@ public class World
     /**
      * Returns whether a chunk exists at chunk coordinates x, y, z
      */
-    public boolean chunkExists(int x, int y, int z)
+    public boolean doesChunkExists(int x, int y, int z)
     {
-        return this.chunkProvider.chunkExists(this, x, y, z);
+        return this.chunkProvider.doesChunkExists(this, x, y, z);
     }
 
     public void createChunk(final int x, final int y, final int z)
     {
         final World w = this;
-        if(chunkExists(x, y, z))
+        if(doesChunkExists(x, y, z))
             Log.error("Cannot generate a chunk on a chunk on " + x + ", " + y + ", " + z);
         else {
             Thread t = new Thread() {

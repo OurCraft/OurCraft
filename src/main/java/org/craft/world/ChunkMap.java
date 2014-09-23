@@ -30,4 +30,9 @@ public class ChunkMap implements Iterable<Chunk>
     {
         map.put(c.getCoords(), c);
     }
+
+    public boolean contains(ChunkCoord coords)
+    {
+        return map.containsKey(coords);
+    }
 }

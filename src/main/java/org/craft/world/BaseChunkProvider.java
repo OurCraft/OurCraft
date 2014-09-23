@@ -44,9 +44,9 @@ public class BaseChunkProvider extends ChunkProvider
     }
 
     @Override
-    public boolean chunkExists(World world, int chunkX, int chunkY, int chunkZ)
+    public boolean doesChunkExists(World world, int chunkX, int chunkY, int chunkZ)
     {
-        return get(world, chunkX, chunkY, chunkZ) != null;
+        return chunkMap.contains(ChunkCoord.get(chunkX, chunkY, chunkZ));
     }
 
 }
