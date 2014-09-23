@@ -78,16 +78,11 @@ public class OurCraft implements Runnable
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+            ContextAttribs context = new ContextAttribs(3, 3).withProfileCompatibility(true).withDebug(true);
             Display.setParent(canvas);
-            Display.create();
+            Display.create(new PixelFormat(), context);
             mouseHandler = new MouseHandler();
             mouseHandler.grab();
-            GL11.glMatrixMode(GL11.GL_PROJECTION);
-            GL11.glLoadIdentity();
-            glOrtho(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-            GL11.glLoadIdentity();
 
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

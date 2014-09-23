@@ -36,7 +36,15 @@ public class RenderEngine
      */
     public void renderBuffer(OpenGLBuffer buffer)
     {
-        glEnableClientState(GL_VERTEX_ARRAY);
+        renderBuffer(buffer, GL_TRIANGLES);
+    }
+
+    /**
+     * Renders a buffer with given mode
+     */
+    public void renderBuffer(OpenGLBuffer buffer, int mode)
+    {
+        //        glEnableClientState(GL_VERTEX_ARRAY);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -47,12 +55,12 @@ public class RenderEngine
         glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 20);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.getIboID());
-        glDrawElements(GL_TRIANGLES, buffer.getIndicesCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(mode, buffer.getIndicesCount(), GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
-        glDisableClientState(GL_VERTEX_ARRAY);
+        //        glDisableClientState(GL_VERTEX_ARRAY);
     }
 
     public Matrix4 getProjectionMatrix()
