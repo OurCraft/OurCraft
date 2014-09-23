@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
-import org.craft.maths.MathHelper;
+import org.craft.maths.*;
 
 public class Chunk
 {
@@ -337,9 +337,10 @@ public class Chunk
                 for(int y = 0; y <= maxY && y < 16; y++ )
                 {
                     Block b = blocks[x][y][z];
-                    if(b == null) b.updateTick(owner, x, y, z);
+                    if(b != null)
+                        b.updateTick(owner, x, y, z);
                 }
             }
+        }
     }
-}
 }
