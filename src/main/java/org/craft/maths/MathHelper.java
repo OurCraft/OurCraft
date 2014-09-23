@@ -5,6 +5,8 @@ import java.util.*;
 public class MathHelper
 {
 
+    private static HashMap<Long, ImprovedNoise> noiseGenerators = new HashMap<Long, ImprovedNoise>();
+
     public static double roundToNearestMultiple(double number, double multiple)
     {
         return (int) (number / multiple) * multiple;
@@ -40,7 +42,16 @@ public class MathHelper
 
     public static float perlinNoise(float x, float y, long seed)
     {
-        return (float) new ImprovedNoise(seed).perlinNoise(x, y);
+        return (float) getNoiseGenerator(seed).perlinNoise(x, y);
+    }
+
+    private static ImprovedNoise getNoiseGenerator(long seed)
+    {
+        if(!noiseGenerators.containsKey(seed))
+        {
+            noiseGenerators.put(seed, new ImprovedNoise(seed));
+        }
+        return noiseGenerators.get(seed);
     }
 
     public static int[] shuffle(int[] perm, long seed)

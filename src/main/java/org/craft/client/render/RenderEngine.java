@@ -26,7 +26,7 @@ public class RenderEngine
      */
     public void renderBuffer(OpenGLBuffer buffer, ITextureObject texture)
     {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0 + 0);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
         texture.bind();
         renderBuffer(buffer);
     }
@@ -94,6 +94,7 @@ public class RenderEngine
 
     public void renderSplashScreen()
     {
+
         OpenGLBuffer buffer = new OpenGLBuffer();
         buffer.addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
         buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), Vector2.get(1, 0)));

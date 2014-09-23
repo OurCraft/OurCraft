@@ -89,18 +89,30 @@ public class OurCraft implements Runnable
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             renderEngine = new RenderEngine();
             projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
-            //INVALID ENUM START
             basicShader = new Shader(new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
             basicShader.bind();
             basicShader.setUniform("projection", projectionHud);
             basicShader.setUniform("modelview", new Matrix4().initIdentity());
-            //INVALID ENUM END
             renderEngine.renderSplashScreen();
 
             fontRenderer = new BaseFontRenderer();
             Display.update();
 
             Blocks.init();
+            I18n.init(classpathLoader);
+
+            Log.message("==== IN en_US.lang ====");
+            Log.message("lang.test1 is " + I18n.format("lang.test1"));
+            Log.message("lang.test2 is " + I18n.format("lang.test2", 0.2));
+            Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
+            Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
+
+            I18n.setCurrentLanguage("fr_FR");
+            Log.message("==== IN fr_FR.lang ====");
+            Log.message("lang.test1 is " + I18n.format("lang.test1"));
+            Log.message("lang.test2 is " + I18n.format("lang.test2", 0.2));
+            Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
+            Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
 
             WorldGenerator generator = new WorldGenerator();
             generator.addPopulator(new RockPopulator());
@@ -291,6 +303,17 @@ public class OurCraft implements Runnable
         renderEngine.renderBuffer(crosshairBuffer, crosshairTexture);
         renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
 
+        printIfGLError();
+
+        fontRenderer.drawString("Playing as \"" + username + "\"", 0xFFFFFF, 2, 0, renderEngine);
+        fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
+        fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
+        fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 2, 45, renderEngine);
+        fontRenderer.drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 2, 60, renderEngine);
+    }
+
+    public static void printIfGLError()
+    {
         int errorFlag = glGetError();
         // If an error has occurred...
         if(errorFlag != GL_NO_ERROR)
@@ -298,12 +321,6 @@ public class OurCraft implements Runnable
             // Print the error to System.err.
             Log.error("[GL ERROR] " + gluErrorString(errorFlag));
         }
-
-        fontRenderer.drawString("Playing as \"" + username + "\"", 0xFFFFFF, 2, 0, renderEngine);
-        fontRenderer.drawString("Free memory: " + (getFreeMemory() / 1000L) + "kb:" + (getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
-        fontRenderer.drawString("Used memory: " + (getUsedMemory() / 1000L) + "kb:" + (getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
-        fontRenderer.drawString("Total memory: " + (getTotalMemory() / 1000L) + "kb:" + (getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 2, 45, renderEngine);
-        fontRenderer.drawString("Max available memory: " + (getMaxMemory() / 1000L) + "kb:" + (getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 2, 60, renderEngine);
     }
 
     public static OurCraft getOurCraft()

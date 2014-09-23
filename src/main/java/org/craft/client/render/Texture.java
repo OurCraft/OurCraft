@@ -28,8 +28,6 @@ public class Texture implements ITextureObject
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glTexParameteri(GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
         glTexParameteri(GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);
-
-        glClampColor(GL_TEXTURE_2D, GL_FALSE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         glBindTexture(GL_TEXTURE_2D, 0);
     }

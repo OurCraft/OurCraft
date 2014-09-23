@@ -118,9 +118,12 @@ public class Block
     {
         w.clearStates(x, y, z);
     }
-    
+
     /**
      * Ticks the block if it's been scheduled
      */
-    public void updateTick(World world, int x, int y, int z) { Log.message("UPDATE " + this.getID());}
+    public void updateTick(World world, int x, int y, int z)
+    {
+        //  Log.message("UPDATE " + this.getID());
+    }
 }
