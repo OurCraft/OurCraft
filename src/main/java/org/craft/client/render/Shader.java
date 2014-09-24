@@ -68,6 +68,32 @@ public class Shader
     }
 
     /**
+     * Sets the given uniform to the value of the given vec2
+     */
+    public Shader setUniform(String uniform, Vector2 v)
+    {
+        int l = getLocation(uniform);
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 2);
+        v.write(buffer);
+        buffer.flip();
+        glUniform2(l, buffer);
+        return this;
+    }
+
+    /**
+     * Sets the given uniform to the value of the given vec3
+     */
+    public Shader setUniform(String uniform, Vector3 v)
+    {
+        int l = getLocation(uniform);
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 3);
+        v.write(buffer);
+        buffer.flip();
+        glUniform3(l, buffer);
+        return this;
+    }
+
+    /**
      * Sets the given uniform to the value of the given matrix
      */
     public Shader setUniform(String uniform, Matrix4 m)
