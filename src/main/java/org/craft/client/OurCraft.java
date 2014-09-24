@@ -301,7 +301,7 @@ public class OurCraft implements Runnable
         renderEngine.disableGLCap(GL_DEPTH_TEST);
         if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
         {
-            renderEngine.bind(null);
+            renderEngine.bindLocation(null);
             Matrix4 modelView = renderEngine.getModelviewMatrix();
             renderEngine.setModelviewMatrix(new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
             renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);

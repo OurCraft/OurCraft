@@ -27,16 +27,16 @@ public class RenderBlocks
     private HashMap<ChunkCoord, OpenGLBuffer> chunkBuffersPass1;
     private RenderEngine                      renderEngine;
     private int                               index;
-    public static TextureMap                  blockMap;
+    private static ResourceLocation           blockMapLoc;
 
     public RenderBlocks(RenderEngine engine)
     {
         this.renderEngine = engine;
         chunkBuffersPass0 = new HashMap<ChunkCoord, OpenGLBuffer>();
         chunkBuffersPass1 = new HashMap<ChunkCoord, OpenGLBuffer>();
-        if(blockMap == null)
+        if(blockMapLoc == null)
         {
-            blockMap = new TextureMap(OurCraft.getOurCraft().getBaseLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
+            TextureMap blockMap = new TextureMap(OurCraft.getOurCraft().getBaseLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
             for(Block b : Blocks.BLOCK_REGISTRY.values())
             {
                 b.registerIcons(blockMap);
@@ -49,6 +49,8 @@ public class RenderBlocks
             {
                 e.printStackTrace();
             }
+            blockMapLoc = new ResourceLocation("ourcraft", "textures/atlases/blocks.png");
+            engine.registerLocation(blockMapLoc, blockMap);
         }
     }
 
@@ -326,7 +328,8 @@ public class RenderBlocks
                         if(currentPass == EnumRenderPass.ALPHA)
                             c.cleanUpDirtiness();
                     }
-                    renderEngine.renderBuffer(buffer, blockMap);
+                    renderEngine.bindLocation(blockMapLoc);
+                    renderEngine.renderBuffer(buffer);
                 }
                 if(currentPass == EnumRenderPass.ALPHA)
                 {

@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
+import java.util.*;
+
 import org.craft.client.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
@@ -14,19 +16,23 @@ import org.lwjgl.opengl.*;
 public class RenderEngine
 {
 
-    private Entity  renderViewEntity;
-    private Matrix4 projection3dMatrix;
-    private Shader  currentShader;
-    private Shader  basicShader;
-    private Matrix4 projectionHud;
-    private Matrix4 modelMatrix;
-    private Matrix4 projection;
-    private boolean projectFromEntity;
-    private int     blendSrc;
-    private int     blendDst;
+    private HashMap<ResourceLocation, ITextureObject> texturesLocs;
+    private Entity                                    renderViewEntity;
+    private Matrix4                                   projection3dMatrix;
+    private Shader                                    currentShader;
+    private Shader                                    basicShader;
+    private Matrix4                                   projectionHud;
+    private Matrix4                                   modelMatrix;
+    private Matrix4                                   projection;
+    private boolean                                   projectFromEntity;
+    private int                                       blendSrc;
+    private int                                       blendDst;
+    private ResourceLoader                            loader;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
+        this.loader = loader;
+        texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
         projectFromEntity = true;
         modelMatrix = new Matrix4().initIdentity();
         projection3dMatrix = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
@@ -45,7 +51,7 @@ public class RenderEngine
      */
     public void renderBuffer(OpenGLBuffer buffer, ITextureObject texture)
     {
-        bind(texture);
+        bindTexture(texture);
         renderBuffer(buffer);
     }
 
@@ -205,14 +211,58 @@ public class RenderEngine
         glBlendFunc(blendSrc, blendDst);
     }
 
-    public void bind(ITextureObject object)
+    public void bindTexture(ITextureObject object)
     {
-        bind(object, 0);
+        bindTexture(object, 0);
     }
 
-    public void bind(ITextureObject object, int slot)
+    public void bindTexture(ITextureObject object, int slot)
+    {
+        if(object != null)
+        {
+            GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
+            object.bind();
+        }
+    }
+
+    public void bindTexture(int texId, int slot)
     {
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
-        object.bind();
+        glBindTexture(GL_TEXTURE_2D, texId);
+    }
+
+    public void bindLocation(ResourceLocation loc)
+    {
+        if(loc == null)
+        {
+            bindTexture(0, 0);
+        }
+        else if(!texturesLocs.containsKey(loc))
+        {
+            bindTexture(0, 0);
+            try
+            {
+                texturesLocs.put(loc, OpenGLHelper.loadTexture(loader.getResource(loc)));
+                bindLocation(loc);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                texturesLocs.put(loc, null);
+            }
+        }
+        else
+        {
+            ITextureObject texObject = texturesLocs.get(loc);
+            if(texObject != null)
+                texObject.bind();
+            else
+                bindTexture(0, 0);
+        }
+    }
+
+    public void registerLocation(ResourceLocation loc, ITextureObject object)
+    {
+        texturesLocs.put(loc, object);
     }
 }

@@ -121,6 +121,11 @@ public class ResourceLocation
         return false;
     }
 
+    public int hashCode()
+    {
+        return getFullPath().hashCode();
+    }
+
     public ResourceLocation getChild(String child)
     {
         return new ResourceLocation(getFullPath() + "/" + child);
