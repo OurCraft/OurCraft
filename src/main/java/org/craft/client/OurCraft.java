@@ -51,6 +51,7 @@ public class OurCraft implements Runnable
 
     private Gui                           currentMenu;
     private Gui                           newMenu;
+    private OpenGLBuffer                  selectionBoxBuffer;
 
     public OurCraft()
     {
@@ -143,6 +144,46 @@ public class OurCraft implements Runnable
             crosshairBuffer.addIndex(0);
             crosshairBuffer.upload();
             crosshairBuffer.clearVertices();
+
+            selectionBoxBuffer = new OpenGLBuffer();
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 0, 0))); //0
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 0, 1))); //1
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 1, 0))); //2
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 1, 1))); //3
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 0, 0))); //4
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 0, 1))); //5
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 1, 0))); //6
+            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 1, 1))); //7
+
+            selectionBoxBuffer.addIndex(0);
+            selectionBoxBuffer.addIndex(1);
+            selectionBoxBuffer.addIndex(2);
+            selectionBoxBuffer.addIndex(3);
+            selectionBoxBuffer.addIndex(4);
+            selectionBoxBuffer.addIndex(5);
+            selectionBoxBuffer.addIndex(6);
+            selectionBoxBuffer.addIndex(7);
+
+            selectionBoxBuffer.addIndex(0);
+            selectionBoxBuffer.addIndex(4);
+            selectionBoxBuffer.addIndex(2);
+            selectionBoxBuffer.addIndex(6);
+            selectionBoxBuffer.addIndex(1);
+            selectionBoxBuffer.addIndex(5);
+            selectionBoxBuffer.addIndex(3);
+            selectionBoxBuffer.addIndex(7);
+
+            selectionBoxBuffer.addIndex(0);
+            selectionBoxBuffer.addIndex(2);
+            selectionBoxBuffer.addIndex(4);
+            selectionBoxBuffer.addIndex(6);
+            selectionBoxBuffer.addIndex(5);
+            selectionBoxBuffer.addIndex(7);
+            selectionBoxBuffer.addIndex(1);
+            selectionBoxBuffer.addIndex(3);
+
+            selectionBoxBuffer.upload();
+            selectionBoxBuffer.clearVertices();
 
             fallbackRenderer = new FallbackRender<Entity>();
             new ThreadGetChunksFromCamera(this).start();
@@ -270,44 +311,9 @@ public class OurCraft implements Runnable
         if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
         {
             glBindTexture(GL_TEXTURE_2D, 0);
-            glBegin(GL_LINES);
-            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z);
-            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z);
-
-            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z);
-            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z);
-
-            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z + 1);
-            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z + 1);
-            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z);
-            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z);
-            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z);
-            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z);
-            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z);
-            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z);
-
-            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z);
-            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z);
-
-            glVertex3d(objectInFront.x, objectInFront.y, objectInFront.z + 1);
-            glVertex3d(objectInFront.x, objectInFront.y + 1, objectInFront.z + 1);
-
-            glVertex3d(objectInFront.x + 1, objectInFront.y, objectInFront.z + 1);
-            glVertex3d(objectInFront.x + 1, objectInFront.y + 1, objectInFront.z + 1);
-
-            glEnd();
+            basicShader.setUniform("modelview", new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
+            renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
+            basicShader.setUniform("modelview", modelMatrix);
         }
 
         basicShader.setUniform("projection", projectionHud);

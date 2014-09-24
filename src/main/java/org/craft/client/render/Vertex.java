@@ -22,7 +22,15 @@ public class Vertex implements IDisposable
     private Vector3         color;
 
     /**
-     * Creates a Vertex with given position, texCoords and color set as white
+     * Creates a Vertex with given position and texCoords and color set as 0,0,0
+     */
+    public Vertex(Vector3 pos)
+    {
+        this(pos, Vector2.get(0, 0));
+    }
+
+    /**
+     * Creates a Vertex with given position, texCoords and white color
      */
     public Vertex(Vector3 pos, Vector2 texCoords)
     {
