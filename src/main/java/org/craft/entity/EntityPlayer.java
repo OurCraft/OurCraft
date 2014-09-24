@@ -44,20 +44,17 @@ public class EntityPlayer extends Entity
         CollisionInfos infos = OurCraft.getOurCraft().getObjectInFront();
         if(infos.type == CollisionType.BLOCK)
         {
-            while(Mouse.next())
+            if(Mouse.isButtonDown(0))
             {
-                if((Mouse.getEventButton() == 0) && (Mouse.getEventButtonState()))
-                {
-                    getWorld().setBlock((int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), Blocks.air);
-                }
-                else if((Mouse.getEventButton() == 1) && (Mouse.getEventButtonState()))
-                {
-                    int x = (int) infos.x + infos.side.getTranslationX();
-                    int y = (int) (infos.y) + infos.side.getTranslationY();
-                    int z = (int) (infos.z + infos.side.getTranslationZ());
-                    getWorld().setBlock(x, y, z, Blocks.log);
-                    Blocks.log.onBlockAdded(getWorld(), x, y, z, infos.side, this);
-                }
+                getWorld().setBlock((int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), Blocks.air);
+            }
+            else if(Mouse.isButtonDown(1))
+            {
+                int x = (int) infos.x + infos.side.getTranslationX();
+                int y = (int) (infos.y) + infos.side.getTranslationY();
+                int z = (int) (infos.z + infos.side.getTranslationZ());
+                getWorld().setBlock(x, y, z, Blocks.log);
+                Blocks.log.onBlockAdded(getWorld(), x, y, z, infos.side, this);
             }
 
         }

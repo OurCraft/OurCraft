@@ -1,6 +1,8 @@
 package org.craft.client.gui.widgets;
 
-public class GuiWidget
+import org.craft.client.render.*;
+
+public abstract class GuiWidget
 {
 
     private int id;
@@ -17,6 +19,8 @@ public class GuiWidget
         this.w = w;
         this.h = h;
     }
+
+    public abstract void render(int mx, int my, RenderEngine engine);
 
     public int getID()
     {
@@ -42,4 +46,10 @@ public class GuiWidget
     {
         return h;
     }
+
+    public boolean isMouseOver(int x, int y)
+    {
+        return getX() <= x && getX() + getWidth() > x && getY() <= y && getY() + getHeight() > y;
+    }
+
 }

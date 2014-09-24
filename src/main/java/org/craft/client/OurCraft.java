@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -69,6 +70,14 @@ public class OurCraft implements Runnable
             System.setProperty("org.lwjgl.util.Debug", "true");
             JFrame frame = new JFrame();
             frame.setTitle("OurCraft - " + getVersion());
+            frame.addWindowListener(new WindowAdapter()
+            {
+                @Override
+                public void windowClosing(WindowEvent e)
+                {
+                    running = false;
+                }
+            });
             Canvas canvas = new Canvas();
             frame.add(canvas);
             canvas.setPreferredSize(new Dimension(displayWidth, displayHeight));
@@ -225,6 +234,17 @@ public class OurCraft implements Runnable
             if(currentMenu != null)
                 currentMenu.init();
         }
+        while(Mouse.next())
+        {
+            int mouseButton = Mouse.getEventButton();
+            boolean state = Mouse.getEventButtonState();
+            int x = Mouse.getEventX();
+            int y = displayHeight - Mouse.getEventY();
+            if(currentMenu != null && state)
+            {
+                currentMenu.handleClick(x, y, mouseButton);
+            }
+        }
         if(currentMenu != null)
         {
             currentMenu.update();
@@ -335,7 +355,7 @@ public class OurCraft implements Runnable
         int mx = Mouse.getX();
         int my = Mouse.getY();
         if(currentMenu != null)
-            currentMenu.draw(mx, my, renderEngine);
+            currentMenu.draw(mx, displayHeight - my, renderEngine);
     }
 
     public static void printIfGLError()

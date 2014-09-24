@@ -2,11 +2,7 @@ package org.craft.utils;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class Log
 {
@@ -26,6 +22,8 @@ public class Log
         ConsoleHandler ch = new ConsoleHandler();
         ch.setFormatter(logformatter);
         log.addHandler(ch);
+        ch.setLevel(Level.ALL);
+        log.setLevel(Level.ALL);
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -110,5 +108,11 @@ public class Log
     {
         System.err.println(string);
         System.exit(-1); // TODO: needs crash report'n' stuff
+    }
+
+    @NonLoggable
+    public static void debug(String string)
+    {
+        log(string, Level.FINE, true);
     }
 }

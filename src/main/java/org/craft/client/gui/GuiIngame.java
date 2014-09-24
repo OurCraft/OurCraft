@@ -21,6 +21,7 @@ public class GuiIngame extends Gui
     @Override
     public void draw(int mx, int my, RenderEngine renderEngine)
     {
+        super.draw(mx, my, renderEngine);
         getFontRenderer().drawString("Playing as \"" + OurCraft.getOurCraft().getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
         getFontRenderer().drawString("Free memory: " + (OurCraft.getOurCraft().getFreeMemory() / 1000L) + "kb:" + (OurCraft.getOurCraft().getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
         getFontRenderer().drawString("Used memory: " + (OurCraft.getOurCraft().getUsedMemory() / 1000L) + "kb:" + (OurCraft.getOurCraft().getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
