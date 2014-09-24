@@ -24,7 +24,7 @@ public abstract class FontRenderer
      */
     public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
-        buffer.clearVertices();
+        buffer.clearAndDisposeVertices();
         ArrayList<Vertex> vertices = new ArrayList<Vertex>();
         ArrayList<Integer> indices = new ArrayList<Integer>();
         int currentIndex = 0;

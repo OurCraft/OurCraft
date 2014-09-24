@@ -6,7 +6,6 @@ import static org.lwjgl.util.glu.GLU.*;
 import java.awt.*;
 import java.util.*;
 
-import javax.imageio.*;
 import javax.swing.*;
 
 import org.craft.blocks.*;
@@ -39,8 +38,6 @@ public class OurCraft implements Runnable
     private EntityPlayer                  player;
     private static OurCraft               instance;
     private CollisionInfos                objectInFront = null;
-    private Matrix4                       projectionHud;
-    private Texture                       crosshairTexture;
     private OpenGLBuffer                  crosshairBuffer;
     private FallbackRender<Entity>        fallbackRenderer;
     private Runtime                       runtime;
@@ -69,6 +66,7 @@ public class OurCraft implements Runnable
     {
         try
         {
+            System.setProperty("org.lwjgl.util.Debug", "true");
             JFrame frame = new JFrame();
             frame.setTitle("OurCraft - " + getVersion());
             Canvas canvas = new Canvas();
@@ -121,7 +119,6 @@ public class OurCraft implements Runnable
             clientWorld.spawn(player);
             renderEngine.setRenderViewEntity(player);
 
-            this.crosshairTexture = OpenGLHelper.loadTexture(ImageIO.read(OurCraft.class.getResourceAsStream("/assets/ourcraft/textures/crosshair.png")));
             crosshairBuffer = new OpenGLBuffer();
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
@@ -136,7 +133,7 @@ public class OurCraft implements Runnable
             crosshairBuffer.addIndex(3);
             crosshairBuffer.addIndex(0);
             crosshairBuffer.upload();
-            crosshairBuffer.clearVertices();
+            crosshairBuffer.clearAndDisposeVertices();
 
             selectionBoxBuffer = new OpenGLBuffer();
             selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 0, 0))); //0
@@ -176,7 +173,7 @@ public class OurCraft implements Runnable
             selectionBoxBuffer.addIndex(3);
 
             selectionBoxBuffer.upload();
-            selectionBoxBuffer.clearVertices();
+            selectionBoxBuffer.clearAndDisposeVertices();
 
             fallbackRenderer = new FallbackRender<Entity>();
             new ThreadGetChunksFromCamera(this).start();
@@ -312,7 +309,8 @@ public class OurCraft implements Runnable
 
         renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        renderEngine.renderBuffer(crosshairBuffer, crosshairTexture);
+        renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
+        renderEngine.renderBuffer(crosshairBuffer);
         renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
 
         printIfGLError();

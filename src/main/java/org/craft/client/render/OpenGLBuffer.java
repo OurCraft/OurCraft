@@ -89,7 +89,7 @@ public class OpenGLBuffer
     public void setVertices(List<Vertex> newVertices, boolean disposePrevious)
     {
         if(disposePrevious)
-            clearVertices();
+            clearAndDisposeVertices();
         else
             vertices.clear();
         for(Vertex v : newVertices)
@@ -135,13 +135,13 @@ public class OpenGLBuffer
     public void clear()
     {
         indices.clear();
-        clearVertices();
+        clearAndDisposeVertices();
         upload();
     }
 
     public void dispose()
     {
-        clearVertices();
+        clearAndDisposeVertices();
         glDeleteBuffers(iboID);
         glDeleteBuffers(vboID);
     }
@@ -150,7 +150,7 @@ public class OpenGLBuffer
      * Disposes and clear vertices list.<br/>
      * Usage: Buffers than require to be uploaded only one time and rendered multiple times.
      */
-    public void clearVertices()
+    public void clearAndDisposeVertices()
     {
         for(Vertex v : vertices)
         {
@@ -161,7 +161,7 @@ public class OpenGLBuffer
 
     public void setToCube()
     {
-        clearVertices();
+        clearAndDisposeVertices();
         indices.clear();
         int index = 0;
         addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
@@ -189,6 +189,6 @@ public class OpenGLBuffer
         index += 4;
 
         upload();
-        clearVertices();
+        clearAndDisposeVertices();
     }
 }

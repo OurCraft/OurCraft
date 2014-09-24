@@ -193,7 +193,7 @@ public class RenderBlocks
     public void flush(OpenGLBuffer buffer)
     {
         buffer.upload();
-        buffer.clearVertices();
+        buffer.clearAndDisposeVertices();
     }
 
     /**
