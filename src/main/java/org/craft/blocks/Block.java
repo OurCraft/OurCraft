@@ -18,6 +18,8 @@ public class Block
     private String      id;
     private TextureIcon blockIcon;
 
+    private short uniqueID;
+
     /**
      * Block constructor. Takes in an ID to identify the block
      */
@@ -125,5 +127,16 @@ public class Block
     public void updateTick(World world, int x, int y, int z)
     {
         //  Log.message("UPDATE " + this.getID());
+    }
+    
+    public void setUniqueID(short  id)
+    {
+        this.uniqueID = id;
+    }
+    
+    public short  getUniqueID()
+    {
+        // TODO Auto-generated method stub
+        return uniqueID;
     }
 }

@@ -9,7 +9,7 @@ import org.craft.maths.*;
 public class Chunk
 {
 
-    public Block[][][]             blocks;
+    public short[][][]             blocks;
     public int[][]                 highest;
     public float[][][]             lightValues;
     public BlockStatesObject[][][] blockStatesObjects;
@@ -21,7 +21,7 @@ public class Chunk
     {
         this.owner = owner;
         this.coords = coords;
-        this.blocks = new Block[16][16][16];
+        this.blocks = new short[16][16][16];
         this.highest = new int[16][16];
         this.lightValues = new float[16][16][16];
         blockStatesObjects = new BlockStatesObject[16][16][16];
@@ -30,7 +30,7 @@ public class Chunk
             Arrays.fill(highest[x], -1);
             for(int y = 0; y < 16; y++ )
             {
-                Arrays.fill(blocks[x][y], Blocks.air);
+                Arrays.fill(blocks[x][y], Blocks.air.getUniqueID());
                 Arrays.fill(lightValues[x][y], 1f);
                 Arrays.fill(blockStatesObjects[x][y], new BlockStatesObject());
             }
@@ -70,9 +70,8 @@ public class Chunk
             y = 16 + y;
         if(z < 0)
             z = 16 + z;
-        if(blocks[x][y][z] == null)
-            blocks[x][y][z] = Blocks.air;
-        return blocks[x][y][z];
+       
+        return Blocks.getByID(blocks[x][y][z]);
     }
 
     /**
@@ -197,7 +196,7 @@ public class Chunk
      */
     public Block getChunkBlock(int x, int y, int z)
     {
-        Block b = blocks[x][y][z];
+        Block b = Blocks.getByID(blocks[x][y][z]);
         if(b == null)
             return Blocks.air;
         return b;
@@ -211,7 +210,7 @@ public class Chunk
         if(block == null)
             block = Blocks.air;
         else
-            blocks[x][y][z] = block;
+            blocks[x][y][z] = block.getUniqueID();
 
         if(y >= highest[x][z])
         {
@@ -336,7 +335,7 @@ public class Chunk
                 int maxY = (int) Math.round(4f * MathHelper.perlinNoise(x + this.getCoords().x * 16, z + this.getCoords().z * 16, owner.getGenerator().getSeed())) - (this.getCoords().y - 11) * 16 + 1;
                 for(int y = 0; y <= maxY && y < 16; y++ )
                 {
-                    Block b = blocks[x][y][z];
+                    Block b = Blocks.getByID(blocks[x][y][z]);
                     if(b != null)
                         b.updateTick(owner, x, y, z);
                 }
