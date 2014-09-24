@@ -33,4 +33,10 @@ public class GuiIngame extends Gui
     {
     }
 
+    @Override
+    public boolean requiresMouse()
+    {
+        return false;
+    }
+
 }

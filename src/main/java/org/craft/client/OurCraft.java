@@ -88,8 +88,8 @@ public class OurCraft implements Runnable
             renderEngine.switchToOrtho();
             renderEngine.renderSplashScreen();
 
-            fontRenderer = new BaseFontRenderer();
             Display.update();
+            fontRenderer = new BaseFontRenderer();
 
             Blocks.init();
             I18n.init(classpathLoader);
@@ -107,17 +107,29 @@ public class OurCraft implements Runnable
             Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
             Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
 
-            WorldGenerator generator = new WorldGenerator();
-            generator.addPopulator(new RockPopulator());
-            generator.addPopulator(new GrassPopulator());
-            generator.addPopulator(new TreePopulator());
-            clientWorld = new World(new BaseChunkProvider(), generator);
-            renderBlocks = new RenderBlocks(renderEngine);
+            boolean debugNoGui = false;
+            if(debugNoGui)
+            {
+                WorldGenerator generator = new WorldGenerator();
+                generator.addPopulator(new RockPopulator());
+                generator.addPopulator(new GrassPopulator());
+                generator.addPopulator(new TreePopulator());
+                clientWorld = new World(new BaseChunkProvider(), generator);
+                renderBlocks = new RenderBlocks(renderEngine);
 
-            player = new EntityPlayer(clientWorld);
-            player.setLocation(0, 160 + 17, 0);
-            clientWorld.spawn(player);
-            renderEngine.setRenderViewEntity(player);
+                player = new EntityPlayer(clientWorld);
+                player.setLocation(0, 160 + 17, 0);
+                clientWorld.spawn(player);
+                renderEngine.setRenderViewEntity(player);
+
+                fallbackRenderer = new FallbackRender<Entity>();
+                new ThreadGetChunksFromCamera(this).start();
+                openMenu(new GuiIngame(fontRenderer));
+            }
+            else
+            {
+                openMenu(new GuiMainMenu(fontRenderer));
+            }
 
             crosshairBuffer = new OpenGLBuffer();
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
@@ -174,12 +186,8 @@ public class OurCraft implements Runnable
 
             selectionBoxBuffer.upload();
             selectionBoxBuffer.clearAndDisposeVertices();
-
-            fallbackRenderer = new FallbackRender<Entity>();
-            new ThreadGetChunksFromCamera(this).start();
             running = true;
 
-            openMenu(new GuiIngame(fontRenderer));
             while(running && !Display.isCloseRequested())
             {
                 tick(1000 / 60);
@@ -218,7 +226,13 @@ public class OurCraft implements Runnable
                 currentMenu.init();
         }
         if(currentMenu != null)
+        {
             currentMenu.update();
+            if(currentMenu.requiresMouse())
+                mouseHandler.ungrab();
+        }
+        else
+            mouseHandler.grab();
         mouseHandler.update();
         if(player != null)
         {
@@ -239,8 +253,8 @@ public class OurCraft implements Runnable
             this.resetTime();
 
         }
-        clientWorld.update(time, canUpdate);
-
+        if(clientWorld != null)
+            clientWorld.update(time, canUpdate);
     }
 
     public void resetTime()
@@ -288,10 +302,13 @@ public class OurCraft implements Runnable
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);
         renderEngine.switchToPerspective();
-        renderBlocks.render(clientWorld, visiblesChunks);
-        for(Entity e : clientWorld.getEntitiesList())
+        if(clientWorld != null)
         {
-            fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
+            renderBlocks.render(clientWorld, visiblesChunks);
+            for(Entity e : clientWorld.getEntitiesList())
+            {
+                fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
+            }
         }
 
         glClear(GL_DEPTH_BUFFER_BIT);
