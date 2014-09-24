@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL20.*;
 import org.craft.client.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
+import org.craft.resources.*;
 import org.craft.utils.*;
 import org.lwjgl.opengl.*;
 
@@ -14,11 +15,29 @@ public class RenderEngine
 {
 
     private Entity  renderViewEntity;
+    private Matrix4 projection3dMatrix;
+    private Shader  currentShader;
+    private Shader  basicShader;
+    private Matrix4 projectionHud;
+    private Matrix4 modelMatrix;
     private Matrix4 projection;
+    private boolean projectFromEntity;
+    private int     blendSrc;
+    private int     blendDst;
 
-    public RenderEngine()
+    public RenderEngine(ResourceLoader loader) throws Exception
     {
-        projection = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
+        projectFromEntity = true;
+        modelMatrix = new Matrix4().initIdentity();
+        projection3dMatrix = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
+        projection = projection3dMatrix;
+        projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+        basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
+        basicShader.bind();
+        basicShader.setUniform("projection", projectionHud);
+        basicShader.setUniform("modelview", new Matrix4().initIdentity());
+
+        currentShader = basicShader;
     }
 
     /**
@@ -26,8 +45,7 @@ public class RenderEngine
      */
     public void renderBuffer(OpenGLBuffer buffer, ITextureObject texture)
     {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        texture.bind();
+        bind(texture);
         renderBuffer(buffer);
     }
 
@@ -44,7 +62,6 @@ public class RenderEngine
      */
     public void renderBuffer(OpenGLBuffer buffer, int mode)
     {
-        //        glEnableClientState(GL_VERTEX_ARRAY);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -60,12 +77,11 @@ public class RenderEngine
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
-        //        glDisableClientState(GL_VERTEX_ARRAY);
     }
 
-    public Matrix4 getProjectionMatrix()
+    public Matrix4 getProjectedViewMatrix()
     {
-        if(renderViewEntity != null)
+        if(renderViewEntity != null && shouldProjectFromEntity())
         {
             return projection.mul(renderViewEntity.getRotation().conjugate().toRotationMatrix().mul(new Matrix4().initTranslation(-renderViewEntity.getX() - 0.5f, -renderViewEntity.getY() - renderViewEntity.getEyeOffset(), -renderViewEntity.getZ() - 0.5f)));
         }
@@ -102,7 +118,6 @@ public class RenderEngine
 
     public void renderSplashScreen()
     {
-
         OpenGLBuffer buffer = new OpenGLBuffer();
         buffer.addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
         buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), Vector2.get(1, 0)));
@@ -119,5 +134,85 @@ public class RenderEngine
         buffer.upload();
         renderBuffer(buffer, OpenGLHelper.loadTexture(ImageUtils.getFromClasspath("/assets/ourcraft/textures/loadingScreen.png")));
         buffer.dispose();
+    }
+
+    public void setModelviewMatrix(Matrix4 modelMatrix)
+    {
+        this.modelMatrix = modelMatrix;
+        updateOpenGL();
+    }
+
+    public Matrix4 getModelviewMatrix()
+    {
+        return modelMatrix;
+    }
+
+    public void updateOpenGL()
+    {
+        currentShader.bind();
+        currentShader.setUniform("modelview", this.modelMatrix);
+        currentShader.setUniform("projection", getProjectedViewMatrix());
+    }
+
+    public void setCurrentShader(Shader shader)
+    {
+        this.currentShader = shader;
+        updateOpenGL();
+    }
+
+    public Shader getCurrentShader()
+    {
+        return currentShader;
+    }
+
+    public void setProjectionMatrix(Matrix4 projection)
+    {
+        this.projection = projection;
+        updateOpenGL();
+    }
+
+    public Matrix4 getProjectionMatrix()
+    {
+        return projection;
+    }
+
+    public void switchToOrtho()
+    {
+        projectFromEntity = false;
+        setProjectionMatrix(projectionHud);
+    }
+
+    public void switchToPerspective()
+    {
+        projectFromEntity = true;
+        setProjectionMatrix(projection3dMatrix);
+    }
+
+    public boolean shouldProjectFromEntity()
+    {
+        return projectFromEntity;
+    }
+
+    public void setProjectFromEntity(boolean flag)
+    {
+        this.projectFromEntity = flag;
+    }
+
+    public void setBlendFunc(int blendSrc, int blendDst)
+    {
+        this.blendSrc = blendSrc;
+        this.blendDst = blendDst;
+        glBlendFunc(blendSrc, blendDst);
+    }
+
+    public void bind(ITextureObject object)
+    {
+        bind(object, 0);
+    }
+
+    public void bind(ITextureObject object, int slot)
+    {
+        GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
+        object.bind();
     }
 }

@@ -32,8 +32,6 @@ public class OurCraft implements Runnable
     private long                          lastTime      = 0;
     private boolean                       running       = true;
     private RenderEngine                  renderEngine  = null;
-    private Matrix4                       modelMatrix;
-    private Shader                        basicShader;
     private ClasspathSimpleResourceLoader classpathLoader;
     private RenderBlocks                  renderBlocks;
     private World                         clientWorld;
@@ -85,14 +83,11 @@ public class OurCraft implements Runnable
             mouseHandler = new MouseHandler();
             mouseHandler.grab();
 
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            renderEngine = new RenderEngine();
-            projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
-            basicShader = new Shader(new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(classpathLoader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
-            basicShader.bind();
-            basicShader.setUniform("projection", projectionHud);
-            basicShader.setUniform("modelview", new Matrix4().initIdentity());
+            renderEngine = new RenderEngine(classpathLoader);
+            renderEngine.enableGLCap(GL_BLEND);
+            renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            renderEngine.switchToOrtho();
             renderEngine.renderSplashScreen();
 
             fontRenderer = new BaseFontRenderer();
@@ -120,8 +115,6 @@ public class OurCraft implements Runnable
             generator.addPopulator(new TreePopulator());
             clientWorld = new World(new BaseChunkProvider(), generator);
             renderBlocks = new RenderBlocks(renderEngine);
-
-            modelMatrix = new Matrix4().initIdentity();
 
             player = new EntityPlayer(clientWorld);
             player.setLocation(0, 160 + 17, 0);
@@ -297,9 +290,7 @@ public class OurCraft implements Runnable
         glClearColor(0, 0.6666667f, 1, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);
-        basicShader.bind();
-        basicShader.setUniform("modelview", this.modelMatrix);
-        basicShader.setUniform("projection", this.renderEngine.getProjectionMatrix());
+        renderEngine.switchToPerspective();
         renderBlocks.render(clientWorld, visiblesChunks);
         for(Entity e : clientWorld.getEntitiesList())
         {
@@ -310,13 +301,14 @@ public class OurCraft implements Runnable
         renderEngine.disableGLCap(GL_DEPTH_TEST);
         if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
         {
-            glBindTexture(GL_TEXTURE_2D, 0);
-            basicShader.setUniform("modelview", new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
+            renderEngine.bind(null);
+            Matrix4 modelView = renderEngine.getModelviewMatrix();
+            renderEngine.setModelviewMatrix(new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
             renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
-            basicShader.setUniform("modelview", modelMatrix);
+            renderEngine.setModelviewMatrix(modelView);
         }
 
-        basicShader.setUniform("projection", projectionHud);
+        renderEngine.switchToOrtho();
 
         renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
