@@ -128,7 +128,7 @@ public class World
      */
     public void performRayCast(Entity sender, CollisionInfos infos, float maxDist)
     {
-        float maxReachedDist = Float.POSITIVE_INFINITY;
+        float maxReachedDist = maxDist;
         /*
          * for(Entity e : entities)
          * {
@@ -144,77 +144,62 @@ public class World
          * }
          * }
          */
+        float size = 0.5f;
+        Vector3 origin = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset() - size / 2f, sender.getZ());
+        Vector3 pos = origin;
+        Vector3 ray = sender.getRotation().getForward();
 
-        float step = 0.5f;
-        Vector3 startPos = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset(), sender.getZ());
-        Vector3 look = sender.getRotation().getForward();
-        Vector3 currentPos = startPos;
-        AABB bb = new AABB(Vector3.get(-0.01f, -0.01f, -0.01f), Vector3.get(0.01f, 0.01f, 0.01f));
-        Vector3 blockPos = Vector3.NULL.copy();
-        float dist = 0f;
-        while(dist < maxDist)
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        float step = 0.005f;
+        AABB rayBB = new AABB(Vector3.get(0, 0, 0), Vector3.get(size, size, size));
+        Vector3 blockPos = Vector3.get(x, y, z);
+        for(float dist = 0f; dist <= maxDist + step; dist += step)
         {
-            int x = (int) (currentPos.getX());
-            int y = (int) (currentPos.getY());
-            int z = (int) (currentPos.getZ());
-            currentPos = startPos.add(look.mul(dist));
-            dist += step;
+            x = (int) Math.round(pos.getX());
+            y = (int) Math.round(pos.getY());
+            z = (int) Math.round(pos.getZ());
             Block b = getBlock(x, y, z);
-            if(b == null)
+            if(b != null)
             {
-                continue;
-            }
-            float dx = (int) (currentPos.getX()) - (x + 0.5f);
-            float dy = (int) (currentPos.getY()) - (y + 0.5f);
-            float dz = (int) (currentPos.getZ()) - (z + 0.5f);
-            float blockDist = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-            blockPos.set(x, y, z);
-            AABB blockBB = b.getSelectionBox(this, x, y, z);
-            if(blockBB == null)
-            {
-                currentPos = currentPos.add(look.mul(step));
-                continue;
-            }
-            if(blockDist < maxReachedDist && (blockBB.intersectAABB(bb.translate(currentPos)).doesIntersects() || blockBB.intersectAABB(bb.translate(currentPos)).getDistance() < 1f / 16f))
-            {
-                maxReachedDist = blockDist;
-                Vector3 dir = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset(), sender.getZ()).sub(blockPos);
-                float max = Math.max(Math.abs(dir.getX()), Math.max(Math.abs(dir.getY()), Math.abs(dir.getZ())));
-                if(max == Math.abs(dir.getZ()))
+                AABB blockBB = b.getCollisionBox(this, x, y, z);
+                if(blockBB != null)
                 {
-                    if(dir.getZ() < 0)
+                    if(blockBB.intersectAABB(rayBB.translate(pos)).doesIntersects())
                     {
-                        infos.side = EnumSide.NORTH;
-                    }
-                    else
-                        infos.side = EnumSide.SOUTH;
-                }
-                if(max == Math.abs(dir.getX()))
-                {
-                    if(dir.getX() < 0)
-                    {
-                        infos.side = EnumSide.WEST;
-                    }
-                    else
-                        infos.side = EnumSide.EAST;
-                }
-                if(max == Math.abs(dir.getY()))
-                {
-                    if(dir.getY() < 0)
-                    {
+                        infos.x = x;
+                        infos.y = y;
+                        infos.z = z;
+                        infos.type = CollisionType.BLOCK;
                         infos.side = EnumSide.BOTTOM;
+                        infos.value = b;
+                        blockPos = Vector3.get(x + 0.5f, y + 0.5f, z + 0.5f);
+
+                        Vector3 diff = blockPos.sub(pos.add(0.5f));
+
+                        float absx = Math.abs(diff.getX());
+                        float absy = Math.abs(diff.getY());
+                        float absz = Math.abs(diff.getZ());
+
+                        if(absy < absx)
+                        {
+                            if(absz < absy)
+                            {
+                                if(diff.getY() > 0)
+                                {
+                                    infos.side = EnumSide.TOP;
+                                }
+                                else
+                                {
+                                    infos.side = EnumSide.BOTTOM;
+                                }
+                            }
+                        }
                     }
-                    else
-                        infos.side = EnumSide.TOP;
                 }
-                infos.type = CollisionType.BLOCK;
-                infos.distance = maxReachedDist;
-                infos.value = b;
-                infos.x = x;
-                infos.y = y;
-                infos.z = z;
             }
-            currentPos = currentPos.add(look.mul(step));
+            pos = origin.add(ray.mul((maxDist + step) - dist));
         }
     }
 
