@@ -11,7 +11,7 @@ import org.craft.client.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 
-public class TextureMap implements IconGenerator, ITextureObject
+public class TextureMap implements IconGenerator, ITextureObject, IDisposable
 {
 
     private ResourceLoader              loader;
@@ -293,6 +293,12 @@ public class TextureMap implements IconGenerator, ITextureObject
     public void bind()
     {
         texture.bind();
+    }
+
+    @Override
+    public void dispose()
+    {
+        texture.dispose();
     }
 
 }

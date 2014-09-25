@@ -56,16 +56,44 @@ public abstract class Gui
     {
     }
 
-    public void handleClick(int x, int y, int button)
+    public void keyPressed(int id, char c)
     {
         for(GuiWidget widget : widgets)
         {
-            if(widget.isMouseOver(x, y))
+            if(widget.keyPressed(id, c))
             {
-                actionPerformed(widget);
                 break;
             }
         }
+    }
+
+    public void keyReleased(int id, char c)
+    {
+        for(GuiWidget widget : widgets)
+        {
+            if(widget.keyReleased(id, c))
+            {
+                break;
+            }
+        }
+    }
+
+    public void handleClick(int x, int y, int button)
+    {
+        if(button == 0)
+            for(GuiWidget widget : widgets)
+            {
+                if(widget.isMouseOver(x, y))
+                {
+                    actionPerformed(widget);
+                    break;
+                }
+            }
+    }
+
+    public boolean pausesGame()
+    {
+        return false;
     }
 
     public abstract boolean requiresMouse();

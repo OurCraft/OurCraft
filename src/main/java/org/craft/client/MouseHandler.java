@@ -5,8 +5,9 @@ import org.lwjgl.input.*;
 public class MouseHandler
 {
 
-    private int dx;
-    private int dy;
+    private int     dx;
+    private int     dy;
+    private boolean grabbed;
 
     public void update()
     {
@@ -26,11 +27,15 @@ public class MouseHandler
 
     public void grab()
     {
-        Mouse.setGrabbed(true);
+        if(!grabbed)
+            Mouse.setGrabbed(true);
+        grabbed = true;
     }
 
     public void ungrab()
     {
-        Mouse.setGrabbed(false);
+        if(grabbed)
+            Mouse.setGrabbed(false);
+        grabbed = false;
     }
 }

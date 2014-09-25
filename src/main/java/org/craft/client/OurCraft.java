@@ -3,11 +3,7 @@ package org.craft.client;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
-
-import javax.swing.*;
 
 import org.craft.blocks.*;
 import org.craft.client.gui.*;
@@ -68,27 +64,12 @@ public class OurCraft implements Runnable
         try
         {
             System.setProperty("org.lwjgl.util.Debug", "true");
-            JFrame frame = new JFrame();
-            frame.setTitle("OurCraft - " + getVersion());
-            frame.addWindowListener(new WindowAdapter()
-            {
-                @Override
-                public void windowClosing(WindowEvent e)
-                {
-                    running = false;
-                }
-            });
-            Canvas canvas = new Canvas();
-            frame.add(canvas);
-            canvas.setPreferredSize(new Dimension(displayWidth, displayHeight));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+            System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
             ContextAttribs context = new ContextAttribs(3, 3).withProfileCompatibility(true).withDebug(true);
-            Display.setParent(canvas);
+            Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
+            Display.setResizable(true);
             Display.create(new PixelFormat(), context);
             mouseHandler = new MouseHandler();
-            mouseHandler.grab();
 
             renderEngine = new RenderEngine(classpathLoader);
             renderEngine.enableGLCap(GL_BLEND);
@@ -117,6 +98,9 @@ public class OurCraft implements Runnable
             Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
 
             boolean debugNoGui = false;
+            renderBlocks = new RenderBlocks(renderEngine);
+            fallbackRenderer = new FallbackRender<Entity>();
+
             if(debugNoGui)
             {
                 WorldGenerator generator = new WorldGenerator();
@@ -202,9 +186,12 @@ public class OurCraft implements Runnable
                 tick(1000 / 60);
                 Display.sync(60);
                 Display.update();
+                Thread.yield();
+                Thread.sleep(1);
             }
+            Log.error("CLEANUP");
+            renderEngine.dispose();
             Display.destroy();
-            frame.dispose();
             Log.error("BYE");
             System.exit(0);
         }
@@ -240,9 +227,37 @@ public class OurCraft implements Runnable
             boolean state = Mouse.getEventButtonState();
             int x = Mouse.getEventX();
             int y = displayHeight - Mouse.getEventY();
-            if(currentMenu != null && state)
+            if(currentMenu != null && state && mouseButton != -1)
             {
                 currentMenu.handleClick(x, y, mouseButton);
+            }
+
+            // TODO: Event queue
+        }
+        while(Keyboard.next())
+        {
+            int id = Keyboard.getEventKey();
+            char c = Keyboard.getEventCharacter();
+            boolean state = Keyboard.getEventKeyState();
+            if(currentMenu != null)
+            {
+                if(!state)
+                {
+                    currentMenu.keyPressed(id, c);
+                }
+                else
+                {
+                    if(id == Keyboard.KEY_ESCAPE)
+                    {
+                        if(clientWorld != null && !(currentMenu instanceof GuiPauseMenu))
+                        {
+                            openMenu(new GuiPauseMenu(fontRenderer));
+                        }
+                        else if(clientWorld == null)
+                            running = false;
+                    }
+                    currentMenu.keyReleased(id, c);
+                }
             }
         }
         if(currentMenu != null)
@@ -250,6 +265,8 @@ public class OurCraft implements Runnable
             currentMenu.update();
             if(currentMenu.requiresMouse())
                 mouseHandler.ungrab();
+            else
+                mouseHandler.grab();
         }
         else
             mouseHandler.grab();
@@ -261,20 +278,24 @@ public class OurCraft implements Runnable
         boolean canUpdate = (System.currentTimeMillis() - lastTime) >= time;
         if(canUpdate)
         {
-
-            if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+            if(clientWorld != null)
             {
-                running = false;
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-            {
-                player.jump();
+                if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+                {
+                    player.jump();
+                }
             }
             this.resetTime();
-
         }
         if(clientWorld != null)
-            clientWorld.update(time, canUpdate);
+        {
+            if(currentMenu != null && !currentMenu.pausesGame())
+            {
+                clientWorld.update(time, canUpdate);
+            }
+            else if(currentMenu == null)
+                clientWorld.update(time, canUpdate);
+        }
     }
 
     public void resetTime()
@@ -329,33 +350,37 @@ public class OurCraft implements Runnable
             {
                 fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
             }
-        }
+            glClear(GL_DEPTH_BUFFER_BIT);
+            renderEngine.disableGLCap(GL_DEPTH_TEST);
+            if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
+            {
+                renderEngine.bindLocation(null);
+                Matrix4 modelView = renderEngine.getModelviewMatrix();
+                renderEngine.setModelviewMatrix(new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
+                renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
+                renderEngine.setModelviewMatrix(modelView);
+            }
+            renderEngine.switchToOrtho();
 
-        glClear(GL_DEPTH_BUFFER_BIT);
-        renderEngine.disableGLCap(GL_DEPTH_TEST);
-        if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
+            renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
+            glLogicOp(GL_XOR);
+            renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
+            renderEngine.renderBuffer(crosshairBuffer);
+            renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
+        }
+        else
         {
-            renderEngine.bindLocation(null);
-            Matrix4 modelView = renderEngine.getModelviewMatrix();
-            renderEngine.setModelviewMatrix(new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
-            renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
-            renderEngine.setModelviewMatrix(modelView);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            renderEngine.disableGLCap(GL_DEPTH_TEST);
+            renderEngine.switchToOrtho();
         }
-
-        renderEngine.switchToOrtho();
-
-        renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
-        glLogicOp(GL_XOR);
-        renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
-        renderEngine.renderBuffer(crosshairBuffer);
-        renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
-
-        printIfGLError();
 
         int mx = Mouse.getX();
         int my = Mouse.getY();
         if(currentMenu != null)
             currentMenu.draw(mx, displayHeight - my, renderEngine);
+
+        printIfGLError();
     }
 
     public static void printIfGLError()
@@ -452,5 +477,30 @@ public class OurCraft implements Runnable
     public FontRenderer getFontRenderer()
     {
         return fontRenderer;
+    }
+
+    public void setWorld(World world)
+    {
+        this.clientWorld = world;
+    }
+
+    public void setPlayer(EntityPlayer player)
+    {
+        this.player = player;
+    }
+
+    public void shutdown()
+    {
+        running = false;
+    }
+
+    /**
+     * Convinience method that disposes of the world and change the current screen
+     */
+    public void quitToMainScreen()
+    {
+        clientWorld = null;
+        player = null;
+        openMenu(new GuiMainMenu(fontRenderer));
     }
 }

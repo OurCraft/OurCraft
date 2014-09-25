@@ -4,8 +4,9 @@ import java.util.*;
 
 import org.craft.client.render.*;
 import org.craft.maths.*;
+import org.craft.utils.*;
 
-public abstract class FontRenderer
+public abstract class FontRenderer implements IDisposable
 {
 
     private TextureAtlas atlas;
@@ -19,22 +20,14 @@ public abstract class FontRenderer
         this.buffer = new OpenGLBuffer();
     }
 
-    /**
-     * Draws a given string at given coords with given color
-     */
-    public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
-    {
-        drawString(text, color, xo, yo, false, renderEngine);
-    }
-
     public void drawShadowedString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
-        drawString(text, color, xo, yo, true, renderEngine);
+        drawString(text, 0xFF000000, xo + 1, yo + 1, renderEngine);
+        drawString(text, color, xo, yo, renderEngine);
     }
 
-    public void drawString(String text, int color, int xo, int yo, boolean shadowed, RenderEngine renderEngine)
+    public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
-        buffer.clearAndDisposeVertices();
         ArrayList<Vertex> vertices = new ArrayList<Vertex>();
         ArrayList<Integer> indices = new ArrayList<Integer>();
         int currentIndex = 0;
@@ -129,23 +122,6 @@ public abstract class FontRenderer
                 }
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
 
-                if(shadowed)
-                {
-                    vertices.add(new Vertex(Vector3.get(x - 2 + 1, y + 1, 0), Vector2.get(region.getMinU(), region.getMaxV()), Vector3.get(0, 0, 0)));
-                    vertices.add(new Vertex(Vector3.get(x + 2 + 1 + getCharWidth(c), y + 1, 0), Vector2.get(region.getMaxU(), region.getMaxV()), Vector3.get(0, 0, 0)));
-                    vertices.add(new Vertex(Vector3.get(x + 2 + 1 + getCharWidth(c), y + 1 + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), Vector3.get(0, 0, 0)));
-                    vertices.add(new Vertex(Vector3.get(x - 2 + 1, y + 1 + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), Vector3.get(0, 0, 0)));
-
-                    indices.add(currentIndex + 0);
-                    indices.add(currentIndex + 2);
-                    indices.add(currentIndex + 3);
-
-                    indices.add(currentIndex + 0);
-                    indices.add(currentIndex + 1);
-                    indices.add(currentIndex + 2);
-                    currentIndex += 4;
-                }
-
                 vertices.add(new Vertex(Vector3.get(x - 2, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
                 vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
                 vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
@@ -177,35 +153,6 @@ public abstract class FontRenderer
                     yPos = (int) (Math.random() * atlas.getYNbr());
                 }
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
-
-                if(shadowed)
-                {
-                    if(!italic)
-                    {
-                        vertices.add(new Vertex(Vector3.get(x + 1, y + 1, 0), Vector2.get(region.getMinU(), region.getMaxV()), Vector3.get(0, 0, 0)));
-                        vertices.add(new Vertex(Vector3.get(x + 1 + getCharWidth(c), y + 1, 0), Vector2.get(region.getMaxU(), region.getMaxV()), Vector3.get(0, 0, 0)));
-                        vertices.add(new Vertex(Vector3.get(x + 1 + getCharWidth(c), y + 1 + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), Vector3.get(0, 0, 0)));
-                        vertices.add(new Vertex(Vector3.get(x + 1, y + 1 + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), Vector3.get(0, 0, 0)));
-                    }
-                    else
-                    {
-                        float italicFactor = -2.5f;
-                        vertices.add(new Vertex(Vector3.get(x + 1 - italicFactor, y + 1, 0), Vector2.get(region.getMinU(), region.getMaxV()), Vector3.get(0, 0, 0)));
-                        vertices.add(new Vertex(Vector3.get(x + 1 + getCharWidth(c) - italicFactor, y + 1, 0), Vector2.get(region.getMaxU(), region.getMaxV()), Vector3.get(0, 0, 0)));
-                        vertices.add(new Vertex(Vector3.get(x + 1 + getCharWidth(c), y + 1 + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), Vector3.get(0, 0, 0)));
-                        vertices.add(new Vertex(Vector3.get(x + 1 + italicFactor, y + 1 + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), Vector3.get(0, 0, 0)));
-                    }
-
-                    indices.add(currentIndex + 0);
-                    indices.add(currentIndex + 2);
-                    indices.add(currentIndex + 3);
-
-                    indices.add(currentIndex + 0);
-                    indices.add(currentIndex + 1);
-                    indices.add(currentIndex + 2);
-
-                    currentIndex += 4;
-                }
 
                 if(!italic)
                 {
@@ -244,6 +191,7 @@ public abstract class FontRenderer
         vertices.clear();
         indices.clear();
         colorVec.dispose();
+        buffer.clearAndDisposeVertices();
     }
 
     private int getIndex(char c)
@@ -287,5 +235,10 @@ public abstract class FontRenderer
             l += getCharWidth(c) + getCharSpacing(c, next);
         }
         return l;
+    }
+
+    public void dispose()
+    {
+        buffer.dispose();
     }
 }

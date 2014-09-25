@@ -5,9 +5,10 @@ import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.*;
 
+import org.craft.utils.*;
 import org.lwjgl.opengl.*;
 
-public class Texture implements ITextureObject
+public class Texture implements ITextureObject, IDisposable
 {
 
     private int texID;

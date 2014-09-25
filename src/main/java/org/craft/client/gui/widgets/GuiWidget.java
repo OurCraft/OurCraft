@@ -52,4 +52,13 @@ public abstract class GuiWidget
         return getX() <= x && getX() + getWidth() > x && getY() <= y && getY() + getHeight() > y;
     }
 
+    public boolean keyPressed(int id, char c)
+    {
+        return false;
+    }
+
+    public boolean keyReleased(int id, char c)
+    {
+        return false;
+    }
 }

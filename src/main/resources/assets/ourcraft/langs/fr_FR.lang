@@ -2,3 +2,8 @@ lang.test1=OurCraft!
 lang.test2=OurCraft et l'argument donné est: %1$d
 lang.test3=OurCraft et l'argument donné est: %1$s
 lang.test4=OurCraft et l'argument donné est: %1$i
+
+main.play.singleplayer=Jeu solo
+main.quit=Quitter
+main.play.return=Retourner dans le jeu
+main.play.quitToMainScreen=Returner sur le menu principal

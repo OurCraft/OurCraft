@@ -9,7 +9,7 @@ import org.craft.maths.*;
 import org.craft.utils.*;
 import org.lwjgl.*;
 
-public class Shader
+public class Shader implements IDisposable
 {
 
     private static Shader            current = null;
@@ -118,5 +118,10 @@ public class Shader
             locsMap.put(uniform, loc);
         }
         return locsMap.get(uniform);
+    }
+
+    public void dispose()
+    {
+        glDeleteProgram(program);
     }
 }

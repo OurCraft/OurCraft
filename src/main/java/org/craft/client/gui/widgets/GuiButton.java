@@ -27,7 +27,7 @@ public class GuiButton extends GuiWidget
         {
             color = 0xFFF544;
         }
-        font.drawShadowedString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ')), engine);
+        font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
     }
 
 }

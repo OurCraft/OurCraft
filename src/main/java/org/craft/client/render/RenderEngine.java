@@ -13,7 +13,7 @@ import org.craft.resources.*;
 import org.craft.utils.*;
 import org.lwjgl.opengl.*;
 
-public class RenderEngine
+public class RenderEngine implements IDisposable
 {
 
     private HashMap<ResourceLocation, ITextureObject> texturesLocs;
@@ -266,5 +266,13 @@ public class RenderEngine
     public void registerLocation(ResourceLocation loc, ITextureObject object)
     {
         texturesLocs.put(loc, object);
+    }
+
+    public void dispose()
+    {
+        for(ITextureObject o : texturesLocs.values())
+            if(o instanceof IDisposable)
+                ((IDisposable) o).dispose();
+        currentShader.dispose();
     }
 }

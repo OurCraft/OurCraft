@@ -2,7 +2,7 @@ package org.craft.client.render;
 
 import org.craft.utils.*;
 
-public class TextureAtlas implements IDisposable
+public class TextureAtlas implements ITextureObject, IDisposable
 {
 
     private Texture           texture;
@@ -102,6 +102,12 @@ public class TextureAtlas implements IDisposable
     public int getYNbr()
     {
         return yNbr;
+    }
+
+    @Override
+    public void bind()
+    {
+        texture.bind();
     }
 
 }
