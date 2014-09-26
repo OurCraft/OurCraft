@@ -70,6 +70,7 @@ public class OurCraft implements Runnable
             ContextAttribs context = new ContextAttribs(3, 3).withProfileCompatibility(true).withDebug(true);
             Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
             Display.setResizable(true);
+            Display.setTitle("OurCraft - " + getVersion());
             Display.create(new PixelFormat(), context);
             mouseHandler = new MouseHandler();
 

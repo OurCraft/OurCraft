@@ -44,7 +44,7 @@ public class RenderEngine implements IDisposable
         basicShader.setUniform("modelview", new Matrix4().initIdentity());
 
         currentShader = basicShader;
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     }
 
     /**
