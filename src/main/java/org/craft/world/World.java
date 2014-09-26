@@ -128,22 +128,8 @@ public class World
      */
     public void performRayCast(Entity sender, CollisionInfos infos, float maxDist)
     {
-        /*
-         * for(Entity e : entities)
-         * {
-         * if(maxReachedDist > e.dist(sender) && sender != e)
-         * {
-         * maxReachedDist = e.dist(sender);
-         * infos.type = CollisionType.ENTITY;
-         * infos.value = e;
-         * infos.x = e.getPos().x;
-         * infos.y = e.getPos().y;
-         * infos.z = e.getPos().z;
-         * infos.distance = maxReachedDist;
-         * }
-         * }
-         */
-        float size = 0.5f;
+        float maxReachedDist = maxDist; // Thog, DO NOT REMOVE THIS LINE
+        float size = 0.45f;
         Vector3 origin = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset() - size / 2f, sender.getZ());
         Vector3 pos = origin;
         Vector3 ray = sender.getRotation().getForward();
@@ -181,24 +167,45 @@ public class World
                         float absy = Math.abs(diff.getY());
                         float absz = Math.abs(diff.getZ());
 
-                        if(absy < absx)
+                        if(absx > absy && absx > absz)
                         {
-                            if(absz < absy)
-                            {
-                                if(diff.getY() > 0)
-                                {
-                                    infos.side = EnumSide.TOP;
-                                }
-                                else
-                                {
-                                    infos.side = EnumSide.BOTTOM;
-                                }
-                            }
+                            if(diff.getX() > 0)
+                                infos.side = EnumSide.WEST;
+                            else
+                                infos.side = EnumSide.EAST;
+                        }
+                        if(absy > absx && absy > absz)
+                        {
+                            if(diff.getY() > 0)
+                                infos.side = EnumSide.BOTTOM;
+                            else
+                                infos.side = EnumSide.TOP;
+                        }
+                        if(absz > absy && absz > absx)
+                        {
+                            if(diff.getZ() > 0)
+                                infos.side = EnumSide.NORTH;
+                            else
+                                infos.side = EnumSide.SOUTH;
                         }
                     }
                 }
             }
             pos = origin.add(ray.mul((maxDist + step) - dist));
+        }
+
+        for(Entity e : entities)
+        {
+            if(maxReachedDist > e.getDistance(sender) && sender != e)
+            {
+                maxReachedDist = e.getDistance(sender);
+                infos.type = CollisionType.ENTITY;
+                infos.value = e;
+                infos.x = e.getX();
+                infos.y = e.getY();
+                infos.z = e.getZ();
+                infos.distance = maxReachedDist;
+            }
         }
     }
 

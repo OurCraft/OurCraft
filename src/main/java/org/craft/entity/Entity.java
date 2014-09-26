@@ -310,4 +310,5 @@ public class Entity
         float dz = other.getZ() - posZ;
         return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
+
 }
