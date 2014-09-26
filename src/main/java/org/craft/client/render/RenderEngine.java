@@ -3,7 +3,9 @@ package org.craft.client.render;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
+import java.nio.*;
 import java.util.*;
 
 import org.craft.client.*;
@@ -11,6 +13,7 @@ import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
+import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
 public class RenderEngine implements IDisposable
@@ -28,6 +31,11 @@ public class RenderEngine implements IDisposable
     private int                                       blendSrc;
     private int                                       blendDst;
     private ResourceLoader                            loader;
+    private int                                       framebufferId;
+    private OpenGLBuffer                              renderBuffer;
+    private int                                       depthBuffer;
+    private Texture                                   colorBuffer;
+    private Shader                                    postRenderShader;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
@@ -38,13 +46,45 @@ public class RenderEngine implements IDisposable
         projection3dMatrix = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
         projection = projection3dMatrix;
         projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
-        basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
-        basicShader.bind();
-        basicShader.setUniform("projection", projectionHud);
-        basicShader.setUniform("modelview", new Matrix4().initIdentity());
-
-        currentShader = basicShader;
+        loadShaders();
         glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
+        colorBuffer = new Texture(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), null);
+
+        depthBuffer = glGenRenderbuffers();
+        glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight());
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        framebufferId = glGenFramebuffers();
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer.getTextureID(), 0);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+        glDrawBuffers((IntBuffer) BufferUtils.createIntBuffer(2).put(GL_COLOR_ATTACHMENT0).put(GL_NONE).flip());
+
+        int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            Log.fatal("Framebuffer could not be created, status code: " + status);
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        renderBuffer = new OpenGLBuffer();
+
+        renderBuffer.addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 1)));
+        renderBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth(), 0, 0), Vector2.get(1, 1)));
+        renderBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth(), Display.getHeight(), 0), Vector2.get(1, 0)));
+        renderBuffer.addVertex(new Vertex(Vector3.get(0, Display.getHeight(), 0), Vector2.get(0, 0)));
+
+        renderBuffer.addIndex(0);
+        renderBuffer.addIndex(1);
+        renderBuffer.addIndex(2);
+
+        renderBuffer.addIndex(2);
+        renderBuffer.addIndex(3);
+        renderBuffer.addIndex(0);
+        renderBuffer.upload();
+        renderBuffer.clearAndDisposeVertices();
     }
 
     /**
@@ -293,5 +333,36 @@ public class RenderEngine implements IDisposable
             }
         }
         RenderBlocks.createBlockMap(this);
+    }
+
+    public void loadShaders() throws Exception
+    {
+        basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
+        basicShader.bind();
+        basicShader.setUniform("projection", projectionHud);
+        basicShader.setUniform("modelview", new Matrix4().initIdentity());
+
+        currentShader = basicShader;
+        postRenderShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
+        postRenderShader.bind();
+        postRenderShader.setUniform("projection", projectionHud);
+        postRenderShader.setUniform("modelview", new Matrix4().initIdentity());
+    }
+
+    public void begin()
+    {
+        currentShader.bind();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+    }
+
+    public void end()
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        postRenderShader.bind();
+        bindTexture(colorBuffer, 0);
+        renderBuffer(renderBuffer);
+        currentShader.bind();
     }
 }

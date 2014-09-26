@@ -324,6 +324,7 @@ public class OurCraft implements Runnable
 
     private void render()
     {
+        renderEngine.begin();
         ArrayList<Chunk> visiblesChunks = new ArrayList<Chunk>();
         if(player != null)
         {
@@ -375,18 +376,21 @@ public class OurCraft implements Runnable
                 renderEngine.setModelviewMatrix(modelView);
             }
             renderEngine.switchToOrtho();
-
-            renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
-            glLogicOp(GL_XOR);
-            renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
-            renderEngine.renderBuffer(crosshairBuffer);
-            renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
         }
         else
         {
             glClear(GL_DEPTH_BUFFER_BIT);
             renderEngine.disableGLCap(GL_DEPTH_TEST);
             renderEngine.switchToOrtho();
+        }
+        renderEngine.end();
+        if(clientWorld != null)
+        {
+            renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
+            glLogicOp(GL_XOR);
+            renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
+            renderEngine.renderBuffer(crosshairBuffer);
+            renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
         }
 
         int mx = Mouse.getX();
@@ -402,6 +406,7 @@ public class OurCraft implements Runnable
         ResourceLocation location = new ResourceLocation("resourcepacks", fileName);
         ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(gameFolderLoader.getResource(location), "assets");
         this.assetsLoader.setResourcePackLoader(loader);
+        renderEngine.loadShaders();
         renderEngine.reloadLocations();
     }
 
