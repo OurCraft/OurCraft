@@ -25,7 +25,7 @@ public class Entity
     protected float           lastYaw;
     protected float           lastPitch;
 
-    private World             worldObj;
+    protected World           worldObj;
     private boolean           isDead;
     private AABB              boundingBox;
     private boolean           onGround;
@@ -144,10 +144,10 @@ public class Entity
             {
                 for(int z = startZ; z <= endZ; z++ )
                 {
-                    Block block = getWorld().getBlock(x, y, z);
+                    Block block = worldObj.getBlock(x, y, z);
                     if(block == null)
                         continue;
-                    AABB blockBB = block.getCollisionBox(getWorld(), x, y, z);
+                    AABB blockBB = block.getCollisionBox(worldObj, x, y, z);
                     if(blockBB == null)
                         continue;
                     IntersectionInfos interInfos = boundingBox.intersectAABB(blockBB);
@@ -202,7 +202,7 @@ public class Entity
     {
         if(rotationQuaternion == null || hasRotationChanged())
         {
-            rotationQuaternion = new Quaternion(Vector3.yAxis, this.getYaw()).mul(new Quaternion(Vector3.xAxis, this.getPitch()))/*.mul(new Quaternion(Vector3.zAxis, this.getRoll()))*/;
+            rotationQuaternion = new Quaternion(Vector3.yAxis, this.getYaw()).mul(new Quaternion(Vector3.xAxis, this.getPitch()))/* .mul(new Quaternion(Vector3.zAxis, this.getRoll())) */;
         }
         return rotationQuaternion;
     }
@@ -296,7 +296,7 @@ public class Entity
     public CollisionInfos getObjectInFront(float maxDist)
     {
         CollisionInfos infos = new CollisionInfos();
-        getWorld().performRayCast(this, infos, maxDist);
+        worldObj.performRayCast(this, infos, maxDist);
         return infos;
     }
 

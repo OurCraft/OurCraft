@@ -9,7 +9,8 @@ import org.lwjgl.input.*;
 
 public class EntityPlayer extends Entity
 {
-
+    private long lastPressTime;
+    
     public EntityPlayer(World world)
     {
         super(world);
@@ -44,17 +45,19 @@ public class EntityPlayer extends Entity
         CollisionInfos infos = OurCraft.getOurCraft().getObjectInFront();
         if(infos.type == CollisionType.BLOCK)
         {
-            if(Mouse.isButtonDown(0))
+            int button = Mouse.getEventButton();
+            
+            if(button == 0)
             {
-                getWorld().setBlock((int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), Blocks.air);
+                worldObj.setBlock((int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), Blocks.air);
             }
-            else if(Mouse.isButtonDown(1))
+            else if(button == 1)
             {
                 int x = (int) infos.x + infos.side.getTranslationX();
                 int y = (int) (infos.y) + infos.side.getTranslationY();
                 int z = (int) (infos.z + infos.side.getTranslationZ());
-                getWorld().setBlock(x, y, z, Blocks.log);
-                Blocks.log.onBlockAdded(getWorld(), x, y, z, infos.side, this);
+                worldObj.setBlock(x, y, z, Blocks.log);
+                Blocks.log.onBlockAdded(worldObj, x, y, z, infos.side, this);
             }
 
         }
