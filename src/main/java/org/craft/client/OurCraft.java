@@ -23,33 +23,35 @@ import org.lwjgl.opengl.*;
 public class OurCraft implements Runnable
 {
 
-    private int                           displayWidth  = 960;
-    private int                           displayHeight = 540;
-    private long                          lastTime      = 0;
-    private boolean                       running       = true;
-    private RenderEngine                  renderEngine  = null;
-    private ClasspathSimpleResourceLoader classpathLoader;
-    private RenderBlocks                  renderBlocks;
-    private World                         clientWorld;
-    private MouseHandler                  mouseHandler;
-    private EntityPlayer                  player;
-    private static OurCraft               instance;
-    private CollisionInfos                objectInFront = null;
-    private OpenGLBuffer                  crosshairBuffer;
-    private FallbackRender<Entity>        fallbackRenderer;
-    private Runtime                       runtime;
-    private FontRenderer                  fontRenderer;
-    private String                        username;
+    private int                      displayWidth  = 960;
+    private int                      displayHeight = 540;
+    private long                     lastTime      = 0;
+    private boolean                  running       = true;
+    private RenderEngine             renderEngine  = null;
+    private AssetLoader              assetsLoader;
+    private RenderBlocks             renderBlocks;
+    private World                    clientWorld;
+    private MouseHandler             mouseHandler;
+    private EntityPlayer             player;
+    private static OurCraft          instance;
+    private CollisionInfos           objectInFront = null;
+    private OpenGLBuffer             crosshairBuffer;
+    private FallbackRender<Entity>   fallbackRenderer;
+    private Runtime                  runtime;
+    private FontRenderer             fontRenderer;
+    private String                   username;
 
-    private Gui                           currentMenu;
-    private Gui                           newMenu;
-    private OpenGLBuffer                  selectionBoxBuffer;
+    private Gui                      currentMenu;
+    private Gui                      newMenu;
+    private OpenGLBuffer             selectionBoxBuffer;
+    private DiskSimpleResourceLoader gameFolderLoader;
 
     public OurCraft()
     {
         instance = this;
 
-        this.classpathLoader = new ClasspathSimpleResourceLoader("assets");
+        this.assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
+        this.gameFolderLoader = new DiskSimpleResourceLoader(SystemUtils.getGameFolder().getAbsolutePath());
         runtime = Runtime.getRuntime();
     }
 
@@ -71,7 +73,7 @@ public class OurCraft implements Runnable
             Display.create(new PixelFormat(), context);
             mouseHandler = new MouseHandler();
 
-            renderEngine = new RenderEngine(classpathLoader);
+            renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
             renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -82,7 +84,7 @@ public class OurCraft implements Runnable
             fontRenderer = new BaseFontRenderer();
 
             Blocks.init();
-            I18n.init(classpathLoader);
+            I18n.init(assetsLoader);
 
             Log.message("==== IN en_US.lang ====");
             Log.message("lang.test1 is " + I18n.format("lang.test1"));
@@ -256,6 +258,17 @@ public class OurCraft implements Runnable
                         else if(clientWorld == null)
                             running = false;
                     }
+                    if(id == Keyboard.KEY_RETURN)
+                    {
+                        try
+                        {
+                            setResourcesPack("test.zip");
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                     currentMenu.keyReleased(id, c);
                 }
             }
@@ -383,6 +396,14 @@ public class OurCraft implements Runnable
         printIfGLError();
     }
 
+    public void setResourcesPack(String fileName) throws Exception
+    {
+        ResourceLocation location = new ResourceLocation("resourcepacks", fileName);
+        ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(gameFolderLoader.getResource(location), "assets");
+        this.assetsLoader.setResourcePackLoader(loader);
+        renderEngine.reloadLocations();
+    }
+
     public static void printIfGLError()
     {
         int errorFlag = glGetError();
@@ -404,9 +425,9 @@ public class OurCraft implements Runnable
         return instance;
     }
 
-    public ResourceLoader getBaseLoader()
+    public ResourceLoader getAssetsLoader()
     {
-        return classpathLoader;
+        return assetsLoader;
     }
 
     public MouseHandler getMouseHandler()
@@ -502,5 +523,10 @@ public class OurCraft implements Runnable
         clientWorld = null;
         player = null;
         openMenu(new GuiMainMenu(fontRenderer));
+    }
+
+    public ResourceLoader getGameFolderLoader()
+    {
+        return gameFolderLoader;
     }
 }

@@ -1,19 +1,28 @@
 package org.craft.resources;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class DiskSimpleResourceLoader extends ResourceLoader
 {
 
     private HashMap<String, AbstractResource> resources = new HashMap<String, AbstractResource>();
+    private String                            base;
+
+    public DiskSimpleResourceLoader()
+    {
+        this("");
+    }
+
+    public DiskSimpleResourceLoader(String base)
+    {
+        this.base = base;
+    }
 
     @Override
     public AbstractResource getResourceOrCreate(ResourceLocation location) throws Exception
     {
+        location = complete(location);
         if(!doesResourceExists(location))
         {
             File f = new File(location.getFullPath());
@@ -25,9 +34,15 @@ public class DiskSimpleResourceLoader extends ResourceLoader
         return getResource(location);
     }
 
+    private ResourceLocation complete(ResourceLocation location)
+    {
+        return new ResourceLocation(base, location.getFullPath());
+    }
+
     @Override
     public AbstractResource getResource(ResourceLocation location) throws Exception
     {
+        location = complete(location);
         if(!isLoaded(location))
         {
             File file = new File(location.getFullPath());
@@ -49,12 +64,14 @@ public class DiskSimpleResourceLoader extends ResourceLoader
     @Override
     public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
     {
+        location = complete(location);
         return Arrays.asList(getResource(location));
     }
 
     @Override
     public boolean doesResourceExists(ResourceLocation location)
     {
+        location = complete(location);
         return new File(location.getFullPath()).exists();
     }
 

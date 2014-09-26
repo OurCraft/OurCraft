@@ -275,4 +275,23 @@ public class RenderEngine implements IDisposable
                 ((IDisposable) o).dispose();
         currentShader.dispose();
     }
+
+    public void reloadLocations() throws Exception
+    {
+        Iterator<ResourceLocation> it = texturesLocs.keySet().iterator();
+        while(it.hasNext())
+        {
+            ResourceLocation key = it.next();
+            try
+            {
+                texturesLocs.put(key, OpenGLHelper.loadTexture(loader.getResource(key)));
+            }
+            catch(Exception e)
+            {
+                texturesLocs.put(key, null);
+                Log.error("Could not reload texture at /" + key.getFullPath() + " because of: " + e.getClass().getCanonicalName() + " " + e.getLocalizedMessage());
+            }
+        }
+        RenderBlocks.createBlockMap(this);
+    }
 }
