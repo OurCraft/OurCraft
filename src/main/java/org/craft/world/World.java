@@ -128,7 +128,6 @@ public class World
      */
     public void performRayCast(Entity sender, CollisionInfos infos, float maxDist)
     {
-        float maxReachedDist = maxDist;
         /*
          * for(Entity e : entities)
          * {

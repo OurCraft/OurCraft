@@ -18,7 +18,7 @@ public class Block
     private String      id;
     private TextureIcon blockIcon;
 
-    private short uniqueID;
+    private short       uniqueID;
 
     /**
      * Block constructor. Takes in an ID to identify the block
@@ -126,17 +126,21 @@ public class Block
      */
     public void updateTick(World world, int x, int y, int z)
     {
-        //  Log.message("UPDATE " + this.getID());
+        // Log.message("UPDATE " + this.getID());
     }
-    
-    public void setUniqueID(short  id)
+
+    public void setUniqueID(short id)
     {
         this.uniqueID = id;
     }
-    
-    public short  getUniqueID()
+
+    public short getUniqueID()
     {
-        // TODO Auto-generated method stub
         return uniqueID;
+    }
+
+    public int getStackLimit()
+    {
+        return 64;
     }
 }

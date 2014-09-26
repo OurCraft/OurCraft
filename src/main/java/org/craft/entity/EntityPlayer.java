@@ -9,8 +9,6 @@ import org.lwjgl.input.*;
 
 public class EntityPlayer extends Entity
 {
-    private long lastPressTime;
-    
     public EntityPlayer(World world)
     {
         super(world);
