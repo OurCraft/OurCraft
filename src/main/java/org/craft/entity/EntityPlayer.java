@@ -55,7 +55,6 @@ public class EntityPlayer extends Entity
                 worldObj.setBlock(x, y, z, Blocks.log);
                 Blocks.log.onBlockAdded(worldObj, x, y, z, infos.side, this);
             }
-
         }
     }
 

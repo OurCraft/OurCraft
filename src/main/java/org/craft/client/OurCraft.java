@@ -365,7 +365,10 @@ public class OurCraft implements Runnable
             renderBlocks.render(clientWorld, visiblesChunks);
             for(Entity e : clientWorld.getEntitiesList())
             {
-                fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
+                if(e != renderEngine.getRenderViewEntity())
+                {
+                    fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
+                }
             }
             glClear(GL_DEPTH_BUFFER_BIT);
             renderEngine.disableGLCap(GL_DEPTH_TEST);

@@ -1,7 +1,6 @@
 package org.craft.world;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
@@ -13,23 +12,23 @@ import org.craft.utils.CollisionInfos.CollisionType;
 public class World
 {
 
-    private LinkedList<Entity>          entities;
-    private LinkedBlockingQueue<Entity> spawingQueue;
-    private ChunkProvider               chunkProvider;
-    private WorldGenerator              generator;
+    private LinkedList<Entity> entities;
+    private ArrayList<Entity>  spawingQueue;
+    private ChunkProvider      chunkProvider;
+    private WorldGenerator     generator;
 
     public World(ChunkProvider prov, WorldGenerator generator)
     {
         this.generator = generator;
         this.chunkProvider = prov;
-        spawingQueue = new LinkedBlockingQueue<Entity>();
+        spawingQueue = new ArrayList<Entity>();
         entities = new LinkedList<Entity>();
     }
 
     public void update(int time, boolean canUpdate)
     {
         while(!spawingQueue.isEmpty())
-            entities.add(spawingQueue.poll());
+            entities.add(spawingQueue.remove(0));
         ArrayList<Entity> deadEntities = new ArrayList<Entity>();
         if(canUpdate)
         {
@@ -120,6 +119,7 @@ public class World
      */
     public void spawn(Entity e)
     {
+        Log.message("added " + e.getClass());
         this.spawingQueue.add(e);
     }
 
@@ -192,19 +192,17 @@ public class World
                 }
             }
             pos = origin.add(ray.mul((maxDist + step) - dist));
-        }
-
-        for(Entity e : entities)
-        {
-            if(maxReachedDist > e.getDistance(sender) && sender != e)
+            for(Entity e : entities)
             {
-                maxReachedDist = e.getDistance(sender);
-                infos.type = CollisionType.ENTITY;
-                infos.value = e;
-                infos.x = e.getX();
-                infos.y = e.getY();
-                infos.z = e.getZ();
-                infos.distance = maxReachedDist;
+                if(e.getBoundingBox().intersectAABB(rayBB).doesIntersects())
+                {
+                    infos.type = CollisionType.ENTITY;
+                    infos.value = e;
+                    infos.x = e.getX();
+                    infos.y = e.getY();
+                    infos.z = e.getZ();
+                    infos.distance = maxReachedDist;
+                }
             }
         }
     }

@@ -18,8 +18,7 @@ public class FallbackRender<T extends Entity> extends ModelRender<T>
         if(fallbackModel == null)
         {
             fallbackModel = new ModelBase();
-            ModelBox box = fallbackModel.addBox(0, 0, 0, 1, 1, 1);
-            box.setRotationPoint(0.5f, 0.5f, 0.5f);
+            fallbackModel.addBox(-0.5f, -0.5f, -0.5f, 1, 1, 1);
         }
         return fallbackModel;
     }

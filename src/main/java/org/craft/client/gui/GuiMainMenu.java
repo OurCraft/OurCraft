@@ -42,6 +42,10 @@ public class GuiMainMenu extends Gui
             clientWorld.spawn(player);
             OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
 
+            Entity testEntity = new Entity(clientWorld);
+            testEntity.setLocation(player.getX() + 10, player.getY() + 20, player.getZ());
+            clientWorld.spawn(testEntity);
+
             new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
             OurCraft.getOurCraft().setWorld(clientWorld);
             OurCraft.getOurCraft().setPlayer(player);
