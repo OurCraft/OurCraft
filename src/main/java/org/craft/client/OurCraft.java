@@ -607,4 +607,9 @@ public class OurCraft implements Runnable
     {
         this.playerController = playerController;
     }
+
+    public Gui getCurrentMenu()
+    {
+        return currentMenu;
+    }
 }
