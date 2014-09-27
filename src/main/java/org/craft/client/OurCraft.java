@@ -8,6 +8,7 @@ import java.util.*;
 import org.craft.blocks.*;
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
+import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
@@ -102,6 +103,11 @@ public class OurCraft implements Runnable
 
             boolean debugNoGui = false;
             renderBlocks = new RenderBlocks(renderEngine);
+            renderBlocks.registerBlockRenderer(Block.class, new FullCubeBlockRenderer());
+            renderBlocks.registerBlockRenderer(BlockAir.class, null);
+            renderBlocks.registerBlockRenderer(BlockTransparent.class, new FullCubeBlockRenderer());
+            renderBlocks.registerBlockRenderer(BlockLog.class, new FullCubeBlockRenderer());
+            renderBlocks.registerBlockRenderer(BlockGrass.class, new FullCubeBlockRenderer());
             fallbackRenderer = new FallbackRender<Entity>();
 
             if(debugNoGui)

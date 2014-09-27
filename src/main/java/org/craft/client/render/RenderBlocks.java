@@ -6,9 +6,8 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
-import org.craft.maths.*;
+import org.craft.client.render.blocks.*;
 import org.craft.resources.*;
-import org.craft.utils.*;
 import org.craft.world.*;
 
 public class RenderBlocks
@@ -23,11 +22,12 @@ public class RenderBlocks
         public int   z;
     }
 
-    private HashMap<ChunkCoord, OpenGLBuffer> chunkBuffersPass0;
-    private HashMap<ChunkCoord, OpenGLBuffer> chunkBuffersPass1;
-    private RenderEngine                      renderEngine;
-    private int                               index;
-    private static ResourceLocation           blockMapLoc;
+    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>      chunkBuffersPass0;
+    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>      chunkBuffersPass1;
+    private RenderEngine                                    renderEngine;
+    private HashMap<Class<? extends Block>, IBlockRenderer> renderers;
+    private IBlockRenderer                                  fallbackRenderer;
+    private static ResourceLocation                         blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
     {
@@ -51,145 +51,39 @@ public class RenderBlocks
     public RenderBlocks(RenderEngine engine)
     {
         this.renderEngine = engine;
-        chunkBuffersPass0 = new HashMap<ChunkCoord, OpenGLBuffer>();
-        chunkBuffersPass1 = new HashMap<ChunkCoord, OpenGLBuffer>();
+        chunkBuffersPass0 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
+        chunkBuffersPass1 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
         if(blockMapLoc == null)
         {
             createBlockMap(engine);
         }
+        fallbackRenderer = new FullCubeBlockRenderer();
+        renderers = new HashMap<Class<? extends Block>, IBlockRenderer>();
+    }
+
+    public void registerBlockRenderer(Class<? extends Block> blockClass, IBlockRenderer renderer)
+    {
+        renderers.put(blockClass, renderer);
+    }
+
+    public IBlockRenderer getRenderer(Block block)
+    {
+        Class<? extends Block> blockClass = block.getClass();
+        if(renderers.containsKey(blockClass))
+        {
+            IBlockRenderer renderer = renderers.get(blockClass);
+            return renderer;
+        }
+        return fallbackRenderer;
     }
 
     /**
      * Clears the buffer and setup required informations in order to start rendering
      */
-    public void startRendering(OpenGLBuffer buffer)
+    public void startRendering(OffsettedOpenGLBuffer buffer)
     {
-        index = 0;
+        buffer.setOffset(0);
         buffer.clear();
-    }
-
-    /**
-     * Draws a full cube from the given block
-     */
-    public void drawAllFaces(OpenGLBuffer buffer, Block block, World world, int x, int y, int z)
-    {
-        EnumSide side = EnumSide.NORTH;
-        Chunk chunk = world.getChunk(x, y, z);
-        if(chunk == null)
-            return;
-        float lightValue = chunk.getLightValue(world, x, y, z);
-        if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
-        {
-            drawNorthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.NORTH), x, y, z);
-        }
-
-        side = EnumSide.SOUTH;
-        if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
-        {
-            drawSouthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.SOUTH), x, y, z);
-        }
-
-        side = EnumSide.WEST;
-        if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
-        {
-            drawWestFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.WEST), x, y, z);
-        }
-
-        side = EnumSide.EAST;
-        if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
-        {
-            drawEastFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.EAST), x, y, z);
-        }
-
-        side = EnumSide.TOP;
-        if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
-        {
-            drawTopFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.TOP), x, y, z);
-        }
-
-        side = EnumSide.BOTTOM;
-        if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
-        {
-            drawBottomFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.BOTTOM), x, y, z);
-        }
-    }
-
-    public void drawNorthFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
-    {
-        if(!block.shouldRender())
-            return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        endDrawFace(buffer);
-    }
-
-    public void drawSouthFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
-    {
-        if(!block.shouldRender())
-            return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        endDrawFace(buffer);
-    }
-
-    public void drawWestFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
-    {
-        if(!block.shouldRender())
-            return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        endDrawFace(buffer);
-    }
-
-    public void drawEastFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
-    {
-        if(!block.shouldRender())
-            return;
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        endDrawFace(buffer);
-    }
-
-    public void drawTopFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
-    {
-        if(!block.shouldRender())
-            return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        endDrawFace(buffer);
-    }
-
-    public void drawBottomFace(OpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
-    {
-        if(!block.shouldRender())
-            return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        endDrawFace(buffer);
-    }
-
-    private void endDrawFace(OpenGLBuffer buffer)
-    {
-        buffer.addIndex(0 + index);
-        buffer.addIndex(1 + index);
-        buffer.addIndex(2 + index);
-        buffer.addIndex(1 + index);
-        buffer.addIndex(2 + index);
-        buffer.addIndex(3 + index);
-
-        index += 4;
     }
 
     /**
@@ -235,22 +129,22 @@ public class RenderBlocks
                 }
                 for(Chunk c : visiblesChunks)
                 {
-                    OpenGLBuffer buffer = null;
+                    OffsettedOpenGLBuffer buffer = null;
                     if(currentPass == EnumRenderPass.NORMAL)
                     {
                         buffer = chunkBuffersPass0.get(c.getCoords());
                         if(buffer == null)
                         {
-                            chunkBuffersPass0.put(c.getCoords(), new OpenGLBuffer());
+                            chunkBuffersPass0.put(c.getCoords(), new OffsettedOpenGLBuffer());
                             buffer = chunkBuffersPass0.get(c.getCoords());
                         }
                     }
-                    if(currentPass == EnumRenderPass.ALPHA)
+                    else if(currentPass == EnumRenderPass.ALPHA)
                     {
                         buffer = chunkBuffersPass1.get(c.getCoords());
                         if(buffer == null)
                         {
-                            chunkBuffersPass1.put(c.getCoords(), new OpenGLBuffer());
+                            chunkBuffersPass1.put(c.getCoords(), new OffsettedOpenGLBuffer());
                             buffer = chunkBuffersPass1.get(c.getCoords());
                         }
                     }
@@ -267,9 +161,9 @@ public class RenderBlocks
                                     for(int z = 0; z < 16; z++ )
                                     {
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                        if(b != null && b.shouldRenderInPass(currentPass))
+                                        if(b != null && b.shouldRender() && b.shouldRenderInPass(currentPass))
                                         {
-                                            drawAllFaces(buffer, b, w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
+                                            getRenderer(b).render(renderEngine, buffer, w, b, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
                                         }
                                     }
                                 }
@@ -277,13 +171,6 @@ public class RenderBlocks
                         }
                         else
                         {
-                            buffer = chunkBuffersPass1.get(c.getCoords());
-                            if(buffer == null)
-                            {
-                                chunkBuffersPass1.put(c.getCoords(), new OpenGLBuffer());
-                                buffer = chunkBuffersPass1.get(c.getCoords());
-                            }
-                            startRendering(buffer);
 
                             ArrayList<BlockRenderInfos> infosList = new ArrayList<BlockRenderInfos>();
                             for(int x = 0; x < 16; x++ )
@@ -293,7 +180,7 @@ public class RenderBlocks
                                     for(int z = 0; z < 16; z++ )
                                     {
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                        if(b != null && b.shouldRenderInPass(currentPass))
+                                        if(b != null && b.shouldRender() && b.shouldRenderInPass(currentPass))
                                         {
                                             BlockRenderInfos infos = new BlockRenderInfos();
                                             infos.block = b;
@@ -325,7 +212,7 @@ public class RenderBlocks
                             });
                             for(BlockRenderInfos infos : infosList)
                             {
-                                drawAllFaces(buffer, infos.block, w, infos.x, infos.y, infos.z);
+                                getRenderer(infos.block).render(renderEngine, buffer, w, infos.block, infos.x, infos.y, infos.z);
                             }
                         }
                         flush(buffer);

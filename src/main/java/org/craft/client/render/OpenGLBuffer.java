@@ -77,7 +77,7 @@ public class OpenGLBuffer
         indices.clear();
         for(Integer index : newIndices)
         {
-            indices.add(index);
+            addIndex(index);
         }
     }
 
