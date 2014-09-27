@@ -40,4 +40,9 @@ public class BlockStatesObject
     {
         map.clear();
     }
+
+    public HashMap<BlockState, IBlockStateValue> getMap()
+    {
+        return map;
+    }
 }

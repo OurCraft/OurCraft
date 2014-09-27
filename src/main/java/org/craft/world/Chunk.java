@@ -70,7 +70,7 @@ public class Chunk
             y = 16 + y;
         if(z < 0)
             z = 16 + z;
-       
+
         return Blocks.getByID(blocks[x][y][z]);
     }
 
@@ -341,5 +341,20 @@ public class Chunk
                 }
             }
         }
+    }
+
+    public BlockStatesObject getBlockStates(int worldX, int worldY, int worldZ)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        return blockStatesObjects[x][y][z];
     }
 }

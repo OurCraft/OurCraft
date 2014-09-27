@@ -282,4 +282,14 @@ public class World
         }
 
     }
+
+    public BlockStatesObject getBlockStates(int x, int y, int z)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c != null)
+        {
+            return c.getBlockStates(x, y, z);
+        }
+        return null;
+    }
 }

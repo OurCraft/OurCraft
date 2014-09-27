@@ -8,27 +8,27 @@ import org.craft.world.*;
 public class Entity
 {
 
-    protected float           posX;
-    protected float           posY;
-    protected float           posZ;
-    protected float           velX;
-    protected float           velY;
-    protected float           velZ;
-    protected float           yaw;
-    protected float           pitch;
-    protected float           roll;
+    public float              posX;
+    public float              posY;
+    public float              posZ;
+    public float              velX;
+    public float              velY;
+    public float              velZ;
+    public float              yaw;
+    public float              pitch;
+    public float              roll;
 
-    protected float           headYaw;
-    protected float           headPitch;
-    protected float           headRoll;
+    public float              headYaw;
+    public float              headPitch;
+    public float              headRoll;
 
-    protected float           lastYaw;
-    protected float           lastPitch;
+    public float              lastYaw;
+    public float              lastPitch;
 
-    protected World           worldObj;
+    public World              worldObj;
     private boolean           isDead;
     private AABB              boundingBox;
-    private boolean           onGround;
+    public boolean            onGround;
     private Quaternion        rotationQuaternion;
 
     public static final float G = 9.81f / 360f;

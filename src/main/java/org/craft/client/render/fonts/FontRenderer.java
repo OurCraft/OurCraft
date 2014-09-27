@@ -226,12 +226,27 @@ public abstract class FontRenderer implements IDisposable
     public float getTextLength(String text)
     {
         float l = 0;
+        int toSkip = 0;
         for(int i = 0; i < text.length(); i++ )
         {
+            if(toSkip > 0)
+            {
+                toSkip-- ;
+                continue;
+            }
             char c = text.charAt(i);
             char next = '\0';
             if(text.length() - 1 != i)
                 next = text.charAt(i + 1);
+            if(c == TextFormatting.BEGINNING)
+            {
+                TextFormatting format = TextFormatting.fromString(next);
+                if(format != null)
+                {
+                    toSkip = format.getCharsAfter() + 1;
+                    continue;
+                }
+            }
             l += getCharWidth(c) + getCharSpacing(c, next);
         }
         return l;

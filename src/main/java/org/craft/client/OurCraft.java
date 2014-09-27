@@ -48,6 +48,7 @@ public class OurCraft implements Runnable
     private Gui                      newMenu;
     private OpenGLBuffer             selectionBoxBuffer;
     private DiskSimpleResourceLoader gameFolderLoader;
+    private PlayerController         playerController;
 
     public OurCraft()
     {
@@ -68,6 +69,8 @@ public class OurCraft implements Runnable
     {
         try
         {
+            objectInFront = new CollisionInfos();
+            objectInFront.type = CollisionType.NONE;
             System.setProperty("org.lwjgl.util.Debug", "true");
             System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
             ContextAttribs context = new ContextAttribs(3, 3).withProfileCompatibility(true).withDebug(true);
@@ -222,6 +225,10 @@ public class OurCraft implements Runnable
 
     private void update(final int time)
     {
+        if(player != null)
+        {
+            objectInFront = player.getObjectInFront(5f);
+        }
         if(newMenu != currentMenu)
         {
             currentMenu = newMenu;
@@ -237,6 +244,18 @@ public class OurCraft implements Runnable
             if(currentMenu != null && state && mouseButton != -1)
             {
                 currentMenu.handleClick(x, y, mouseButton);
+
+                if(playerController != null)
+                {
+                    if(mouseButton == 0)
+                    {
+                        playerController.onLeftClick(getObjectInFront());
+                    }
+                    else
+                    {
+                        playerController.onRightClick(getObjectInFront());
+                    }
+                }
             }
 
             // TODO: Event queue
@@ -293,19 +312,32 @@ public class OurCraft implements Runnable
         else
             mouseHandler.grab();
         mouseHandler.update();
-        if(player != null)
-        {
-            objectInFront = player.getObjectInFront(5f);
-        }
         boolean canUpdate = (System.currentTimeMillis() - lastTime) >= time;
         if(canUpdate)
         {
-            if(clientWorld != null)
+            if(playerController != null)
             {
+                if(Keyboard.isKeyDown(Keyboard.KEY_Z))
+                {
+                    playerController.onMoveForwardRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_S))
+                {
+                    playerController.onMoveBackwardsRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_Q))
+                {
+                    playerController.onMoveLeftRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_D))
+                {
+                    playerController.onMoveRightRequested();
+                }
                 if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
                 {
-                    player.jump();
+                    playerController.onJumpRequested();
                 }
+                playerController.update();
             }
             this.resetTime();
         }
@@ -564,5 +596,15 @@ public class OurCraft implements Runnable
     {
         renderEngine.dispose();
         Display.destroy();
+    }
+
+    public PlayerController getPlayerController()
+    {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController)
+    {
+        this.playerController = playerController;
     }
 }

@@ -41,6 +41,7 @@ public class GuiMainMenu extends Gui
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
             OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
+            OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
 
             Entity testEntity = new Entity(clientWorld);
             testEntity.setLocation(player.getX() + 10, player.getY() + 20, player.getZ());

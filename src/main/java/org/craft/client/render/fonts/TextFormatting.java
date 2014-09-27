@@ -59,6 +59,6 @@ public enum TextFormatting
         String blueStr = Integer.toHexString(blue);
         if(blueStr.length() < 2)
             blueStr = "0" + blueStr;
-        return BEGINNING + COLOR.toString() + alphaStr + redStr + greenStr + blueStr;
+        return COLOR.toString() + alphaStr + redStr + greenStr + blueStr;
     }
 }
