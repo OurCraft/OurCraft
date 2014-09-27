@@ -13,12 +13,12 @@ public class Block
     {
         normalCubeAABB = new AABB(Vector3.NULL.copy(), Vector3.get(1, 1, 1));
     }
-    private static AABB normalCubeAABB;
+    protected static AABB normalCubeAABB;
 
-    private String      id;
-    private TextureIcon blockIcon;
+    private String        id;
+    private TextureIcon   blockIcon;
 
-    private short       uniqueID;
+    private short         uniqueID;
 
     /**
      * Block constructor. Takes in an ID to identify the block

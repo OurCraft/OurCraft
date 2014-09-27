@@ -103,11 +103,7 @@ public class OurCraft implements Runnable
 
             boolean debugNoGui = false;
             renderBlocks = new RenderBlocks(renderEngine);
-            renderBlocks.registerBlockRenderer(Block.class, new FullCubeBlockRenderer());
-            renderBlocks.registerBlockRenderer(BlockAir.class, null);
-            renderBlocks.registerBlockRenderer(BlockTransparent.class, new FullCubeBlockRenderer());
-            renderBlocks.registerBlockRenderer(BlockLog.class, new FullCubeBlockRenderer());
-            renderBlocks.registerBlockRenderer(BlockGrass.class, new FullCubeBlockRenderer());
+            renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
             fallbackRenderer = new FallbackRender<Entity>();
 
             if(debugNoGui)
@@ -377,7 +373,13 @@ public class OurCraft implements Runnable
             {
                 renderEngine.bindLocation(null);
                 Matrix4 modelView = renderEngine.getModelviewMatrix();
-                renderEngine.setModelviewMatrix(new Matrix4().initTranslation(objectInFront.x, objectInFront.y, objectInFront.z));
+                AABB blockSelectBB = ((Block) objectInFront.value).getSelectionBox(clientWorld, 0, 0, 0);
+                Vector3 ratio = blockSelectBB.getMaxExtents().sub(blockSelectBB.getMinExtents());
+                float sx = ratio.getX();
+                float sy = ratio.getY();
+                float sz = ratio.getZ();
+                Matrix4 selectionBoxMatrix = new Matrix4().initTranslation(objectInFront.x + blockSelectBB.getMinExtents().getX(), objectInFront.y + blockSelectBB.getMinExtents().getY(), objectInFront.z + blockSelectBB.getMinExtents().getZ()).mul(new Matrix4().initScale(sx, sy, sz));
+                renderEngine.setModelviewMatrix(selectionBoxMatrix);
                 renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
                 renderEngine.setModelviewMatrix(modelView);
             }

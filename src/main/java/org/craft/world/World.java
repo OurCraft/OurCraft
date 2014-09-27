@@ -148,7 +148,7 @@ public class World
             Block b = getBlock(x, y, z);
             if(b != null)
             {
-                AABB blockBB = b.getCollisionBox(this, x, y, z);
+                AABB blockBB = b.getSelectionBox(this, x, y, z);
                 if(blockBB != null)
                 {
                     if(blockBB.intersectAABB(rayBB.translate(pos)).doesIntersects())

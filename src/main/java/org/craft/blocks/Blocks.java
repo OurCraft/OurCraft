@@ -1,7 +1,6 @@
 package org.craft.blocks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public final class Blocks
 {
@@ -14,8 +13,10 @@ public final class Blocks
     public static Block                        log;
     public static Block                        leaves;
     public static Block                        glass;
+    public static Block                        rose;
     public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
-    private static ArrayList<Block> blockByID; 
+    private static ArrayList<Block>            blockByID;
+
     public static void init()
     {
         blockByID = new ArrayList<Block>();
@@ -27,11 +28,13 @@ public final class Blocks
         register(log = new BlockLog("log"));
         register(leaves = new BlockTransparent("leaves"));
         register(glass = new BlockTransparent("glass"));
-        
-        for(short i = 0; i < blockByID.size(); i++)
+        register(rose = new BlockFlower("rose"));
+
+        for(short i = 0; i < blockByID.size(); i++ )
         {
             Block b = blockByID.get(i);
-            if(b !=null) b.setUniqueID(i);
+            if(b != null)
+                b.setUniqueID(i);
         }
     }
 
@@ -57,11 +60,12 @@ public final class Blocks
             return air;
         return BLOCK_REGISTRY.get(string);
     }
-    
+
     public static Block getByID(int id)
     {
         Block b = blockByID.get(id);
-        if(b == null) b = air;
+        if(b == null)
+            b = air;
         return b;
     }
 }

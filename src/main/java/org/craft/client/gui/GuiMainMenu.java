@@ -34,6 +34,7 @@ public class GuiMainMenu extends Gui
             generator.addPopulator(new RockPopulator());
             generator.addPopulator(new GrassPopulator());
             generator.addPopulator(new TreePopulator());
+            generator.addPopulator(new FlowerPopulator());
             World clientWorld = new World(new BaseChunkProvider(), generator);
 
             EntityPlayer player = new EntityPlayer(clientWorld);
