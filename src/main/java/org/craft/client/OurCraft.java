@@ -12,8 +12,10 @@ import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
+import org.craft.entity.Entity;
 import org.craft.maths.*;
 import org.craft.resources.*;
+import org.craft.spongeimpl.game.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.crash.*;
@@ -22,8 +24,12 @@ import org.craft.world.populators.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
+import org.spongepowered.api.*;
+import org.spongepowered.api.entity.*;
+import org.spongepowered.api.event.*;
+import org.spongepowered.api.plugin.*;
 
-public class OurCraft implements Runnable
+public class OurCraft implements Runnable, Game
 {
 
     private int                      displayWidth  = 960;
@@ -49,6 +55,7 @@ public class OurCraft implements Runnable
     private OpenGLBuffer             selectionBoxBuffer;
     private DiskSimpleResourceLoader gameFolderLoader;
     private PlayerController         playerController;
+    private SpongeGameRegistry       gameRegistry;
 
     public OurCraft()
     {
@@ -88,6 +95,7 @@ public class OurCraft implements Runnable
             renderEngine.renderSplashScreen();
             Display.update();
 
+            initSponge();
             AL.create();
 
             fontRenderer = new BaseFontRenderer();
@@ -209,6 +217,11 @@ public class OurCraft implements Runnable
         {
             e.printStackTrace();
         }
+    }
+
+    private void initSponge()
+    {
+        gameRegistry = new SpongeGameRegistry();
     }
 
     public void openMenu(Gui gui)
@@ -611,5 +624,92 @@ public class OurCraft implements Runnable
     public Gui getCurrentMenu()
     {
         return currentMenu;
+    }
+
+    @Override
+    public Platform getPlatform()
+    {
+        return Platform.CLIENT;
+    }
+
+    @Override
+    public PluginManager getPluginManager()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public EventManager getEventManager()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public GameRegistry getRegistry()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collection<Player> getOnlinePlayers()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int getMaxPlayers()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public Player getPlayer(UUID uniqueId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collection<org.spongepowered.api.world.World> getWorlds()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.world.World getWorld(UUID uniqueId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.world.World getWorld(String worldName)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void broadcastMessage(String message)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public String getAPIVersion()
+    {
+        return "1.0";
+    }
+
+    @Override
+    public String getImplementationVersion()
+    {
+        return "1.0";
     }
 }

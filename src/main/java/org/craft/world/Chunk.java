@@ -5,8 +5,12 @@ import java.util.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.maths.*;
+import org.craft.spongeimpl.math.*;
+import org.spongepowered.api.entity.*;
+import org.spongepowered.api.math.*;
+import org.spongepowered.api.world.*;
 
-public class Chunk
+public class Chunk implements org.spongepowered.api.world.Chunk
 {
 
     public short[][][]             blocks;
@@ -356,5 +360,66 @@ public class Chunk
         if(z < 0)
             z = 16 + z;
         return blockStatesObjects[x][y][z];
+    }
+
+    @Override
+    public Location at(Vector2d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Location at(int x, int y, int z)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock(Vector3i position)
+    {
+        return getChunkBlock(position.getX(), position.getY(), position.getZ());
+    }
+
+    @Override
+    public boolean setBlock(Vector3i position, org.spongepowered.api.block.Block block)
+    {
+        setChunkBlock(position.getX(), position.getY(), position.getZ(), (Block) block);
+        return true;
+    }
+
+    @Override
+    public byte getLuminance(Vector3i position)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public byte getLuminanceFromSky(Vector3i position)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public byte getLuminanceFromGround(Vector3i position)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public Collection<Entity> getEntities()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Vector3i getPosition()
+    {
+        return new Vec3i(coords.x, coords.y, coords.z);
     }
 }

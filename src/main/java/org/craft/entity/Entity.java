@@ -1,11 +1,15 @@
 package org.craft.entity;
 
+import java.util.*;
+
 import org.craft.blocks.*;
 import org.craft.maths.*;
+import org.craft.spongeimpl.math.*;
 import org.craft.utils.*;
 import org.craft.world.*;
+import org.spongepowered.api.math.*;
 
-public class Entity
+public class Entity implements org.spongepowered.api.entity.Entity
 {
 
     public float              posX;
@@ -30,6 +34,8 @@ public class Entity
     private AABB              boundingBox;
     public boolean            onGround;
     private Quaternion        rotationQuaternion;
+    private boolean           onFire;
+    private int               fireTicks;
 
     public static final float G = 9.81f / 360f;
 
@@ -198,7 +204,7 @@ public class Entity
         velZ += (float) (Math.cos(yaw + Math.toRadians(90)) * distance);
     }
 
-    public Quaternion getRotation()
+    public Quaternion getQuaternionRotation()
     {
         if(rotationQuaternion == null || hasRotationChanged())
         {
@@ -309,6 +315,86 @@ public class Entity
         float dy = other.getY() - posY;
         float dz = other.getZ() - posZ;
         return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    @Override
+    public UUID getUniqueId()
+    {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public boolean isBurning()
+    {
+        return onFire;
+    }
+
+    @Override
+    public int getDuration()
+    {
+        return fireTicks;
+    }
+
+    @Override
+    public void setDuration(int ticks)
+    {
+        this.fireTicks = ticks;
+    }
+
+    @Override
+    public Vector3f getVelocity()
+    {
+        return new Vec3f(velX, velY, velZ);
+    }
+
+    @Override
+    public void setVelocity(Vector3f velocity)
+    {
+        this.velX = velocity.getX();
+        this.velY = velocity.getY();
+        this.velZ = velocity.getZ();
+    }
+
+    @Override
+    public Vector3d getPosition()
+    {
+        return new Vec3d(posX, posY, posZ);
+    }
+
+    @Override
+    public void setPosition(Vector3d position)
+    {
+        posX = (float) position.getX();
+        posY = (float) position.getY();
+        posZ = (float) position.getZ();
+    }
+
+    @Override
+    public Vector3f getVectorRotation()
+    {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public void setVectorRotation(Vector3f rotation)
+    {
+        // TODO
+    }
+
+    @Override
+    public EulerDirection getRotation()
+    {
+        return new SpongeEulerDirection(yaw, pitch, roll);
+    }
+
+    @Override
+    public void setRotation(EulerDirection rotation)
+    {
+        this.yaw = rotation.getYaw();
+        this.pitch = rotation.getPitch();
+        this.roll = rotation.getRoll();
     }
 
 }

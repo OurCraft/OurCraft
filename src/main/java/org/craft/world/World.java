@@ -8,8 +8,10 @@ import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
+import org.spongepowered.api.math.*;
+import org.spongepowered.api.world.*;
 
-public class World
+public class World implements org.spongepowered.api.world.World
 {
 
     private LinkedList<Entity> entities;
@@ -132,7 +134,7 @@ public class World
         float size = 0.45f;
         Vector3 origin = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset() - size / 2f, sender.getZ());
         Vector3 pos = origin;
-        Vector3 ray = sender.getRotation().getForward();
+        Vector3 ray = sender.getQuaternionRotation().getForward();
 
         int x = 0;
         int y = 0;
@@ -291,5 +293,95 @@ public class World
             return c.getBlockStates(x, y, z);
         }
         return null;
+    }
+
+    @Override
+    public Location at(Vector2d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Location at(int x, int y, int z)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock(Vector3i position)
+    {
+        return getBlock(position.getX(), position.getY(), position.getZ());
+    }
+
+    @Override
+    public boolean setBlock(Vector3i position, org.spongepowered.api.block.Block block)
+    {
+        setBlock(position.getX(), position.getY(), position.getZ(), (Block) block);
+        return true;
+    }
+
+    @Override
+    public byte getLuminance(Vector3i position)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public byte getLuminanceFromSky(Vector3i position)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public byte getLuminanceFromGround(Vector3i position)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public Collection<org.spongepowered.api.entity.Entity> getEntities()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public UUID getUniqueID()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getName()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.world.Chunk getChunk(Vector2i position)
+    {
+        return getChunk(position.getX(), 0, position.getY());
+    }
+
+    @Override
+    public org.spongepowered.api.world.Chunk loadChunk(Vector2i position, boolean shouldGenerate)
+    {
+        if(shouldGenerate)
+            return chunkProvider.getOrCreate(this, position.getX(), 0, position.getY());
+        else
+            return getChunk(position);
+    }
+
+    @Override
+    public org.spongepowered.api.world.Chunk loadChunk(Vector2i position)
+    {
+        return loadChunk(position, false);
     }
 }

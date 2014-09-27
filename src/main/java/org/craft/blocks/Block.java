@@ -6,7 +6,7 @@ import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
-public class Block
+public class Block implements org.spongepowered.api.block.Block
 {
 
     static
@@ -142,5 +142,11 @@ public class Block
     public int getStackLimit()
     {
         return 64;
+    }
+
+    @Override
+    public String getId()
+    {
+        return "ourcraft:" + getID();
     }
 }
