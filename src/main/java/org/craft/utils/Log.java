@@ -4,6 +4,9 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.logging.*;
 
+import org.craft.client.*;
+import org.craft.utils.crash.*;
+
 public class Log
 {
     private static final Logger log = Logger.getLogger("OurCraft");
@@ -106,8 +109,7 @@ public class Log
     @NonLoggable
     public static void fatal(String string)
     {
-        System.err.println(string);
-        System.exit(-1); // TODO: needs crash report'n' stuff
+        OurCraft.getOurCraft().crash(new CrashReport(string));
     }
 
     @NonLoggable

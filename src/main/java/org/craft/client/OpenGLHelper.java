@@ -1,13 +1,18 @@
 package org.craft.client;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.image.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.*;
+import java.util.*;
 
 import org.craft.client.render.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.lwjgl.*;
+import org.lwjgl.opengl.*;
 
 public class OpenGLHelper
 {
@@ -44,5 +49,69 @@ public class OpenGLHelper
     {
         BufferedImage img = ImageUtils.loadImage(resource);
         return loadTexture(img);
+    }
+
+    private static HashMap<Integer, String> capNamesMap = new HashMap<Integer, String>();
+
+    public static void loadCapNames()
+    {
+        loadCapNames(GL11.class);
+        loadCapNames(GL12.class);
+        loadCapNames(GL13.class);
+        loadCapNames(GL14.class);
+        loadCapNames(GL15.class);
+        loadCapNames(GL20.class);
+        loadCapNames(GL21.class);
+        loadCapNames(GL30.class);
+        loadCapNames(GL31.class);
+        loadCapNames(GL32.class);
+        loadCapNames(GL33.class);
+    }
+
+    private static void loadCapNames(Class<?> glClass)
+    {
+        Field[] fields = glClass.getFields();
+        for(Field field : fields)
+        {
+            if(Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))
+            {
+                try
+                {
+                    if(field.getType() == Integer.TYPE)
+                    {
+                        int value = (Integer) field.get(null);
+                        if(!capNamesMap.containsKey(value))
+                        {
+                            capNamesMap.put(value, field.getName());
+                        }
+                    }
+                }
+                catch(IllegalArgumentException e)
+                {
+                    e.printStackTrace();
+                }
+                catch(IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static String getOpenGLVersion()
+    {
+        return glGetString(GL_VERSION);
+    }
+
+    public static String getOpenGLVendor()
+    {
+        return glGetString(GL_VENDOR);
+    }
+
+    public static String getCapName(int cap)
+    {
+        if(!capNamesMap.containsKey(cap))
+            return "" + cap;
+        return capNamesMap.get(cap);
     }
 }

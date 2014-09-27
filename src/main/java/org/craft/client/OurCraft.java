@@ -16,9 +16,11 @@ import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
+import org.craft.utils.crash.*;
 import org.craft.world.*;
 import org.craft.world.populators.*;
 import org.lwjgl.input.*;
+import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 
 public class OurCraft implements Runnable
@@ -81,9 +83,12 @@ public class OurCraft implements Runnable
 
             renderEngine.switchToOrtho();
             renderEngine.renderSplashScreen();
-
             Display.update();
+
+            AL.create();
+
             fontRenderer = new BaseFontRenderer();
+            OpenGLHelper.loadCapNames();
 
             Blocks.init();
             I18n.init(assetsLoader);
@@ -194,10 +199,7 @@ public class OurCraft implements Runnable
                 Thread.yield();
                 Thread.sleep(1);
             }
-            Log.error("CLEANUP");
-            renderEngine.dispose();
-            Display.destroy();
-            Log.error("BYE");
+            cleanup();
             System.exit(0);
         }
         catch(Exception e)
@@ -260,6 +262,10 @@ public class OurCraft implements Runnable
                         }
                         else if(clientWorld == null)
                             running = false;
+                    }
+                    if(id == Keyboard.KEY_BACK)
+                    {
+                        Log.fatal("Testing fatal crashes");
                     }
                     if(id == Keyboard.KEY_RETURN)
                     {
@@ -545,5 +551,18 @@ public class OurCraft implements Runnable
     public ResourceLoader getGameFolderLoader()
     {
         return gameFolderLoader;
+    }
+
+    public void crash(CrashReport crashReport)
+    {
+        crashReport.printStack();
+        cleanup();
+        System.exit(-1);
+    }
+
+    public void cleanup()
+    {
+        renderEngine.dispose();
+        Display.destroy();
     }
 }

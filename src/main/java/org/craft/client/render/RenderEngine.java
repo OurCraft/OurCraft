@@ -28,17 +28,18 @@ public class RenderEngine implements IDisposable
     private Matrix4                                   modelMatrix;
     private Matrix4                                   projection;
     private boolean                                   projectFromEntity;
-    private int                                       blendSrc;
-    private int                                       blendDst;
     private ResourceLoader                            loader;
     private int                                       framebufferId;
     private OpenGLBuffer                              renderBuffer;
     private int                                       depthBuffer;
     private Texture                                   colorBuffer;
     private Shader                                    postRenderShader;
+    private RenderState                               renderState;
+    private Stack<RenderState>                        renderStatesStack;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
+        renderState = new RenderState();
         this.loader = loader;
         texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
         projectFromEntity = true;
@@ -140,24 +141,6 @@ public class RenderEngine implements IDisposable
         this.renderViewEntity = e;
     }
 
-    /**
-     * Calls glEnable(cap)<br/>
-     * Will be able to memorize render state in the future
-     */
-    public void enableGLCap(int cap)
-    {
-        glEnable(cap);
-    }
-
-    /**
-     * Calls glDisable(cap)<br/>
-     * Will be able to memorize render state in the future
-     */
-    public void disableGLCap(int cap)
-    {
-        glDisable(cap);
-    }
-
     public Entity getRenderViewEntity()
     {
         return renderViewEntity;
@@ -247,16 +230,21 @@ public class RenderEngine implements IDisposable
 
     public void setBlendFunc(int blendSrc, int blendDst)
     {
-        this.blendSrc = blendSrc;
-        this.blendDst = blendDst;
+        renderState.setBlendFunc(blendSrc, blendDst);
         glBlendFunc(blendSrc, blendDst);
     }
 
+    /**
+     * Binds given texture object
+     */
     public void bindTexture(ITextureObject object)
     {
         bindTexture(object, 0);
     }
 
+    /**
+     * Binds given texture to given texture unit slot
+     */
     public void bindTexture(ITextureObject object, int slot)
     {
         if(object != null)
@@ -266,12 +254,20 @@ public class RenderEngine implements IDisposable
         }
     }
 
+    /**
+     * Binds given texture to given texture unit slot
+     */
     public void bindTexture(int texId, int slot)
     {
         GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, texId);
     }
 
+    /**
+     * Binds a texture from given ResourceLocation<br/>
+     * If the ResourceLocation doesn't have any texture bound to it, this method will try to bind one corresponding.<br/>
+     * Unbinds current texture if fails.
+     */
     public void bindLocation(ResourceLocation loc)
     {
         if(loc == null)
@@ -303,11 +299,17 @@ public class RenderEngine implements IDisposable
         }
     }
 
+    /**
+     * Bind a texture object to a ResourceLocation
+     */
     public void registerLocation(ResourceLocation loc, ITextureObject object)
     {
         texturesLocs.put(loc, object);
     }
 
+    /**
+     * Disposes of current shader and textures bound to ResourceLocations
+     */
     public void dispose()
     {
         for(ITextureObject o : texturesLocs.values())
@@ -316,6 +318,10 @@ public class RenderEngine implements IDisposable
         currentShader.dispose();
     }
 
+    /**
+     * Reload all textures bound to a ResourceLocation.<br/>
+     * If a texture can't be found, it will be discarded
+     */
     public void reloadLocations() throws Exception
     {
         Iterator<ResourceLocation> it = texturesLocs.keySet().iterator();
@@ -335,6 +341,9 @@ public class RenderEngine implements IDisposable
         RenderBlocks.createBlockMap(this);
     }
 
+    /**
+     * Loads all required shaders
+     */
     public void loadShaders() throws Exception
     {
         basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
@@ -349,6 +358,9 @@ public class RenderEngine implements IDisposable
         postRenderShader.setUniform("modelview", new Matrix4().initIdentity());
     }
 
+    /**
+     * Starts World rendering
+     */
     public void begin()
     {
         currentShader.bind();
@@ -357,6 +369,9 @@ public class RenderEngine implements IDisposable
         glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
     }
 
+    /**
+     * Ends World rendering
+     */
     public void end()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -364,5 +379,76 @@ public class RenderEngine implements IDisposable
         bindTexture(colorBuffer, 0);
         renderBuffer(renderBuffer);
         currentShader.bind();
+    }
+
+    /**
+     * Pushs current RenderState
+     */
+    public RenderEngine pushState()
+    {
+        renderStatesStack.push(renderState);
+        renderState = renderState.clone();
+        return this;
+    }
+
+    /**
+     * Pops current RenderState
+     */
+    public RenderEngine popState()
+    {
+        RenderState pop = renderStatesStack.pop();
+        pop.apply(this);
+        renderState = pop;
+        return this;
+    }
+
+    public RenderState getRenderState()
+    {
+        return renderState;
+    }
+
+    public boolean isGLCapEnabled(int cap)
+    {
+        return glIsEnabled(cap);
+    }
+
+    /**
+     * Calls glEnable(cap) and memorize the state of the cap
+     */
+    public RenderEngine enableGLCap(int cap)
+    {
+        glEnable(cap);
+        renderState.setGLCap(cap, true);
+        return this;
+    }
+
+    /**
+     * Calls glDisable(cap) and memorize the state of the cap
+     */
+    public RenderEngine disableGLCap(int cap)
+    {
+        glDisable(cap);
+        renderState.setGLCap(cap, false);
+        return this;
+    }
+
+    /**
+     * Calls glClearColor and memorize given parameters
+     */
+    public RenderEngine setClearColor(float r, float g, float b, float a)
+    {
+        glClearColor(r, g, b, a);
+        renderState.setClearColor(r, g, b, a);
+        return this;
+    }
+
+    /**
+     * Calls glAlphaFunc and memorize given parameters
+     */
+    public RenderEngine setAlphaFunc(int func, float ref)
+    {
+        glAlphaFunc(func, ref);
+        renderState.setAlphaFunc(func, ref);
+        return this;
     }
 }

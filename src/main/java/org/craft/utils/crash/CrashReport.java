@@ -1,0 +1,97 @@
+package org.craft.utils.crash;
+
+import java.nio.charset.*;
+
+import org.craft.client.*;
+import org.craft.resources.*;
+
+public class CrashReport
+{
+
+    private static String[] comments = new String[]
+                                     {
+            null, null, "Well, this was a disappointment.", "I'm sorry Dave. I think I can't let you do that", "Here, have a gift http://xkcd.com/953/ "
+                                     };
+
+    static
+    {
+        try
+        {
+            comments[0] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+            comments[1] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static class UndefinedException extends Exception
+    {
+
+        public UndefinedException(String message)
+        {
+            super(message);
+        }
+
+        private static final long serialVersionUID = 3352250643266742630L;
+    }
+
+    private Throwable exception;
+
+    public CrashReport(String message)
+    {
+        this(new UndefinedException(message).fillInStackTrace());
+    }
+
+    public CrashReport(Throwable throwable)
+    {
+        this.exception = throwable;
+    }
+
+    public void printStack()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(CrashInfos.SECTION_START + " Crash " + CrashInfos.SECTION_END + "\n");
+        String comment = generateRandomComment();
+        buffer.append(comment + "\n");
+        buffer.append("\n" + exception.getClass().getCanonicalName());
+        StackTraceElement[] stackTrace = exception.getStackTrace();
+        if(exception.getLocalizedMessage() != null)
+        {
+            buffer.append(": " + exception.getLocalizedMessage());
+        }
+        else if(exception.getMessage() != null)
+            buffer.append(": " + exception.getMessage());
+        buffer.append("\n");
+        if(stackTrace != null && stackTrace.length > 0)
+        {
+            for(StackTraceElement elem : stackTrace)
+            {
+                buffer.append("\tat " + elem.toString() + "\n");
+            }
+        }
+        else
+        {
+            buffer.append("\t**** Stack Trace is empty ****");
+        }
+        buffer.append(CrashInfos.SECTION_START + " Game " + CrashInfos.SECTION_END + "\n\tName: OurCraft\n");
+        add(buffer, new DateInfos());
+        add(buffer, new OSInfos());
+        add(buffer, new OpenALInfos());
+        add(buffer, new OpenGLInfos());
+        add(buffer, new RenderStateInfos(OurCraft.getOurCraft().getRenderEngine()));
+        System.err.println(buffer.toString());
+    }
+
+    private void add(StringBuffer buffer, CrashInfos infos)
+    {
+        buffer.append(infos.getInfos() + "\n");
+    }
+
+    private String generateRandomComment()
+    {
+        return comments[(int) Math.floor(Math.random() * comments.length)];
+    }
+
+}
