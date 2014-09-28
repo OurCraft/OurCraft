@@ -18,11 +18,11 @@ public class ThreadGetChunksFromCamera extends Thread
     {
         try
         {
-            World clientWorld = game.getClientWorld();
             RenderEngine renderEngine = game.getRenderEngine();
             int renderDistance = 6;
             while(game.isRunning())
             {
+                World clientWorld = game.getClientWorld();
                 int ox = (int) renderEngine.getRenderViewEntity().getX();
                 int oy = (int) renderEngine.getRenderViewEntity().getY();
                 int oz = (int) renderEngine.getRenderViewEntity().getZ();
@@ -38,11 +38,12 @@ public class ThreadGetChunksFromCamera extends Thread
 
                             if(fy < 0)
                                 continue yLoop;
-                            synchronized(clientWorld)
-                            {
-                                if(!clientWorld.doesChunkExists((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f)))
-                                    clientWorld.createChunk((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
-                            }
+                            if(clientWorld != null)
+                                synchronized(clientWorld)
+                                {
+                                    if(!clientWorld.doesChunkExists((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f)))
+                                        clientWorld.createChunk((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
+                                }
                         }
                     }
                 }

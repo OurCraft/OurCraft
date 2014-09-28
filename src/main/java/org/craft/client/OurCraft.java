@@ -17,6 +17,7 @@ import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;
+import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.tests.*;
@@ -62,6 +63,7 @@ public class OurCraft implements Runnable, Game
     private SpongeGameRegistry       gameRegistry;
     private EventBus                 eventBus;
     private SpongePluginManager      pluginManager;
+    private Session                  session;
 
     public OurCraft()
     {
@@ -101,6 +103,7 @@ public class OurCraft implements Runnable, Game
             renderEngine.renderSplashScreen();
             Display.update();
 
+            session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             initSponge();
             eventBus.call(new SpongeInitEvent(this));
             AL.create();
@@ -135,10 +138,10 @@ public class OurCraft implements Runnable, Game
                 generator.addPopulator(new RockPopulator());
                 generator.addPopulator(new GrassPopulator());
                 generator.addPopulator(new TreePopulator());
-                clientWorld = new World(new BaseChunkProvider(), generator);
+                clientWorld = new World("test-world", new BaseChunkProvider(), generator);
                 renderBlocks = new RenderBlocks(renderEngine);
 
-                player = new EntityPlayer(clientWorld);
+                player = new EntityPlayer(clientWorld, session.getUUID());
                 player.setLocation(0, 160 + 17, 0);
                 clientWorld.spawn(player);
                 renderEngine.setRenderViewEntity(player);
@@ -581,6 +584,15 @@ public class OurCraft implements Runnable, Game
 
     public void setWorld(World world)
     {
+        if(world == null)
+        {
+            if(clientWorld != null)
+                eventBus.call(new SpongeWorldUnloadEvent(this, clientWorld));
+        }
+        else
+        {
+            eventBus.call(new SpongeWorldLoadEvent(this, world));
+        }
         this.clientWorld = world;
     }
 
@@ -599,8 +611,8 @@ public class OurCraft implements Runnable, Game
      */
     public void quitToMainScreen()
     {
-        clientWorld = null;
-        player = null;
+        setWorld(null);
+        setPlayer(null);
         openMenu(new GuiMainMenu(fontRenderer));
     }
 
@@ -719,5 +731,10 @@ public class OurCraft implements Runnable, Game
     public String getImplementationVersion()
     {
         return "1.0";
+    }
+
+    public Session getSession()
+    {
+        return session;
     }
 }

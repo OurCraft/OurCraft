@@ -35,9 +35,9 @@ public class GuiMainMenu extends Gui
             generator.addPopulator(new GrassPopulator());
             generator.addPopulator(new TreePopulator());
             generator.addPopulator(new FlowerPopulator());
-            World clientWorld = new World(new BaseChunkProvider(), generator);
+            World clientWorld = new World("test-world", new BaseChunkProvider(), generator);
 
-            EntityPlayer player = new EntityPlayer(clientWorld);
+            EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
             OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);

@@ -36,6 +36,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
     private Quaternion        rotationQuaternion;
     private boolean           onFire;
     private int               fireTicks;
+    private UUID              uuid;
 
     public static final float G = 9.81f / 360f;
 
@@ -44,9 +45,15 @@ public class Entity implements org.spongepowered.api.entity.Entity
      */
     public Entity(World world)
     {
+        uuid = generateUUID();
         this.boundingBox = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
         this.isDead = false;
         this.worldObj = world;
+    }
+
+    public UUID generateUUID()
+    {
+        return UUID.randomUUID();
     }
 
     /**
@@ -320,8 +327,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
     @Override
     public UUID getUniqueId()
     {
-        // TODO
-        return null;
+        return uuid;
     }
 
     @Override

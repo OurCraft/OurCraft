@@ -18,9 +18,11 @@ public class World implements org.spongepowered.api.world.World
     private ArrayList<Entity>  spawingQueue;
     private ChunkProvider      chunkProvider;
     private WorldGenerator     generator;
+    private String             name;
 
-    public World(ChunkProvider prov, WorldGenerator generator)
+    public World(String name, ChunkProvider prov, WorldGenerator generator)
     {
+        this.name = name;
         this.generator = generator;
         this.chunkProvider = prov;
         spawingQueue = new ArrayList<Entity>();
@@ -360,8 +362,7 @@ public class World implements org.spongepowered.api.world.World
     @Override
     public String getName()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return name;
     }
 
     @Override
