@@ -1,69 +1,80 @@
-apply plugin: 'java'
-sourceCompatibility = 1.6
-
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 
-//IDE
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
-// Def vars and properties
 def filteredSourceDir = file("${buildDir}/filtered") 
-archivesBaseName = 'OurCraft'
-version = 'InDev 0.1'
-def versionValue = version
-def mainClass = "org.craft.launch.OurCraftLauncher";
+def versionValue = 'InDev 0.1'
+def mainClass = "org.craft.launch.OurCraftLauncher"
 
-repositories {
-    mavenCentral()
+subprojects {
+    apply plugin: 'java'
+    group = 'org.craft.subprojects'
+    version = '1.0'
 }
 
-//Tasks
-task processVersion(type: Copy) {
- 	from sourceSets.main.java 
-    into filteredSourceDir 
-    // Substitute property references in files
-    // Use some of the filters provided by Ant
-    filter(FixCrLfFilter)
-    filter(ReplaceTokens, tokens: ['version': versionValue])
-    // Use a closure to filter each line
-    filter { String line ->
-        ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+versionValue+'"'))
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.6
+    archivesBaseName = 'OurCraft'
+    version = versionValue
+
+    //IDE
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
     }
-}
 
-sourceSets { 
-    // This source set will contain all sources that we filter 
-    filtered { 
-        java { 
-            srcDirs = [filteredSourceDir] 
+    //Tasks
+    task processVersion(type: Copy) {
+     	from sourceSets.main.java 
+        into filteredSourceDir 
+        // Substitute property references in files
+        // Use some of the filters provided by Ant
+        filter(FixCrLfFilter)
+        filter(ReplaceTokens, tokens: ['version': versionValue])
+        // Use a closure to filter each line
+        filter { String line ->
+            ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+versionValue+'"'))
+        }
+    }
+
+    sourceSets { 
+        // This source set will contain all sources that we filter 
+        filtered { 
+            java { 
+                srcDirs = [filteredSourceDir] 
+            } 
         } 
     } 
-} 
 
-//force UTF-8 to the compileJava task
-compileJava.options.encoding = 'UTF-8'
+    //force UTF-8 to the compileJava task
+    compileJava.options.encoding = 'UTF-8'
 
-// tell the compileJava task to compile the filtered source 
-compileJava.source = sourceSets.filtered.java 
+    // tell the compileJava task to compile the filtered source 
+    compileJava.source = sourceSets.filtered.java 
 
-// Add dependencies processVersion to compileJava task
-compileJava.dependsOn processVersion 
+    // Add dependencies processVersion to compileJava task
+    compileJava.dependsOn processVersion 
 
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
-    compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-    compile 'com.google.guava:guava:18.0'
-    compile 'io.netty:netty-all:4.0.23.Final'
-    compile 'com.google.code.gson:gson:2.3'
-}
+    dependencies {
+        compile fileTree(dir: 'libs', include: '*.jar')
+        compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
+        compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+        compile 'com.google.guava:guava:18.0'
+        compile 'io.netty:netty-all:4.0.23.Final'
+        compile 'com.google.code.gson:gson:2.3'
+        
+        // Sponge Dependencies
+        compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
+        compile 'com.google.code.findbugs:jsr305:1.3.9'
+    }
 
-jar {
+    jar {
     manifest {
         attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': mainClass
     }
+}
 }
 
 task runClient(type: JavaExec, dependsOn: 'classes') {

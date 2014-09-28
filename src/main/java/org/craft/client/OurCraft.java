@@ -15,7 +15,11 @@ import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.maths.*;
 import org.craft.resources.*;
+import org.craft.spongeimpl.events.*;
+import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
+import org.craft.spongeimpl.plugin.*;
+import org.craft.spongeimpl.tests.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.crash.*;
@@ -56,6 +60,8 @@ public class OurCraft implements Runnable, Game
     private DiskSimpleResourceLoader gameFolderLoader;
     private PlayerController         playerController;
     private SpongeGameRegistry       gameRegistry;
+    private EventBus                 eventBus;
+    private SpongePluginManager      pluginManager;
 
     public OurCraft()
     {
@@ -96,6 +102,7 @@ public class OurCraft implements Runnable, Game
             Display.update();
 
             initSponge();
+            eventBus.call(new SpongeInitEvent(this));
             AL.create();
 
             fontRenderer = new BaseFontRenderer();
@@ -202,6 +209,7 @@ public class OurCraft implements Runnable, Game
             selectionBoxBuffer.clearAndDisposeVertices();
             running = true;
 
+            eventBus.call(new SpongePostInitEvent(this));
             while(running && !Display.isCloseRequested())
             {
                 tick(1000 / 60);
@@ -222,6 +230,9 @@ public class OurCraft implements Runnable, Game
     private void initSponge()
     {
         gameRegistry = new SpongeGameRegistry();
+        eventBus = new EventBus();
+        pluginManager = new SpongePluginManager(this, eventBus);
+        pluginManager.loadPlugin(SpongeTestPlugin.class);
     }
 
     public void openMenu(Gui gui)
@@ -635,22 +646,19 @@ public class OurCraft implements Runnable, Game
     @Override
     public PluginManager getPluginManager()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return pluginManager;
     }
 
     @Override
     public EventManager getEventManager()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return eventBus;
     }
 
     @Override
     public GameRegistry getRegistry()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return gameRegistry;
     }
 
     @Override

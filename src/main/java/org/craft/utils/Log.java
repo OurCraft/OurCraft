@@ -4,16 +4,18 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.logging.*;
 
+import org.apache.logging.log4j.spi.*;
 import org.craft.client.*;
 import org.craft.utils.crash.*;
 
 public class Log
 {
     private static final Logger log = Logger.getLogger("OurCraft");
+    private static LogFormater  logformatter;
     static
     {
         LogManager.getLogManager().reset();
-        LogFormater logformatter = new LogFormater();
+        logformatter = new LogFormater();
         Handler[] ahandler = log.getHandlers();
         int i = ahandler.length;
 
@@ -52,6 +54,12 @@ public class Log
             {
                 StackTraceElement elem = elems[i];
                 if(elem.getClassName().contains(Log.class.getCanonicalName()))
+                    continue;
+                if(elem.getClassName().contains(org.apache.logging.log4j.Logger.class.getCanonicalName()))
+                    continue;
+                if(elem.getClassName().contains(AbstractLogger.class.getCanonicalName()))
+                    continue;
+                if(elem.getClassName().contains(Logger.class.getCanonicalName()))
                     continue;
                 try
                 {
@@ -95,7 +103,7 @@ public class Log
     }
 
     @NonLoggable
-    private static void log(String msg, Level lvl, boolean format)
+    public static void log(String msg, Level lvl, boolean format)
     {
         String finalMessage = msg;
         // TODO format
@@ -117,4 +125,5 @@ public class Log
     {
         log(string, Level.FINE, true);
     }
+
 }
