@@ -1,7 +1,10 @@
 package org.craft.items;
 
 import org.craft.client.render.*;
+import org.craft.entity.*;
 import org.craft.inventory.*;
+import org.craft.utils.CollisionInfos.CollisionType;
+import org.craft.utils.*;
 
 public class Item implements IStackable
 {
@@ -50,5 +53,11 @@ public class Item implements IStackable
     public void registerIcons(IconGenerator register)
     {
         icon = register.generateIcon(id + ".png");
+    }
+
+    @Override
+    public void onUse(Entity user, float x, float y, float z, EnumSide side, CollisionType type)
+    {
+        ;
     }
 }

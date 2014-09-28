@@ -35,7 +35,9 @@ public class BlockLog extends Block
             {
                 if(side == EnumSide.NORTH || side == EnumSide.SOUTH)
                     return topAndBottomIcon;
-                return lyingSideIcon;
+                if(side == EnumSide.EAST || side == EnumSide.WEST)
+                    return lyingSideIcon;
+                return sideIcon;
             }
             else if(value == EnumLogBlockStates.LYING_WE)
             {

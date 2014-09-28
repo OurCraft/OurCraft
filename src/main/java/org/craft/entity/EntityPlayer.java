@@ -2,9 +2,9 @@ package org.craft.entity;
 
 import java.util.*;
 
+import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.inventory.Stack;
-import org.craft.items.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.spongepowered.api.entity.*;
@@ -22,7 +22,7 @@ public class EntityPlayer extends EntityLiving implements Player
         this.name = SessionManager.getInstance().getName(uuid);
         this.displayName = SessionManager.getInstance().getDisplayName(uuid);
         this.inventory = new PlayerInventory(name, 36);
-        inventory.setInventorySlotContents(0, new Stack(Items.test));
+        inventory.setInventorySlotContents(0, new Stack(Blocks.log));
         setSize(0.75f, 1.80f, 0.75f);
     }
 

@@ -2,6 +2,7 @@ package org.craft.client;
 
 import org.craft.blocks.*;
 import org.craft.entity.*;
+import org.craft.inventory.*;
 import org.craft.utils.*;
 
 public class LocalPlayerController extends PlayerController
@@ -79,12 +80,10 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onRightClick(CollisionInfos infos)
     {
-        if(infos.type != CollisionInfos.CollisionType.BLOCK)
-            return;
-        int x = (int) infos.x + infos.side.getTranslationX();
-        int y = (int) (infos.y) + infos.side.getTranslationY();
-        int z = (int) (infos.z + infos.side.getTranslationZ());
-        player.worldObj.setBlock(x, y, z, Blocks.log);
-        Blocks.log.onBlockAdded(player.worldObj, x, y, z, infos.side, player);
+        Stack s = player.getHeldItem();
+        if(s != null)
+        {
+            s.getItem().onUse(player, infos.x, infos.y, infos.z, infos.side, infos.type);
+        }
     }
 }

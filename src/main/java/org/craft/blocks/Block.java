@@ -4,6 +4,7 @@ import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.items.*;
 import org.craft.maths.*;
+import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
 import org.craft.world.*;
 
@@ -150,5 +151,17 @@ public class Block implements IStackable, org.spongepowered.api.block.Block
     public int getMaxStackQuantity()
     {
         return 64;
+    }
+
+    @Override
+    public void onUse(Entity user, float x, float y, float z, EnumSide side, CollisionType type)
+    {
+        if(type != CollisionType.BLOCK)
+            return;
+        int x1 = (int) (x + side.getTranslationX());
+        int y1 = (int) (y + side.getTranslationY());
+        int z1 = (int) (z + side.getTranslationZ());
+        user.worldObj.setBlock(x1, y1, z1, Blocks.log);
+        onBlockAdded(user.worldObj, x1, y1, z1, side, user);
     }
 }
