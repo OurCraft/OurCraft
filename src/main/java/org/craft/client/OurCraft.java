@@ -15,6 +15,7 @@ import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.items.*;
 import org.craft.maths.*;
+import org.craft.network.*;
 import org.craft.resources.*;
 import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;
@@ -115,6 +116,7 @@ public class OurCraft implements Runnable, Game
 
             Blocks.init();
             Items.init();
+            PacketRegistry.init();
             I18n.init(assetsLoader);
 
             Log.message("==== IN en_US.lang ====");
