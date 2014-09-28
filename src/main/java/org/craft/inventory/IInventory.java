@@ -1,6 +1,5 @@
 package org.craft.inventory;
 
-import org.craft.blocks.Stack;
 
 public interface IInventory
 {

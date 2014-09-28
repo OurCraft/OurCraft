@@ -339,6 +339,7 @@ public class RenderEngine implements IDisposable
             }
         }
         RenderBlocks.createBlockMap(this);
+        RenderItems.createItemMap(this);
     }
 
     /**

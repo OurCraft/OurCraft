@@ -2,11 +2,12 @@ package org.craft.blocks;
 
 import org.craft.client.render.*;
 import org.craft.entity.*;
+import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
-public class Block implements org.spongepowered.api.block.Block
+public class Block implements IStackable, org.spongepowered.api.block.Block
 {
 
     static
@@ -139,14 +140,15 @@ public class Block implements org.spongepowered.api.block.Block
         return uniqueID;
     }
 
-    public int getStackLimit()
-    {
-        return 64;
-    }
-
     @Override
     public String getId()
     {
         return "ourcraft:" + getID();
+    }
+
+    @Override
+    public int getMaxStackQuantity()
+    {
+        return 64;
     }
 }

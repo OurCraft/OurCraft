@@ -13,6 +13,7 @@ import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.entity.Entity;
+import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.spongeimpl.events.*;
@@ -64,6 +65,7 @@ public class OurCraft implements Runnable, Game
     private EventBus                 eventBus;
     private SpongePluginManager      pluginManager;
     private Session                  session;
+    private RenderItems              renderItems;
 
     public OurCraft()
     {
@@ -112,6 +114,7 @@ public class OurCraft implements Runnable, Game
             OpenGLHelper.loadCapNames();
 
             Blocks.init();
+            Items.init();
             I18n.init(assetsLoader);
 
             Log.message("==== IN en_US.lang ====");
@@ -130,6 +133,7 @@ public class OurCraft implements Runnable, Game
             boolean debugNoGui = false;
             renderBlocks = new RenderBlocks(renderEngine);
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
+            renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
 
             if(debugNoGui)
@@ -139,7 +143,6 @@ public class OurCraft implements Runnable, Game
                 generator.addPopulator(new GrassPopulator());
                 generator.addPopulator(new TreePopulator());
                 clientWorld = new World("test-world", new BaseChunkProvider(), generator);
-                renderBlocks = new RenderBlocks(renderEngine);
 
                 player = new EntityPlayer(clientWorld, session.getUUID());
                 player.setLocation(0, 160 + 17, 0);
@@ -607,7 +610,7 @@ public class OurCraft implements Runnable, Game
     }
 
     /**
-     * Convinience method that disposes of the world and change the current screen
+     * Convenience method that disposes of the world and change the current screen
      */
     public void quitToMainScreen()
     {

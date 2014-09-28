@@ -69,6 +69,10 @@ public class Stitcher
             nbrY-- ;
         int width = nbrX * tileWidth;
         int height = nbrY * tileHeight;
+        if(height < tileHeight)
+            height = tileHeight;
+        if(width < tileWidth)
+            width = tileWidth;
         BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = result.createGraphics();
         for(int i = 0; i < imgs.size(); i++ )
