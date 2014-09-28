@@ -1,27 +1,24 @@
 package org.craft.spongeimpl.plugin;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.logging.log4j.*;
-import org.craft.spongeimpl.events.*;
-import org.craft.spongeimpl.events.state.*;
-import org.craft.utils.*;
-import org.spongepowered.api.*;
+import org.craft.modding.*;
+import org.craft.spongeimpl.*;
 import org.spongepowered.api.plugin.*;
 
-public class SpongePluginManager implements PluginManager
+public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
 {
 
     private HashMap<String, PluginContainer> plugins;
-    private EventBus                         eventBus;
-    private Game                             game;
+    private HashMap<PluginContainer, Logger> loggers;
+    private SpongeAddonHandler               handler;
 
-    public SpongePluginManager(Game gameInstance, EventBus eventBus)
+    public SpongePluginManager()
     {
-        this.game = gameInstance;
         plugins = new HashMap<String, PluginContainer>();
-        this.eventBus = eventBus;
+        loggers = new HashMap<PluginContainer, Logger>();
+        this.handler = new SpongeAddonHandler();
     }
 
     @Override
@@ -33,8 +30,7 @@ public class SpongePluginManager implements PluginManager
     @Override
     public Logger getLogger(PluginContainer plugin)
     {
-        // TODO
-        return null;
+        return loggers.get(plugin);
     }
 
     @Override
@@ -43,43 +39,35 @@ public class SpongePluginManager implements PluginManager
         return plugins.values();
     }
 
-    public void loadPlugin(PluginContainer plugin)
+    public void loadAddon(AddonContainer container)
     {
-        plugins.put(plugin.getId(), plugin);
+        plugins.put(container.getId(), (PluginContainer) container);
     }
 
-    public void loadPlugin(Class<?> clazz)
+    @Override
+    public AddonContainer getAddon(String id)
     {
-        if(clazz.isAnnotationPresent(Plugin.class))
-        {
-            Plugin annot = clazz.getAnnotation(Plugin.class);
-            Object instance;
-            try
-            {
-                instance = clazz.newInstance();
-                plugins.put(annot.id(), new SpongePluginContainer(instance, annot));
-                eventBus.register(instance);
-                File configFolder = new File(SystemUtils.getGameFolder(), "configs/");
-                if(!configFolder.exists())
-                {
-                    configFolder.mkdirs();
-                }
-                Logger logger = new PluginLogger(annot);
-                SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, annot.id() + ".cfg"), configFolder, configFolder);
-                eventBus.fireEvent(preInitEvent, instance);
-            }
-            catch(InstantiationException e)
-            {
-                e.printStackTrace();
-            }
-            catch(IllegalAccessException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Log.error("Class " + clazz.getCanonicalName() + " was marked to be registred as plugin when it does not have a Plugin annotation");
-        }
+        return (AddonContainer) getPlugin(id);
     }
+
+    @Override
+    public Collection<AddonContainer> getAddons()
+    {
+        ArrayList<AddonContainer> containers = new ArrayList<AddonContainer>();
+        for(PluginContainer plugin : getPlugins())
+        {
+            if(plugin instanceof AddonContainer)
+            {
+                containers.add((AddonContainer) plugin);
+            }
+        }
+        return containers;
+    }
+
+    @Override
+    public IAddonHandler<Plugin> getHandler()
+    {
+        return handler;
+    }
+
 }

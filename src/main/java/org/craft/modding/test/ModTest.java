@@ -1,20 +1,19 @@
-package org.craft.spongeimpl.tests;
+package org.craft.modding.test;
 
 import org.apache.logging.log4j.*;
+import org.craft.modding.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
-import org.spongepowered.api.plugin.*;
 
-@Plugin(id = "plugtest", name = "Test plugin")
-public class SpongeTestPlugin
+@Mod(id = "modtest", name = "Test mod", version = "1.0")
+public class ModTest
 {
 
     private Logger logger;
 
-    public SpongeTestPlugin()
+    public ModTest()
     {
-
     }
 
     @SpongeEventHandler

@@ -3,6 +3,7 @@ package org.craft.client;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.craft.blocks.*;
@@ -15,6 +16,8 @@ import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.items.*;
 import org.craft.maths.*;
+import org.craft.modding.*;
+import org.craft.modding.test.*;
 import org.craft.network.*;
 import org.craft.resources.*;
 import org.craft.spongeimpl.events.*;
@@ -67,6 +70,7 @@ public class OurCraft implements Runnable, Game
     private SpongePluginManager      pluginManager;
     private Session                  session;
     private RenderItems              renderItems;
+    private AddonsLoader             addonsLoader;
 
     public OurCraft()
     {
@@ -239,8 +243,22 @@ public class OurCraft implements Runnable, Game
     {
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus();
-        pluginManager = new SpongePluginManager(this, eventBus);
-        pluginManager.loadPlugin(SpongeTestPlugin.class);
+        pluginManager = new SpongePluginManager();
+        addonsLoader = new AddonsLoader(this, new File(SystemUtils.getGameFolder(), "mods"), eventBus);
+        addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
+        try
+        {
+            addonsLoader.loadAddon(SpongeTestPlugin.class);
+            addonsLoader.loadAddon(ModTest.class);
+        }
+        catch(InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch(IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void openMenu(Gui gui)

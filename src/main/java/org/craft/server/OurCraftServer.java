@@ -1,9 +1,11 @@
 package org.craft.server;
 
+import java.io.*;
 import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.items.*;
+import org.craft.modding.*;
 import org.craft.network.*;
 import org.craft.server.network.*;
 import org.craft.spongeimpl.events.*;
@@ -28,6 +30,7 @@ public class OurCraftServer implements Game
     private int                 maxPlayers;
 
     private ArrayList<Player>   onlinePlayers;
+    private AddonsLoader        addonsLoader;
 
     public OurCraftServer()
     {
@@ -63,8 +66,21 @@ public class OurCraftServer implements Game
     {
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus();
-        pluginManager = new SpongePluginManager(this, eventBus);
-        pluginManager.loadPlugin(SpongeTestPlugin.class);
+        pluginManager = new SpongePluginManager();
+        addonsLoader = new AddonsLoader(this, new File(SystemUtils.getGameFolder(), "mods"), eventBus);
+        addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
+        try
+        {
+            addonsLoader.loadAddon(SpongeTestPlugin.class);
+        }
+        catch(InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch(IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
