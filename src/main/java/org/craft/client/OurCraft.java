@@ -42,18 +42,18 @@ import org.spongepowered.api.plugin.*;
 public class OurCraft implements Runnable, Game
 {
 
-    private int                      displayWidth  = 960;
-    private int                      displayHeight = 540;
-    private long                     lastTime      = 0;
-    private boolean                  running       = true;
-    private RenderEngine             renderEngine  = null;
+    private int                      displayWidth                = 960;
+    private int                      displayHeight               = 540;
+    private long                     lastTime                    = 0;
+    private boolean                  running                     = true;
+    private RenderEngine             renderEngine                = null;
     private AssetLoader              assetsLoader;
     private RenderBlocks             renderBlocks;
     private World                    clientWorld;
     private MouseHandler             mouseHandler;
     private EntityPlayer             player;
     private static OurCraft          instance;
-    private CollisionInfos           objectInFront = null;
+    private CollisionInfos           objectInFront               = null;
     private OpenGLBuffer             crosshairBuffer;
     private FallbackRender<Entity>   fallbackRenderer;
     private Runtime                  runtime;
@@ -71,6 +71,20 @@ public class OurCraft implements Runnable, Game
     private Session                  session;
     private RenderItems              renderItems;
     private AddonsLoader             addonsLoader;
+
+    private int                      frame;
+    private int                      fps;
+    private double                   expectedFrameRate           = 60.0;
+    private double                   timeBetweenUpdates          = 1000000000 / expectedFrameRate;
+    private final int                maxUpdatesBeforeRender      = 2;
+    private double                   lastUpdateTime              = System.nanoTime();
+    private double                   lastRenderTime              = System.nanoTime();
+
+    // If we are able to get as high as this FPS, don't render again.
+    private final double             TARGET_FPS                  = 60;
+    private final double             TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
+
+    private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
 
     public OurCraft()
     {
@@ -222,13 +236,12 @@ public class OurCraft implements Runnable, Game
             running = true;
 
             eventBus.call(new SpongePostInitEvent(this));
+
+            expectedFrameRate = 60;
+            timeBetweenUpdates = 1000000000 / expectedFrameRate;
             while(running && !Display.isCloseRequested())
             {
-                tick(1000 / 60);
-                Display.sync(60);
-                Display.update();
-                Thread.yield();
-                Thread.sleep(1);
+                tick();
             }
             cleanup();
             System.exit(0);
@@ -266,14 +279,56 @@ public class OurCraft implements Runnable, Game
         this.newMenu = gui;
     }
 
-    private void tick(final int time)
+    private final void tick()
     {
-        render();
-        update(time);
+        double now = System.nanoTime();
+        int updateCount = 0;
+        {
+            double delta = timeBetweenUpdates / 1000000000;
+            while(now - lastUpdateTime > timeBetweenUpdates && updateCount < maxUpdatesBeforeRender)
+            {
+                update(delta);
+                lastUpdateTime += timeBetweenUpdates;
+                updateCount++ ;
+            }
 
+            if(now - lastUpdateTime > timeBetweenUpdates)
+            {
+                lastUpdateTime = now - timeBetweenUpdates;
+            }
+
+            render(delta);
+            Display.update();
+
+            lastRenderTime = now;
+            // Update the frames we got.
+            int thisSecond = (int) (lastUpdateTime / 1000000000);
+            frame++ ;
+            if(thisSecond > lastSecondTime)
+            {
+                fps = frame;
+                frame = 0;
+                lastSecondTime = thisSecond;
+            }
+
+            while(now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < timeBetweenUpdates)
+            {
+                Thread.yield();
+
+                try
+                {
+                    Thread.sleep(1);
+                }
+                catch(Exception e)
+                {
+                }
+
+                now = System.nanoTime();
+            }
+        }
     }
 
-    private void update(final int time)
+    private void update(final double delta)
     {
         if(player != null)
         {
@@ -362,7 +417,7 @@ public class OurCraft implements Runnable, Game
         else
             mouseHandler.grab();
         mouseHandler.update();
-        boolean canUpdate = (System.currentTimeMillis() - lastTime) >= time;
+        boolean canUpdate = (System.currentTimeMillis() - lastTime) >= delta;
         if(canUpdate)
         {
             if(playerController != null)
@@ -395,10 +450,10 @@ public class OurCraft implements Runnable, Game
         {
             if(currentMenu != null && !currentMenu.pausesGame())
             {
-                clientWorld.update(time, canUpdate);
+                clientWorld.update(delta, canUpdate);
             }
             else if(currentMenu == null)
-                clientWorld.update(time, canUpdate);
+                clientWorld.update(delta, canUpdate);
         }
     }
 
@@ -412,7 +467,7 @@ public class OurCraft implements Runnable, Game
         return lastTime;
     }
 
-    private void render()
+    private void render(double delta)
     {
         renderEngine.begin();
         ArrayList<Chunk> visiblesChunks = new ArrayList<Chunk>();

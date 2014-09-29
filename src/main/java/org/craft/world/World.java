@@ -29,7 +29,7 @@ public class World implements org.spongepowered.api.world.World
         entities = new LinkedList<Entity>();
     }
 
-    public void update(int time, boolean canUpdate)
+    public void update(double delta, boolean canUpdate)
     {
         while(!spawingQueue.isEmpty())
             entities.add(spawingQueue.remove(0));

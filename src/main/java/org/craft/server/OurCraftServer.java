@@ -39,6 +39,21 @@ public class OurCraftServer implements Game
     private ServerGui             serverGui;
     private org.craft.world.World serverWorld;
 
+    private int                   frame;
+    private int                   fps;
+    private double                expectedFrameRate           = 60.0;
+    private double                timeBetweenUpdates          = 1000000000 / expectedFrameRate;
+    private final int             maxUpdatesBeforeRender      = 3;
+    private double                lastUpdateTime              = System.nanoTime();
+    private double                lastRenderTime              = System.nanoTime();
+
+    // If we are able to get as high as this FPS, don't render again.
+    private final double          TARGET_FPS                  = 60;
+    private final double          TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
+
+    private int                   lastSecondTime              = (int) (lastUpdateTime / 1000000000);
+    private boolean               running;
+
     public OurCraftServer()
     {
         this(20);
@@ -93,6 +108,14 @@ public class OurCraftServer implements Game
         new Thread(serverWrapper).start();
 
         eventBus.call(new SpongePostInitEvent(this));
+        running = true;
+
+        expectedFrameRate = 60;
+        timeBetweenUpdates = 1000000000 / expectedFrameRate;
+        while(running)
+        {
+            tick();
+        }
         // TODO: Thog, it's your turn to code! :D
     }
 
@@ -207,5 +230,59 @@ public class OurCraftServer implements Game
     public static String getVersion()
     {
         return "OurCraft:BuildNumber";
+    }
+
+    private final void tick()
+    {
+        double now = System.nanoTime();
+        int updateCount = 0;
+
+        {
+            double delta = timeBetweenUpdates / 1000000000;
+            while(now - lastUpdateTime > timeBetweenUpdates && updateCount < maxUpdatesBeforeRender)
+            {
+
+                update(delta);
+                lastUpdateTime += timeBetweenUpdates;
+                updateCount++ ;
+            }
+
+            if(now - lastUpdateTime > timeBetweenUpdates)
+            {
+                lastUpdateTime = now - timeBetweenUpdates;
+            }
+
+            lastRenderTime = now;
+            // Update the frames we got.
+            int thisSecond = (int) (lastUpdateTime / 1000000000);
+            frame++ ;
+            if(thisSecond > lastSecondTime)
+            {
+                fps = frame;
+                frame = 0;
+                lastSecondTime = thisSecond;
+            }
+
+            while(now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < timeBetweenUpdates)
+            {
+                Thread.yield();
+
+                try
+                {
+                    Thread.sleep(1);
+                }
+                catch(Exception e)
+                {
+                }
+
+                now = System.nanoTime();
+            }
+        }
+
+    }
+
+    private void update(double delta)
+    {
+        serverWorld.update(delta, true);
     }
 }

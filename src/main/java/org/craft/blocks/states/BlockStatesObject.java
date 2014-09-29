@@ -2,6 +2,8 @@ package org.craft.blocks.states;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 public class BlockStatesObject
 {
 
@@ -9,7 +11,7 @@ public class BlockStatesObject
 
     public BlockStatesObject()
     {
-        map = new HashMap<BlockState, IBlockStateValue>();
+        map = Maps.newHashMap();
     }
 
     public BlockStatesObject(BlockState[] states, IBlockStateValue[] values)
