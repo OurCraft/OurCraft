@@ -164,4 +164,16 @@ public class Block implements IStackable, org.spongepowered.api.block.Block
         user.worldObj.setBlock(x1, y1, z1, Blocks.log);
         onBlockAdded(user.worldObj, x1, y1, z1, side, user);
     }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock()
+    {
+        return this;
+    }
+
+    @Override
+    public String getUnlocalizedID()
+    {
+        return "block." + getID();
+    }
 }

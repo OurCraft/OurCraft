@@ -45,7 +45,6 @@ public class OurCraftServer implements Game
 
     public void start(HashMap<String, String> properties)
     {
-        serverWrapper = new NettyServerWrapper(Integer.parseInt(properties.get("port")));
         Log.message("Loading game data");
         Blocks.init();
         Items.init();
@@ -53,9 +52,14 @@ public class OurCraftServer implements Game
 
         Log.message("Loading SpongeAPI implementation");
         initSponge();
+
+        Log.message("Starting server");
+
         eventBus.call(new SpongeInitEvent(this));
+        serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
+        eventBus.call(new SpongeServerAboutToStartEvent(this));
         new Thread(serverWrapper).start();
 
         eventBus.call(new SpongePostInitEvent(this));

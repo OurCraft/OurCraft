@@ -8,6 +8,8 @@ import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
+import org.craft.entity.*;
+import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 
@@ -53,6 +55,19 @@ public class GuiIngame extends Gui
                 }
             }
         }
+
+        EntityPlayer player = (EntityPlayer) OurCraft.getOurCraft().getPlayer(null);
+        org.craft.inventory.Stack stack = player.getHeldItem();
+        if(stack != null)
+        {
+            String s = I18n.format(stack.getItem().getUnlocalizedID());
+            Matrix4 m = renderEngine.getModelviewMatrix().copy();
+            float scale = 1.85f;
+            renderEngine.setModelviewMatrix(m.mul(new Matrix4().initScale(scale, scale, 1)));
+            getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (OurCraft.getOurCraft().getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextLength(s) / (2 * scale)), (int) (OurCraft.getOurCraft().getDisplayHeight() / scale) - 40, renderEngine);
+            renderEngine.setModelviewMatrix(m);
+        }
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.craft.network;
 
 import java.util.*;
 
+import org.craft.network.packets.*;
 import org.craft.utils.*;
 
 public class PacketRegistry

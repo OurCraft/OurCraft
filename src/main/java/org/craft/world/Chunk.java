@@ -36,7 +36,10 @@ public class Chunk implements org.spongepowered.api.world.Chunk
             {
                 Arrays.fill(blocks[x][y], Blocks.air.getUniqueID());
                 Arrays.fill(lightValues[x][y], 1f);
-                Arrays.fill(blockStatesObjects[x][y], new BlockStatesObject());
+                for(int z = 0; z < 16; z++ )
+                {
+                    blockStatesObjects[x][y][z] = new BlockStatesObject();
+                }
             }
         }
     }

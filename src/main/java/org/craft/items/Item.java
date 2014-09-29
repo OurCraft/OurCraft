@@ -5,6 +5,7 @@ import org.craft.entity.*;
 import org.craft.inventory.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
+import org.spongepowered.api.block.*;
 
 public class Item implements IStackable
 {
@@ -59,5 +60,17 @@ public class Item implements IStackable
     public void onUse(Entity user, float x, float y, float z, EnumSide side, CollisionType type)
     {
         ;
+    }
+
+    @Override
+    public Block getBlock()
+    {
+        return null;
+    }
+
+    @Override
+    public String getUnlocalizedID()
+    {
+        return "item." + id;
     }
 }

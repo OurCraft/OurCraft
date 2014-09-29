@@ -699,43 +699,37 @@ public class OurCraft implements Runnable, Game
     @Override
     public Collection<Player> getOnlinePlayers()
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public int getMaxPlayers()
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public Player getPlayer(UUID uniqueId)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return player;
     }
 
     @Override
     public Collection<org.spongepowered.api.world.World> getWorlds()
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public org.spongepowered.api.world.World getWorld(UUID uniqueId)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return clientWorld;
     }
 
     @Override
     public org.spongepowered.api.world.World getWorld(String worldName)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return clientWorld;
     }
 
     @Override

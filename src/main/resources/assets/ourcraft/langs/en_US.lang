@@ -7,3 +7,5 @@ main.play.singleplayer=Singleplayer
 main.quit=Quit
 main.play.return=Return to game
 main.play.quitToMainScreen=Return to main screen
+
+block.log=Log
