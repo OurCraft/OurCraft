@@ -129,7 +129,7 @@ public class OurCraft implements Runnable, Game
             Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
             Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
 
-            I18n.setCurrentLanguage("fr_FR");
+            I18n.setCurrentLanguage("en_US");
             Log.message("==== IN fr_FR.lang ====");
             Log.message("lang.test1 is " + I18n.format("lang.test1"));
             Log.message("lang.test2 is " + I18n.format("lang.test2", 0.2));
