@@ -44,7 +44,6 @@ public class AddonsLoader
         boolean added = false;
         for(Annotation annot : annots)
         {
-            Log.message("Checking " + annot.annotationType());
             if(handlers.containsKey(annot.annotationType()))
             {
                 IAddonManager manager = handlers.get(annot.annotationType());

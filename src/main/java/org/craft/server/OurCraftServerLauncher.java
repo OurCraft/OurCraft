@@ -21,6 +21,7 @@ public class OurCraftServerLauncher
             final File gameFolder = SystemUtils.getGameFolder();
             HashMap<String, String> properties = new HashMap<String, String>();
             properties.put("port", "35565");
+            properties.put("nogui", "false");
             String current = null;
             for(int i = 0; i < args.length; i++ )
             {

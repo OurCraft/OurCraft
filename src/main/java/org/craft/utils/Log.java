@@ -126,4 +126,9 @@ public class Log
         log(string, Level.FINE, true);
     }
 
+    public static void addHandler(Handler h)
+    {
+        log.addHandler(h);
+        h.setFormatter(logformatter);
+    }
 }

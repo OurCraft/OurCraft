@@ -10,7 +10,7 @@ public class CrashReport
 
     private static String[] comments = new String[]
                                      {
-            null, null, "Well, this was a disappointment.", "I'm sorry Dave. I think I can't let you do that", "Here, have a gift http://xkcd.com/953/ "
+            null, null, "Well, this was a disappointment.", "I'm sorry Dave. I think I can't let you do that", "Here, have a gift http://xkcd.com/953/ ", "This computer is on fiiiiiiiiiiiiiiiiiiiire!"
                                      };
 
     static

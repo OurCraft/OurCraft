@@ -3,9 +3,12 @@ package org.craft.server;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.*;
+
 import org.craft.blocks.*;
 import org.craft.items.*;
 import org.craft.modding.*;
+import org.craft.modding.test.*;
 import org.craft.network.*;
 import org.craft.server.network.*;
 import org.craft.spongeimpl.events.*;
@@ -14,23 +17,27 @@ import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.tests.*;
 import org.craft.utils.*;
+import org.craft.world.*;
+import org.craft.world.populators.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.world.*;
 
 public class OurCraftServer implements Game
 {
 
-    private NettyServerWrapper  serverWrapper;
-    private SpongeGameRegistry  gameRegistry;
-    private EventBus            eventBus;
-    private SpongePluginManager pluginManager;
-    private int                 maxPlayers;
+    private NettyServerWrapper    serverWrapper;
+    private SpongeGameRegistry    gameRegistry;
+    private EventBus              eventBus;
+    private SpongePluginManager   pluginManager;
+    private int                   maxPlayers;
 
-    private ArrayList<Player>   onlinePlayers;
-    private AddonsLoader        addonsLoader;
+    private ArrayList<Player>     onlinePlayers;
+    private AddonsLoader          addonsLoader;
+    private boolean               nogui;
+    private ServerGui             serverGui;
+    private org.craft.world.World serverWorld;
 
     public OurCraftServer()
     {
@@ -41,10 +48,33 @@ public class OurCraftServer implements Game
     {
         onlinePlayers = new ArrayList<Player>();
         this.maxPlayers = maxPlayers;
+        WorldGenerator gen = new WorldGenerator();
+        gen.addPopulator(new RockPopulator());
+        gen.addPopulator(new GrassPopulator());
+        gen.addPopulator(new FlowerPopulator());
+        gen.addPopulator(new TreePopulator());
+        serverWorld = new org.craft.world.World("test-world", new BaseChunkProvider(), gen);
     }
 
     public void start(HashMap<String, String> properties)
     {
+        nogui = Boolean.parseBoolean(properties.get("nogui"));
+        if(!nogui)
+        {
+            try
+            {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            serverGui = new ServerGui(this, "OurCraft server - " + getVersion());
+            serverGui.pack();
+            serverGui.setLocationRelativeTo(null);
+            serverGui.setVisible(true);
+            Log.addHandler(serverGui.getLogHandler());
+        }
         Log.message("Loading game data");
         Blocks.init();
         Items.init();
@@ -76,6 +106,7 @@ public class OurCraftServer implements Game
         try
         {
             addonsLoader.loadAddon(SpongeTestPlugin.class);
+            addonsLoader.loadAddon(ModTest.class);
         }
         catch(InstantiationException e)
         {
@@ -135,31 +166,30 @@ public class OurCraftServer implements Game
     }
 
     @Override
-    public Collection<World> getWorlds()
+    public Collection<org.spongepowered.api.world.World> getWorlds()
     {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<org.spongepowered.api.world.World> worlds = new ArrayList<org.spongepowered.api.world.World>();
+        worlds.add(serverWorld);
+        return worlds;
     }
 
     @Override
     public World getWorld(UUID uniqueId)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return serverWorld;
     }
 
     @Override
     public World getWorld(String worldName)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return serverWorld;
     }
 
     @Override
     public void broadcastMessage(String message)
     {
-        // TODO Auto-generated method stub
-
+        // TODO Packets!
+        Log.message("[CHAT] " + message);
     }
 
     @Override
@@ -174,4 +204,8 @@ public class OurCraftServer implements Game
         return "UNKNOWN";
     }
 
+    public static String getVersion()
+    {
+        return "OurCraft:BuildNumber";
+    }
 }
