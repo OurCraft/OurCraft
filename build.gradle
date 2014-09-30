@@ -20,7 +20,7 @@ def mainClass = "org.craft.launch.OurCraftLauncher"
 
     //Tasks
     task processVersion(type: Copy) {
-     	from sourceSets.main.java 
+        from sourceSets.main.java 
         into filteredSourceDir 
         // Substitute property references in files
         // Use some of the filters provided by Ant

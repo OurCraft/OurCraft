@@ -8,6 +8,7 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.gui.*;
+import org.craft.client.launch.*;
 import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
@@ -17,7 +18,6 @@ import org.craft.entity.Entity;
 import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.modding.*;
-import org.craft.modding.test.*;
 import org.craft.network.*;
 import org.craft.resources.*;
 import org.craft.spongeimpl.events.*;
@@ -25,7 +25,6 @@ import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
-import org.craft.spongeimpl.tests.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.crash.*;
@@ -34,6 +33,7 @@ import org.craft.world.populators.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
+import org.reflections.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
@@ -261,14 +261,17 @@ public class OurCraft implements Runnable, Game
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         try
         {
-            addonsLoader.loadAddon(SpongeTestPlugin.class);
-            addonsLoader.loadAddon(ModTest.class);
+            ClassLoader classLoader = OurCraftLauncher.getClassLoader();
+            Reflections reflection = new Reflections(classLoader);
+            File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
+            if(!modsFolder.exists())
+                modsFolder.mkdirs();
+            File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
+            if(!pluginsFolder.exists())
+                pluginsFolder.mkdirs();
+            addonsLoader.loadAll(reflection, modsFolder, pluginsFolder);
         }
-        catch(InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch(IllegalAccessException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
