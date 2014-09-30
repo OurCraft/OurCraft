@@ -20,3 +20,7 @@ hs_err_pid*
 assets_ourcraft_textures_blocks.png
 assets_textures_blocks.png
 ourcraft_textures_blocks.png
+
+# Intellij IDEA #
+.idea/
+*.iml
