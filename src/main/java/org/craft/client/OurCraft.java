@@ -1,69 +1,43 @@
 package org.craft.client;
 
-import org.craft.blocks.Block;
-import org.craft.blocks.BlockFlower;
-import org.craft.blocks.Blocks;
-import org.craft.client.gui.Gui;
-import org.craft.client.gui.GuiIngame;
-import org.craft.client.gui.GuiMainMenu;
-import org.craft.client.gui.GuiPauseMenu;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.*;
+
+import java.io.*;
+import java.util.*;
+
+import org.craft.blocks.*;
+import org.craft.client.gui.*;
+import org.craft.client.launch.*;
 import org.craft.client.render.*;
-import org.craft.client.render.blocks.BlockFlowerRenderer;
-import org.craft.client.render.entity.FallbackRender;
-import org.craft.client.render.fonts.BaseFontRenderer;
-import org.craft.client.render.fonts.FontRenderer;
+import org.craft.client.render.blocks.*;
+import org.craft.client.render.entity.*;
+import org.craft.client.render.fonts.*;
+import org.craft.entity.*;
 import org.craft.entity.Entity;
-import org.craft.entity.EntityPlayer;
-import org.craft.items.Items;
-import org.craft.maths.AABB;
-import org.craft.maths.Matrix4;
-import org.craft.maths.Vector2;
-import org.craft.maths.Vector3;
-import org.craft.modding.AddonsLoader;
-import org.craft.modding.Mod;
-import org.craft.network.PacketRegistry;
+import org.craft.items.*;
+import org.craft.maths.*;
+import org.craft.modding.*;
+import org.craft.network.*;
 import org.craft.resources.*;
-import org.craft.spongeimpl.events.EventBus;
-import org.craft.spongeimpl.events.state.SpongeInitEvent;
-import org.craft.spongeimpl.events.state.SpongePostInitEvent;
-import org.craft.spongeimpl.events.world.SpongeWorldLoadEvent;
-import org.craft.spongeimpl.events.world.SpongeWorldUnloadEvent;
-import org.craft.spongeimpl.game.SpongeGameRegistry;
-import org.craft.spongeimpl.plugin.SpongePluginManager;
+import org.craft.spongeimpl.events.*;
+import org.craft.spongeimpl.events.state.*;
+import org.craft.spongeimpl.events.world.*;
+import org.craft.spongeimpl.game.*;
+import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
-import org.craft.utils.crash.CrashReport;
-import org.craft.world.BaseChunkProvider;
-import org.craft.world.Chunk;
-import org.craft.world.World;
-import org.craft.world.WorldGenerator;
-import org.craft.world.populators.GrassPopulator;
-import org.craft.world.populators.RockPopulator;
-import org.craft.world.populators.TreePopulator;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.openal.AL;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.PixelFormat;
-import org.reflections.Reflections;
-import org.spongepowered.api.Game;
-import org.spongepowered.api.GameRegistry;
-import org.spongepowered.api.Platform;
-import org.spongepowered.api.entity.Player;
-import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.plugin.PluginManager;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.UUID;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluErrorString;
+import org.craft.utils.crash.*;
+import org.craft.world.*;
+import org.craft.world.populators.*;
+import org.lwjgl.input.*;
+import org.lwjgl.openal.*;
+import org.lwjgl.opengl.*;
+import org.reflections.*;
+import org.spongepowered.api.*;
+import org.spongepowered.api.entity.*;
+import org.spongepowered.api.event.*;
+import org.spongepowered.api.plugin.*;
 
 public class OurCraft implements Runnable, Game
 {
@@ -287,23 +261,17 @@ public class OurCraft implements Runnable, Game
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         try
         {
-            Reflections reflection = new Reflections();
-
-            for (Class<?> clazz : reflection.getTypesAnnotatedWith(Plugin.class))
-            {
-                addonsLoader.loadAddon(clazz);
-            }
-
-            for (Class<?> clazz : reflection.getTypesAnnotatedWith(Mod.class))
-            {
-                addonsLoader.loadAddon(clazz);
-            }
+            ClassLoader classLoader = OurCraftLauncher.getClassLoader();
+            Reflections reflection = new Reflections(classLoader);
+            File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
+            if(!modsFolder.exists())
+                modsFolder.mkdirs();
+            File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
+            if(!pluginsFolder.exists())
+                pluginsFolder.mkdirs();
+            addonsLoader.loadAll(reflection, modsFolder, pluginsFolder);
         }
-        catch(InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch(IllegalAccessException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }

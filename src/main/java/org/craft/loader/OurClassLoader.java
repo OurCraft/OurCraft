@@ -32,7 +32,7 @@ public class OurClassLoader extends URLClassLoader
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException
     {
-        Log.message("Loading " + name + " ...");
+        Log.message("Loading class " + name);
         return super.loadClass(name);
     }
 
