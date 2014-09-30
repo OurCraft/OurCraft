@@ -45,7 +45,7 @@ public class EntityLiving extends Entity implements LivingEntity
     /**
      * Returns currently held item by the entity
      */
-    public Stack getHeldItem()
+    public org.craft.inventory.Stack getHeldItem()
     {
         return null;
     }

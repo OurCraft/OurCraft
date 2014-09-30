@@ -54,7 +54,7 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
         return uuid;
     }
 
-    public Stack getHeldItem()
+    public org.craft.inventory.Stack getHeldItem()
     {
         return inventory.getStackInSlot(((PlayerInventory) inventory).getSelectedIndex());
     }

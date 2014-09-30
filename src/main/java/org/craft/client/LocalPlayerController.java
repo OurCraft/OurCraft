@@ -80,7 +80,7 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onRightClick(CollisionInfos infos)
     {
-        Stack s = player.getHeldItem();
+        org.craft.inventory.Stack s = player.getHeldItem();
         if(s != null)
         {
             s.getItem().onUse(player, infos.x, infos.y, infos.z, infos.side, infos.type);

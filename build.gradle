@@ -5,13 +5,6 @@ def filteredSourceDir = file("${buildDir}/filtered")
 def versionValue = 'InDev 0.1'
 def mainClass = "org.craft.launch.OurCraftLauncher"
 
-subprojects {
-    apply plugin: 'java'
-    group = 'org.craft.subprojects'
-    version = '1.0'
-}
-
-allprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.6
     archivesBaseName = 'OurCraft'
@@ -43,7 +36,6 @@ allprojects {
         // This source set will contain all sources that we filter 
         filtered { 
             java { 
-                srcDirs = [filteredSourceDir] 
             } 
         } 
     } 
@@ -64,17 +56,13 @@ allprojects {
         compile 'com.google.guava:guava:18.0'
         compile 'io.netty:netty-all:4.0.23.Final'
         compile 'com.google.code.gson:gson:2.3'
-        
-        // Sponge Dependencies
-        compile 'org.apache.logging.log4j:log4j-api:2.0-beta9'
-        compile 'com.google.code.findbugs:jsr305:1.3.9'
+        compile project(':SpongeAPI')
     }
 
     jar {
     manifest {
         attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': mainClass
     }
-}
 }
 
 task runClient(type: JavaExec, dependsOn: 'classes') {
