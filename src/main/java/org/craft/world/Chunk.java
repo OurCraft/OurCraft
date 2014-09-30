@@ -13,13 +13,13 @@ import org.spongepowered.api.world.*;
 public class Chunk implements org.spongepowered.api.world.Chunk
 {
 
-    public short[][][]             blocks;
-    public int[][]                 highest;
-    public float[][][]             lightValues;
-    public BlockStatesObject[][][] blockStatesObjects;
-    private ChunkCoord             coords;
-    private boolean                isDirty;
-    private World                  owner;
+    public short[][][]                         blocks;
+    public int[][]                             highest;
+    public float[][][]                         lightValues;
+    public HashMap<Vector3, BlockStatesObject> blockStatesObjects;
+    private ChunkCoord                         coords;
+    private boolean                            isDirty;
+    private World                              owner;
 
     public Chunk(World owner, ChunkCoord coords)
     {
@@ -28,7 +28,7 @@ public class Chunk implements org.spongepowered.api.world.Chunk
         this.blocks = new short[16][16][16];
         this.highest = new int[16][16];
         this.lightValues = new float[16][16][16];
-        blockStatesObjects = new BlockStatesObject[16][16][16];
+        blockStatesObjects = new HashMap<Vector3, BlockStatesObject>();
         for(int x = 0; x < 16; x++ )
         {
             Arrays.fill(highest[x], -1);
@@ -36,10 +36,6 @@ public class Chunk implements org.spongepowered.api.world.Chunk
             {
                 Arrays.fill(blocks[x][y], Blocks.air.getUniqueID());
                 Arrays.fill(lightValues[x][y], 1f);
-                for(int z = 0; z < 16; z++ )
-                {
-                    blockStatesObjects[x][y][z] = new BlockStatesObject();
-                }
             }
         }
     }
@@ -282,7 +278,7 @@ public class Chunk implements org.spongepowered.api.world.Chunk
      */
     public void setChunkBlockState(int x, int y, int z, BlockState state, IBlockStateValue value)
     {
-        blockStatesObjects[x][y][z].set(state, value);
+        getBlockStateObject(x, y, z, true).set(state, value);
         markNeighbors(x, y, z);
         markDirty();
     }
@@ -310,7 +306,12 @@ public class Chunk implements org.spongepowered.api.world.Chunk
      */
     private IBlockStateValue getChunkBlockState(int x, int y, int z, BlockState state)
     {
-        return blockStatesObjects[x][y][z].get(state);
+        BlockStatesObject o = getBlockStateObject(x, y, z, false);
+        if(o != null)
+        {
+            return o.get(state);
+        }
+        return null;
     }
 
     public void clearStates(int worldX, int worldY, int worldZ)
@@ -330,7 +331,13 @@ public class Chunk implements org.spongepowered.api.world.Chunk
 
     public void clearChunkState(int x, int y, int z)
     {
-        blockStatesObjects[x][y][z].clear();
+        BlockStatesObject o = getBlockStateObject(x, y, z, false);
+        if(o != null)
+        {
+            o.clear();
+            Vector3 v = Vector3.get(x, y, z);
+            blockStatesObjects.put(v, null);
+        }
     }
 
     public void update()
@@ -362,7 +369,19 @@ public class Chunk implements org.spongepowered.api.world.Chunk
             y = 16 + y;
         if(z < 0)
             z = 16 + z;
-        return blockStatesObjects[x][y][z];
+        return getBlockStateObject(x, y, z, false);
+    }
+
+    private BlockStatesObject getBlockStateObject(int x, int y, int z, boolean forceGen)
+    {
+        Vector3 v = Vector3.get(x, y, z);
+        BlockStatesObject object = blockStatesObjects.get(v);
+        if(object == null && forceGen)
+        {
+            blockStatesObjects.put(v, new BlockStatesObject());
+            object = blockStatesObjects.get(v);
+        }
+        return object;
     }
 
     @Override

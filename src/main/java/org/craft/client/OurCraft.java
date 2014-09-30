@@ -802,7 +802,7 @@ public class OurCraft implements Runnable, Game
     @Override
     public String getImplementationVersion()
     {
-        return "1.0";
+        return "OurCraft's Unofficial Sponge Implementation - 1.0";
     }
 
     public Session getSession()

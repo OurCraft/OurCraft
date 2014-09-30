@@ -168,10 +168,10 @@ public class Vector3 extends AbstractReference implements IDisposable
         float sinAngle = (float) Math.sin(-angle);
         float cosAngle = (float) Math.cos(-angle);
         return this.cross(axis.mul(sinAngle)).add( // Rotation on local X
-                (this.mul(cosAngle)).add( // Rotation on local Z
-                        axis.mul(this.dot(axis.mul(1 - cosAngle))))); // Rotation
-                                                                      // on
-                                                                      // local Y
+        (this.mul(cosAngle)).add( // Rotation on local Z
+        axis.mul(this.dot(axis.mul(1 - cosAngle))))); // Rotation
+                                                      // on
+                                                      // local Y
     }
 
     public Vector3 rotate(Quaternion rotation)
@@ -274,6 +274,18 @@ public class Vector3 extends AbstractReference implements IDisposable
             return array[0] == x && array[1] == y && array[2] == z;
         }
         return false;
+    }
+
+    public int hashCode()
+    {
+        final int BASE = 17;
+        final int MULTIPLIER = 31;
+
+        int result = BASE;
+        result = MULTIPLIER * result + Float.floatToIntBits(x);
+        result = MULTIPLIER * result + Float.floatToIntBits(y);
+        result = MULTIPLIER * result + Float.floatToIntBits(z);
+        return result;
     }
 
     public static Vector3 cross(Vector3 a, Vector3 b)
