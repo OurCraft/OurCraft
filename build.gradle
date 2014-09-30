@@ -36,6 +36,7 @@ def mainClass = "org.craft.launch.OurCraftLauncher"
         // This source set will contain all sources that we filter 
         filtered { 
             java { 
+                srcDirs = [filteredSourceDir] 
             } 
         } 
     } 
