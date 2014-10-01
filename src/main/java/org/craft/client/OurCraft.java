@@ -8,7 +8,6 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.gui.*;
-import org.craft.client.launch.*;
 import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
@@ -33,7 +32,6 @@ import org.craft.world.populators.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
-import org.reflections.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
@@ -261,15 +259,13 @@ public class OurCraft implements Runnable, Game
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         try
         {
-            ClassLoader classLoader = OurCraftLauncher.getClassLoader();
-            Reflections reflection = new Reflections(classLoader);
             File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
             if(!modsFolder.exists())
                 modsFolder.mkdirs();
             File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
             if(!pluginsFolder.exists())
                 pluginsFolder.mkdirs();
-            addonsLoader.loadAll(reflection, modsFolder, pluginsFolder);
+            addonsLoader.loadAll(modsFolder, pluginsFolder);
         }
         catch(Exception e)
         {

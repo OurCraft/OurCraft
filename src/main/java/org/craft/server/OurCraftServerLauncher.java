@@ -1,7 +1,6 @@
 package org.craft.server;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import org.craft.loader.*;
@@ -14,8 +13,8 @@ public class OurCraftServerLauncher
 
     public static void main(String[] args)
     {
-        classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
-        Thread.currentThread().setContextClassLoader(classLoader);
+        //        classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
+        //        Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
             final File gameFolder = SystemUtils.getGameFolder();

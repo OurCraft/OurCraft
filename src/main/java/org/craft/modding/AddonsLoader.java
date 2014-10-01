@@ -46,7 +46,6 @@ public class AddonsLoader
         boolean added = false;
         for(Class<? extends Annotation> c : handlers.keySet())
         {
-            Log.message("checking " + c);
             if(clazz.isAnnotationPresent(c))
             {
                 IAddonManager manager = handlers.get(c);
@@ -65,6 +64,7 @@ public class AddonsLoader
                 SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
                 eventBus.fireEvent(preInitEvent, instance);
                 added = true;
+                Log.message("Loaded addon " + clazz + " as " + c.getName());
             }
         }
         if(!added)
@@ -78,7 +78,7 @@ public class AddonsLoader
         return addonsFolder;
     }
 
-    public void loadAll(Reflections reflection, File... folders)
+    public void loadAll(File... folders)
     {
         for(File folder : folders)
         {
@@ -92,6 +92,7 @@ public class AddonsLoader
             }
         }
 
+        Reflections reflection = new Reflections();
         for(Class<? extends Annotation> c : handlers.keySet())
         {
             for(Class<?> clazz : reflection.getTypesAnnotatedWith(c))
