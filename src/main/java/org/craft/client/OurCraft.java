@@ -255,7 +255,7 @@ public class OurCraft implements Runnable, Game
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus();
         pluginManager = new SpongePluginManager();
-        addonsLoader = new AddonsLoader(this, new File(SystemUtils.getGameFolder(), "mods"), eventBus);
+        addonsLoader = new AddonsLoader(this, eventBus);
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         try
         {

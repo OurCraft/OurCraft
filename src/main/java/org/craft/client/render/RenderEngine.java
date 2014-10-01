@@ -281,7 +281,7 @@ public class RenderEngine implements IDisposable
             {
                 texturesLocs.put(loc, OpenGLHelper.loadTexture(loader.getResource(loc)));
                 bindLocation(loc);
-                Log.debug("Unknown texture: " + loc.getFullPath() + " charging it");
+                Log.debug("Unknown texture: /" + loc.getFullPath() + " charging it");
             }
             catch(Exception e)
             {

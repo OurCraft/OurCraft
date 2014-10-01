@@ -8,14 +8,12 @@ import javax.swing.*;
 import org.craft.blocks.*;
 import org.craft.items.*;
 import org.craft.modding.*;
-import org.craft.modding.test.*;
 import org.craft.network.*;
 import org.craft.server.network.*;
 import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
-import org.craft.spongeimpl.tests.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.populators.*;
@@ -124,18 +122,19 @@ public class OurCraftServer implements Game
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus();
         pluginManager = new SpongePluginManager();
-        addonsLoader = new AddonsLoader(this, new File(SystemUtils.getGameFolder(), "mods"), eventBus);
+        addonsLoader = new AddonsLoader(this, eventBus);
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         try
         {
-            addonsLoader.loadAddon(SpongeTestPlugin.class);
-            addonsLoader.loadAddon(ModTest.class);
+            File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
+            if(!modsFolder.exists())
+                modsFolder.mkdirs();
+            File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
+            if(!pluginsFolder.exists())
+                pluginsFolder.mkdirs();
+            addonsLoader.loadAll(modsFolder, pluginsFolder);
         }
-        catch(InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch(IllegalAccessException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }

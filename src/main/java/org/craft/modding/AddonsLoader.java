@@ -17,16 +17,14 @@ import org.spongepowered.api.*;
 public class AddonsLoader
 {
 
-    private File                                                   addonsFolder;
     private HashMap<Class<? extends Annotation>, IAddonManager<?>> handlers;
     private EventBus                                               eventBus;
     private Game                                                   game;
 
-    public AddonsLoader(Game gameInstance, File addonsFolder, EventBus eventBus)
+    public AddonsLoader(Game gameInstance, EventBus eventBus)
     {
         this.game = gameInstance;
         this.eventBus = eventBus;
-        this.addonsFolder = addonsFolder;
         handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
         registerAddonAnnotation(Mod.class, new ModManager());
     }
@@ -64,18 +62,13 @@ public class AddonsLoader
                 SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
                 eventBus.fireEvent(preInitEvent, instance);
                 added = true;
-                Log.message("Loaded addon " + clazz + " as " + c.getName());
+                Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
             }
         }
         if(!added)
         {
-            Log.error("Tried to register addon " + clazz.getCanonicalName() + " but it is not supported");
+            Log.error("Tried to register addon " + clazz.getName() + " but it is not supported");
         }
-    }
-
-    public File getAddonsFolder()
-    {
-        return addonsFolder;
     }
 
     public void loadAll(File... folders)
@@ -95,17 +88,16 @@ public class AddonsLoader
         Reflections reflection = new Reflections();
         for(Class<? extends Annotation> c : handlers.keySet())
         {
-            for(Class<?> clazz : reflection.getTypesAnnotatedWith(c))
+            Set<Class<?>> list = reflection.getTypesAnnotatedWith(c);
+            Iterator<Class<?>> it = list.iterator();
+            while(it.hasNext())
             {
+                Class<?> clazz = it.next();
                 try
                 {
                     loadAddon(clazz);
                 }
-                catch(InstantiationException e)
-                {
-                    e.printStackTrace();
-                }
-                catch(IllegalAccessException e)
+                catch(Exception e)
                 {
                     e.printStackTrace();
                 }

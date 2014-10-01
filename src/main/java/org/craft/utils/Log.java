@@ -1,5 +1,6 @@
 package org.craft.utils;
 
+import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.logging.*;
@@ -25,6 +26,20 @@ public class Log
             log.removeHandler(handler);
         }
         ConsoleHandler ch = new ConsoleHandler();
+
+        /**
+         * ConsoleHandler uses System.err by default to print messages. So we force it to print into System.out 
+         */
+        try
+        {
+            Method setOutputStreamMethod = StreamHandler.class.getDeclaredMethod("setOutputStream", OutputStream.class);
+            setOutputStreamMethod.setAccessible(true);
+            setOutputStreamMethod.invoke(ch, System.out);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         ch.setFormatter(logformatter);
         log.addHandler(ch);
         ch.setLevel(Level.ALL);
