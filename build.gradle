@@ -54,9 +54,15 @@ def mainClass = "org.craft.launch.OurCraftLauncher"
         compile fileTree(dir: 'libs', include: '*.jar')
         compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
         compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-        compile 'com.google.guava:guava:18.0'
+        
         compile 'io.netty:netty-all:4.0.23.Final'
+
+        compile 'com.google.guava:guava:18.0'
         compile 'com.google.code.gson:gson:2.3'
+
+        compile 'org.reflections:reflections-maven:0.9.9-RC2'
+        compile 'org.javassist:javassist:3.18.2-GA'
+
         compile project(':SpongeAPI')
     }
 
