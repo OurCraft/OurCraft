@@ -62,7 +62,7 @@ public class AddonsLoader
                 Logger logger = new AddonLogger(container);
                 SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
                 for(EventBus eventBus : eventBuses)
-                    eventBus.fireEvent(preInitEvent, instance);
+                    eventBus.fireEvent(preInitEvent, instance, null);
                 added = true;
                 Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
             }

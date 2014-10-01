@@ -124,7 +124,7 @@ public class OurCraft implements Runnable, Game
 
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             initSponge();
-            eventBus.call(new SpongeInitEvent(this));
+            eventBus.fireEvent(new SpongeInitEvent(this), null, null);
             AL.create();
 
             fontRenderer = new BaseFontRenderer();
@@ -233,7 +233,7 @@ public class OurCraft implements Runnable, Game
             selectionBoxBuffer.clearAndDisposeVertices();
             running = true;
 
-            eventBus.call(new SpongePostInitEvent(this));
+            eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
 
             expectedFrameRate = 60;
             timeBetweenUpdates = 1000000000 / expectedFrameRate;
@@ -665,11 +665,11 @@ public class OurCraft implements Runnable, Game
         if(world == null)
         {
             if(clientWorld != null)
-                eventBus.call(new SpongeWorldUnloadEvent(this, clientWorld));
+                eventBus.fireEvent(new SpongeWorldUnloadEvent(this, clientWorld), null, null);
         }
         else
         {
-            eventBus.call(new SpongeWorldLoadEvent(this, world));
+            eventBus.fireEvent(new SpongeWorldLoadEvent(this, world), null, null);
         }
         this.clientWorld = world;
     }

@@ -1,17 +1,26 @@
 package org.craft.modding.events;
 
+import java.lang.annotation.*;
+
 public class EventListener
 {
-    private Object   listener;
-    private String   methodName;
-    private boolean  enabled = true;
-    private Class<?> eventClass;
+    private Object                      listener;
+    private String                      methodName;
+    private boolean                     enabled = true;
+    private Class<?>                    eventClass;
+    private Class<? extends Annotation> annotClass;
 
-    public EventListener(Object object, String methodName, Class<?> eventClass)
+    public EventListener(Object object, String methodName, Class<?> eventClass, Class<? extends Annotation> annotClass)
     {
         this.eventClass = eventClass;
         this.listener = object;
         this.methodName = methodName;
+        this.annotClass = annotClass;
+    }
+
+    public Class<? extends Annotation> getAnnotClass()
+    {
+        return annotClass;
     }
 
     public Object getListener()

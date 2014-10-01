@@ -98,14 +98,14 @@ public class OurCraftServer implements Game
 
         Log.message("Starting server");
 
-        eventBus.call(new SpongeInitEvent(this));
+        eventBus.fireEvent(new SpongeInitEvent(this), null, null);
         serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
-        eventBus.call(new SpongeServerAboutToStartEvent(this));
+        eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
         new Thread(serverWrapper).start();
 
-        eventBus.call(new SpongePostInitEvent(this));
+        eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
         running = true;
 
         expectedFrameRate = 60;

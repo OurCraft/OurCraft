@@ -59,7 +59,7 @@ public class EventBus implements EventManager
                         {
                             @SuppressWarnings("unchecked")
                             Class<? extends Event> eventClass = (Class<? extends Event>) method.getParameterTypes()[0];
-                            EventListener listener = new EventListener(object, method.getName(), eventClass);
+                            EventListener listener = new EventListener(object, method.getName(), eventClass, annotation);
                             ArrayList<EventListener> list = listeners.get(eventClass);
                             if(list == null)
                                 list = new ArrayList<EventListener>();
@@ -105,10 +105,10 @@ public class EventBus implements EventManager
     @Override
     public boolean call(Event event)
     {
-        return fireEvent(event, null);
+        return fireEvent(event, null, SpongeEventHandler.class);
     }
 
-    public boolean fireEvent(Event e, Object instance)
+    public boolean fireEvent(Event e, Object instance, Class<? extends Annotation> annotClass)
     {
         HashMap<Class<? extends Event>, ArrayList<EventListener>> listenersMap = getListeners();
         for(ArrayList<EventListener> list : listenersMap.values())
@@ -118,17 +118,18 @@ public class EventBus implements EventManager
                 for(EventListener listener : list)
                 {
                     if(listener.isEnabled() && (instance == null || listener.getListener() == instance) && listener.getEventClass().isAssignableFrom(e.getClass()))
-                        try
-                        {
-                            Method m = listener.getListener().getClass().getDeclaredMethod(listener.getMethodName(), listener.getEventClass());
-                            m.setAccessible(true);
-                            m.invoke(listener.getListener(), e);
-                            listener.disable();
-                        }
-                        catch(Exception e1)
-                        {
-                            e1.printStackTrace();
-                        }
+                        if(listener.getAnnotClass() == annotClass || annotClass == null)
+                            try
+                            {
+                                Method m = listener.getListener().getClass().getDeclaredMethod(listener.getMethodName(), listener.getEventClass());
+                                m.setAccessible(true);
+                                m.invoke(listener.getListener(), e);
+                                listener.disable();
+                            }
+                            catch(Exception e1)
+                            {
+                                e1.printStackTrace();
+                            }
                 }
                 for(EventListener listener : list)
                 {
