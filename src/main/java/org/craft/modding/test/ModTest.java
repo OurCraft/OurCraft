@@ -2,7 +2,6 @@ package org.craft.modding.test;
 
 import org.apache.logging.log4j.*;
 import org.craft.modding.*;
-import org.spongepowered.api.event.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 
@@ -16,32 +15,32 @@ public class ModTest
     {
     }
 
-    @SpongeEventHandler
+    @OurModEventHandler
     public void onPreInit(PreInitializationEvent evt)
     {
         logger = evt.getPluginLog();
         evt.getPluginLog().debug("PreInit!!!");
     }
 
-    @SpongeEventHandler
+    @OurModEventHandler
     public void onPostInit(PostInitializationEvent evt)
     {
         logger.debug("PostInit!!!");
     }
 
-    @SpongeEventHandler
+    @OurModEventHandler
     public void onWorldLoad(WorldLoadEvent evt)
     {
         logger.debug("Loading world " + evt.getWorld().getName());
     }
 
-    @SpongeEventHandler
+    @OurModEventHandler
     public void onWorldUnload(WorldUnloadEvent evt)
     {
         logger.debug("Unloading world " + evt.getWorld().getName());
     }
 
-    @SpongeEventHandler
+    @OurModEventHandler
     public void onInit(InitializationEvent evt)
     {
         logger.debug("Init!!!");

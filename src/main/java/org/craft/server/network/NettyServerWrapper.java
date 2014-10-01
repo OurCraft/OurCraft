@@ -7,6 +7,7 @@ import io.netty.channel.socket.*;
 import io.netty.channel.socket.nio.*;
 import io.netty.util.concurrent.*;
 
+import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;

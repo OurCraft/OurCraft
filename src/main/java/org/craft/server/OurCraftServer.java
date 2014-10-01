@@ -8,9 +8,9 @@ import javax.swing.*;
 import org.craft.blocks.*;
 import org.craft.items.*;
 import org.craft.modding.*;
+import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.server.network.*;
-import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
@@ -117,10 +117,11 @@ public class OurCraftServer implements Game
         // TODO: Thog, it's your turn to code! :D
     }
 
+    @SuppressWarnings("unchecked")
     private void initSponge()
     {
         gameRegistry = new SpongeGameRegistry();
-        eventBus = new EventBus();
+        eventBus = new EventBus(SpongeEventHandler.class, OurModEventHandler.class);
         pluginManager = new SpongePluginManager();
         addonsLoader = new AddonsLoader(this, eventBus);
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);

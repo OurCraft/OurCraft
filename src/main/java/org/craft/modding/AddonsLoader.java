@@ -7,7 +7,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.logging.log4j.*;
-import org.craft.spongeimpl.events.*;
+import org.craft.modding.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
@@ -18,13 +18,13 @@ public class AddonsLoader
 {
 
     private HashMap<Class<? extends Annotation>, IAddonManager<?>> handlers;
-    private EventBus                                               eventBus;
+    private EventBus[]                                             eventBuses;
     private Game                                                   game;
 
-    public AddonsLoader(Game gameInstance, EventBus eventBus)
+    public AddonsLoader(Game gameInstance, EventBus... eventBuses)
     {
         this.game = gameInstance;
-        this.eventBus = eventBus;
+        this.eventBuses = eventBuses;
         handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
         registerAddonAnnotation(Mod.class, new ModManager());
     }
@@ -51,7 +51,8 @@ public class AddonsLoader
                 Object instance = clazz.newInstance();
                 AddonContainer container = handler.createContainer(clazz.getAnnotation(c), instance);
                 manager.loadAddon(container);
-                eventBus.register(instance);
+                for(EventBus eventBus : eventBuses)
+                    eventBus.register(instance);
 
                 File configFolder = new File(SystemUtils.getGameFolder(), "configs/");
                 if(!configFolder.exists())
@@ -60,7 +61,8 @@ public class AddonsLoader
                 }
                 Logger logger = new AddonLogger(container);
                 SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
-                eventBus.fireEvent(preInitEvent, instance);
+                for(EventBus eventBus : eventBuses)
+                    eventBus.fireEvent(preInitEvent, instance);
                 added = true;
                 Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
             }

@@ -17,9 +17,9 @@ import org.craft.entity.Entity;
 import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.modding.*;
+import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
-import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.game.*;
@@ -250,10 +250,11 @@ public class OurCraft implements Runnable, Game
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void initSponge()
     {
         gameRegistry = new SpongeGameRegistry();
-        eventBus = new EventBus();
+        eventBus = new EventBus(SpongeEventHandler.class, OurModEventHandler.class);
         pluginManager = new SpongePluginManager();
         addonsLoader = new AddonsLoader(this, eventBus);
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
