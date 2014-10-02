@@ -26,7 +26,7 @@ public class LuaEventBusListener implements IEventBusListener
         {
             for(LuaEventListener listener : listeners)
             {
-                if(instance == listener.getContainer())
+                if(instance == listener.getContainer() || instance == null)
                 {
                     String eventName = listener.getEventName();
                     LuaFunction handler = listener.getHandler();
