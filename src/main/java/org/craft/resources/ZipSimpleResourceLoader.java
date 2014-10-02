@@ -66,6 +66,8 @@ public class ZipSimpleResourceLoader extends ResourceLoader
 
     private ResourceLocation complete(ResourceLocation location)
     {
+        if(base.equals(""))
+            return location;
         return new ResourceLocation(base + "/" + location.getFullPath());
     }
 

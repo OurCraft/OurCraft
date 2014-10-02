@@ -6,8 +6,12 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 
+import com.google.gson.*;
+
 import org.apache.logging.log4j.*;
 import org.craft.modding.events.*;
+import org.craft.modding.script.lua.*;
+import org.craft.resources.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
@@ -18,13 +22,17 @@ public class AddonsLoader
 {
 
     private HashMap<Class<? extends Annotation>, IAddonManager<?>> handlers;
-    private EventBus[]                                             eventBuses;
+    private EventBus                                               eventBus;
     private Game                                                   game;
+    private LuaEventBusListener                                    luaListener;
 
-    public AddonsLoader(Game gameInstance, EventBus... eventBuses)
+    public AddonsLoader(Game gameInstance, EventBus eventBus)
     {
+        luaListener = new LuaEventBusListener();
+        eventBus.addListener(luaListener);
+
         this.game = gameInstance;
-        this.eventBuses = eventBuses;
+        this.eventBus = eventBus;
         handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
         registerAddonAnnotation(Mod.class, new ModManager());
     }
@@ -51,8 +59,7 @@ public class AddonsLoader
                 Object instance = clazz.newInstance();
                 AddonContainer container = handler.createContainer(clazz.getAnnotation(c), instance);
                 manager.loadAddon(container);
-                for(EventBus eventBus : eventBuses)
-                    eventBus.register(instance);
+                eventBus.register(instance);
 
                 File configFolder = new File(SystemUtils.getGameFolder(), "configs/");
                 if(!configFolder.exists())
@@ -61,8 +68,7 @@ public class AddonsLoader
                 }
                 Logger logger = new AddonLogger(container);
                 SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
-                for(EventBus eventBus : eventBuses)
-                    eventBus.fireEvent(preInitEvent, instance, null);
+                eventBus.fireEvent(preInitEvent, instance, null);
                 added = true;
                 Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
             }
@@ -73,8 +79,10 @@ public class AddonsLoader
         }
     }
 
+    @SuppressWarnings("unused")
     public void loadAll(File... folders)
     {
+
         for(File folder : folders)
         {
             File[] files = folder.listFiles();
@@ -82,7 +90,53 @@ public class AddonsLoader
             {
                 if(file.getAbsolutePath().endsWith(".jar") || file.getAbsolutePath().endsWith(".zip"))
                 {
-                    tryToAddToClassPath(file);
+                    try
+                    {
+                        DiskSimpleResourceLoader diskResLoader = new DiskSimpleResourceLoader();
+                        ZipSimpleResourceLoader zipResLoader = new ZipSimpleResourceLoader(diskResLoader.getResource(new ResourceLocation("", file.getAbsolutePath())));
+                        if(zipResLoader.doesResourceExists(new ResourceLocation("luaAddon.json")))
+                        {
+                            String rawJsonData = new String(zipResLoader.getResource(new ResourceLocation("luaAddon.json")).getData(), "UTF-8");
+                            Gson gson = new Gson();
+                            JsonObject jsonObject = gson.fromJson(rawJsonData, JsonObject.class);
+                            if(jsonObject.has("id") && jsonObject.has("name") && jsonObject.has("version") && jsonObject.has("mainClass"))
+                            {
+                                String id = jsonObject.get("id").getAsString();
+                                String name = jsonObject.get("name").getAsString();
+                                String version = jsonObject.get("version").getAsString();
+                                String mainClass = jsonObject.get("mainClass").getAsString();
+                                String author = "unknown";
+                                if(jsonObject.has("author"))
+                                {
+                                    author = jsonObject.get("author").getAsString();
+                                }
+
+                                Log.message("Found lua addon with id: " + id + ", name: " + name + ", version: " + version + " and mainClass: " + mainClass + ". Author is " + author);
+
+                                LuaAddonContainer container = new LuaAddonContainer(id, name, version, author, mainClass);
+                                new LuaScript(zipResLoader.getResource(new ResourceLocation(mainClass)), luaListener, container);
+
+                                eventBus.register(container);
+                                File configFolder = new File(SystemUtils.getGameFolder(), "configs/");
+                                if(!configFolder.exists())
+                                {
+                                    configFolder.mkdirs();
+                                }
+                                Logger logger = new AddonLogger(container);
+                                SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
+                                eventBus.fireEvent(preInitEvent, container, null);
+                            }
+                            else
+                            {
+                                Log.error("Missing data when loading lua addon: luaAddon.json must contain fields \"id\", \"name\", \"version\" and \"mainClass\"");
+                            }
+                        }
+                        tryToAddToClassPath(file);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
