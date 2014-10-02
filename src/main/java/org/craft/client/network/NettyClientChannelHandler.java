@@ -12,7 +12,7 @@ public class NettyClientChannelHandler extends ChannelInboundHandlerAdapter
         NettyPacket m = (NettyPacket) msg;
         try
         {
-            AbstractPacket packet = PacketRegistry.create(m.getID());
+            AbstractPacket packet = PacketRegistry.create(m.getSide(), m.getID());
             packet.decodeFrom(m.getPayload());
 
             // TODO: handle the packet

@@ -3,6 +3,7 @@ package org.craft.server.network;
 import io.netty.channel.*;
 
 import org.craft.network.*;
+import org.craft.server.network.packets.*;
 
 public class NettyServerChannelHandler extends ChannelInboundHandlerAdapter
 {
@@ -13,7 +14,7 @@ public class NettyServerChannelHandler extends ChannelInboundHandlerAdapter
         NettyPacket receivedPacket = (NettyPacket) msg;
         try
         {
-            AbstractPacket packet = PacketRegistry.create(receivedPacket.getID());
+            AbstractPacket packet = PacketRegistry.create(receivedPacket.getSide(), receivedPacket.getID());
             packet.decodeFrom(receivedPacket.getPayload());
 
             // TODO: handle the packet
@@ -27,7 +28,7 @@ public class NettyServerChannelHandler extends ChannelInboundHandlerAdapter
     @Override
     public void channelActive(final ChannelHandlerContext ctx)
     {
-
+        ctx.writeAndFlush(new S0ConnectionAccepted());
     }
 
     @Override

@@ -7,8 +7,9 @@ import io.netty.channel.socket.*;
 import io.netty.channel.socket.nio.*;
 
 import org.craft.network.*;
+import org.craft.utils.*;
 
-public class ClientNetHandler
+public class ClientNetHandler implements INetworkHandler
 {
     public void connectTo(String host, int port) throws Exception
     {
@@ -39,5 +40,11 @@ public class ClientNetHandler
         {
             workerGroup.shutdownGracefully();
         }
+    }
+
+    @Override
+    public void handlePacket(AbstractPacket packet)
+    {
+        Log.message(packet.getClass().getName());
     }
 }

@@ -2,10 +2,12 @@ package org.craft.client.gui;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
+import org.craft.client.network.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.resources.*;
+import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.populators.*;
 
@@ -22,8 +24,9 @@ public class GuiMainMenu extends Gui
     @Override
     public void init()
     {
-        addWidget(new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
-        addWidget(new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.quit"), getFontRenderer()));
+        addWidget(new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 - 20, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
+        addWidget(new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 40, 300, 40, I18n.format("main.play.multiplayer"), getFontRenderer()));
+        addWidget(new GuiButton(10, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 100, 300, 40, I18n.format("main.quit"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -53,6 +56,18 @@ public class GuiMainMenu extends Gui
             OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
         }
         else if(widget.getID() == 1)
+        {
+            try
+            {
+                Log.message("trying to connect");
+                new ClientNetHandler().connectTo("localhost", 35565);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else if(widget.getID() == 10)
         {
             OurCraft.getOurCraft().shutdown();
         }

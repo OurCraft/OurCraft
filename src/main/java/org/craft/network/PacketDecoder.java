@@ -38,10 +38,11 @@ public class PacketDecoder extends ByteToMessageDecoder
         }
         else
         {
-            if(buffer.readableBytes() >= 8)
+            if(buffer.readableBytes() >= 12)
             {
                 packet = new NettyPacket();
                 packet.id = buffer.readInt();
+                packet.side = NetworkSide.values()[buffer.readInt()];
                 int payloadSize = buffer.readInt();
                 if(buffer.readableBytes() < payloadSize)
                 {
