@@ -12,9 +12,11 @@ public class EventBus implements EventManager
 
     private HashMap<Class<? extends Event>, ArrayList<EventListener>> listeners;
     private Class<? extends Annotation>[]                             annotations;
+    private ArrayList<IEventBusListener>                              eventBusListeners;
 
     public EventBus(Class<? extends Annotation>... annots)
     {
+        this.eventBusListeners = new ArrayList<IEventBusListener>();
         this.annotations = annots;
         listeners = new HashMap<Class<? extends Event>, ArrayList<EventListener>>();
     }
@@ -110,6 +112,8 @@ public class EventBus implements EventManager
 
     public boolean fireEvent(Event e, Object instance, Class<? extends Annotation> annotClass)
     {
+        for(IEventBusListener listener : eventBusListeners)
+            listener.onEvent(e, instance, annotClass);
         HashMap<Class<? extends Event>, ArrayList<EventListener>> listenersMap = getListeners();
         for(ArrayList<EventListener> list : listenersMap.values())
         {
@@ -143,5 +147,10 @@ public class EventBus implements EventManager
             cancelled = ((Cancellable) e).isCancelled();
         }
         return cancelled && e.isCancellable();
+    }
+
+    public void addListener(IEventBusListener listener)
+    {
+        eventBusListeners.add(listener);
     }
 }

@@ -103,6 +103,7 @@ public class OurCraft implements Runnable, Game
     {
         try
         {
+            AL.create();
             objectInFront = new CollisionInfos();
             objectInFront.type = CollisionType.NONE;
             System.setProperty("org.lwjgl.util.Debug", "true");
@@ -125,7 +126,6 @@ public class OurCraft implements Runnable, Game
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             initSponge();
             eventBus.fireEvent(new SpongeInitEvent(this), null, null);
-            AL.create();
 
             fontRenderer = new BaseFontRenderer();
             OpenGLHelper.loadCapNames();
