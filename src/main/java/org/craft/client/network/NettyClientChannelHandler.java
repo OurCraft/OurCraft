@@ -3,6 +3,7 @@ package org.craft.client.network;
 import io.netty.channel.*;
 
 import org.craft.network.*;
+import org.craft.utils.*;
 
 public class NettyClientChannelHandler extends ChannelInboundHandlerAdapter
 {
@@ -15,6 +16,7 @@ public class NettyClientChannelHandler extends ChannelInboundHandlerAdapter
             AbstractPacket packet = PacketRegistry.create(m.getSide(), m.getID());
             packet.decodeFrom(m.getPayload());
 
+            Log.message(packet.toString());
             // TODO: handle the packet
         }
         catch(Exception e)

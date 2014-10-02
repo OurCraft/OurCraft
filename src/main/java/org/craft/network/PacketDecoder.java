@@ -6,6 +6,8 @@ import io.netty.handler.codec.*;
 
 import java.util.*;
 
+import org.craft.utils.*;
+
 public class PacketDecoder extends ByteToMessageDecoder
 {
 
@@ -22,6 +24,7 @@ public class PacketDecoder extends ByteToMessageDecoder
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf data, List<Object> out) throws Exception
     {
+        Log.message("NEW DATA!");
         buffer.writeBytes(data);
         if(waitingPayloadSize >= 0)
         {
@@ -33,8 +36,7 @@ public class PacketDecoder extends ByteToMessageDecoder
             out.add(packet);
             packet = null;
             waitingPayloadSize = -1;
-            if(payload.readableBytes() > 0)
-                decode(ctx, payload, out);
+            decode(ctx, payload, out);
         }
         else
         {

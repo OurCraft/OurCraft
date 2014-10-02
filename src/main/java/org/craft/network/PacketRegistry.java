@@ -11,8 +11,13 @@ public class PacketRegistry
 
     private static HashMap<NetworkSide, HashMap<Integer, Class<? extends AbstractPacket>>> packets;
 
+    private static HashMap<Class<? extends AbstractPacket>, NetworkSide>                   sides;
+    private static HashMap<Class<? extends AbstractPacket>, Integer>                       ids;
+
     public static void init()
     {
+        sides = new HashMap<Class<? extends AbstractPacket>, NetworkSide>();
+        ids = new HashMap<Class<? extends AbstractPacket>, Integer>();
         packets = new HashMap<NetworkSide, HashMap<Integer, Class<? extends AbstractPacket>>>();
         packets.put(NetworkSide.CLIENT, new HashMap<Integer, Class<? extends AbstractPacket>>());
         packets.put(NetworkSide.COMMON, new HashMap<Integer, Class<? extends AbstractPacket>>());
@@ -21,9 +26,22 @@ public class PacketRegistry
         registerPacket(NetworkSide.SERVER, 0x0, S0ConnectionAccepted.class);
     }
 
+    public static int getPacketId(Class<? extends AbstractPacket> packet)
+    {
+        return ids.get(packet);
+    }
+
+    public static NetworkSide getPacketSide(Class<? extends AbstractPacket> packet)
+    {
+        return sides.get(packet);
+    }
+
     public static void registerPacket(NetworkSide senderSide, int id, Class<? extends AbstractPacket> packetClass)
     {
         packets.get(senderSide).put(id, packetClass);
+
+        sides.put(packetClass, senderSide);
+        ids.put(packetClass, id);
     }
 
     public static AbstractPacket create(NetworkSide side, int id)

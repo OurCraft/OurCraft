@@ -32,7 +32,14 @@ public class LuaEventBusListener implements IEventBusListener
                     LuaFunction handler = listener.getHandler();
                     if(event.getClass().getSimpleName().replaceFirst("Sponge", "").equals(eventName))
                     {
-                        handler.call(CoerceJavaToLua.coerce(event));
+                        try
+                        {
+                            handler.call(CoerceJavaToLua.coerce(event));
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
