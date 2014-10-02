@@ -60,6 +60,7 @@ public class GuiMainMenu extends Gui
             try
             {
                 Log.message("trying to connect");
+                OurCraft.getOurCraft().openMenu(new GuiConnecting(getFontRenderer()));
                 new ClientNetHandler().connectTo("localhost", 35565);
             }
             catch(Exception e)

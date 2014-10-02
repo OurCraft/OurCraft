@@ -6,6 +6,8 @@ import io.netty.channel.nio.*;
 import io.netty.channel.socket.*;
 import io.netty.channel.socket.nio.*;
 
+import org.craft.client.*;
+import org.craft.client.gui.*;
 import org.craft.network.*;
 import org.craft.utils.*;
 
@@ -30,7 +32,7 @@ public class ClientNetHandler implements INetworkHandler
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception
                         {
-                            ch.pipeline().addLast(new PacketDecoder()).addLast(new PacketEncoder()).addLast(new NettyClientChannelHandler());
+                            ch.pipeline().addLast(new PacketDecoder()).addLast(new PacketEncoder()).addLast(new NettyClientChannelHandler(ClientNetHandler.this));
                         }
                     });
 
@@ -57,5 +59,16 @@ public class ClientNetHandler implements INetworkHandler
     public void handlePacket(AbstractPacket packet)
     {
         Log.message(packet.getClass().getName());
+    }
+
+    @Override
+    public void onConnexionEstablished(ChannelHandlerContext ctx)
+    {
+        Gui menu = OurCraft.getOurCraft().getCurrentMenu();
+        if(menu instanceof GuiConnecting)
+        {
+            GuiConnecting connectingMenu = (GuiConnecting) menu;
+            connectingMenu.setStatus("Connected... Downloading terrain");
+        }
     }
 }
