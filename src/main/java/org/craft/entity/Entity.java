@@ -2,11 +2,14 @@ package org.craft.entity;
 
 import java.util.*;
 
+import com.google.common.base.Optional;
+
 import org.craft.blocks.*;
 import org.craft.maths.*;
 import org.craft.spongeimpl.math.*;
 import org.craft.utils.*;
 import org.craft.world.*;
+import org.spongepowered.api.entity.*;
 import org.spongepowered.api.math.*;
 
 public class Entity implements org.spongepowered.api.entity.Entity
@@ -168,7 +171,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
             {
                 for(int z = startZ; z <= endZ; z++ )
                 {
-                    Block block = worldObj.getBlock(x, y, z);
+                    Block block = worldObj.getBlockAt(x, y, z);
                     if(block == null)
                         continue;
                     AABB blockBB = block.getCollisionBox(worldObj, x, y, z);
@@ -278,17 +281,17 @@ public class Entity implements org.spongepowered.api.entity.Entity
         return worldObj;
     }
 
-    public float getX()
+    public double getX()
     {
         return posX;
     }
 
-    public float getY()
+    public double getY()
     {
         return posY;
     }
 
-    public float getZ()
+    public double getZ()
     {
         return posZ;
     }
@@ -329,48 +332,10 @@ public class Entity implements org.spongepowered.api.entity.Entity
      */
     public float getDistance(Entity other)
     {
-        float dx = other.getX() - posX;
-        float dy = other.getY() - posY;
-        float dz = other.getZ() - posZ;
+        float dx = (float) (other.getX() - posX);
+        float dy = (float) (other.getY() - posY);
+        float dz = (float) (other.getZ() - posZ);
         return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
-
-    @Override
-    public UUID getUniqueId()
-    {
-        return uuid;
-    }
-
-    @Override
-    public boolean isBurning()
-    {
-        return onFire;
-    }
-
-    @Override
-    public int getDuration()
-    {
-        return fireTicks;
-    }
-
-    @Override
-    public void setDuration(int ticks)
-    {
-        this.fireTicks = ticks;
-    }
-
-    @Override
-    public Vector3f getVelocity()
-    {
-        return new Vec3f(velX, velY, velZ);
-    }
-
-    @Override
-    public void setVelocity(Vector3f velocity)
-    {
-        this.velX = velocity.getX();
-        this.velY = velocity.getY();
-        this.velZ = velocity.getZ();
     }
 
     @Override
@@ -412,6 +377,33 @@ public class Entity implements org.spongepowered.api.entity.Entity
         this.yaw = rotation.getYaw();
         this.pitch = rotation.getPitch();
         this.roll = rotation.getRoll();
+    }
+
+    @Override
+    public EntityType getType()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public EntitySnapshot getSnapshot()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <T> Optional<T> getComponent(Class<T> clazz)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void remove()
+    {
+        setDead();
     }
 
 }

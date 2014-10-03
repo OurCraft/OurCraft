@@ -7,8 +7,9 @@ import org.craft.maths.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
 import org.craft.world.*;
+import org.spongepowered.api.block.*;
 
-public class Block implements IStackable, org.spongepowered.api.block.Block
+public class Block implements IStackable
 {
 
     static
@@ -166,14 +167,30 @@ public class Block implements IStackable, org.spongepowered.api.block.Block
     }
 
     @Override
-    public org.spongepowered.api.block.Block getBlock()
-    {
-        return this;
-    }
-
-    @Override
     public String getUnlocalizedID()
     {
         return "block." + getID();
     }
+
+    public void onBlockUpdate(World world, int x, int y, int z)
+    {
+        ;
+    }
+
+    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z)
+    {
+        onBlockUpdate(world, x, y, z);
+    }
+
+    public boolean isSolid()
+    {
+        return true;
+    }
+
+    @Override
+    public BlockType getBlock()
+    {
+        return null;
+    }
+
 }

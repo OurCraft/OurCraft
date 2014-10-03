@@ -1,30 +1,41 @@
 package org.craft.spongeimpl.game;
 
+import com.google.common.base.*;
+
 import org.craft.blocks.*;
+import org.craft.blocks.Block;
 import org.craft.items.*;
 import org.spongepowered.api.*;
+import org.spongepowered.api.block.*;
+import org.spongepowered.api.item.*;
 
 public class SpongeGameRegistry implements GameRegistry
 {
 
     @Override
-    public Block getBlock(String id)
+    public Optional<BlockType> getBlock(String id)
     {
-        return Blocks.get(id);
+        // TODO
+        Blocks.get(id);
+        return null;
     }
 
     @Override
-    public Item getItem(String id)
+    public Optional<ItemType> getItem(String id)
     {
-        return Items.get(id);
+        // TODO
+        Items.get(id);
+        return null;
     }
 
     @Override
-    public String getID(Object obj)
+    public Optional<String> getId(Object obj)
     {
         if(obj instanceof IStackable)
         {
-            return ((IStackable) obj).getID();
+            // TODO
+            ((IStackable) obj).getId();
+            return null;
         }
         return null;
     }

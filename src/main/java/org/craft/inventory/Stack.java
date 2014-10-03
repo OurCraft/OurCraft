@@ -1,7 +1,7 @@
 package org.craft.inventory;
 
 import org.craft.items.*;
-import org.spongepowered.api.inventory.*;
+import org.spongepowered.api.item.inventory.*;
 
 public class Stack implements ItemStack
 {

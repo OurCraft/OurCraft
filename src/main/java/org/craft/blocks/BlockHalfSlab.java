@@ -68,7 +68,7 @@ public class BlockHalfSlab extends Block
     {
         if(type != CollisionType.BLOCK)
             return;
-        if(user.worldObj.getBlock((int) x, (int) y, (int) z) == this)
+        if(user.worldObj.getBlockAt((int) x, (int) y, (int) z) == this)
         {
             user.worldObj.setBlock((int) x, (int) y, (int) z, Blocks.dirt);
         }

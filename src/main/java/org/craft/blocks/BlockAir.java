@@ -42,4 +42,9 @@ public class BlockAir extends Block
     {
         return true;
     }
+
+    public boolean isSolid()
+    {
+        return false;
+    }
 }

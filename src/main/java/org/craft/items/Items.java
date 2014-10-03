@@ -30,11 +30,11 @@ public class Items
      */
     public static void register(Item item)
     {
-        if(ITEM_REGISTRY.containsKey(item.getID()))
+        if(ITEM_REGISTRY.containsKey(item.getId()))
         {
-            throw new IllegalArgumentException("Id " + item.getID() + " is already used by " + ITEM_REGISTRY.get(item.getID()) + " when trying to add " + item);
+            throw new IllegalArgumentException("Id " + item.getId() + " is already used by " + ITEM_REGISTRY.get(item.getId()) + " when trying to add " + item);
         }
-        ITEM_REGISTRY.put(item.getID(), item);
+        ITEM_REGISTRY.put(item.getId(), item);
         itemByID.add(item);
     }
 

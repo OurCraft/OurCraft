@@ -2,13 +2,15 @@ package org.craft.world;
 
 import java.util.*;
 
+import com.google.common.base.Optional;
+
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.maths.*;
 import org.craft.spongeimpl.math.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.math.*;
-import org.spongepowered.api.world.*;
+import org.spongepowered.api.world.biome.*;
 
 public class Chunk implements org.spongepowered.api.world.Chunk
 {
@@ -385,54 +387,6 @@ public class Chunk implements org.spongepowered.api.world.Chunk
     }
 
     @Override
-    public Location at(Vector2d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Location at(int x, int y, int z)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public org.spongepowered.api.block.Block getBlock(Vector3i position)
-    {
-        return getChunkBlock(position.getX(), position.getY(), position.getZ());
-    }
-
-    @Override
-    public boolean setBlock(Vector3i position, org.spongepowered.api.block.Block block)
-    {
-        setChunkBlock(position.getX(), position.getY(), position.getZ(), (Block) block);
-        return true;
-    }
-
-    @Override
-    public byte getLuminance(Vector3i position)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public byte getLuminanceFromSky(Vector3i position)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public byte getLuminanceFromGround(Vector3i position)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public Collection<Entity> getEntities()
     {
         // TODO Auto-generated method stub
@@ -443,5 +397,38 @@ public class Chunk implements org.spongepowered.api.world.Chunk
     public Vector3i getPosition()
     {
         return new Vec3i(coords.x, coords.y, coords.z);
+    }
+
+    @Override
+    public Optional<Entity> createEntity(EntityType type, Vector3d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<Entity> createEntity(EntitySnapshot snapshot, Vector3d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Biome getBiome(Vector3d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock(Vector3d position)
+    {
+        return getBlock((int) position.getX(), (int) position.getY(), (int) position.getZ());
+    }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock(int x, int y, int z)
+    {
+        return getBlock(x, y, z);
     }
 }

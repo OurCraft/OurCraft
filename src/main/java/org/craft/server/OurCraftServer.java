@@ -182,7 +182,7 @@ public class OurCraftServer implements Game
     {
         for(Player player : onlinePlayers)
         {
-            if(player.getUniqueId().equals(uniqueId))
+            if(player.getDisplayName().equals(SessionManager.getInstance().getDisplayName(uniqueId)))
                 return player;
         }
         return null;

@@ -45,4 +45,17 @@ public class BlockFlower extends Block
     {
         return pass == EnumRenderPass.ALPHA;
     }
+
+    public void onBlockUpdate(World world, int x, int y, int z)
+    {
+        if(!world.getBlockAt(x, y - 1, z).isSolid())
+        {
+            world.setBlock(x, y, z, Blocks.air);
+        }
+    }
+
+    public boolean isSolid()
+    {
+        return false;
+    }
 }

@@ -511,7 +511,7 @@ public class OurCraft implements Runnable, Game
             {
                 if(e != renderEngine.getRenderViewEntity())
                 {
-                    fallbackRenderer.render(renderEngine, e, e.getX(), e.getY(), e.getZ());
+                    fallbackRenderer.render(renderEngine, e, (float) e.getX(), (float) e.getY(), (float) e.getZ());
                 }
             }
             glClear(GL_DEPTH_BUFFER_BIT);

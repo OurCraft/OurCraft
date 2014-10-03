@@ -2,14 +2,17 @@ package org.craft.world;
 
 import java.util.*;
 
+import com.google.common.base.Optional;
+
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
+import org.craft.spongeimpl.block.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.spongepowered.api.math.*;
-import org.spongepowered.api.world.*;
+import org.spongepowered.api.world.biome.*;
 
 public class World implements org.spongepowered.api.world.World
 {
@@ -71,13 +74,13 @@ public class World implements org.spongepowered.api.world.World
      */
     public Block getBlockNextTo(int x, int y, int z, EnumSide side)
     {
-        return getBlock(x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ());
+        return getBlockAt(x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ());
     }
 
     /**
      * Returns block at given coords
      */
-    public Block getBlock(int x, int y, int z)
+    public Block getBlockAt(int x, int y, int z)
     {
         Chunk c = getChunk(x, y, z);
         if(c == null)
@@ -102,6 +105,7 @@ public class World implements org.spongepowered.api.world.World
         if(c == null)
             return;
         c.setBlockState(x, y, z, state, value);
+        updateBlockAndNeighbors(x, y, z);
     }
 
     /**
@@ -115,6 +119,7 @@ public class World implements org.spongepowered.api.world.World
             return;
         }
         c.setBlock(this, x, y, z, block);
+        updateBlockAndNeighbors(x, y, z);
         c.markDirty();
     }
 
@@ -132,9 +137,9 @@ public class World implements org.spongepowered.api.world.World
      */
     public void performRayCast(Entity sender, CollisionInfos infos, float maxDist)
     {
-        float maxReachedDist = maxDist; // Thog, DO NOT REMOVE THIS LINE
+        float maxReachedDist = maxDist;
         float size = 0.45f;
-        Vector3 origin = Vector3.get(sender.getX(), sender.getY() + sender.getEyeOffset() - size / 2f, sender.getZ());
+        Vector3 origin = Vector3.get(sender.posX, sender.posY + sender.getEyeOffset() - size / 2f, sender.posZ);
         Vector3 pos = origin;
         Vector3 ray = sender.getQuaternionRotation().getForward();
 
@@ -149,7 +154,7 @@ public class World implements org.spongepowered.api.world.World
             x = (int) Math.round(pos.getX());
             y = (int) Math.round(pos.getY());
             z = (int) Math.round(pos.getZ());
-            Block b = getBlock(x, y, z);
+            Block b = getBlockAt(x, y, z);
             if(b != null)
             {
                 AABB blockBB = b.getSelectionBox(this, x, y, z);
@@ -202,9 +207,9 @@ public class World implements org.spongepowered.api.world.World
                 {
                     infos.type = CollisionType.ENTITY;
                     infos.value = e;
-                    infos.x = e.getX();
-                    infos.y = e.getY();
-                    infos.z = e.getZ();
+                    infos.x = e.posX;
+                    infos.y = e.posY;
+                    infos.z = e.posZ;
                     infos.distance = maxReachedDist;
                 }
             }
@@ -228,7 +233,7 @@ public class World implements org.spongepowered.api.world.World
     {
         for(int y1 = y + 1; y1 < 256; y1++ )
         {
-            if(!getBlock(x, y1, z).letLightGoThrough())
+            if(!getBlockAt(x, y1, z).letLightGoThrough())
             {
                 return false;
             }
@@ -297,53 +302,42 @@ public class World implements org.spongepowered.api.world.World
         return null;
     }
 
-    @Override
-    public Location at(Vector2d position)
+    public boolean updateBlock(int x, int y, int z)
     {
-        // TODO Auto-generated method stub
-        return null;
+        Block b = getBlockAt(x, y, z);
+        if(b != null)
+        {
+            b.onBlockUpdate(this, x, y, z);
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public Location at(int x, int y, int z)
+    protected boolean updateBlockFromNeighbor(int x, int y, int z)
     {
-        // TODO Auto-generated method stub
-        return null;
+        Block b = getBlockAt(x, y, z);
+        if(b != null)
+        {
+            b.onBlockUpdateFromNeighbor(this, x, y, z);
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public org.spongepowered.api.block.Block getBlock(Vector3i position)
+    public void updateBlockAndNeighbors(int x, int y, int z)
     {
-        return getBlock(position.getX(), position.getY(), position.getZ());
+        updateBlock(x, y, z);
+        updateBlockFromNeighbor(x, y, z + 1);
+        updateBlockFromNeighbor(x, y, z - 1);
+        updateBlockFromNeighbor(x, y + 1, z);
+        updateBlockFromNeighbor(x, y - 1, z);
+        updateBlockFromNeighbor(x + 1, y, z);
+        updateBlockFromNeighbor(x - 1, y, z);
     }
 
-    @Override
-    public boolean setBlock(Vector3i position, org.spongepowered.api.block.Block block)
-    {
-        setBlock(position.getX(), position.getY(), position.getZ(), (Block) block);
-        return true;
-    }
-
-    @Override
-    public byte getLuminance(Vector3i position)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public byte getLuminanceFromSky(Vector3i position)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public byte getLuminanceFromGround(Vector3i position)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+    // -------------------------------------------------
+    // START OF SPONGE IMPLEMENTATION
+    // -------------------------------------------------
 
     @Override
     public Collection<org.spongepowered.api.entity.Entity> getEntities()
@@ -384,5 +378,38 @@ public class World implements org.spongepowered.api.world.World
     public org.spongepowered.api.world.Chunk loadChunk(Vector2i position)
     {
         return loadChunk(position, false);
+    }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock(Vector3d position)
+    {
+        return new SpongeBlock(getBlockAt((int) position.getX(), (int) position.getY(), (int) position.getZ()), (int) position.getX(), (int) position.getY(), (int) position.getZ(), this);
+    }
+
+    @Override
+    public Optional<org.spongepowered.api.entity.Entity> createEntity(org.spongepowered.api.entity.EntityType type, Vector3d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<org.spongepowered.api.entity.Entity> createEntity(org.spongepowered.api.entity.EntitySnapshot snapshot, Vector3d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Biome getBiome(Vector3d position)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public org.spongepowered.api.block.Block getBlock(int x, int y, int z)
+    {
+        return new SpongeBlock(getBlockAt(x, y, z), x, y, z, this);
     }
 }

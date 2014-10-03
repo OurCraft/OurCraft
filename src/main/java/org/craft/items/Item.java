@@ -20,7 +20,7 @@ public class Item implements IStackable
     }
 
     @Override
-    public String getID()
+    public String getId()
     {
         return "ourcraft:" + id;
     }
@@ -63,7 +63,7 @@ public class Item implements IStackable
     }
 
     @Override
-    public Block getBlock()
+    public BlockType getBlock()
     {
         return null;
     }

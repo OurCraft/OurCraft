@@ -131,7 +131,7 @@ public class RenderEngine implements IDisposable
     {
         if(renderViewEntity != null && shouldProjectFromEntity())
         {
-            return projection.mul(renderViewEntity.getQuaternionRotation().conjugate().toRotationMatrix().mul(new Matrix4().initTranslation(-renderViewEntity.getX() - 0.5f, -renderViewEntity.getY() - renderViewEntity.getEyeOffset(), -renderViewEntity.getZ() - 0.5f)));
+            return projection.mul(renderViewEntity.getQuaternionRotation().conjugate().toRotationMatrix().mul(new Matrix4().initTranslation(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f)));
         }
         return projection;
     }
