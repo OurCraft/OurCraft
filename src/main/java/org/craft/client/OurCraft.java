@@ -151,6 +151,7 @@ public class OurCraft implements Runnable, Game
             boolean debugNoGui = false;
             renderBlocks = new RenderBlocks(renderEngine);
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
+            renderBlocks.registerBlockRenderer(BlockHalfSlab.class, new BlockHalfSlabRenderer());
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
 

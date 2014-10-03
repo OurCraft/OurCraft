@@ -38,6 +38,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
     private int               fireTicks;
     private UUID              uuid;
     protected float           stepHeight = 0.f;
+    private boolean           wasOnGround;
 
     public static final float G          = 9.81f / 360f;
 
@@ -78,14 +79,14 @@ public class Entity implements org.spongepowered.api.entity.Entity
      */
     public void update()
     {
+        wasOnGround = onGround;
         onGround = true;
-        onEntityUpdate();
 
         if(canGo(posX + velX, posY, posZ))
         {
             posX += velX;
         }
-        else if(canGo(posX + velX, posY + stepHeight, posZ) && velY >= -G)
+        else if(canGo(posX + velX, posY + stepHeight, posZ) && wasOnGround)
         {
             velY = 0;
             posX += velX;
@@ -98,7 +99,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
         {
             posZ += velZ;
         }
-        else if(canGo(posX, posY + stepHeight, posZ + velZ) && velY >= -G)
+        else if(canGo(posX, posY + stepHeight, posZ + velZ) && wasOnGround)
         {
             velY = 0;
             posZ += velZ;
@@ -137,6 +138,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
             velZ *= 0.12f / 2f;
         }
 
+        onEntityUpdate();
         velY += -G;
 
         if(velY < -G * 6)
