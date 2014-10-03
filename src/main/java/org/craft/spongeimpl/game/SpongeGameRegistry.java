@@ -28,4 +28,14 @@ public class SpongeGameRegistry implements GameRegistry
         }
         return null;
     }
+
+    public void registerBlock(Block block)
+    {
+        Blocks.register(block);
+    }
+
+    public void registerItem(Item item)
+    {
+        Items.register(item);
+    }
 }

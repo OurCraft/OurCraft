@@ -3,17 +3,30 @@ package org.craft.modding.script.lua;
 import org.craft.utils.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.*;
+import org.luaj.vm2.lib.jse.*;
+import org.spongepowered.api.*;
 
 public class OurCraftLib extends TwoArgFunction
 {
 
     private LuaEventBusListener eventBus;
     private LuaAddonContainer   container;
+    private Game                game;
 
-    public OurCraftLib(LuaEventBusListener eventBus, LuaAddonContainer container)
+    public OurCraftLib(LuaEventBusListener eventBus, LuaAddonContainer container, Game game)
     {
+        this.game = game;
         this.eventBus = eventBus;
         this.container = container;
+    }
+
+    public class GetGameRegistryFunc extends LuaFunction
+    {
+        @Override
+        public LuaValue call(LuaValue name, LuaValue method)
+        {
+            return CoerceJavaToLua.coerce(game.getRegistry());
+        }
     }
 
     public class RegisterHandlerFunc extends TwoArgFunction
@@ -34,6 +47,7 @@ public class OurCraftLib extends TwoArgFunction
     {
         LuaTable table = new LuaTable();
         table.set("registerHandler", new RegisterHandlerFunc());
+        table.set("getGameRegistry", new GetGameRegistryFunc());
         par2.set("OurCraftAPI", table);
         par2.get("package").get("loaded").set("OurCraftAPI", table);
         return NIL;

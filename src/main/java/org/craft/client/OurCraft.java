@@ -125,7 +125,6 @@ public class OurCraft implements Runnable, Game
 
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             initSponge();
-            eventBus.fireEvent(new SpongeInitEvent(this), null, null);
 
             fontRenderer = new BaseFontRenderer();
             OpenGLHelper.loadCapNames();
@@ -134,6 +133,7 @@ public class OurCraft implements Runnable, Game
             Items.init();
             PacketRegistry.init();
             I18n.init(assetsLoader);
+            eventBus.fireEvent(new SpongeInitEvent(this), null, null);
 
             Log.message("==== IN en_US.lang ====");
             Log.message("lang.test1 is " + I18n.format("lang.test1"));

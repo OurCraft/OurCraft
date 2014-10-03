@@ -14,6 +14,7 @@ public final class Blocks
     public static Block                        leaves;
     public static Block                        glass;
     public static Block                        rose;
+    public static Block                        dirtSlab;
     public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
     private static ArrayList<Block>            blockByID;
 
@@ -29,6 +30,8 @@ public final class Blocks
         register(leaves = new BlockTransparent("leaves"));
         register(glass = new BlockTransparent("glass"));
         register(rose = new BlockFlower("rose"));
+
+        register(dirtSlab = new BlockHalfSlab("dirt"));
 
         for(short i = 0; i < blockByID.size(); i++ )
         {

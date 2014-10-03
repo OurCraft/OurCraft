@@ -4,6 +4,7 @@ import java.io.*;
 
 import org.craft.resources.*;
 import org.luaj.vm2.*;
+import org.spongepowered.api.*;
 
 public class RequireFunction extends LuaFunction
 {
@@ -12,9 +13,11 @@ public class RequireFunction extends LuaFunction
     private Globals             globals;
     private LuaEventBusListener eventBus;
     private LuaAddonContainer   container;
+    private Game                game;
 
-    public RequireFunction(AbstractResource scriptResource, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container)
+    public RequireFunction(AbstractResource scriptResource, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container, Game game)
     {
+        this.game = game;
         this.container = container;
         this.scriptResource = scriptResource;
         this.eventBus = eventBus;
@@ -28,7 +31,7 @@ public class RequireFunction extends LuaFunction
         try
         {
             AbstractResource newRes = scriptResource.getLoader().getResource(scriptResource.getResourceLocation().getDirectParent().getChild(scriptName));
-            new LuaScript(newRes, globals, eventBus, container);
+            new LuaScript(newRes, globals, eventBus, container, game);
         }
         catch(UnsupportedEncodingException e)
         {

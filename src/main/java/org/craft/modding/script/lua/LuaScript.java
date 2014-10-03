@@ -6,24 +6,28 @@ import org.craft.modding.script.*;
 import org.craft.resources.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
+import org.spongepowered.api.*;
 
 public class LuaScript extends Script
 {
     private Globals             globals;
     private LuaEventBusListener eventBus;
     private LuaAddonContainer   container;
+    private Game                game;
 
-    public LuaScript(AbstractResource scriptRes, LuaEventBusListener eventBus, LuaAddonContainer container) throws UnsupportedEncodingException
+    public LuaScript(AbstractResource scriptRes, LuaEventBusListener eventBus, LuaAddonContainer container, Game game) throws UnsupportedEncodingException
     {
         super();
+        this.game = game;
         this.eventBus = eventBus;
         this.container = container;
         init(scriptRes);
     }
 
-    public LuaScript(AbstractResource newRes, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container) throws UnsupportedEncodingException
+    public LuaScript(AbstractResource newRes, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container, Game game) throws UnsupportedEncodingException
     {
         super();
+        this.game = game;
         this.container = container;
         this.eventBus = eventBus;
         this.globals = globals;
@@ -35,9 +39,9 @@ public class LuaScript extends Script
     {
         if(globals == null)
             globals = JsePlatform.debugGlobals();
-        globals.set("require", new RequireFunction(scriptResource, globals, eventBus, container));
+        globals.set("require", new RequireFunction(scriptResource, globals, eventBus, container, game));
         globals.set("print", new PrintFunction(globals));
-        globals.load(new OurCraftLib(eventBus, container));
+        globals.load(new OurCraftLib(eventBus, container, game));
         globals.load(scriptSource, scriptResource.getResourceLocation().getName()).call();
     }
 

@@ -114,7 +114,7 @@ public class AddonsLoader
                                 Log.message("Found lua addon with id: " + id + ", name: " + name + ", version: " + version + " and mainClass: " + mainClass + ". Author is " + author);
 
                                 LuaAddonContainer container = new LuaAddonContainer(id, name, version, author, mainClass);
-                                new LuaScript(zipResLoader.getResource(new ResourceLocation(mainClass)), luaListener, container);
+                                new LuaScript(zipResLoader.getResource(new ResourceLocation(mainClass)), luaListener, container, game);
 
                                 eventBus.register(container);
                                 File configFolder = new File(SystemUtils.getGameFolder(), "configs/");

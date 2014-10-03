@@ -37,8 +37,9 @@ public class Entity implements org.spongepowered.api.entity.Entity
     private boolean           onFire;
     private int               fireTicks;
     private UUID              uuid;
+    protected float           stepHeight = 0.f;
 
-    public static final float G = 9.81f / 360f;
+    public static final float G          = 9.81f / 360f;
 
     /**
      * Instantiates an Entity with given world
@@ -80,41 +81,41 @@ public class Entity implements org.spongepowered.api.entity.Entity
         onGround = true;
         onEntityUpdate();
 
-        velY += -G;
-
-        if(velY < -G * 6)
-        {
-            velY = -G * 6;
-        }
-
         if(canGo(posX + velX, posY, posZ))
         {
             posX += velX;
         }
+        else if(canGo(posX + velX, posY + stepHeight, posZ) && velY >= -G)
+        {
+            velY = 0;
+            posX += velX;
+            posY += stepHeight;
+        }
         else
             velX = 0;
-        if(velY == 0f)
-        {
-            ;
-        }
-        else
-        {
-            if(canGo(posX, posY + velY, posZ))
-            {
-                posY += velY;
-                onGround = false;
-            }
-            else
-            {
-                velY = 0;
-            }
-        }
+
         if(canGo(posX, posY, posZ + velZ))
         {
             posZ += velZ;
         }
+        else if(canGo(posX, posY + stepHeight, posZ + velZ) && velY >= -G)
+        {
+            velY = 0;
+            posZ += velZ;
+            posY += stepHeight;
+        }
         else
             velZ = 0;
+
+        if(canGo(posX, posY + velY, posZ))
+        {
+            posY += velY;
+            onGround = false;
+        }
+        else
+        {
+            velY = 0;
+        }
 
         if(pitch > Math.toRadians(90))
         {
@@ -135,6 +136,14 @@ public class Entity implements org.spongepowered.api.entity.Entity
             velX *= 0.12f / 2f;
             velZ *= 0.12f / 2f;
         }
+
+        velY += -G;
+
+        if(velY < -G * 6)
+        {
+            velY = -G * 6;
+        }
+
     }
 
     /**

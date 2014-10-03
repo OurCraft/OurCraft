@@ -18,7 +18,7 @@ public class Block implements IStackable, org.spongepowered.api.block.Block
     protected static AABB normalCubeAABB;
 
     private String        id;
-    private TextureIcon   blockIcon;
+    protected TextureIcon blockIcon;
 
     private short         uniqueID;
 
@@ -161,7 +161,7 @@ public class Block implements IStackable, org.spongepowered.api.block.Block
         int x1 = (int) (x + side.getTranslationX());
         int y1 = (int) (y + side.getTranslationY());
         int z1 = (int) (z + side.getTranslationZ());
-        user.worldObj.setBlock(x1, y1, z1, Blocks.log);
+        user.worldObj.setBlock(x1, y1, z1, this);
         onBlockAdded(user.worldObj, x1, y1, z1, side, user);
     }
 

@@ -23,11 +23,12 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
     public EntityPlayer(World world, UUID uuid)
     {
         super(world);
+        this.stepHeight = 0.75f;
         this.uuid = uuid;
         this.name = SessionManager.getInstance().getName(uuid);
         this.displayName = SessionManager.getInstance().getDisplayName(uuid);
         this.inventory = new PlayerInventory(name, 36);
-        inventory.setInventorySlotContents(0, new Stack(Blocks.log));
+        inventory.setInventorySlotContents(0, new Stack(Blocks.dirtSlab));
         setSize(0.75f, 1.80f, 0.75f);
     }
 
