@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 def filteredSourceDir = file("${buildDir}/filtered") 
 def versionValue = 'InDev 0.1'
-def mainClass = "org.craft.launch.OurCraftLauncher"
+def mainClass = "org.craft.client.start.OurCraftStartup"
 
     apply plugin: 'java'
     sourceCompatibility = 1.6
@@ -60,7 +60,7 @@ def mainClass = "org.craft.launch.OurCraftLauncher"
         compile 'com.google.guava:guava:18.0'
         compile 'com.google.code.gson:gson:2.3'
 
-        compile 'org.reflections:reflections-maven:0.9.9-RC2'
+        compile 'org.reflections:reflections:0.9.9'
         compile 'org.javassist:javassist:3.18.2-GA'
 
         compile 'org.luaj:luaj-jse:3.0'
