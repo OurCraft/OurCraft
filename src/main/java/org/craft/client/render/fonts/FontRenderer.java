@@ -1,7 +1,5 @@
 package org.craft.client.render.fonts;
 
-import java.util.*;
-
 import org.craft.client.render.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
@@ -28,8 +26,6 @@ public abstract class FontRenderer implements IDisposable
 
     public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
-        ArrayList<Vertex> vertices = new ArrayList<Vertex>();
-        ArrayList<Integer> indices = new ArrayList<Integer>();
         int currentIndex = 0;
         float x = (float) xo;
         float y = (float) yo;
@@ -122,18 +118,18 @@ public abstract class FontRenderer implements IDisposable
                 }
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
 
-                vertices.add(new Vertex(Vector3.get(x - 2, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
-                vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
-                vertices.add(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
-                vertices.add(new Vertex(Vector3.get(x - 2, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
+                buffer.addVertex(new Vertex(Vector3.get(x - 2, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                buffer.addVertex(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                buffer.addVertex(new Vertex(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                buffer.addVertex(new Vertex(Vector3.get(x - 2, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
 
-                indices.add(currentIndex + 0);
-                indices.add(currentIndex + 2);
-                indices.add(currentIndex + 3);
+                buffer.addIndex(currentIndex + 0);
+                buffer.addIndex(currentIndex + 2);
+                buffer.addIndex(currentIndex + 3);
 
-                indices.add(currentIndex + 0);
-                indices.add(currentIndex + 1);
-                indices.add(currentIndex + 2);
+                buffer.addIndex(currentIndex + 0);
+                buffer.addIndex(currentIndex + 1);
+                buffer.addIndex(currentIndex + 2);
                 currentIndex += 4;
 
             }
@@ -156,27 +152,27 @@ public abstract class FontRenderer implements IDisposable
 
                 if(!italic)
                 {
-                    vertices.add(new Vertex(Vector3.get(x, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
                 }
                 else
                 {
                     float italicFactor = -2.5f;
-                    vertices.add(new Vertex(Vector3.get(x - italicFactor, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c) - italicFactor, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
-                    vertices.add(new Vertex(Vector3.get(x + italicFactor, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x - italicFactor, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x + getCharWidth(c) - italicFactor, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                    buffer.addVertex(new Vertex(Vector3.get(x + italicFactor, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
                 }
 
-                indices.add(currentIndex + 0);
-                indices.add(currentIndex + 2);
-                indices.add(currentIndex + 3);
+                buffer.addIndex(currentIndex + 0);
+                buffer.addIndex(currentIndex + 2);
+                buffer.addIndex(currentIndex + 3);
 
-                indices.add(currentIndex + 0);
-                indices.add(currentIndex + 1);
-                indices.add(currentIndex + 2);
+                buffer.addIndex(currentIndex + 0);
+                buffer.addIndex(currentIndex + 1);
+                buffer.addIndex(currentIndex + 2);
 
                 currentIndex += 4;
 
@@ -184,12 +180,8 @@ public abstract class FontRenderer implements IDisposable
                 x = (float) Math.floor(x);
             }
         }
-        buffer.setVertices(vertices);
-        buffer.setIndices(indices);
         buffer.upload();
         renderEngine.renderBuffer(buffer, atlas.getTexture());
-        vertices.clear();
-        indices.clear();
         colorVec.dispose();
         buffer.clearAndDisposeVertices();
     }

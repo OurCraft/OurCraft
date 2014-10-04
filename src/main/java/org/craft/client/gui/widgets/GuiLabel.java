@@ -26,7 +26,10 @@ public class GuiLabel extends GuiWidget
     @Override
     public void render(int mx, int my, RenderEngine engine)
     {
-        font.drawShadowedString(txt, color, getX(), getY(), engine);
+        if(visible)
+        {
+            font.drawShadowedString(txt, color, getX(), getY(), engine);
+        }
     }
 
 }

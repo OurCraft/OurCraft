@@ -56,6 +56,7 @@ public class GuiMainMenu extends Gui
     @Override
     public void draw(int mx, int my, RenderEngine renderEngine)
     {
+        drawBackground(mx, my, renderEngine);
         renderEngine.bindLocation(logoTexture);
         drawTexturedRect(renderEngine, OurCraft.getOurCraft().getDisplayWidth() / 2 - 350, 0, 700, 150, 0, 0, 1, 1);
         super.draw(mx, my, renderEngine);

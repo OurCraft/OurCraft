@@ -2,6 +2,7 @@ package org.craft.network;
 
 import java.util.*;
 
+import org.craft.client.network.packets.*;
 import org.craft.network.packets.*;
 import org.craft.server.network.packets.*;
 import org.craft.utils.*;
@@ -22,8 +23,11 @@ public class PacketRegistry
         packets.put(NetworkSide.CLIENT, new HashMap<Integer, Class<? extends AbstractPacket>>());
         packets.put(NetworkSide.COMMON, new HashMap<Integer, Class<? extends AbstractPacket>>());
         packets.put(NetworkSide.SERVER, new HashMap<Integer, Class<? extends AbstractPacket>>());
+
         registerPacket(NetworkSide.COMMON, 0x0, TestPacket.class);
+        registerPacket(NetworkSide.CLIENT, 0x0, C0PlayerInfos.class);
         registerPacket(NetworkSide.SERVER, 0x0, S0ConnectionAccepted.class);
+        registerPacket(NetworkSide.SERVER, 0x1, S1ChatMessage.class);
     }
 
     public static int getPacketId(Class<? extends AbstractPacket> packet)

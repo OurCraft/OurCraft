@@ -7,7 +7,5 @@ varying vec3 baseColor;
 
 void main()
 {
-	vec4 finalColor = texture2D(diffuse, texCoord0);
-	finalColor = vec4(finalColor.rgb, finalColor.a);
-	gl_FragColor = finalColor * vec4(baseColor,1);
+	gl_FragColor = texture2D(diffuse, texCoord0) * vec4(baseColor,1);
 }

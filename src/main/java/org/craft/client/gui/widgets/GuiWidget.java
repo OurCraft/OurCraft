@@ -5,14 +5,18 @@ import org.craft.client.render.*;
 public abstract class GuiWidget
 {
 
-    private int id;
-    private int x;
-    private int y;
-    private int w;
-    private int h;
+    private int    id;
+    private int    x;
+    private int    y;
+    private int    w;
+    private int    h;
+    public boolean visible;
+    public boolean enabled;
 
     public GuiWidget(int id, int x, int y, int w, int h)
     {
+        visible = true;
+        enabled = true;
         this.id = id;
         this.x = x;
         this.y = y;

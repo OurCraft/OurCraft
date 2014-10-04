@@ -7,9 +7,10 @@ import io.netty.channel.socket.*;
 import io.netty.channel.socket.nio.*;
 import io.netty.util.concurrent.*;
 
+import java.util.*;
+
 import org.craft.modding.events.*;
 import org.craft.network.*;
-import org.craft.spongeimpl.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.spongepowered.api.*;
 
@@ -19,12 +20,17 @@ import org.spongepowered.api.*;
 public class NettyServerWrapper implements Runnable
 {
 
-    private int      port;
-    private EventBus eventBus;
-    private Game     game;
+    private int                      port;
+    private EventBus                 eventBus;
+    private Game                     game;
+    private ArrayList<Channel>       channels;
+    private HashMap<String, Channel> channelsMap;
 
     public NettyServerWrapper(Game gameInstance, EventBus eventBus, int port)
     {
+        channels = new ArrayList<Channel>();
+        channelsMap = new HashMap<String, Channel>();
+
         this.game = gameInstance;
         this.port = port;
         this.eventBus = eventBus;
@@ -76,6 +82,19 @@ public class NettyServerWrapper implements Runnable
         {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
+        }
+    }
+
+    public void registerChannel(String id, Channel channel)
+    {
+        channelsMap.put(id, channel);
+    }
+
+    public void sendPacketToAll(AbstractPacket packet)
+    {
+        for(Channel channel : channelsMap.values())
+        {
+            ChannelHelper.writeAndFlush(packet, channel);
         }
     }
 }

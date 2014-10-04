@@ -13,4 +13,5 @@ public abstract class AbstractPacket
     public abstract void decodeFrom(ByteBuf buffer);
 
     public abstract void encodeInto(ByteBuf buffer);
+
 }

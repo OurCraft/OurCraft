@@ -9,3 +9,5 @@ main.play.return=Return to game
 main.play.quitToMainScreen=Return to main screen
 
 block.log=Log
+
+players.joined=%1$s joined the game!

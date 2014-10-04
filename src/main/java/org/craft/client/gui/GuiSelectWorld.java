@@ -72,6 +72,8 @@ public class GuiSelectWorld extends Gui
         addWidget(new GuiButton(1, 0, 90, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer()));
         addWidget(worldList);
         addWidget(new GuiButton(3, 0, 140, 200, 40, I18n.format("menu.selectworld.new"), getFontRenderer()));
+        addWidget(new GuiButton(4, 0, 190, 200, 40, I18n.format("menu.back"), getFontRenderer()));
+
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -154,6 +156,10 @@ public class GuiSelectWorld extends Gui
                 e.printStackTrace();
             }
         }
+        else if(widget.getID() == 4)
+        {
+            OurCraft.getOurCraft().openMenu(new GuiMainMenu(getFontRenderer()));
+        }
     }
 
     @Override
@@ -162,4 +168,9 @@ public class GuiSelectWorld extends Gui
 
     }
 
+    public void draw(int mx, int my, RenderEngine renderEngine)
+    {
+        drawBackground(mx, my, renderEngine);
+        super.draw(mx, my, renderEngine);
+    }
 }

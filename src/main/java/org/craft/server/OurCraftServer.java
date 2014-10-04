@@ -6,12 +6,14 @@ import java.util.*;
 import javax.swing.*;
 
 import org.craft.blocks.*;
+import org.craft.client.*;
 import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
 import org.craft.server.network.*;
+import org.craft.server.network.packets.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
@@ -27,6 +29,7 @@ import org.spongepowered.api.plugin.*;
 public class OurCraftServer implements Game
 {
 
+    private static OurCraftServer instance;
     private NettyServerWrapper    serverWrapper;
     private SpongeGameRegistry    gameRegistry;
     private EventBus              eventBus;
@@ -53,6 +56,7 @@ public class OurCraftServer implements Game
 
     private int                   lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private boolean               running;
+    private AssetLoader           assetsLoader;
 
     public OurCraftServer()
     {
@@ -61,6 +65,8 @@ public class OurCraftServer implements Game
 
     public OurCraftServer(int maxPlayers)
     {
+        instance = this;
+        assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
         onlinePlayers = new ArrayList<Player>();
         this.maxPlayers = maxPlayers;
         WorldGenerator gen = new WorldGenerator();
@@ -94,6 +100,14 @@ public class OurCraftServer implements Game
         Log.message("Loading game data");
         Blocks.init();
         Items.init();
+        try
+        {
+            I18n.init(assetsLoader);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         PacketRegistry.init();
 
         Log.message("Loading SpongeAPI implementation");
@@ -214,8 +228,8 @@ public class OurCraftServer implements Game
     @Override
     public void broadcastMessage(String message)
     {
-        // TODO Packets!
         Log.message("[CHAT] " + message);
+        serverWrapper.sendPacketToAll(new S1ChatMessage(message));
     }
 
     @Override
@@ -287,5 +301,15 @@ public class OurCraftServer implements Game
     private void update(double delta)
     {
         serverWorld.update(delta, true);
+    }
+
+    public static OurCraftServer getServer()
+    {
+        return instance;
+    }
+
+    public NettyServerWrapper getNettyWrapper()
+    {
+        return serverWrapper;
     }
 }

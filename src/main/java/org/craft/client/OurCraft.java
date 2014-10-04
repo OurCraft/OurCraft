@@ -821,7 +821,7 @@ public class OurCraft implements Runnable, Game
     @Override
     public void broadcastMessage(String message)
     {
-        // TODO Auto-generated method stub
+        Log.message(message);
     }
 
     @Override

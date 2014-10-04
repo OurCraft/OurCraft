@@ -20,6 +20,11 @@ public class SessionManager
         return session;
     }
 
+    public void registerSession(Session session)
+    {
+        sessions.put(session.getUUID(), session);
+    }
+
     public static SessionManager getInstance()
     {
         if(instance == null)

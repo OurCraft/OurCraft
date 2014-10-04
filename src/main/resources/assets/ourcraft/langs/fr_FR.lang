@@ -9,3 +9,5 @@ main.play.return=Retourner dans le jeu
 main.play.quitToMainScreen=Returner sur le menu principal
 
 block.log=Bûche
+
+players.joined=%1$s a rejoint la partie!

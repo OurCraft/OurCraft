@@ -1,5 +1,6 @@
 package org.craft.client.network;
 
+import static org.craft.network.ChannelHelper.*;
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.nio.*;
@@ -8,8 +9,9 @@ import io.netty.channel.socket.nio.*;
 
 import org.craft.client.*;
 import org.craft.client.gui.*;
+import org.craft.client.network.packets.*;
 import org.craft.network.*;
-import org.craft.utils.*;
+import org.craft.server.network.packets.*;
 
 public class ClientNetHandler implements INetworkHandler
 {
@@ -45,6 +47,13 @@ public class ClientNetHandler implements INetworkHandler
                 catch(Exception e)
                 {
                     e.printStackTrace();
+                    setGuiStatus(e.toString());
+                    Gui menu = OurCraft.getOurCraft().getCurrentMenu();
+                    if(menu instanceof GuiConnecting)
+                    {
+                        GuiConnecting connectingMenu = (GuiConnecting) menu;
+                        connectingMenu.showGoBackButton();
+                    }
                 }
                 finally
                 {
@@ -56,19 +65,33 @@ public class ClientNetHandler implements INetworkHandler
     }
 
     @Override
-    public void handlePacket(AbstractPacket packet)
+    public void handlePacket(ChannelHandlerContext ctx, AbstractPacket packet)
     {
-        Log.message(packet.getClass().getName());
+        if(packet instanceof S0ConnectionAccepted)
+        {
+            setGuiStatus("Connected... Downloading terrain");
+            writeAndFlush(new C0PlayerInfos(OurCraft.getOurCraft().getSession()), ctx);
+        }
+        else if(packet instanceof S1ChatMessage)
+        {
+            S1ChatMessage chatMessage = (S1ChatMessage) packet;
+            OurCraft.getOurCraft().broadcastMessage(chatMessage.getMessage());
+        }
     }
 
     @Override
     public void onConnexionEstablished(ChannelHandlerContext ctx)
     {
+        ;
+    }
+
+    public void setGuiStatus(String status)
+    {
         Gui menu = OurCraft.getOurCraft().getCurrentMenu();
         if(menu instanceof GuiConnecting)
         {
             GuiConnecting connectingMenu = (GuiConnecting) menu;
-            connectingMenu.setStatus("Connected... Downloading terrain");
+            connectingMenu.setStatus(status);
         }
     }
 }

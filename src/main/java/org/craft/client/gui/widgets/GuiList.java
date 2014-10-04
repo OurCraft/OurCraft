@@ -43,11 +43,14 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     @Override
     public void render(int mx, int my, RenderEngine engine)
     {
-        for(int index = 0; index < getSize(); index++ )
+        if(visible)
         {
-            T slot = getSlot(index);
-            if(slot != null)
-                slot.render(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
+            for(int index = 0; index < getSize(); index++ )
+            {
+                T slot = getSlot(index);
+                if(slot != null)
+                    slot.render(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
+            }
         }
     }
 

@@ -1,7 +1,9 @@
 package org.craft.client.gui;
 
+import java.io.*;
 import java.util.*;
 
+import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
@@ -13,11 +15,27 @@ public abstract class Gui
 
     public static ResourceLocation widgetsTexture = new ResourceLocation("ourcraft", "textures/gui/widgets.png");
     private static OpenGLBuffer    buffer         = new OpenGLBuffer();
+    private static Texture         backgroundTexture;
     private FontRenderer           fontRenderer;
     private ArrayList<GuiWidget>   widgets;
 
     public Gui(FontRenderer font)
     {
+        if(backgroundTexture == null)
+        {
+            try
+            {
+                backgroundTexture = OpenGLHelper.loadTexture(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/gui/background.png")));
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
         widgets = new ArrayList<GuiWidget>();
         this.fontRenderer = font;
     }
@@ -84,9 +102,12 @@ public abstract class Gui
         {
             if(widget.isMouseOver(x, y))
             {
-                if(button == 0)
-                    actionPerformed(widget);
-                widget.onButtonReleased(x, y, button);
+                if(widget.enabled)
+                {
+                    if(button == 0)
+                        actionPerformed(widget);
+                    widget.onButtonReleased(x, y, button);
+                }
             }
         }
     }
@@ -97,7 +118,8 @@ public abstract class Gui
         {
             if(widget.isMouseOver(x, y))
             {
-                widget.onButtonPressed(x, y, button);
+                if(widget.enabled)
+                    widget.onButtonPressed(x, y, button);
             }
         }
     }
@@ -117,6 +139,12 @@ public abstract class Gui
         {
             widget.render(mx, my, renderEngine);
         }
+    }
+
+    public void drawBackground(int mx, int my, RenderEngine renderEngine)
+    {
+        renderEngine.bindTexture(backgroundTexture, 0);
+        drawTexturedRect(renderEngine, 0, 0, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0, 0, OurCraft.getOurCraft().getDisplayWidth() / backgroundTexture.getWidth(), OurCraft.getOurCraft().getDisplayHeight() / backgroundTexture.getHeight());
     }
 
     public abstract void update();

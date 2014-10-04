@@ -5,7 +5,7 @@ import io.netty.channel.*;
 public interface INetworkHandler
 {
 
-    void handlePacket(AbstractPacket packet);
+    void handlePacket(ChannelHandlerContext ctx, AbstractPacket packet);
 
     void onConnexionEstablished(ChannelHandlerContext ctx);
 }

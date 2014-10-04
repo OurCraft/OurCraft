@@ -20,14 +20,17 @@ public class GuiButton extends GuiWidget
     @Override
     public void render(int mx, int my, RenderEngine engine)
     {
-        engine.bindLocation(Gui.widgetsTexture);
-        Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), 0, 0, 100f / 256f, 10f / 256f);
-        int color = 0xFFFFFF;
-        if(isMouseOver(mx, my))
+        if(visible)
         {
-            color = 0xFFF544;
+            engine.bindLocation(Gui.widgetsTexture);
+            Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), 0, 0, 100f / 256f, 10f / 256f);
+            int color = 0xFFFFFF;
+            if(isMouseOver(mx, my))
+            {
+                color = 0xFFF544;
+            }
+            font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
         }
-        font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
     }
 
 }
