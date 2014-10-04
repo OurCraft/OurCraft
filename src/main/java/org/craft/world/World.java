@@ -22,9 +22,11 @@ public class World implements org.spongepowered.api.world.World
     private ChunkProvider      chunkProvider;
     private WorldGenerator     generator;
     private String             name;
+    private WorldLoader        worldLoader;
 
-    public World(String name, ChunkProvider prov, WorldGenerator generator)
+    public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
+        this.worldLoader = worldLoader;
         this.name = name;
         this.generator = generator;
         this.chunkProvider = prov;
@@ -411,5 +413,20 @@ public class World implements org.spongepowered.api.world.World
     public org.spongepowered.api.block.Block getBlock(int x, int y, int z)
     {
         return new SpongeBlock(getBlockAt(x, y, z), x, y, z, this);
+    }
+
+    public void setSeed(long seed)
+    {
+        this.getGenerator().setSeed(seed);
+    }
+
+    public long getSeed()
+    {
+        return getGenerator().getSeed();
+    }
+
+    public WorldLoader getLoader()
+    {
+        return worldLoader;
     }
 }

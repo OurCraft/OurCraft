@@ -28,7 +28,6 @@ import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.crash.*;
 import org.craft.world.*;
-import org.craft.world.populators.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
@@ -148,34 +147,12 @@ public class OurCraft implements Runnable, Game
             Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
             Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
 
-            boolean debugNoGui = false;
             renderBlocks = new RenderBlocks(renderEngine);
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
             renderBlocks.registerBlockRenderer(BlockHalfSlab.class, new BlockHalfSlabRenderer());
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
-
-            if(debugNoGui)
-            {
-                WorldGenerator generator = new WorldGenerator();
-                generator.addPopulator(new RockPopulator());
-                generator.addPopulator(new GrassPopulator());
-                generator.addPopulator(new TreePopulator());
-                clientWorld = new World("test-world", new BaseChunkProvider(), generator);
-
-                player = new EntityPlayer(clientWorld, session.getUUID());
-                player.setLocation(0, 160 + 17, 0);
-                clientWorld.spawn(player);
-                renderEngine.setRenderViewEntity(player);
-
-                fallbackRenderer = new FallbackRender<Entity>();
-                new ThreadGetChunksFromCamera(this).start();
-                openMenu(new GuiIngame(fontRenderer));
-            }
-            else
-            {
-                openMenu(new GuiMainMenu(fontRenderer));
-            }
+            openMenu(new GuiMainMenu(fontRenderer));
 
             crosshairBuffer = new OpenGLBuffer();
             crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
@@ -670,6 +647,14 @@ public class OurCraft implements Runnable, Game
         }
         else
         {
+            try
+            {
+                world.getLoader().loadWorldConstants(world);
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
             eventBus.fireEvent(new SpongeWorldLoadEvent(this, world), null, null);
         }
         this.clientWorld = world;
@@ -690,9 +675,54 @@ public class OurCraft implements Runnable, Game
      */
     public void quitToMainScreen()
     {
+        saveWorld();
         setWorld(null);
         setPlayer(null);
         openMenu(new GuiMainMenu(fontRenderer));
+    }
+
+    public void saveWorld()
+    {
+        WorldLoader loader = clientWorld.getLoader();
+        ByteDataBuffer buffer = new ByteDataBuffer();
+        try
+        {
+            File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + clientWorld.getName());
+            if(!worldFolder.exists())
+                worldFolder.mkdirs();
+            File chunkFolder = new File(worldFolder, "chunks");
+            if(!chunkFolder.exists())
+                chunkFolder.mkdirs();
+            loader.writeWorldConstants(buffer, clientWorld);
+            buffer.flush();
+            buffer.close();
+            File worldData = new File(worldFolder, "world.data");
+            if(!worldData.exists())
+                worldData.createNewFile();
+            FileOutputStream worldDataOut = new FileOutputStream(worldData);
+            worldDataOut.write(buffer.toBytes());
+            worldDataOut.flush();
+            worldDataOut.close();
+            Iterator<Chunk> chunks = clientWorld.getChunkProvider().iterator();
+            while(chunks.hasNext())
+            {
+                ByteDataBuffer regionBuffer = new ByteDataBuffer();
+                Chunk chunk = chunks.next();
+                loader.writeChunk(regionBuffer, chunk, chunk.getCoords().x, chunk.getCoords().y, chunk.getCoords().z);
+                regionBuffer.flush();
+                regionBuffer.close();
+                byte[] regionRawData = regionBuffer.toBytes();
+                File regionFile = new File(worldFolder, "chunks/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data");
+                FileOutputStream out = new FileOutputStream(regionFile);
+                out.write(regionRawData);
+                out.flush();
+                out.close();
+            }
+        }
+        catch(Exception e)
+        {
+            crash(new CrashReport(e));
+        }
     }
 
     public ResourceLoader getGameFolderLoader()

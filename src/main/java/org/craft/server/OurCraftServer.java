@@ -10,12 +10,14 @@ import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
+import org.craft.resources.*;
 import org.craft.server.network.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 import org.craft.world.*;
+import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
@@ -66,7 +68,8 @@ public class OurCraftServer implements Game
         gen.addPopulator(new GrassPopulator());
         gen.addPopulator(new FlowerPopulator());
         gen.addPopulator(new TreePopulator());
-        serverWorld = new org.craft.world.World("test-world", new BaseChunkProvider(), gen);
+        WorldLoader worldLoader = new VanillaWorldLoader(new ResourceLocation("world"), new DiskSimpleResourceLoader());
+        serverWorld = new org.craft.world.World("test-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 
     public void start(HashMap<String, String> properties)

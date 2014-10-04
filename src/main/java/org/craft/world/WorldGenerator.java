@@ -56,4 +56,9 @@ public class WorldGenerator
         return seed;
     }
 
+    public void setSeed(long seed)
+    {
+        this.seed = seed;
+    }
+
 }

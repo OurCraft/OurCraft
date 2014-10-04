@@ -46,11 +46,11 @@ public final class Blocks
      */
     public static void register(Block block)
     {
-        if(BLOCK_REGISTRY.containsKey(block.getID()))
+        if(BLOCK_REGISTRY.containsKey(block.getId()))
         {
-            throw new IllegalArgumentException("Id " + block.getID() + " is already used by " + BLOCK_REGISTRY.get(block.getID()) + " when trying to add " + block);
+            throw new IllegalArgumentException("Id " + block.getId() + " is already used by " + BLOCK_REGISTRY.get(block.getId()) + " when trying to add " + block);
         }
-        BLOCK_REGISTRY.put(block.getID(), block);
+        BLOCK_REGISTRY.put(block.getId(), block);
         blockByID.add(block);
     }
 

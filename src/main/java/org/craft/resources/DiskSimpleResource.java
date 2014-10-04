@@ -1,9 +1,6 @@
 package org.craft.resources;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 public class DiskSimpleResource extends AbstractResource
 {
@@ -27,7 +24,8 @@ public class DiskSimpleResource extends AbstractResource
                 byte[] buffer = new byte[65565];
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 int i;
-                while((i = getInputStream().read(buffer, 0, buffer.length)) != -1)
+                BufferedInputStream in = new BufferedInputStream(getInputStream());
+                while((i = in.read(buffer, 0, buffer.length)) != -1)
                 {
                     baos.write(buffer, 0, i);
                 }
