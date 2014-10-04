@@ -840,4 +840,9 @@ public class OurCraft implements Runnable, Game
     {
         return session;
     }
+
+    public void sendPacket(AbstractPacket packet)
+    {
+
+    }
 }
