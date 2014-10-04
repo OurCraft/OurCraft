@@ -37,7 +37,7 @@ public class VanillaWorldLoader extends WorldLoader
     @Override
     public Chunk loadChunk(World world, int chunkX, int chunkY, int chunkZ) throws IOException
     {
-        ResourceLocation res = new ResourceLocation(worldFolder, "chunks/chunk" + chunkX + "." + chunkY + "." + chunkZ + ".data");
+        ResourceLocation res = new ResourceLocation(worldFolder, "chunkData/chunk" + chunkX + "." + chunkY + "." + chunkZ + ".data");
         if(loader.doesResourceExists(res))
         {
             Chunk chunk = new Chunk(world, ChunkCoord.get(chunkX, chunkY, chunkZ));

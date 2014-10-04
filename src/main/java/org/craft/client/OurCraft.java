@@ -326,7 +326,7 @@ public class OurCraft implements Runnable, Game
             int y = displayHeight - Mouse.getEventY();
             if(currentMenu != null && state && mouseButton != -1)
             {
-                currentMenu.handleClick(x, y, mouseButton);
+                currentMenu.handleButtonReleased(x, y, mouseButton);
 
                 if(playerController != null)
                 {
@@ -690,7 +690,7 @@ public class OurCraft implements Runnable, Game
             File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + clientWorld.getName());
             if(!worldFolder.exists())
                 worldFolder.mkdirs();
-            File chunkFolder = new File(worldFolder, "chunks");
+            File chunkFolder = new File(worldFolder, "chunkData");
             if(!chunkFolder.exists())
                 chunkFolder.mkdirs();
             loader.writeWorldConstants(buffer, clientWorld);
@@ -712,7 +712,7 @@ public class OurCraft implements Runnable, Game
                 regionBuffer.flush();
                 regionBuffer.close();
                 byte[] regionRawData = regionBuffer.toBytes();
-                File regionFile = new File(worldFolder, "chunks/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data");
+                File regionFile = new File(worldFolder, "chunkData/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data");
                 FileOutputStream out = new FileOutputStream(regionFile);
                 out.write(regionRawData);
                 out.flush();

@@ -144,9 +144,9 @@ public class Entity implements org.spongepowered.api.entity.Entity
         onEntityUpdate();
         velY += -G;
 
-        if(velY < -G * 6)
+        if(velY < -G * 20)
         {
-            velY = -G * 6;
+            velY = -G * 20;
         }
 
     }

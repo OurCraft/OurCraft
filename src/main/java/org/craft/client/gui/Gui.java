@@ -78,17 +78,28 @@ public abstract class Gui
         }
     }
 
-    public void handleClick(int x, int y, int button)
+    public void handleButtonReleased(int x, int y, int button)
     {
-        if(button == 0)
-            for(GuiWidget widget : widgets)
+        for(GuiWidget widget : widgets)
+        {
+            if(widget.isMouseOver(x, y))
             {
-                if(widget.isMouseOver(x, y))
-                {
+                if(button == 0)
                     actionPerformed(widget);
-                    break;
-                }
+                widget.onButtonReleased(x, y, button);
             }
+        }
+    }
+
+    public void handleButtonPressed(int x, int y, int button)
+    {
+        for(GuiWidget widget : widgets)
+        {
+            if(widget.isMouseOver(x, y))
+            {
+                widget.onButtonPressed(x, y, button);
+            }
+        }
     }
 
     public boolean pausesGame()

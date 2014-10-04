@@ -61,4 +61,14 @@ public abstract class GuiWidget
     {
         return false;
     }
+
+    public boolean onButtonReleased(int x, int y, int button)
+    {
+        return true;
+    }
+
+    public boolean onButtonPressed(int x, int y, int button)
+    {
+        return true;
+    }
 }
