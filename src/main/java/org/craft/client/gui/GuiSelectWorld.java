@@ -22,15 +22,18 @@ public class GuiSelectWorld extends Gui
     public class GuiWorldSlot extends GuiListSlot
     {
 
-        private String worldFolderName;
-        private String worldName;
-        private long   timestamp;
+        private String   worldFolderName;
+        private String   worldName;
+        private long     timestamp;
+        private Calendar calendar;
 
         public GuiWorldSlot(String folderName, String name, long timestamp)
         {
             this.worldFolderName = folderName;
             this.worldName = name;
             this.timestamp = timestamp;
+            calendar = (Calendar) Calendar.getInstance().clone();
+            calendar.setTimeInMillis(timestamp);
         }
 
         @Override
@@ -39,9 +42,22 @@ public class GuiSelectWorld extends Gui
             if(selected)
                 Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
             FontRenderer font = OurCraft.getOurCraft().getFontRenderer();
-            font.drawShadowedString(worldName, 0xFFFFFFFF, x, y, engine);
-            font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x, y + 20, engine);
-            font.drawShadowedString(timestamp + "", 0xFFFFFFFF, x, y + 40, engine);
+            font.drawShadowedString(worldName, 0xFFFFFFFF, x + 2, y, engine);
+            font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x + 2, y + 20, engine);
+            String hour = "" + calendar.get(Calendar.HOUR_OF_DAY);
+            String minute = "" + calendar.get(Calendar.MINUTE);
+            String second = "" + calendar.get(Calendar.SECOND);
+            String day = "" + calendar.get(Calendar.DAY_OF_MONTH);
+            if(hour.length() < 2)
+                hour = "0" + hour;
+            if(minute.length() < 2)
+                minute = "0" + minute;
+            if(second.length() < 2)
+                second = "0" + second;
+            if(day.length() < 2)
+                day = "0" + day;
+            String dateString = hour + ":" + minute + ":" + second + " " + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + day;
+            font.drawShadowedString(dateString, 0xFFFFFFFF, x + 2, y + 40, engine);
         }
 
         public String getName()
@@ -90,7 +106,22 @@ public class GuiSelectWorld extends Gui
     @Override
     public void init()
     {
-        worldList = new GuiList<GuiWorldSlot>(2, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 4, 200, 80);
+        worldList = new GuiList<GuiWorldSlot>(2, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 4, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 4, 80);
+        Arrays.sort(worldFolders, new Comparator<File>()
+        {
+
+            @Override
+            public int compare(File a, File b)
+            {
+                File aWorldDataFile = new File(a, "world.data");
+                File bWorldDataFile = new File(b, "world.data");
+                if(aWorldDataFile.exists() && bWorldDataFile.exists())
+                {
+                    return Long.compare(aWorldDataFile.lastModified(), bWorldDataFile.lastModified());
+                }
+                return 1;
+            }
+        });
         for(File worldFolder : worldFolders)
         {
             File worldDataFile = new File(worldFolder, "world.data");

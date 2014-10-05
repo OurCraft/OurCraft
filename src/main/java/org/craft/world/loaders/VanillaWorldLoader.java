@@ -36,6 +36,7 @@ public class VanillaWorldLoader extends WorldLoader
     {
         buffer.writeLong(world.getSeed());
         buffer.writeLong(System.currentTimeMillis());
+        Log.message(">>>" + System.currentTimeMillis());
         buffer.writeString(world.getName());
     }
 

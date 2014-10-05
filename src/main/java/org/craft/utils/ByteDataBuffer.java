@@ -81,12 +81,10 @@ public class ByteDataBuffer implements Flushable, Closeable
 
     public long readLong() throws IOException
     {
-        long result = 0;
-        for(int i = 0; i < 8; i++ )
-        {
-            result |= (short) (((readByte() & 0xFF) << 8 * (order == ByteOrder.BIG_ENDIAN ? 8 - i - 1 : i)));
-        }
-        return result;
+        byte[] bytes = new byte[8];
+        for(int i = 0; i < bytes.length; i++ )
+            bytes[i] = readByte();
+        return ByteBuffer.wrap(bytes).order(order).getLong();
     }
 
     public float readFloat() throws IOException
@@ -120,7 +118,7 @@ public class ByteDataBuffer implements Flushable, Closeable
         }
         else if(order == ByteOrder.BIG_ENDIAN)
         {
-            out.write((byte) (l >> 56 & 0xFF));
+            out.write((byte) (l >> 56) & 0xFF);
             out.write((byte) (l >> 48) & 0xFF);
             out.write((byte) (l >> 40) & 0xFF);
             out.write((byte) (l >> 32) & 0xFF);
