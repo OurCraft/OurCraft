@@ -75,10 +75,7 @@ public class OpenGLBuffer
     public void setIndices(List<Integer> newIndices)
     {
         indices.clear();
-        for(Integer index : newIndices)
-        {
-            addIndex(index);
-        }
+        indices.addAll(newIndices);
     }
 
     public void setVertices(List<Vertex> newVertices)
@@ -92,10 +89,7 @@ public class OpenGLBuffer
             clearAndDisposeVertices();
         else
             vertices.clear();
-        for(Vertex v : newVertices)
-        {
-            vertices.add(v);
-        }
+        vertices.addAll(newVertices);
     }
 
     /**

@@ -50,13 +50,22 @@ public abstract class Gui
         return fontRenderer;
     }
 
-    public static void drawTexturedRect(RenderEngine engine, int x, int y, int w, int h, float minU, float minV, float maxU, float maxV)
-    {
-        buffer.addVertex(new Vertex(Vector3.get(x, y, 0), Vector2.get(minU, minV)));
-        buffer.addVertex(new Vertex(Vector3.get(x + w, y, 0), Vector2.get(maxU, minV)));
-        buffer.addVertex(new Vertex(Vector3.get(x + w, y + h, 0), Vector2.get(maxU, maxV)));
-        buffer.addVertex(new Vertex(Vector3.get(x, y + h, 0), Vector2.get(minU, maxV)));
+    private static Vector3 bottomLeftCornerPos  = Vector3.get(0, 0, 0);
+    private static Vector3 bottomRightCornerPos = Vector3.get(0, 0, 0);
+    private static Vector3 topLeftCornerPos     = Vector3.get(0, 0, 0);
+    private static Vector3 topRightCornerPos    = Vector3.get(0, 0, 0);
 
+    private static Vector2 bottomLeftCornerUV   = Vector2.get(0, 0);
+    private static Vector2 bottomRightCornerUV  = Vector2.get(0, 0);
+    private static Vector2 topLeftCornerUV      = Vector2.get(0, 0);
+    private static Vector2 topRightCornerUV     = Vector2.get(0, 0);
+
+    static
+    {
+        buffer.addVertex(new Vertex(bottomLeftCornerPos, bottomLeftCornerUV));
+        buffer.addVertex(new Vertex(bottomRightCornerPos, bottomRightCornerUV));
+        buffer.addVertex(new Vertex(topLeftCornerPos, topLeftCornerUV));
+        buffer.addVertex(new Vertex(topRightCornerPos, topRightCornerUV));
         buffer.addIndex(0);
         buffer.addIndex(1);
         buffer.addIndex(2);
@@ -64,10 +73,20 @@ public abstract class Gui
         buffer.addIndex(2);
         buffer.addIndex(3);
         buffer.addIndex(0);
+    }
 
+    public static void drawTexturedRect(RenderEngine engine, int x, int y, int w, int h, float minU, float minV, float maxU, float maxV)
+    {
+        bottomLeftCornerPos.set(x, y, 0);
+        bottomRightCornerPos.set(x + w, y, 0);
+        topLeftCornerPos.set(x + w, y + h, 0);
+        topRightCornerPos.set(x, y + h, 0);
+        bottomLeftCornerUV.set(minU, minV);
+        bottomRightCornerUV.set(maxU, minV);
+        topLeftCornerUV.set(maxU, maxV);
+        topRightCornerUV.set(minU, maxV);
         buffer.upload();
         engine.renderBuffer(buffer);
-        buffer.clearAndDisposeVertices();
     }
 
     public void actionPerformed(GuiWidget widget)
