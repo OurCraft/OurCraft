@@ -48,6 +48,8 @@ public class GuiSelectWorld extends Gui
     public GuiSelectWorld(FontRenderer font, File... worldFolders)
     {
         super(font);
+        if(worldFolders == null)
+            worldFolders = new File[0];
         this.worldFolders = worldFolders;
     }
 
