@@ -3,8 +3,13 @@ package org.craft.client;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
+import java.awt.*;
+import java.awt.image.*;
 import java.io.*;
+import java.nio.*;
 import java.util.*;
+
+import javax.imageio.*;
 
 import org.craft.blocks.*;
 import org.craft.client.gui.*;
@@ -29,9 +34,11 @@ import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.crash.*;
 import org.craft.world.*;
+import org.lwjgl.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
@@ -449,8 +456,54 @@ public class OurCraft implements Runnable, Game
 
     private void render(double delta)
     {
+        render(delta, true);
+    }
+
+    private void render(double delta, boolean drawGui)
+    {
         renderEngine.begin();
-        ArrayList<Chunk> visiblesChunks = new ArrayList<Chunk>();
+        ArrayList<Chunk> visiblesChunks = getVisibleChunks();
+        glViewport(0, 0, Display.getWidth(), Display.getHeight());
+        glClearColor(0, 0.6666667f, 1, 0);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        renderEngine.enableGLCap(GL_DEPTH_TEST);
+        renderEngine.switchToPerspective();
+        if(clientWorld != null)
+        {
+            renderWorld(visiblesChunks, delta);
+        }
+        else
+        {
+            glClear(GL_DEPTH_BUFFER_BIT);
+        }
+        renderEngine.end();
+        renderEngine.disableGLCap(GL_DEPTH_TEST);
+        renderEngine.switchToOrtho();
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+        if(drawGui)
+        {
+            if(clientWorld != null)
+            {
+                renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
+                glLogicOp(GL_XOR);
+                renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
+                renderEngine.renderBuffer(crosshairBuffer);
+                renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
+            }
+
+            int mx = Mouse.getX();
+            int my = Mouse.getY();
+            if(currentMenu != null)
+                currentMenu.draw(mx, displayHeight - my, renderEngine);
+        }
+        printIfGLError();
+    }
+
+    private ArrayList<Chunk> getVisibleChunks()
+    {
+        ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
         if(player != null)
         {
             int renderDistance = 8;
@@ -472,67 +525,42 @@ public class OurCraft implements Runnable, Game
                         {
                             Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
                             if(c != null)
-                                visiblesChunks.add(c);
+                                visibleChunks.add(c);
                         }
                     }
                 }
             }
         }
-        glViewport(0, 0, Display.getWidth(), Display.getHeight());
-        glClearColor(0, 0.6666667f, 1, 1);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        renderEngine.enableGLCap(GL_DEPTH_TEST);
-        renderEngine.switchToPerspective();
-        if(clientWorld != null)
-        {
-            renderBlocks.render(clientWorld, visiblesChunks);
-            for(Entity e : clientWorld.getEntitiesList())
-            {
-                if(e != renderEngine.getRenderViewEntity())
-                {
-                    fallbackRenderer.render(renderEngine, e, (float) e.getX(), (float) e.getY(), (float) e.getZ());
-                }
-            }
-            glClear(GL_DEPTH_BUFFER_BIT);
-            renderEngine.disableGLCap(GL_DEPTH_TEST);
-            if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
-            {
-                renderEngine.bindLocation(null);
-                Matrix4 modelView = renderEngine.getModelviewMatrix();
-                AABB blockSelectBB = ((Block) objectInFront.value).getSelectionBox(clientWorld, 0, 0, 0);
-                Vector3 ratio = blockSelectBB.getMaxExtents().sub(blockSelectBB.getMinExtents());
-                float sx = ratio.getX();
-                float sy = ratio.getY();
-                float sz = ratio.getZ();
-                Matrix4 selectionBoxMatrix = new Matrix4().initTranslation(objectInFront.x + blockSelectBB.getMinExtents().getX(), objectInFront.y + blockSelectBB.getMinExtents().getY(), objectInFront.z + blockSelectBB.getMinExtents().getZ()).mul(new Matrix4().initScale(sx, sy, sz));
-                renderEngine.setModelviewMatrix(selectionBoxMatrix);
-                renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
-                renderEngine.setModelviewMatrix(modelView);
-            }
-            renderEngine.switchToOrtho();
-        }
-        else
-        {
-            glClear(GL_DEPTH_BUFFER_BIT);
-            renderEngine.disableGLCap(GL_DEPTH_TEST);
-            renderEngine.switchToOrtho();
-        }
-        renderEngine.end();
-        if(clientWorld != null)
-        {
-            renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
-            glLogicOp(GL_XOR);
-            renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
-            renderEngine.renderBuffer(crosshairBuffer);
-            renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
-        }
+        return visibleChunks;
+    }
 
-        int mx = Mouse.getX();
-        int my = Mouse.getY();
-        if(currentMenu != null)
-            currentMenu.draw(mx, displayHeight - my, renderEngine);
-
-        printIfGLError();
+    private void renderWorld(ArrayList<Chunk> visiblesChunks, double delta)
+    {
+        renderBlocks.render(clientWorld, visiblesChunks);
+        for(Entity e : clientWorld.getEntitiesList())
+        {
+            if(e != renderEngine.getRenderViewEntity())
+            {
+                fallbackRenderer.render(renderEngine, e, (float) e.getX(), (float) e.getY(), (float) e.getZ());
+            }
+        }
+        glClear(GL_DEPTH_BUFFER_BIT);
+        renderEngine.disableGLCap(GL_DEPTH_TEST);
+        if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
+        {
+            renderEngine.bindLocation(null);
+            Matrix4 modelView = renderEngine.getModelviewMatrix();
+            AABB blockSelectBB = ((Block) objectInFront.value).getSelectionBox(clientWorld, 0, 0, 0);
+            Vector3 ratio = blockSelectBB.getMaxExtents().sub(blockSelectBB.getMinExtents());
+            float sx = ratio.getX();
+            float sy = ratio.getY();
+            float sz = ratio.getZ();
+            Matrix4 selectionBoxMatrix = new Matrix4().initTranslation(objectInFront.x + blockSelectBB.getMinExtents().getX(), objectInFront.y + blockSelectBB.getMinExtents().getY(), objectInFront.z + blockSelectBB.getMinExtents().getZ()).mul(new Matrix4().initScale(sx, sy, sz));
+            renderEngine.setModelviewMatrix(selectionBoxMatrix);
+            renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
+            renderEngine.setModelviewMatrix(modelView);
+        }
+        renderEngine.switchToOrtho();
     }
 
     public void setResourcesPack(String fileName) throws Exception
@@ -692,6 +720,11 @@ public class OurCraft implements Runnable, Game
             File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + clientWorld.getName());
             if(!worldFolder.exists())
                 worldFolder.mkdirs();
+
+            render(0, false);
+
+            ImageIO.write(takeScreenshot(), "png", new File(worldFolder, "worldSnapshot.png"));
+
             File chunkFolder = new File(worldFolder, "chunkData");
             if(!chunkFolder.exists())
                 chunkFolder.mkdirs();
@@ -725,6 +758,40 @@ public class OurCraft implements Runnable, Game
         {
             crash(new CrashReport(e));
         }
+    }
+
+    private static int[]     screenshotBufferArray;
+    private static IntBuffer screenshotBuffer;
+
+    public static BufferedImage takeScreenshot()
+    {
+        int k = Display.getWidth() * Display.getHeight();
+        if(screenshotBuffer == null || screenshotBuffer.capacity() < k)
+        {
+            screenshotBuffer = BufferUtils.createIntBuffer(k);
+            screenshotBufferArray = new int[k];
+        }
+        GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        screenshotBuffer.clear();
+        GL11.glReadPixels(0, 0, Display.getWidth(), Display.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, screenshotBuffer);
+        screenshotBuffer.get(screenshotBufferArray);
+        int[] aint1 = new int[Display.getWidth()];
+        int j = Display.getHeight() / 2;
+        for(int l = 0; l < j; ++l)
+        {
+            System.arraycopy(screenshotBufferArray, l * Display.getWidth(), aint1, 0, Display.getWidth());
+            System.arraycopy(screenshotBufferArray, (Display.getHeight() - 1 - l) * Display.getWidth(), screenshotBufferArray, l * Display.getWidth(), Display.getWidth());
+            System.arraycopy(aint1, 0, screenshotBufferArray, (Display.getHeight() - 1 - l) * Display.getWidth(), Display.getWidth());
+        }
+        BufferedImage bufferedimage = new BufferedImage(Display.getWidth(), Display.getHeight(), BufferedImage.TYPE_INT_RGB);
+        for(int i = 0; i < screenshotBufferArray.length; i++ )
+        {
+            Color c = ImageUtils.getColor(screenshotBufferArray[i]);
+            screenshotBufferArray[i] = new Color(c.getBlue(), c.getGreen(), c.getRed()).getRGB();
+        }
+        bufferedimage.setRGB(0, 0, Display.getWidth(), Display.getHeight(), screenshotBufferArray, 0, Display.getWidth());
+        return bufferedimage;
     }
 
     public ResourceLoader getGameFolderLoader()

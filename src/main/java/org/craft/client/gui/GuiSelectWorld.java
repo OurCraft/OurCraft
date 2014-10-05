@@ -1,6 +1,9 @@
 package org.craft.client.gui;
 
 import java.io.*;
+import java.util.*;
+
+import javax.imageio.*;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
@@ -42,16 +45,34 @@ public class GuiSelectWorld extends Gui
 
     }
 
-    private File[]                worldFolders;
-    private GuiList<GuiWorldSlot> worldList;
-    private GuiButton             playButton;
+    private File[]                   worldFolders;
+    private GuiList<GuiWorldSlot>    worldList;
+    private GuiButton                playButton;
+    private HashMap<String, Texture> textureMap;
+    private Texture                  worldSnapshot;
+    private Shader                   worldSnapshotShader;
 
     public GuiSelectWorld(FontRenderer font, File... worldFolders)
     {
         super(font);
+        textureMap = new HashMap<String, Texture>();
         if(worldFolders == null)
             worldFolders = new File[0];
         this.worldFolders = worldFolders;
+
+        try
+        {
+            worldSnapshotShader = new Shader(new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.vsh")).getData(), "UTF-8"), new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.fsh")).getData(), "UTF-8"));
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -70,6 +91,19 @@ public class GuiSelectWorld extends Gui
             if(worldDataFile.exists())
             {
                 worldList.addSlot(new GuiWorldSlot(worldFolder.getName()));
+
+                File snapshotFile = new File(worldFolder, "worldSnapshot.png");
+                if(snapshotFile.exists())
+                {
+                    try
+                    {
+                        textureMap.put(worldFolder.getName(), OpenGLHelper.loadTexture(ImageIO.read(snapshotFile)));
+                    }
+                    catch(IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         playButton = new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer());
@@ -93,6 +127,11 @@ public class GuiSelectWorld extends Gui
         else if(widget.getID() == 2)
         {
             playButton.enabled = worldList.getSelected() != null;
+            if(worldList.getSelected() != null)
+            {
+                String name = worldList.getSelected().worldName;
+                this.worldSnapshot = textureMap.get(name);
+            }
         }
         else if(widget.getID() == 3)
         {
@@ -150,6 +189,14 @@ public class GuiSelectWorld extends Gui
     public void draw(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);
+        if(worldSnapshot != null)
+        {
+            Shader oldShader = renderEngine.getCurrentShader();
+            renderEngine.setCurrentShader(worldSnapshotShader);
+            renderEngine.bindTexture(worldSnapshot);
+            drawTexturedRect(renderEngine, 0, 0, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0, 0, 1, 1);
+            renderEngine.setCurrentShader(oldShader);
+        }
         super.draw(mx, my, renderEngine);
     }
 }

@@ -365,9 +365,10 @@ public class RenderEngine implements IDisposable
     public void begin()
     {
         currentShader.bind();
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+        glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindTexture(GL_TEXTURE_2D, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
     }
 
     /**
@@ -451,5 +452,15 @@ public class RenderEngine implements IDisposable
         glAlphaFunc(func, ref);
         renderState.setAlphaFunc(func, ref);
         return this;
+    }
+
+    public Matrix4 getHUDProjectionMatrix()
+    {
+        return projectionHud;
+    }
+
+    public Texture getColorBuffer()
+    {
+        return colorBuffer;
     }
 }
