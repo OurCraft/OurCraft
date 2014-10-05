@@ -15,6 +15,8 @@ import org.craft.server.network.packets.*;
 
 public class ClientNetHandler implements INetworkHandler
 {
+    private Channel channel;
+
     public void connectTo(final String host, final int port)
     {
         new Thread("Client Multiplayer Thread")
@@ -82,7 +84,7 @@ public class ClientNetHandler implements INetworkHandler
     @Override
     public void onConnexionEstablished(ChannelHandlerContext ctx)
     {
-        ;
+        this.channel = ctx.channel();
     }
 
     public void setGuiStatus(String status)
@@ -93,5 +95,10 @@ public class ClientNetHandler implements INetworkHandler
             GuiConnecting connectingMenu = (GuiConnecting) menu;
             connectingMenu.setStatus(status);
         }
+    }
+
+    public void send(AbstractPacket packet)
+    {
+        ChannelHelper.writeAndFlush(packet, channel);
     }
 }

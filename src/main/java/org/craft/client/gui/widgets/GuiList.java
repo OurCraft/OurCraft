@@ -32,11 +32,14 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
 
     public boolean onButtonReleased(int mx, int my, int button)
     {
-        int y = my + scroll;
-        int index = y / slotHeight;
-        selectedIndex = index;
-        if(selectedIndex < 0 || selectedIndex >= getSize())
-            selectedIndex = -1;
+        if(isMouseOver(mx, my))
+        {
+            int y = my + scroll - getY();
+            int index = y / slotHeight;
+            selectedIndex = index;
+            if(selectedIndex < 0 || selectedIndex >= getSize())
+                selectedIndex = -1;
+        }
         return true;
     }
 

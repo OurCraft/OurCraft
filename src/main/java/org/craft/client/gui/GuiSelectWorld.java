@@ -44,6 +44,7 @@ public class GuiSelectWorld extends Gui
 
     private File[]                worldFolders;
     private GuiList<GuiWorldSlot> worldList;
+    private GuiButton             playButton;
 
     public GuiSelectWorld(FontRenderer font, File... worldFolders)
     {
@@ -62,7 +63,7 @@ public class GuiSelectWorld extends Gui
     @Override
     public void init()
     {
-        worldList = new GuiList<GuiWorldSlot>(2, 0, 0, 100, 200, 20);
+        worldList = new GuiList<GuiWorldSlot>(2, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 4, 200, 20);
         for(File worldFolder : worldFolders)
         {
             File worldDataFile = new File(worldFolder, "world.data");
@@ -71,11 +72,12 @@ public class GuiSelectWorld extends Gui
                 worldList.addSlot(new GuiWorldSlot(worldFolder.getName()));
             }
         }
-        addWidget(new GuiButton(1, 0, 90, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer()));
+        playButton = new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer());
+        playButton.enabled = false;
+        addWidget(playButton);
         addWidget(worldList);
-        addWidget(new GuiButton(3, 0, 140, 200, 40, I18n.format("menu.selectworld.new"), getFontRenderer()));
-        addWidget(new GuiButton(4, 0, 190, 200, 40, I18n.format("menu.back"), getFontRenderer()));
-
+        addWidget(new GuiButton(3, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.new"), getFontRenderer()));
+        addWidget(new GuiButton(4, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.back"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -85,82 +87,57 @@ public class GuiSelectWorld extends Gui
             GuiWorldSlot worldSlot = worldList.getSelected();
             if(worldSlot != null)
             {
-                WorldGenerator generator = new WorldGenerator();
-                generator.addPopulator(new RockPopulator());
-                generator.addPopulator(new GrassPopulator());
-                generator.addPopulator(new TreePopulator());
-                generator.addPopulator(new FlowerPopulator());
-                WorldLoader worldLoader;
-                try
-                {
-                    String worldName = worldSlot.getName();
-                    File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + worldName);
-                    if(!worldFolder.exists())
-                        worldFolder.mkdirs();
-                    worldLoader = new VanillaWorldLoader(new ResourceLocation(worldName), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
-                    World clientWorld = new World(worldName, new BaseChunkProvider(worldLoader), generator, worldLoader);
-
-                    EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
-                    player.setLocation(0, 160 + 17, 0);
-                    clientWorld.spawn(player);
-                    OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
-                    OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
-
-                    Entity testEntity = new Entity(clientWorld);
-                    testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
-                    clientWorld.spawn(testEntity);
-
-                    new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
-                    OurCraft.getOurCraft().setWorld(clientWorld);
-                    OurCraft.getOurCraft().setPlayer(player);
-                    OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
+                launchGameOnWorld(worldSlot.getName());
             }
+        }
+        else if(widget.getID() == 2)
+        {
+            playButton.enabled = worldList.getSelected() != null;
         }
         else if(widget.getID() == 3)
         {
-            WorldGenerator generator = new WorldGenerator();
-            generator.addPopulator(new RockPopulator());
-            generator.addPopulator(new GrassPopulator());
-            generator.addPopulator(new TreePopulator());
-            generator.addPopulator(new FlowerPopulator());
-            WorldLoader worldLoader;
-            try
-            {
-                String worldName = "test-world";
-                File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + worldName);
-                if(!worldFolder.exists())
-                    worldFolder.mkdirs();
-                worldLoader = new VanillaWorldLoader(new ResourceLocation(worldName), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
-                World clientWorld = new World(worldName, new BaseChunkProvider(worldLoader), generator, worldLoader);
-
-                EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
-                player.setLocation(0, 160 + 17, 0);
-                clientWorld.spawn(player);
-                OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
-                OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
-
-                Entity testEntity = new Entity(clientWorld);
-                testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
-                clientWorld.spawn(testEntity);
-
-                new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
-                OurCraft.getOurCraft().setWorld(clientWorld);
-                OurCraft.getOurCraft().setPlayer(player);
-                OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+            launchGameOnWorld("test-world");
         }
         else if(widget.getID() == 4)
         {
             OurCraft.getOurCraft().openMenu(new GuiMainMenu(getFontRenderer()));
+        }
+    }
+
+    private void launchGameOnWorld(String worldName)
+    {
+        WorldGenerator generator = new WorldGenerator();
+        generator.addPopulator(new RockPopulator());
+        generator.addPopulator(new GrassPopulator());
+        generator.addPopulator(new TreePopulator());
+        generator.addPopulator(new FlowerPopulator());
+        WorldLoader worldLoader;
+        try
+        {
+            File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + worldName);
+            if(!worldFolder.exists())
+                worldFolder.mkdirs();
+            worldLoader = new VanillaWorldLoader(new ResourceLocation(worldName), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
+            World clientWorld = new World(worldName, new BaseChunkProvider(worldLoader), generator, worldLoader);
+
+            EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
+            player.setLocation(0, 160 + 17, 0);
+            clientWorld.spawn(player);
+            OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
+            OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
+
+            Entity testEntity = new Entity(clientWorld);
+            testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
+            clientWorld.spawn(testEntity);
+
+            new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
+            OurCraft.getOurCraft().setWorld(clientWorld);
+            OurCraft.getOurCraft().setPlayer(player);
+            OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

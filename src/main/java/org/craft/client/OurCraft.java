@@ -8,6 +8,7 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.gui.*;
+import org.craft.client.network.*;
 import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
@@ -82,6 +83,7 @@ public class OurCraft implements Runnable, Game
     private final double             TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
     private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
+    private ClientNetHandler         netHandler;
 
     public OurCraft()
     {
@@ -841,8 +843,18 @@ public class OurCraft implements Runnable, Game
         return session;
     }
 
+    public void setNetHandler(ClientNetHandler handler)
+    {
+        this.netHandler = handler;
+    }
+
+    public ClientNetHandler getNetHandler()
+    {
+        return netHandler;
+    }
+
     public void sendPacket(AbstractPacket packet)
     {
-
+        netHandler.send(packet);
     }
 }

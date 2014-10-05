@@ -4,6 +4,7 @@ lang.test3=OurCraft et l'argument donné est: %1$s
 lang.test4=OurCraft et l'argument donné est: %1$i
 
 main.play.singleplayer=Jeu solo
+main.play.multiplayer=Jeu multijoueur
 main.quit=Quitter
 main.play.return=Retourner dans le jeu
 main.play.quitToMainScreen=Returner sur le menu principal
@@ -11,3 +12,8 @@ main.play.quitToMainScreen=Returner sur le menu principal
 block.log=Bûche
 
 players.joined=%1$s a rejoint la partie!
+
+menu.back=Retour
+
+menu.selectworld.new=Créer un nouveau monde
+menu.selectworld.play=Jouer sur ce monde

@@ -273,25 +273,8 @@ public class World implements org.spongepowered.api.world.World
             Log.error("Cannot generate a chunk on a chunk on " + x + ", " + y + ", " + z);
         else
         {
-            Thread t = new Thread()
-            {
-                @Override
-                public void run()
-                {
-                    chunkProvider.create(w, x, y, z);
-                }
-            };
-            t.start();
-            try
-            {
-                t.join();
-            }
-            catch(InterruptedException e)
-            {
-                e.printStackTrace();
-            }
+            chunkProvider.create(w, x, y, z);
         }
-
     }
 
     public BlockStatesObject getBlockStates(int x, int y, int z)

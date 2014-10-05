@@ -104,9 +104,9 @@ public abstract class Gui
             {
                 if(widget.enabled)
                 {
+                    widget.onButtonReleased(x, y, button);
                     if(button == 0)
                         actionPerformed(widget);
-                    widget.onButtonReleased(x, y, button);
                 }
             }
         }

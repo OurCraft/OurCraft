@@ -25,12 +25,15 @@ public class GuiButton extends GuiWidget
             engine.bindLocation(Gui.widgetsTexture);
             Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), 0, 0, 100f / 256f, 10f / 256f);
             int color = 0xFFFFFF;
-            if(isMouseOver(mx, my))
+            if(!enabled)
             {
-                color = 0xFFF544;
+                color = 0xFF707070;
+            }
+            else if(isMouseOver(mx, my))
+            {
+                color = 0xFFFFF544;
             }
             font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
         }
     }
-
 }
