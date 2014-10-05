@@ -281,4 +281,11 @@ public class ByteDataBuffer implements Flushable, Closeable
         return in != null && in.available() > 0;
     }
 
+    public int readableBytes() throws IOException
+    {
+        if(in != null)
+            return in.available();
+        return 0;
+    }
+
 }

@@ -22,11 +22,15 @@ public class GuiSelectWorld extends Gui
     public class GuiWorldSlot extends GuiListSlot
     {
 
+        private String worldFolderName;
         private String worldName;
+        private long   timestamp;
 
-        public GuiWorldSlot(String name)
+        public GuiWorldSlot(String folderName, String name, long timestamp)
         {
+            this.worldFolderName = folderName;
             this.worldName = name;
+            this.timestamp = timestamp;
         }
 
         @Override
@@ -36,11 +40,13 @@ public class GuiSelectWorld extends Gui
                 Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
             FontRenderer font = OurCraft.getOurCraft().getFontRenderer();
             font.drawShadowedString(worldName, 0xFFFFFFFF, x, y, engine);
+            font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x, y + 20, engine);
+            font.drawShadowedString(timestamp + "", 0xFFFFFFFF, x, y + 40, engine);
         }
 
         public String getName()
         {
-            return worldName;
+            return worldFolderName;
         }
 
     }
@@ -84,14 +90,18 @@ public class GuiSelectWorld extends Gui
     @Override
     public void init()
     {
-        worldList = new GuiList<GuiWorldSlot>(2, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 4, 200, 20);
+        worldList = new GuiList<GuiWorldSlot>(2, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 4, 200, 80);
         for(File worldFolder : worldFolders)
         {
             File worldDataFile = new File(worldFolder, "world.data");
             if(worldDataFile.exists())
             {
-                worldList.addSlot(new GuiWorldSlot(worldFolder.getName()));
 
+                if(!worldFolder.exists())
+                    worldFolder.mkdirs();
+                WorldLoader worldLoader = new VanillaWorldLoader(new ResourceLocation(worldFolder.getName()), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
+
+                HashMap<String, String> worldInfos = worldLoader.loadWorldInfos(worldDataFile);
                 File snapshotFile = new File(worldFolder, "worldSnapshot.png");
                 if(snapshotFile.exists())
                 {
@@ -104,6 +114,13 @@ public class GuiSelectWorld extends Gui
                         e.printStackTrace();
                     }
                 }
+                long timestamp = 0L;
+                String name = worldFolder.getName();
+                if(worldInfos.containsKey("timestamp"))
+                    timestamp = Long.parseLong(worldInfos.get("timestamp"));
+                if(worldInfos.containsKey("name"))
+                    name = worldInfos.get("name");
+                worldList.addSlot(new GuiWorldSlot(worldFolder.getName(), name, timestamp));
             }
         }
         playButton = new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer());
@@ -129,9 +146,11 @@ public class GuiSelectWorld extends Gui
             playButton.enabled = worldList.getSelected() != null;
             if(worldList.getSelected() != null)
             {
-                String name = worldList.getSelected().worldName;
+                String name = worldList.getSelected().worldFolderName;
                 this.worldSnapshot = textureMap.get(name);
             }
+            else
+                worldSnapshot = null;
         }
         else if(widget.getID() == 3)
         {

@@ -52,7 +52,17 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             {
                 T slot = getSlot(index);
                 if(slot != null)
+                {
+                    if(-scroll + index * slotHeight + slotHeight < 0) // Too high
+                    {
+                        continue;
+                    }
+                    if(-scroll + index * slotHeight + slotHeight >= getHeight()) // Too low
+                    {
+                        continue;
+                    }
                     slot.render(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
+                }
             }
         }
     }

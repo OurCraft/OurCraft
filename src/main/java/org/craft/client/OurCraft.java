@@ -91,6 +91,7 @@ public class OurCraft implements Runnable, Game
 
     private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private ClientNetHandler         netHandler;
+    private WorldLoader              worldLoader;
 
     public OurCraft()
     {
@@ -461,6 +462,7 @@ public class OurCraft implements Runnable, Game
 
     private void render(double delta, boolean drawGui)
     {
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.begin();
         ArrayList<Chunk> visiblesChunks = getVisibleChunks();
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
@@ -475,12 +477,10 @@ public class OurCraft implements Runnable, Game
         else
         {
             glClear(GL_DEPTH_BUFFER_BIT);
+            renderEngine.switchToOrtho();
         }
         renderEngine.end();
         renderEngine.disableGLCap(GL_DEPTH_TEST);
-        renderEngine.switchToOrtho();
-        glClearColor(0, 0, 0, 0);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         if(drawGui)
         {
@@ -923,5 +923,15 @@ public class OurCraft implements Runnable, Game
     public void sendPacket(AbstractPacket packet)
     {
         netHandler.send(packet);
+    }
+
+    public WorldLoader getWorldLoader()
+    {
+        return worldLoader;
+    }
+
+    public void setWorldLoader(WorldLoader loader)
+    {
+        this.worldLoader = loader;
     }
 }

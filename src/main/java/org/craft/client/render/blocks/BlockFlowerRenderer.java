@@ -12,7 +12,7 @@ public class BlockFlowerRenderer implements IBlockRenderer
     @Override
     public void render(RenderEngine engine, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z)
     {
-        if(!w.doesChunkExists(x, y, z))
+        if(w.getChunk(x, y, z) == null)
             return;
         TextureIcon icon = b.getBlockIcon(w, x, y, z, EnumSide.UNDEFINED);
         float lightValue = w.getChunk(x, y, z).getLightValue(w, x, y, z);

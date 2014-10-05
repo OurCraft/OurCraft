@@ -1,6 +1,9 @@
 package org.craft.world.loaders;
 
 import java.io.*;
+import java.util.*;
+
+import com.google.common.collect.*;
 
 import org.craft.blocks.*;
 import org.craft.resources.*;
@@ -19,7 +22,7 @@ public class VanillaWorldLoader extends WorldLoader
     {
         try
         {
-            ByteDataBuffer buffer = new ByteDataBuffer(loader.getResource(new ResourceLocation("test-world", "world.data")).getData());
+            ByteDataBuffer buffer = new ByteDataBuffer(loader.getResource(new ResourceLocation(worldFolder.getName(), "world.data")).getData());
             world.setSeed(buffer.readLong());
             buffer.close();
         }
@@ -32,6 +35,8 @@ public class VanillaWorldLoader extends WorldLoader
     public void writeWorldConstants(ByteDataBuffer buffer, World world) throws IOException
     {
         buffer.writeLong(world.getSeed());
+        buffer.writeLong(System.currentTimeMillis());
+        buffer.writeString(world.getName());
     }
 
     @Override
@@ -97,4 +102,24 @@ public class VanillaWorldLoader extends WorldLoader
         }
     }
 
+    public HashMap<String, String> loadWorldInfos(File worldDataFile)
+    {
+        HashMap<String, String> map = Maps.newHashMap();
+        try
+        {
+            ByteDataBuffer buffer = new ByteDataBuffer(new BufferedInputStream(new FileInputStream(worldDataFile)));
+            map.put("seed", "" + buffer.readLong());
+            if(buffer.readableBytes() >= 8)
+            {
+                map.put("timestamp", buffer.readLong() + "");
+                map.put("name", buffer.readString());
+            }
+            buffer.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        return map;
+    }
 }
