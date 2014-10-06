@@ -713,6 +713,8 @@ public class OurCraft implements Runnable, Game
 
     public void saveWorld()
     {
+        if(clientWorld.isRemote)
+            return;
         WorldLoader loader = clientWorld.getLoader();
         ByteDataBuffer buffer = new ByteDataBuffer();
         try

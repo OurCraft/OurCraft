@@ -171,6 +171,8 @@ public class Entity implements org.spongepowered.api.entity.Entity
             {
                 for(int z = startZ; z <= endZ; z++ )
                 {
+                    if(worldObj.getChunk(x, y, z) == null)
+                        return false;
                     Block block = worldObj.getBlockAt(x, y, z);
                     if(block == null)
                         continue;

@@ -23,6 +23,7 @@ public class World implements org.spongepowered.api.world.World
     private WorldGenerator     generator;
     private String             name;
     private WorldLoader        worldLoader;
+    public boolean             isRemote;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {

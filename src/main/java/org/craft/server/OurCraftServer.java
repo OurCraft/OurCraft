@@ -57,6 +57,7 @@ public class OurCraftServer implements Game
     private int                   lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private boolean               running;
     private AssetLoader           assetsLoader;
+    private WorldLoader           worldLoader;
 
     public OurCraftServer()
     {
@@ -74,7 +75,7 @@ public class OurCraftServer implements Game
         gen.addPopulator(new GrassPopulator());
         gen.addPopulator(new FlowerPopulator());
         gen.addPopulator(new TreePopulator());
-        WorldLoader worldLoader = new VanillaWorldLoader(new ResourceLocation("world"), new DiskSimpleResourceLoader());
+        worldLoader = new VanillaWorldLoader(new ResourceLocation("world"), new DiskSimpleResourceLoader());
         serverWorld = new org.craft.world.World("test-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 
@@ -311,5 +312,15 @@ public class OurCraftServer implements Game
     public NettyServerWrapper getNettyWrapper()
     {
         return serverWrapper;
+    }
+
+    public World getServerWorld()
+    {
+        return serverWorld;
+    }
+
+    public WorldLoader getWorldLoader()
+    {
+        return worldLoader;
     }
 }

@@ -29,7 +29,8 @@ public class BaseChunkProvider extends ChunkProvider
     @Override
     public void addChunk(World world, Chunk c)
     {
-        chunkMap.add(c);
+        if(!chunkMap.contains(c.getCoords()))
+            chunkMap.add(c);
     }
 
     @Override

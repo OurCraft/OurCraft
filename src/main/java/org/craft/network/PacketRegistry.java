@@ -26,8 +26,10 @@ public class PacketRegistry
 
         registerPacket(NetworkSide.COMMON, 0x0, TestPacket.class);
         registerPacket(NetworkSide.CLIENT, 0x0, C0PlayerInfos.class);
+        registerPacket(NetworkSide.CLIENT, 0x1, C1AskForChunk.class);
         registerPacket(NetworkSide.SERVER, 0x0, S0ConnectionAccepted.class);
         registerPacket(NetworkSide.SERVER, 0x1, S1ChatMessage.class);
+        registerPacket(NetworkSide.SERVER, 0x2, S2ChunkData.class);
     }
 
     public static int getPacketId(Class<? extends AbstractPacket> packet)

@@ -24,14 +24,12 @@ public class GuiSelectWorld extends Gui
 
         private String   worldFolderName;
         private String   worldName;
-        private long     timestamp;
         private Calendar calendar;
 
         public GuiWorldSlot(String folderName, String name, long timestamp)
         {
             this.worldFolderName = folderName;
             this.worldName = name;
-            this.timestamp = timestamp;
             calendar = (Calendar) Calendar.getInstance().clone();
             calendar.setTimeInMillis(timestamp);
         }
