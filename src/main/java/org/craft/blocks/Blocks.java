@@ -18,6 +18,9 @@ public final class Blocks
     public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
     private static ArrayList<Block>            blockByID;
 
+    /**
+     * Registers all blocks of the game
+     */
     public static void init()
     {
         blockByID = new ArrayList<Block>();
@@ -64,6 +67,9 @@ public final class Blocks
         return BLOCK_REGISTRY.get(string);
     }
 
+    /**
+     * Returns a block depending on its UID
+     */
     public static Block getByID(int id)
     {
         Block b = blockByID.get(id);

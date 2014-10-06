@@ -40,6 +40,9 @@ public abstract class Gui
         this.fontRenderer = font;
     }
 
+    /**
+     * Adds given widget to this gui
+     */
     public void addWidget(GuiWidget widget)
     {
         widgets.add(widget);
@@ -75,6 +78,9 @@ public abstract class Gui
         buffer.addIndex(0);
     }
 
+    /**
+     * Draws textured rect at given coordinates
+     */
     public static void drawTexturedRect(RenderEngine engine, int x, int y, int w, int h, float minU, float minV, float maxU, float maxV)
     {
         bottomLeftCornerPos.set(x, y, 0);
@@ -89,10 +95,16 @@ public abstract class Gui
         engine.renderBuffer(buffer);
     }
 
+    /*
+     * Method called when a widget is clicked
+     */
     public void actionPerformed(GuiWidget widget)
     {
     }
 
+    /**
+     * Method called when a key is pressed
+     */
     public void keyPressed(int id, char c)
     {
         for(GuiWidget widget : widgets)
@@ -104,6 +116,9 @@ public abstract class Gui
         }
     }
 
+    /**
+     * Method called when a key is released
+     */
     public void keyReleased(int id, char c)
     {
         for(GuiWidget widget : widgets)
@@ -115,6 +130,9 @@ public abstract class Gui
         }
     }
 
+    /**
+     * Method called when a button is released
+     */
     public void handleButtonReleased(int x, int y, int button)
     {
         for(GuiWidget widget : widgets)
@@ -131,6 +149,9 @@ public abstract class Gui
         }
     }
 
+    /**
+     * Method called when a button is pressed
+     */
     public void handleButtonPressed(int x, int y, int button)
     {
         for(GuiWidget widget : widgets)
@@ -143,15 +164,24 @@ public abstract class Gui
         }
     }
 
+    /**
+     * Returns true if the updating of the game should be paused when this gui is opened (
+     */
     public boolean pausesGame()
     {
         return false;
     }
 
+    /**
+     * Returns true if mouse needs to be ungrabbed
+     */
     public abstract boolean requiresMouse();
 
     public abstract void init();
 
+    /**
+     * Renders this gui on screen
+     */
     public void draw(int mx, int my, RenderEngine renderEngine)
     {
         for(GuiWidget widget : widgets)
@@ -160,6 +190,9 @@ public abstract class Gui
         }
     }
 
+    /**
+     * Draws default background on screen
+     */
     public void drawBackground(int mx, int my, RenderEngine renderEngine)
     {
         renderEngine.bindTexture(backgroundTexture, 0);

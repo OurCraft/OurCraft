@@ -137,6 +137,9 @@ public class Block implements IStackable
         this.uniqueID = id;
     }
 
+    /**
+     * 
+     */
     public short getUniqueID()
     {
         return uniqueID;
@@ -172,16 +175,25 @@ public class Block implements IStackable
         return "block." + getID();
     }
 
+    /**
+     * Called when a neighbor block is updated
+     */
     public void onBlockUpdate(World world, int x, int y, int z)
     {
         ;
     }
 
+    /**
+     * Called when a neighbor block is updated
+     */
     public void onBlockUpdateFromNeighbor(World world, int x, int y, int z)
     {
         onBlockUpdate(world, x, y, z);
     }
 
+    /**
+     * Returns true if this cube is solid
+     */
     public boolean isSolid()
     {
         return true;

@@ -24,53 +24,89 @@ public abstract class GuiWidget
         this.h = h;
     }
 
+    /**
+     * Renders the widget
+     * @param mx : Mouse coord on X
+     * @param my : Mouse coord on Y
+     * @param engine : the RenderEngine
+     */
     public abstract void render(int mx, int my, RenderEngine engine);
 
+    /**
+     * Returns the id assigned to the widget
+     */
     public int getID()
     {
         return id;
     }
 
+    /**
+     * Returns position on X of this widget
+     */
     public int getX()
     {
         return x;
     }
 
+    /**
+     * Returns position on Y of this widget
+     */
     public int getY()
     {
         return y;
     }
 
+    /**
+     * Returns width of this widget
+     */
     public int getWidth()
     {
         return w;
     }
 
+    /**
+     * Returns height of this widget
+     */
     public int getHeight()
     {
         return h;
     }
 
+    /**
+     * Returns true if given mouse coords are inside this widget
+     */
     public boolean isMouseOver(int x, int y)
     {
         return getX() <= x && getX() + getWidth() > x && getY() <= y && getY() + getHeight() > y;
     }
 
+    /**
+     * Handle a keyPressed event. Returns true if event was consumed
+     */
     public boolean keyPressed(int id, char c)
     {
         return false;
     }
 
+    /**
+     * Handle a keyReleased event. Returns true if event was consumed
+     */
     public boolean keyReleased(int id, char c)
     {
         return false;
     }
 
+    /**
+     * Handle a 'mouse button released' event. Returns true if event was consumed
+     */
     public boolean onButtonReleased(int x, int y, int button)
     {
         return true;
     }
 
+    /**
+     * Handle a 'mouse button pressed' event. Returns true if event was consumed
+     */
     public boolean onButtonPressed(int x, int y, int button)
     {
         return true;
