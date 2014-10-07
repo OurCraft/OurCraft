@@ -137,9 +137,6 @@ public class Block implements IStackable
         this.uniqueID = id;
     }
 
-    /**
-     * 
-     */
     public short getUniqueID()
     {
         return uniqueID;

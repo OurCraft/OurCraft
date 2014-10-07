@@ -18,6 +18,7 @@ public abstract class Gui
     private static Texture         backgroundTexture;
     private FontRenderer           fontRenderer;
     private ArrayList<GuiWidget>   widgets;
+    private GuiWidget              selectedWidget;
 
     public Gui(FontRenderer font)
     {
@@ -137,16 +138,16 @@ public abstract class Gui
     {
         for(GuiWidget widget : widgets)
         {
-            if(widget.isMouseOver(x, y))
-            {
-                if(widget.enabled)
-                {
-                    widget.onButtonReleased(x, y, button);
-                    if(button == 0)
-                        actionPerformed(widget);
-                }
-            }
+            if(widget.enabled)
+                widget.onButtonReleased(x, y, button);
         }
+
+        if(selectedWidget != null)
+            if(selectedWidget.enabled && selectedWidget.isMouseOver(x, y))
+            {
+                if(button == 0)
+                    actionPerformed(selectedWidget);
+            }
     }
 
     /**
@@ -156,10 +157,11 @@ public abstract class Gui
     {
         for(GuiWidget widget : widgets)
         {
-            if(widget.isMouseOver(x, y))
+            if(widget.enabled)
             {
-                if(widget.enabled)
-                    widget.onButtonPressed(x, y, button);
+                widget.onButtonPressed(x, y, button);
+                if(widget.isMouseOver(x, y))
+                    selectedWidget = widget;
             }
         }
     }

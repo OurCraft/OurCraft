@@ -26,6 +26,8 @@ public abstract class FontRenderer implements IDisposable
 
     public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
+        if(text.replace(" ", "").trim().isEmpty())
+            return;
         int currentIndex = 0;
         float x = (float) xo;
         float y = (float) yo;

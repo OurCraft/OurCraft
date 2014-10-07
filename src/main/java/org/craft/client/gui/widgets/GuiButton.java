@@ -9,6 +9,7 @@ public class GuiButton extends GuiWidget
 
     private String       displayText;
     private FontRenderer font;
+    private boolean      pressed;
 
     public GuiButton(int id, int x, int y, int w, int h, String txt, FontRenderer font)
     {
@@ -23,17 +24,31 @@ public class GuiButton extends GuiWidget
         if(visible)
         {
             engine.bindLocation(Gui.widgetsTexture);
-            Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), 0, 0, 100f / 256f, 10f / 256f);
+            float minU = pressed ? 100f / 256f : 0f;
+            Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), minU, 0, minU + 100f / 256f, 20f / 256f);
             int color = 0xFFFFFF;
             if(!enabled)
             {
                 color = 0xFF707070;
             }
-            else if(isMouseOver(mx, my))
+            else if(isMouseOver(mx, my) || pressed)
             {
                 color = 0xFFFFF544;
             }
             font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
         }
+    }
+
+    public boolean onButtonPressed(int x, int y, int button)
+    {
+        if(isMouseOver(x, y))
+            pressed = true;
+        return true;
+    }
+
+    public boolean onButtonReleased(int x, int y, int button)
+    {
+        pressed = false;
+        return true;
     }
 }

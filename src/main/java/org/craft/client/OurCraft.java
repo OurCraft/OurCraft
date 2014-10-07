@@ -334,11 +334,14 @@ public class OurCraft implements Runnable, Game
             boolean state = Mouse.getEventButtonState();
             int x = Mouse.getEventX();
             int y = displayHeight - Mouse.getEventY();
-            if(currentMenu != null && state && mouseButton != -1)
+            if(currentMenu != null && mouseButton != -1)
             {
-                currentMenu.handleButtonReleased(x, y, mouseButton);
+                if(state)
+                    currentMenu.handleButtonPressed(x, y, mouseButton);
+                else
+                    currentMenu.handleButtonReleased(x, y, mouseButton);
 
-                if(playerController != null)
+                if(playerController != null && state)
                 {
                     if(mouseButton == 0)
                     {
@@ -374,10 +377,6 @@ public class OurCraft implements Runnable, Game
                         }
                         else if(clientWorld == null)
                             running = false;
-                    }
-                    if(id == Keyboard.KEY_BACK)
-                    {
-                        Log.fatal("Testing fatal crashes");
                     }
                     if(id == Keyboard.KEY_RETURN)
                     {

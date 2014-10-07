@@ -71,10 +71,12 @@ public class GuiSelectWorld extends Gui
     private HashMap<String, Texture> textureMap;
     private Texture                  worldSnapshot;
     private Shader                   worldSnapshotShader;
+    private File                     saveFolder;
 
-    public GuiSelectWorld(FontRenderer font, File... worldFolders)
+    public GuiSelectWorld(FontRenderer font, File saveFolder, File... worldFolders)
     {
         super(font);
+        this.saveFolder = saveFolder;
         textureMap = new HashMap<String, Texture>();
         if(worldFolders == null)
             worldFolders = new File[0];
@@ -183,7 +185,7 @@ public class GuiSelectWorld extends Gui
         }
         else if(widget.getID() == 3)
         {
-            launchGameOnWorld("test-world");
+            OurCraft.getOurCraft().openMenu(new GuiCreateWorld(getFontRenderer(), saveFolder));
         }
         else if(widget.getID() == 4)
         {

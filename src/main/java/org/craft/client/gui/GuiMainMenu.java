@@ -32,7 +32,8 @@ public class GuiMainMenu extends Gui
     {
         if(widget.getID() == 0)
         {
-            OurCraft.getOurCraft().openMenu(new GuiSelectWorld(getFontRenderer(), new File(SystemUtils.getGameFolder(), "worlds").listFiles()));
+            File worldFolder = new File(SystemUtils.getGameFolder(), "worlds");
+            OurCraft.getOurCraft().openMenu(new GuiSelectWorld(getFontRenderer(), worldFolder, worldFolder.listFiles()));
         }
         else if(widget.getID() == 1)
         {
