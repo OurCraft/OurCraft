@@ -460,7 +460,7 @@ public class OurCraft implements Runnable, Game
         renderEngine.switchToPerspective();
         if(clientWorld != null)
         {
-            renderWorld(visiblesChunks, delta);
+            renderWorld(visiblesChunks, delta, drawGui);
         }
         else
         {
@@ -522,7 +522,7 @@ public class OurCraft implements Runnable, Game
         return visibleChunks;
     }
 
-    private void renderWorld(ArrayList<Chunk> visiblesChunks, double delta)
+    private void renderWorld(ArrayList<Chunk> visiblesChunks, double delta, boolean drawGui)
     {
         renderBlocks.render(clientWorld, visiblesChunks);
         for(Entity e : clientWorld.getEntitiesList())
@@ -534,7 +534,7 @@ public class OurCraft implements Runnable, Game
         }
         glClear(GL_DEPTH_BUFFER_BIT);
         renderEngine.disableGLCap(GL_DEPTH_TEST);
-        if(objectInFront != null && objectInFront.type == CollisionType.BLOCK)
+        if(objectInFront != null && objectInFront.type == CollisionType.BLOCK && drawGui)
         {
             renderEngine.bindLocation(null);
             Matrix4 modelView = renderEngine.getModelviewMatrix();

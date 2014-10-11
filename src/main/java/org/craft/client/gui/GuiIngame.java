@@ -16,6 +16,9 @@ import org.craft.utils.CollisionInfos.CollisionType;
 public class GuiIngame extends Gui
 {
 
+    private float   scale;
+    private Matrix4 scaleMatrix;
+
     public GuiIngame(FontRenderer fontRenderer)
     {
         super(fontRenderer);
@@ -24,7 +27,8 @@ public class GuiIngame extends Gui
     @Override
     public void init()
     {
-
+        scale = 1.85f;
+        scaleMatrix = new Matrix4().initScale(scale, scale, 1);
     }
 
     @Override
@@ -32,10 +36,6 @@ public class GuiIngame extends Gui
     {
         super.draw(mx, my, renderEngine);
         getFontRenderer().drawString("Playing as \"" + OurCraft.getOurCraft().getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
-        getFontRenderer().drawString("Free memory: " + (OurCraft.getOurCraft().getFreeMemory() / 1000L) + "kb:" + (OurCraft.getOurCraft().getFreeMemory() / 1000000L) + "Mb", 0x00FF00, 2, 15, renderEngine);
-        getFontRenderer().drawString("Used memory: " + (OurCraft.getOurCraft().getUsedMemory() / 1000L) + "kb:" + (OurCraft.getOurCraft().getUsedMemory() / 1000000L) + "Mb", 0x00FF00, 2, 30, renderEngine);
-        getFontRenderer().drawString("Total memory: " + (OurCraft.getOurCraft().getTotalMemory() / 1000L) + "kb:" + (OurCraft.getOurCraft().getTotalMemory() / 1000000L) + "Mb", 0x00FF00, 2, 45, renderEngine);
-        getFontRenderer().drawString("Max available memory: " + (OurCraft.getOurCraft().getMaxMemory() / 1000L) + "kb:" + (OurCraft.getOurCraft().getMaxMemory() / 1000000L) + "Mb", 0x00FF00, 2, 60, renderEngine);
 
         CollisionInfos infos = OurCraft.getOurCraft().getObjectInFront();
         if(infos != null && infos.type == CollisionType.BLOCK)
@@ -62,8 +62,7 @@ public class GuiIngame extends Gui
         {
             String s = I18n.format(stack.getItem().getUnlocalizedID());
             Matrix4 m = renderEngine.getModelviewMatrix().copy();
-            float scale = 1.85f;
-            renderEngine.setModelviewMatrix(m.mul(new Matrix4().initScale(scale, scale, 1)));
+            renderEngine.setModelviewMatrix(m.mul(scaleMatrix));
             getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (OurCraft.getOurCraft().getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextLength(s) / (2 * scale)), (int) (OurCraft.getOurCraft().getDisplayHeight() / scale) - 40, renderEngine);
             renderEngine.setModelviewMatrix(m);
         }

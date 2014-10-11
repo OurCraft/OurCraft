@@ -34,7 +34,7 @@ public class LuaEventBusListener implements IEventBusListener
                     {
                         try
                         {
-                            handler.call(CoerceJavaToLua.coerce(event));
+                            handler.invoke(CoerceJavaToLua.coerce(event));
                         }
                         catch(Exception e)
                         {

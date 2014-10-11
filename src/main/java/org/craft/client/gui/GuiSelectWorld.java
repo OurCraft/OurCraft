@@ -118,7 +118,7 @@ public class GuiSelectWorld extends Gui
                 File bWorldDataFile = new File(b, "world.data");
                 if(aWorldDataFile.exists() && bWorldDataFile.exists())
                 {
-                    return Long.compare(aWorldDataFile.lastModified(), bWorldDataFile.lastModified());
+                    return Long.compare(bWorldDataFile.lastModified(), aWorldDataFile.lastModified());
                 }
                 return 1;
             }

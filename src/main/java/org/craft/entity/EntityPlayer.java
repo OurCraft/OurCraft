@@ -107,4 +107,10 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
     {
         this.saturation = saturation;
     }
+
+    @Override
+    public void sendMessage(String message)
+    {
+
+    }
 }
