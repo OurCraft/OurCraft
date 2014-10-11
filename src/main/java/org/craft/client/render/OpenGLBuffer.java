@@ -158,10 +158,10 @@ public class OpenGLBuffer
         clearAndDisposeVertices();
         indices.clear();
         int index = 0;
-        addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
-        addVertex(new Vertex(Vector3.get(1, 0, 0), Vector2.get(1, 0)));
-        addVertex(new Vertex(Vector3.get(1, 1, 0), Vector2.get(1, 1)));
-        addVertex(new Vertex(Vector3.get(0, 1, 0), Vector2.get(0, 0)));
+        addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
+        addVertex(Vertex.get(Vector3.get(1, 0, 0), Vector2.get(1, 0)));
+        addVertex(Vertex.get(Vector3.get(1, 1, 0), Vector2.get(1, 1)));
+        addVertex(Vertex.get(Vector3.get(0, 1, 0), Vector2.get(0, 0)));
         addIndex(index + 0);
         addIndex(index + 1);
         addIndex(index + 2);
@@ -170,10 +170,10 @@ public class OpenGLBuffer
         addIndex(index + 0);
         index += 4;
 
-        addVertex(new Vertex(Vector3.get(0, 0, 1), Vector2.get(0, 0)));
-        addVertex(new Vertex(Vector3.get(1, 0, 1), Vector2.get(1, 0)));
-        addVertex(new Vertex(Vector3.get(1, 1, 1), Vector2.get(1, 1)));
-        addVertex(new Vertex(Vector3.get(0, 1, 1), Vector2.get(0, 0)));
+        addVertex(Vertex.get(Vector3.get(0, 0, 1), Vector2.get(0, 0)));
+        addVertex(Vertex.get(Vector3.get(1, 0, 1), Vector2.get(1, 0)));
+        addVertex(Vertex.get(Vector3.get(1, 1, 1), Vector2.get(1, 1)));
+        addVertex(Vertex.get(Vector3.get(0, 1, 1), Vector2.get(0, 0)));
         addIndex(index + 0);
         addIndex(index + 1);
         addIndex(index + 2);
@@ -182,10 +182,10 @@ public class OpenGLBuffer
         addIndex(index + 0);
         index += 4;
 
-        addVertex(new Vertex(Vector3.get(0, 1, 0), Vector2.get(1, 0)));
-        addVertex(new Vertex(Vector3.get(1, 1, 0), Vector2.get(0, 0)));
-        addVertex(new Vertex(Vector3.get(1, 1, 1), Vector2.get(0, 1)));
-        addVertex(new Vertex(Vector3.get(0, 1, 1), Vector2.get(1, 0)));
+        addVertex(Vertex.get(Vector3.get(0, 1, 0), Vector2.get(1, 0)));
+        addVertex(Vertex.get(Vector3.get(1, 1, 0), Vector2.get(0, 0)));
+        addVertex(Vertex.get(Vector3.get(1, 1, 1), Vector2.get(0, 1)));
+        addVertex(Vertex.get(Vector3.get(0, 1, 1), Vector2.get(1, 0)));
         addIndex(index + 0);
         addIndex(index + 1);
         addIndex(index + 2);

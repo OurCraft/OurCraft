@@ -1,9 +1,11 @@
 package org.craft.client.render;
 
+import java.util.*;
+
 import org.craft.maths.*;
 import org.craft.utils.*;
 
-public class Vertex implements IDisposable
+public class Vertex extends AbstractReference implements IDisposable
 {
 
     /**
@@ -24,7 +26,7 @@ public class Vertex implements IDisposable
     /**
      * Creates a Vertex with given position and texCoords and color set as 0,0,0
      */
-    public Vertex(Vector3 pos)
+    private Vertex(Vector3 pos)
     {
         this(pos, Vector2.get(0, 0));
     }
@@ -32,7 +34,7 @@ public class Vertex implements IDisposable
     /**
      * Creates a Vertex with given position, texCoords and white color
      */
-    public Vertex(Vector3 pos, Vector2 texCoords)
+    private Vertex(Vector3 pos, Vector2 texCoords)
     {
         this(pos, texCoords, Vector3.get(1, 1, 1));
     }
@@ -40,7 +42,7 @@ public class Vertex implements IDisposable
     /**
      * Creates a Vertex with given position, texCoords and color
      */
-    public Vertex(Vector3 pos, Vector2 texCoords, Vector3 color)
+    private Vertex(Vector3 pos, Vector2 texCoords, Vector3 color)
     {
         this.pos = pos;
         this.texCoords = texCoords;
@@ -68,6 +70,41 @@ public class Vertex implements IDisposable
         pos.dispose();
         color.dispose();
         texCoords.dispose();
+
+        if(decreaseReferenceCounter())
+        {
+            unused.push(this);
+        }
+    }
+
+    private static Stack<Vertex> unused = new Stack<Vertex>();
+
+    public static Vertex get(Vector3 pos)
+    {
+        return get(pos, Vector2.NULL);
+    }
+
+    public static Vertex get(Vector3 pos, Vector2 texCoords)
+    {
+        return get(pos, texCoords, Vector3.get(1, 1, 1));
+    }
+
+    public static Vertex get(Vector3 pos, Vector2 texCoords, Vector3 color)
+    {
+        Vertex v = null;
+        if(unused.isEmpty())
+        {
+            v = new Vertex(pos, texCoords, color);
+        }
+        else
+        {
+            v = unused.pop();
+            v.pos = pos;
+            v.texCoords = texCoords;
+            v.color = color;
+        }
+        v.increaseReferenceCounter();
+        return v;
     }
 
 }

@@ -72,10 +72,10 @@ public class RenderEngine implements IDisposable
 
         renderBuffer = new OpenGLBuffer();
 
-        renderBuffer.addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 1)));
-        renderBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth(), 0, 0), Vector2.get(1, 1)));
-        renderBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth(), Display.getHeight(), 0), Vector2.get(1, 0)));
-        renderBuffer.addVertex(new Vertex(Vector3.get(0, Display.getHeight(), 0), Vector2.get(0, 0)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 1)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth(), 0, 0), Vector2.get(1, 1)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth(), Display.getHeight(), 0), Vector2.get(1, 0)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(0, Display.getHeight(), 0), Vector2.get(0, 0)));
 
         renderBuffer.addIndex(0);
         renderBuffer.addIndex(1);
@@ -149,10 +149,10 @@ public class RenderEngine implements IDisposable
     public void renderSplashScreen()
     {
         OpenGLBuffer buffer = new OpenGLBuffer();
-        buffer.addVertex(new Vertex(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
-        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), Vector2.get(1, 0)));
-        buffer.addVertex(new Vertex(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0), Vector2.get(1, 1)));
-        buffer.addVertex(new Vertex(Vector3.get(0, OurCraft.getOurCraft().getDisplayHeight(), 0), Vector2.get(0, 1)));
+        buffer.addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
+        buffer.addVertex(Vertex.get(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), 0, 0), Vector2.get(1, 0)));
+        buffer.addVertex(Vertex.get(Vector3.get(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0), Vector2.get(1, 1)));
+        buffer.addVertex(Vertex.get(Vector3.get(0, OurCraft.getOurCraft().getDisplayHeight(), 0), Vector2.get(0, 1)));
 
         buffer.addIndex(0);
         buffer.addIndex(1);

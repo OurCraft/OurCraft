@@ -66,10 +66,10 @@ public abstract class Gui
 
     static
     {
-        buffer.addVertex(new Vertex(bottomLeftCornerPos, bottomLeftCornerUV));
-        buffer.addVertex(new Vertex(bottomRightCornerPos, bottomRightCornerUV));
-        buffer.addVertex(new Vertex(topLeftCornerPos, topLeftCornerUV));
-        buffer.addVertex(new Vertex(topRightCornerPos, topRightCornerUV));
+        buffer.addVertex(Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV));
+        buffer.addVertex(Vertex.get(bottomRightCornerPos, bottomRightCornerUV));
+        buffer.addVertex(Vertex.get(topLeftCornerPos, topLeftCornerUV));
+        buffer.addVertex(Vertex.get(topRightCornerPos, topRightCornerUV));
         buffer.addIndex(0);
         buffer.addIndex(1);
         buffer.addIndex(2);

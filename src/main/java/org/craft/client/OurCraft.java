@@ -150,15 +150,16 @@ public class OurCraft implements Runnable, Game
             renderBlocks = new RenderBlocks(renderEngine);
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
             renderBlocks.registerBlockRenderer(BlockHalfSlab.class, new BlockHalfSlabRenderer());
+            renderBlocks.registerBlockRenderer(BlockCable.class, new BlockCableRenderer());
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(fontRenderer));
 
             crosshairBuffer = new OpenGLBuffer();
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), Vector2.get(1, 1)));
-            crosshairBuffer.addVertex(new Vertex(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), Vector2.get(0, 1)));
+            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
+            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
+            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), Vector2.get(1, 1)));
+            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), Vector2.get(0, 1)));
 
             crosshairBuffer.addIndex(0);
             crosshairBuffer.addIndex(1);
@@ -171,14 +172,14 @@ public class OurCraft implements Runnable, Game
             crosshairBuffer.clearAndDisposeVertices();
 
             selectionBoxBuffer = new OpenGLBuffer();
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 0, 0))); //0
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 0, 1))); //1
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 1, 0))); //2
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(0, 1, 1))); //3
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 0, 0))); //4
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 0, 1))); //5
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 1, 0))); //6
-            selectionBoxBuffer.addVertex(new Vertex(Vector3.get(1, 1, 1))); //7
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 0))); //0
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 1))); //1
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(0, 1, 0))); //2
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(0, 1, 1))); //3
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(1, 0, 0))); //4
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(1, 0, 1))); //5
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(1, 1, 0))); //6
+            selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(1, 1, 1))); //7
 
             selectionBoxBuffer.addIndex(0);
             selectionBoxBuffer.addIndex(1);

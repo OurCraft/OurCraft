@@ -104,11 +104,17 @@ public class World implements org.spongepowered.api.world.World
      */
     public void setBlockState(int x, int y, int z, BlockState state, IBlockStateValue value)
     {
+        setBlockState(x, y, z, state, value, true);
+    }
+
+    public void setBlockState(int x, int y, int z, BlockState state, IBlockStateValue value, boolean notify)
+    {
         Chunk c = getChunk(x, y, z);
         if(c == null)
             return;
         c.setBlockState(x, y, z, state, value);
-        updateBlockAndNeighbors(x, y, z);
+        if(notify)
+            updateBlockAndNeighbors(x, y, z);
     }
 
     /**
