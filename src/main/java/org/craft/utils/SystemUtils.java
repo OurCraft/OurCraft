@@ -54,4 +54,19 @@ public class SystemUtils
             gameFolder = new File(System.getProperty("user.home"), ".ourcraft");
         return gameFolder;
     }
+
+    public static void deleteRecursivly(File file)
+    {
+        if(file.isDirectory())
+        {
+            File[] list = file.listFiles();
+            if(list != null)
+                for(File f : list)
+                {
+                    deleteRecursivly(f);
+                    f.delete();
+                }
+        }
+        file.delete();
+    }
 }

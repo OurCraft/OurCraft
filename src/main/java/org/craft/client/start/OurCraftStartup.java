@@ -22,6 +22,7 @@ public class OurCraftStartup
             HashMap<String, String> properties = new HashMap<String, String>();
             String current = null;
             properties.put("username", "Player_" + (int) (Math.random() * 100000L));
+            properties.put("lang", "en_US");
             for(int i = 0; i < args.length; i++ )
             {
                 String arg = args[i];

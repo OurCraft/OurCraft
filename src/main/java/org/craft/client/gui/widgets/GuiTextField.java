@@ -17,6 +17,8 @@ public class GuiTextField extends GuiWidget
     private int                    cursorPos;
     private String                 txt;
     private int                    secondCursorPos;
+    private int                    offset;
+    private int                    offset2;
     public static ResourceLocation cursorLoc = new ResourceLocation("ourcraft", "textures/gui/cursor.png");
 
     public GuiTextField(int id, int x, int y, int w, int h, FontRenderer font)
@@ -25,6 +27,8 @@ public class GuiTextField extends GuiWidget
         cursorCounter = 0;
         this.font = font;
         this.txt = "TEST";
+        offset = 0;
+        offset2 = getMaxDisplayableChars();
     }
 
     @Override
@@ -35,16 +39,50 @@ public class GuiTextField extends GuiWidget
             engine.bindLocation(Gui.widgetsTexture);
             Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), 0, 20f / 256f, 100f / 256f, 40f / 256f);
             int color = 0xFFFFFF;
-            String cursor = " ";
             int time = 54;
-            float cursorOffset = font.getTextLength(txt.substring(0, cursorPos));
+            if(cursorPos < offset)
+            {
+                offset = cursorPos;
+                offset2 = offset + getMaxDisplayableChars();
+            }
+            if(cursorPos > offset2)
+            {
+                offset2 = cursorPos;
+                offset = offset2 - getMaxDisplayableChars();
+            }
+
+            if(secondCursorPos < offset)
+            {
+                offset = secondCursorPos;
+                offset2 = offset + getMaxDisplayableChars();
+            }
+            if(secondCursorPos > offset2)
+            {
+                offset2 = secondCursorPos;
+                offset = offset2 - getMaxDisplayableChars();
+            }
+            if(offset2 > txt.length())
+            {
+                offset2 = txt.length();
+                offset = offset2 - getMaxDisplayableChars();
+            }
+
+            if(offset < 0)
+            {
+                offset = 0;
+                offset2 = offset + getMaxDisplayableChars();
+            }
+            int delta = (int) ((offset) * (font.getCharWidth(' ') + font.getCharSpacing(' ', ' ')));
+            float cursorOffset = font.getTextLength(txt.substring(0, cursorPos)) - delta;
             if(secondCursorPos < 0)
                 secondCursorPos = 0;
             if(secondCursorPos > txt.length())
                 secondCursorPos = txt.length();
-            float cursor2Offset = font.getTextLength(txt.substring(0, secondCursorPos));
-            font.drawShadowedString(txt, color, (int) (getX() + 4), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
+            String toDisplay = txt.substring(offset, Math.max(0, Math.min(offset2, txt.length())));
+            float cursor2Offset = font.getTextLength(txt.substring(0, secondCursorPos)) - delta;
+            font.drawShadowedString(toDisplay, color, (int) (getX() + 4), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
             int cx = (int) (getX() + 4 + cursorOffset);
+
             if(cursorCounter % time <= time / 2 && focused || cursorPos != secondCursorPos)
             {
                 engine.bindLocation(cursorLoc);
@@ -69,6 +107,11 @@ public class GuiTextField extends GuiWidget
             }
 
         }
+    }
+
+    private int getMaxDisplayableChars()
+    {
+        return (int) ((getWidth() - 8) / (font.getCharWidth(' ') + font.getCharSpacing(' ', ' ')));
     }
 
     public boolean onButtonPressed(int x, int y, int button)
@@ -225,5 +268,10 @@ public class GuiTextField extends GuiWidget
         {
             secondCursorPos = txt.length();
         }
+    }
+
+    public String getText()
+    {
+        return txt;
     }
 }

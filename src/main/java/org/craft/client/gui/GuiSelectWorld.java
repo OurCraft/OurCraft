@@ -72,6 +72,7 @@ public class GuiSelectWorld extends Gui
     private Texture                  worldSnapshot;
     private Shader                   worldSnapshotShader;
     private File                     saveFolder;
+    private GuiButton                deleteButton;
 
     public GuiSelectWorld(FontRenderer font, File saveFolder, File... worldFolders)
     {
@@ -160,6 +161,10 @@ public class GuiSelectWorld extends Gui
         addWidget(worldList);
         addWidget(new GuiButton(3, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.new"), getFontRenderer()));
         addWidget(new GuiButton(4, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.back"), getFontRenderer()));
+
+        deleteButton = new GuiButton(5, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.selectworld.delete"), getFontRenderer());
+        deleteButton.enabled = false;
+        addWidget(deleteButton);
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -175,6 +180,7 @@ public class GuiSelectWorld extends Gui
         else if(widget.getID() == 2)
         {
             playButton.enabled = worldList.getSelected() != null;
+            deleteButton.enabled = worldList.getSelected() != null;
             if(worldList.getSelected() != null)
             {
                 String name = worldList.getSelected().worldFolderName;
@@ -185,11 +191,16 @@ public class GuiSelectWorld extends Gui
         }
         else if(widget.getID() == 3)
         {
-            OurCraft.getOurCraft().openMenu(new GuiCreateWorld(getFontRenderer(), saveFolder));
+            OurCraft.getOurCraft().openMenu(new GuiCreateWorld(getFontRenderer(), saveFolder, worldFolders));
         }
         else if(widget.getID() == 4)
         {
             OurCraft.getOurCraft().openMenu(new GuiMainMenu(getFontRenderer()));
+        }
+        else if(widget.getID() == 5)
+        {
+            GuiWorldSlot worldSlot = worldList.getSelected();
+            OurCraft.getOurCraft().openMenu(new GuiDeleteWorld(getFontRenderer(), saveFolder, worldFolders, worldSlot.worldFolderName));
         }
     }
 

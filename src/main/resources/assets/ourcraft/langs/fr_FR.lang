@@ -17,3 +17,12 @@ menu.back=Retour
 
 menu.selectworld.new=Créer un nouveau monde
 menu.selectworld.play=Jouer sur ce monde
+menu.selectworld.delete=Supprimer ce monde
+
+menu.createworld.title=Créer un nouveau monde
+menu.createworld.create=Créer ce monde
+
+menu.deleteworld.title=Supprimer le monde
+menu.deleteworld.delete=Oui, j'en suis sûr
+menu.deleteworld.desc0=Supprimer le monde dure pour §ul'éternité§r (une période de temps extrêmement longue).
+menu.deleteworld.desc1=Êtes-vous sûr de vouloir le supprimer ?

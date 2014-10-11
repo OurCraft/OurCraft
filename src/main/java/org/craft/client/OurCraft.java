@@ -105,6 +105,7 @@ public class OurCraft implements Runnable, Game
     public void start(HashMap<String, String> properties)
     {
         username = properties.get("username");
+        I18n.setCurrentLanguage(properties.get("lang"));
         new Thread(this).start();
     }
 
@@ -143,19 +144,6 @@ public class OurCraft implements Runnable, Game
             PacketRegistry.init();
             I18n.init(assetsLoader);
             eventBus.fireEvent(new SpongeInitEvent(this), null, null);
-
-            Log.message("==== IN en_US.lang ====");
-            Log.message("lang.test1 is " + I18n.format("lang.test1"));
-            Log.message("lang.test2 is " + I18n.format("lang.test2", 0.2));
-            Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
-            Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
-
-            I18n.setCurrentLanguage("en_US");
-            Log.message("==== IN fr_FR.lang ====");
-            Log.message("lang.test1 is " + I18n.format("lang.test1"));
-            Log.message("lang.test2 is " + I18n.format("lang.test2", 0.2));
-            Log.message("lang.test3 is " + I18n.format("lang.test3", "Test"));
-            Log.message("lang.test4 is " + I18n.format("lang.test4", 12));
 
             renderBlocks = new RenderBlocks(renderEngine);
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
@@ -295,6 +283,7 @@ public class OurCraft implements Runnable, Game
             if(thisSecond > lastSecondTime)
             {
                 fps = frame;
+                Display.setTitle("OurCraft - " + getVersion() + " - " + fps + " FPS");
                 frame = 0;
                 lastSecondTime = thisSecond;
             }
