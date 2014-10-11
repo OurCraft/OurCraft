@@ -6,7 +6,7 @@ import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
-public class BlockHalfSlabRenderer implements IBlockRenderer
+public class BlockHalfSlabRenderer extends AbstractBlockRenderer
 {
 
     @Override
@@ -61,10 +61,10 @@ public class BlockHalfSlabRenderer implements IBlockRenderer
     {
         if(!block.shouldRender())
             return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
@@ -72,10 +72,10 @@ public class BlockHalfSlabRenderer implements IBlockRenderer
     {
         if(!block.shouldRender())
             return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
@@ -83,10 +83,10 @@ public class BlockHalfSlabRenderer implements IBlockRenderer
     {
         if(!block.shouldRender())
             return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
@@ -94,10 +94,10 @@ public class BlockHalfSlabRenderer implements IBlockRenderer
     {
         if(!block.shouldRender())
             return;
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) (icon.getMaxV() + icon.getMinV()) / 2), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
@@ -105,10 +105,10 @@ public class BlockHalfSlabRenderer implements IBlockRenderer
     {
         if(!block.shouldRender())
             return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0.5f + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0.5f + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 
@@ -116,10 +116,10 @@ public class BlockHalfSlabRenderer implements IBlockRenderer
     {
         if(!block.shouldRender())
             return;
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(new Vertex(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(new Vertex(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
+        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
+        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
         endDrawFace(buffer);
     }
 

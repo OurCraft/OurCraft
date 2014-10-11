@@ -25,8 +25,8 @@ public class RenderBlocks
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer>      chunkBuffersPass0;
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer>      chunkBuffersPass1;
     private RenderEngine                                    renderEngine;
-    private HashMap<Class<? extends Block>, IBlockRenderer> renderers;
-    private IBlockRenderer                                  fallbackRenderer;
+    private HashMap<Class<? extends Block>, AbstractBlockRenderer> renderers;
+    private AbstractBlockRenderer                                  fallbackRenderer;
     private static ResourceLocation                         blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
@@ -58,20 +58,20 @@ public class RenderBlocks
             createBlockMap(engine);
         }
         fallbackRenderer = new FullCubeBlockRenderer();
-        renderers = new HashMap<Class<? extends Block>, IBlockRenderer>();
+        renderers = new HashMap<Class<? extends Block>, AbstractBlockRenderer>();
     }
 
-    public void registerBlockRenderer(Class<? extends Block> blockClass, IBlockRenderer renderer)
+    public void registerBlockRenderer(Class<? extends Block> blockClass, AbstractBlockRenderer renderer)
     {
         renderers.put(blockClass, renderer);
     }
 
-    public IBlockRenderer getRenderer(Block block)
+    public AbstractBlockRenderer getRenderer(Block block)
     {
         Class<? extends Block> blockClass = block.getClass();
         if(renderers.containsKey(blockClass))
         {
-            IBlockRenderer renderer = renderers.get(blockClass);
+            AbstractBlockRenderer renderer = renderers.get(blockClass);
             return renderer;
         }
         return fallbackRenderer;
