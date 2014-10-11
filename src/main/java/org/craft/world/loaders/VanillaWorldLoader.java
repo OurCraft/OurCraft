@@ -6,6 +6,7 @@ import java.util.*;
 import com.google.common.collect.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -67,6 +68,13 @@ public class VanillaWorldLoader extends WorldLoader
                             }
                             else
                                 Log.message("Unknown block at " + x + "," + y + "," + z + " = " + blockId);
+                            int nBlockStates = buffer.readInt();
+                            for(int i = 0; i < nBlockStates; i++ )
+                            {
+                                BlockState state = BlockStates.getState(buffer.readString());
+                                IBlockStateValue value = BlockStates.getValue(state, buffer.readString());
+                                chunk.setChunkBlockState(x, y, z, state, value);
+                            }
                         }
                     }
                 }
@@ -97,6 +105,23 @@ public class VanillaWorldLoader extends WorldLoader
                 for(int z = 0; z < 16; z++ )
                 {
                     buffer.writeString(chunk.getChunkBlock(x, y, z).getId());
+                    BlockStatesObject o = chunk.getBlockStates(x, y, z);
+                    if(o == null)
+                    {
+                        buffer.writeInt(0);
+                    }
+                    else
+                    {
+                        buffer.writeInt(o.size());
+                        Iterator<BlockState> states = o.getMap().keySet().iterator();
+                        while(states.hasNext())
+                        {
+                            BlockState state = states.next();
+                            IBlockStateValue value = o.get(state);
+                            buffer.writeString(state.toString());
+                            buffer.writeString(value.toString());
+                        }
+                    }
                 }
             }
         }

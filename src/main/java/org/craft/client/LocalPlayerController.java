@@ -86,4 +86,16 @@ public class LocalPlayerController extends PlayerController
             s.getItem().onUse(player, infos.x, infos.y, infos.z, infos.side, infos.type);
         }
     }
+
+    @Override
+    public void onMouseWheelMoved(int amount)
+    {
+        PlayerInventory inv = ((PlayerInventory) player.getInventory());
+        byte newIndex = (byte) (inv.getSelectedIndex() - Math.signum(amount));
+        if(newIndex < 0)
+            newIndex = (byte) (10 + newIndex);
+        if(newIndex >= 10)
+            newIndex = (byte) (newIndex - 10);
+        inv.setSelectedIndex(newIndex);
+    }
 }

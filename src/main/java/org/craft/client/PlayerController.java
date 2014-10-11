@@ -34,5 +34,7 @@ public abstract class PlayerController
 
     public abstract void onRightClick(CollisionInfos infos);
 
+    public abstract void onMouseWheelMoved(int amount);
+
     public abstract void update();
 }

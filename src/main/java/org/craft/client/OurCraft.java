@@ -12,6 +12,7 @@ import java.util.*;
 import javax.imageio.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.client.gui.*;
 import org.craft.client.network.*;
 import org.craft.client.render.*;
@@ -140,6 +141,7 @@ public class OurCraft implements Runnable, Game
             OpenGLHelper.loadCapNames();
 
             Blocks.init();
+            BlockStates.init();
             Items.init();
             PacketRegistry.init();
             I18n.init(assetsLoader);
@@ -329,17 +331,24 @@ public class OurCraft implements Runnable, Game
                     currentMenu.handleButtonPressed(x, y, mouseButton);
                 else
                     currentMenu.handleButtonReleased(x, y, mouseButton);
-
-                if(playerController != null && state)
+            }
+            if(playerController != null && (currentMenu == null || !currentMenu.requiresMouse()))
+            {
+                if(!state)
                 {
                     if(mouseButton == 0)
                     {
                         playerController.onLeftClick(getObjectInFront());
                     }
-                    else
+                    else if(mouseButton == 1)
                     {
                         playerController.onRightClick(getObjectInFront());
                     }
+                }
+                int deltaWheel = Mouse.getEventDWheel();
+                if(deltaWheel != 0)
+                {
+                    playerController.onMouseWheelMoved(deltaWheel);
                 }
             }
 

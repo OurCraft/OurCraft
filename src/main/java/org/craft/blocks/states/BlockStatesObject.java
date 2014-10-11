@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
-public class BlockStatesObject
+public class BlockStatesObject implements Iterable<IBlockStateValue>
 {
 
     private HashMap<BlockState, IBlockStateValue> map;
@@ -46,5 +46,16 @@ public class BlockStatesObject
     public HashMap<BlockState, IBlockStateValue> getMap()
     {
         return map;
+    }
+
+    public int size()
+    {
+        return map.size();
+    }
+
+    @Override
+    public Iterator<IBlockStateValue> iterator()
+    {
+        return map.values().iterator();
     }
 }

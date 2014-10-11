@@ -28,7 +28,15 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
         this.name = SessionManager.getInstance().getName(uuid);
         this.displayName = SessionManager.getInstance().getDisplayName(uuid);
         this.inventory = new PlayerInventory(name, 36);
-        inventory.setInventorySlotContents(0, new Stack(Blocks.dirtSlab));
+        inventory.setInventorySlotContents(0, new Stack(Blocks.log));
+        inventory.setInventorySlotContents(1, new Stack(Blocks.dirt));
+        inventory.setInventorySlotContents(2, new Stack(Blocks.grass));
+        inventory.setInventorySlotContents(3, new Stack(Blocks.stone));
+        inventory.setInventorySlotContents(4, new Stack(Blocks.bedrock));
+        inventory.setInventorySlotContents(5, new Stack(Blocks.dirtSlab));
+        inventory.setInventorySlotContents(6, new Stack(Blocks.glass));
+        inventory.setInventorySlotContents(7, new Stack(Blocks.leaves));
+        inventory.setInventorySlotContents(8, new Stack(Blocks.rose));
         setSize(0.75f, 1.80f, 0.75f);
     }
 
