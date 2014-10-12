@@ -22,12 +22,14 @@ public class RenderBlocks
         public int   z;
     }
 
-    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>      chunkBuffersPass0;
-    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>      chunkBuffersPass1;
-    private RenderEngine                                    renderEngine;
+    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>             chunkBuffersPass0;
+    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>             chunkBuffersPass1;
+    private RenderEngine                                           renderEngine;
     private HashMap<Class<? extends Block>, AbstractBlockRenderer> renderers;
     private AbstractBlockRenderer                                  fallbackRenderer;
-    private static ResourceLocation                         blockMapLoc;
+    private Comparator<Chunk>                                      chunkComparator;
+    private Comparator<BlockRenderInfos>                           blockComparator;
+    private static ResourceLocation                                blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
     {
@@ -102,24 +104,26 @@ public class RenderBlocks
     {
         if(visiblesChunks.size() != 0)
         {
-            Collections.sort(visiblesChunks, new Comparator<Chunk>()
-            {
-
-                @Override
-                public int compare(Chunk a, Chunk b)
+            if(chunkComparator == null)
+                chunkComparator = new Comparator<Chunk>()
                 {
-                    float adx = a.getCoords().x * 16 - renderEngine.getRenderViewEntity().posX;
-                    float ady = a.getCoords().y * 16 - renderEngine.getRenderViewEntity().posY;
-                    float adz = a.getCoords().z * 16 - renderEngine.getRenderViewEntity().posZ;
-                    float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
 
-                    float bdx = b.getCoords().x * 16 - renderEngine.getRenderViewEntity().posX;
-                    float bdy = b.getCoords().y * 16 - renderEngine.getRenderViewEntity().posY;
-                    float bdz = b.getCoords().z * 16 - renderEngine.getRenderViewEntity().posZ;
-                    float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
-                    return Float.compare(bdist, adist);
-                }
-            });
+                    @Override
+                    public int compare(Chunk a, Chunk b)
+                    {
+                        float adx = a.getCoords().x * 16 - renderEngine.getRenderViewEntity().posX;
+                        float ady = a.getCoords().y * 16 - renderEngine.getRenderViewEntity().posY;
+                        float adz = a.getCoords().z * 16 - renderEngine.getRenderViewEntity().posZ;
+                        float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
+
+                        float bdx = b.getCoords().x * 16 - renderEngine.getRenderViewEntity().posX;
+                        float bdy = b.getCoords().y * 16 - renderEngine.getRenderViewEntity().posY;
+                        float bdz = b.getCoords().z * 16 - renderEngine.getRenderViewEntity().posZ;
+                        float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
+                        return Float.compare(bdist, adist);
+                    }
+                };
+            Collections.sort(visiblesChunks, chunkComparator);
             for(int passId = 0; passId < 2; passId++ )
             {
                 EnumRenderPass currentPass = EnumRenderPass.getFromId(passId);
@@ -192,24 +196,26 @@ public class RenderBlocks
                                     }
                                 }
                             }
-                            Collections.sort(infosList, new Comparator<BlockRenderInfos>()
-                            {
-
-                                @Override
-                                public int compare(BlockRenderInfos a, BlockRenderInfos b)
+                            if(blockComparator == null)
+                                blockComparator = new Comparator<BlockRenderInfos>()
                                 {
-                                    float adx = a.x - renderEngine.getRenderViewEntity().posX;
-                                    float ady = a.y - renderEngine.getRenderViewEntity().posY;
-                                    float adz = a.z - renderEngine.getRenderViewEntity().posZ;
-                                    float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
 
-                                    float bdx = b.x - renderEngine.getRenderViewEntity().posX;
-                                    float bdy = b.y - renderEngine.getRenderViewEntity().posY;
-                                    float bdz = b.z - renderEngine.getRenderViewEntity().posZ;
-                                    float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
-                                    return Float.compare(bdist, adist);
-                                }
-                            });
+                                    @Override
+                                    public int compare(BlockRenderInfos a, BlockRenderInfos b)
+                                    {
+                                        float adx = a.x - renderEngine.getRenderViewEntity().posX;
+                                        float ady = a.y - renderEngine.getRenderViewEntity().posY;
+                                        float adz = a.z - renderEngine.getRenderViewEntity().posZ;
+                                        float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
+
+                                        float bdx = b.x - renderEngine.getRenderViewEntity().posX;
+                                        float bdy = b.y - renderEngine.getRenderViewEntity().posY;
+                                        float bdz = b.z - renderEngine.getRenderViewEntity().posZ;
+                                        float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
+                                        return Float.compare(bdist, adist);
+                                    }
+                                };
+                            Collections.sort(infosList, blockComparator);
                             for(BlockRenderInfos infos : infosList)
                             {
                                 getRenderer(infos.block).render(renderEngine, buffer, w, infos.block, infos.x, infos.y, infos.z);

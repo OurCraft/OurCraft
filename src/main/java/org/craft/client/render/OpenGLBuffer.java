@@ -12,10 +12,10 @@ import org.lwjgl.opengl.*;
 public class OpenGLBuffer
 {
 
-    private int                 vboID;
-    private int                 iboID;
-    private LinkedList<Vertex>  vertices = new LinkedList<Vertex>();
-    private LinkedList<Integer> indices  = new LinkedList<Integer>();
+    private int                vboID;
+    private int                iboID;
+    private ArrayList<Vertex>  vertices = new ArrayList<Vertex>();
+    private ArrayList<Integer> indices  = new ArrayList<Integer>();
 
     /**
      * Creates an empty OpenGLBuffer instance

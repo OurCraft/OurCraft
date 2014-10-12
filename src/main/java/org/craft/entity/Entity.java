@@ -252,7 +252,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
      */
     public void setDead()
     {
-        this.isDead = false;
+        this.isDead = true;
     }
 
     /**
