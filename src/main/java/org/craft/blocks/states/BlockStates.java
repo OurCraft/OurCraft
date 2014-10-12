@@ -17,14 +17,16 @@ public final class BlockStates
     public static void init()
     {
         registerState(orientation = new BaseBlockState("orientation"));
-        registerValue(orientation, EnumLogBlockStates.UP);
-        registerValue(orientation, EnumLogBlockStates.LYING_NS);
-        registerValue(orientation, EnumLogBlockStates.LYING_WE);
+        for(EnumLogBlockStates state : EnumLogBlockStates.values())
+        {
+            registerValue(orientation, state);
+        }
 
         registerState(cableConnexions = new BaseBlockState("connexions"));
-        registerValue(cableConnexions, EnumConnexionStates.NONE);
-        registerValue(cableConnexions, EnumConnexionStates.NORTH_SOUTH);
-        registerValue(cableConnexions, EnumConnexionStates.ALL);
+        for(EnumConnexionStates state : EnumConnexionStates.values())
+        {
+            registerValue(cableConnexions, state);
+        }
     }
 
     /**

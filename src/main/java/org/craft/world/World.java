@@ -223,6 +223,10 @@ public class World implements org.spongepowered.api.world.World
                 }
             }
         }
+        origin.dispose();
+        pos.dispose();
+        ray.dispose();
+        rayBB.dispose();
     }
 
     public WorldGenerator getGenerator()

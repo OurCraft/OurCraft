@@ -1,6 +1,8 @@
 package org.craft.maths;
 
-public class AABB
+import org.craft.utils.*;
+
+public class AABB implements IDisposable
 {
 
     private Vector3 minExtents;
@@ -49,5 +51,12 @@ public class AABB
     public AABB translate(Vector3 position)
     {
         return new AABB(minExtents.add(position), maxExtents.add(position));
+    }
+
+    @Override
+    public void dispose()
+    {
+        minExtents.dispose();
+        maxExtents.dispose();
     }
 }

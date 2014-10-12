@@ -1,5 +1,7 @@
 package org.craft.blocks;
 
+import java.util.*;
+
 import org.craft.blocks.states.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
@@ -9,8 +11,15 @@ import org.craft.world.*;
 public class BlockCable extends Block
 {
 
-    private TextureIcon allIcon;
-    private TextureIcon nsIcon;
+    private static AABB                  selectionBB;
+
+    static
+    {
+        selectionBB = new AABB(Vector3.get(0f, 0f, 0f), Vector3.get(1f, 2f / 16f, 1f));
+    }
+
+    private TextureIcon                  allIcon;
+    private HashMap<String, TextureIcon> icons;
 
     public BlockCable(String id)
     {
@@ -35,7 +44,7 @@ public class BlockCable extends Block
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         Vector3 translation = Vector3.get(x, y, z);
-        AABB result = normalCubeAABB.translate(translation);
+        AABB result = selectionBB.translate(translation);
         translation.dispose();
         return result;
     }
@@ -78,10 +87,8 @@ public class BlockCable extends Block
                     return allIcon;
                 case NONE:
                     return allIcon;
-                case NORTH_SOUTH:
-                    return nsIcon;
                 default:
-                    return allIcon;
+                    return icons.get(value.toString());
             }
         }
         return allIcon;
@@ -90,6 +97,10 @@ public class BlockCable extends Block
     public void registerIcons(IconGenerator register)
     {
         allIcon = register.generateIcon(getID() + "_four.png");
-        nsIcon = register.generateIcon(getID() + "_ns.png");
+        icons = new HashMap<String, TextureIcon>();
+        for(EnumConnexionStates state : EnumConnexionStates.values())
+        {
+            icons.put(state.toString(), register.generateIcon(getID() + "_" + state.toString() + ".png"));
+        }
     }
 }

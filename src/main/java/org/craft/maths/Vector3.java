@@ -314,7 +314,15 @@ public class Vector3 extends AbstractReference implements IDisposable
         }
         else
         {
-            v = unused.pop();
+            try
+            {
+                v = unused.pop();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                v = new Vector3(x, y, z);
+            }
             v.set(x, y, z);
         }
         v.increaseReferenceCounter();
