@@ -50,6 +50,8 @@ public class GuiIngame extends Gui
                 while(it.hasNext())
                 {
                     Entry<BlockState, IBlockStateValue> entry = it.next();
+                    if(entry.getKey() == null || entry.getValue() == null)
+                        continue;
                     String s = entry.getKey().toString() + ":" + TextFormatting.generateFromColor(0, 255, 0) + entry.getValue().toString();
                     getFontRenderer().drawString(s, 0xFFFFFFFF, OurCraft.getOurCraft().getDisplayWidth() - (int) getFontRenderer().getTextLength(s) - 2, (i++ ) * 15, renderEngine);
                 }

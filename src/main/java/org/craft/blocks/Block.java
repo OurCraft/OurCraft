@@ -164,6 +164,7 @@ public class Block implements IStackable
         int z1 = (int) (z + side.getTranslationZ());
         user.worldObj.setBlock(x1, y1, z1, this);
         onBlockAdded(user.worldObj, x1, y1, z1, side, user);
+        user.worldObj.updateBlockAndNeighbors(x1, y1, z1);
     }
 
     @Override

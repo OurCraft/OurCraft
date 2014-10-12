@@ -119,7 +119,10 @@ public class VanillaWorldLoader extends WorldLoader
                             BlockState state = states.next();
                             IBlockStateValue value = o.get(state);
                             buffer.writeString(state.toString());
-                            buffer.writeString(value.toString());
+                            if(value == null)
+                                buffer.writeString("null");
+                            else
+                                buffer.writeString(value.toString());
                         }
                     }
                 }

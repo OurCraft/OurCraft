@@ -11,7 +11,6 @@ public class BlockCable extends Block
 
     private TextureIcon allIcon;
     private TextureIcon nsIcon;
-    private TextureIcon side2Icon;
 
     public BlockCable(String id)
     {
@@ -43,7 +42,7 @@ public class BlockCable extends Block
 
     public boolean shouldRenderInPass(EnumRenderPass pass)
     {
-        return pass == EnumRenderPass.NORMAL;
+        return pass == EnumRenderPass.ALPHA;
     }
 
     public boolean letLightGoThrough()
@@ -53,17 +52,17 @@ public class BlockCable extends Block
 
     public void onBlockUpdate(World world, int x, int y, int z)
     {
-        Block westBlock = world.getBlockNextTo(x, y, z, EnumSide.WEST);
-        Block eastBlock = world.getBlockNextTo(x, y, z, EnumSide.EAST);
         Block northBlock = world.getBlockNextTo(x, y, z, EnumSide.NORTH);
         Block southBlock = world.getBlockNextTo(x, y, z, EnumSide.SOUTH);
-        if(northBlock == this && southBlock == this)
-        {
-            world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.NORTH_SOUTH, false);
-        }
-        else
-            world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.NONE, false);
-        // TODO
+        Block eastBlock = world.getBlockNextTo(x, y, z, EnumSide.EAST);
+        Block westBlock = world.getBlockNextTo(x, y, z, EnumSide.WEST);
+
+        int northFlag = northBlock == this ? 1 << 0 : 0;
+        int southFlag = southBlock == this ? 1 << 1 : 0;
+        int eastFlag = eastBlock == this ? 1 << 2 : 0;
+        int westFlag = westBlock == this ? 1 << 3 : 0;
+        int fullFlag = (northFlag | southFlag | eastFlag | westFlag);
+        world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), false);
     }
 
     public TextureIcon getBlockIcon(World w, int x, int y, int z, EnumSide side)
