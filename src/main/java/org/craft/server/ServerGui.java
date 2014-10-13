@@ -6,7 +6,9 @@ import java.util.logging.*;
 
 import javax.swing.*;
 
+import org.craft.commands.*;
 import org.spongepowered.api.*;
+import org.spongepowered.api.util.command.*;
 
 public class ServerGui extends JFrame
 {
@@ -53,6 +55,12 @@ public class ServerGui extends JFrame
         scrollPane.setPreferredSize(new Dimension(900, 600));
         add(scrollPane);
         userInput = new JTextField();
+        userInput.setForeground(Color.lightGray);
+        userInput.setBackground(Color.black);
+        userInput.setCaretColor(Color.lightGray);
+        console.setForeground(Color.lightGray);
+        console.setBackground(Color.black);
+        console.setCaretColor(Color.lightGray);
         userInput.addKeyListener(new KeyListener()
         {
 
@@ -68,6 +76,22 @@ public class ServerGui extends JFrame
                 {
                     String txt = userInput.getText();
                     userInput.setText("");
+                    if(txt.startsWith("/"))
+                    {
+                        String command = txt.substring(1);
+                        CommandMapping callable = Commands.getDispatcher().get(command);
+                        if(callable != null)
+                        {
+                            try
+                            {
+                                callable.getCallable().call((CommandSource) OurCraftServer.getServer(), "", null);
+                            }
+                            catch(CommandException e1)
+                            {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
                     game.broadcastMessage("<Server operator> " + txt);
                 }
             }
@@ -85,7 +109,7 @@ public class ServerGui extends JFrame
         {
             public void windowClosing(WindowEvent evt)
             {
-                // TODO: Shutdown server
+                OurCraftServer.getServer().shutdown();
             }
         });
     }

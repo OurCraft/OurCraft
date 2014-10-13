@@ -7,11 +7,13 @@ import javax.swing.*;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
+import org.craft.commands.*;
 import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
+import org.craft.server.commands.*;
 import org.craft.server.network.*;
 import org.craft.server.network.packets.*;
 import org.craft.spongeimpl.events.state.*;
@@ -25,8 +27,9 @@ import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.util.command.*;
 
-public class OurCraftServer implements Game
+public class OurCraftServer implements Game, CommandSource
 {
 
     private static OurCraftServer instance;
@@ -99,6 +102,8 @@ public class OurCraftServer implements Game
             Log.addHandler(serverGui.getLogHandler());
         }
         Log.message("Loading game data");
+        Commands.init();
+        Commands.register(new StopCommand(), "stop");
         Blocks.init();
         Items.init();
         try
@@ -132,7 +137,9 @@ public class OurCraftServer implements Game
         {
             tick();
         }
-        // TODO: Thog, it's your turn to code! :D
+        if(serverGui != null)
+            serverGui.dispose();
+        serverWrapper.stop();
     }
 
     @SuppressWarnings("unchecked")
@@ -322,5 +329,16 @@ public class OurCraftServer implements Game
     public WorldLoader getWorldLoader()
     {
         return worldLoader;
+    }
+
+    @Override
+    public void sendMessage(String message)
+    {
+        Log.message("[Command] " + message);
+    }
+
+    public void shutdown()
+    {
+        running = false;
     }
 }

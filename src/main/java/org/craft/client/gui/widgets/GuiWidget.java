@@ -111,4 +111,9 @@ public abstract class GuiWidget
     {
         return true;
     }
+
+    public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
+    {
+        return false;
+    }
 }

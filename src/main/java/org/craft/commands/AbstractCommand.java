@@ -36,7 +36,7 @@ public abstract class AbstractCommand implements CommandCallable, Description
     @Override
     public String getHelp()
     {
-        return null;
+        return getShortDescription();
     }
 
     @Override

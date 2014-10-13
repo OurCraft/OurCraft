@@ -25,7 +25,8 @@ public class GuiButton extends GuiWidget
         {
             engine.bindLocation(Gui.widgetsTexture);
             float minU = pressed ? 100f / 256f : 0f;
-            Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), minU, 0, minU + 100f / 256f, 20f / 256f);
+            Gui.drawTexturedRect(engine, getX(), getY(), getWidth() / 2, getHeight(), minU, 0, minU + 50f / 256f, 20f / 256f);
+            Gui.drawTexturedRect(engine, getX() + getWidth() / 2, getY(), getWidth() / 2, getHeight(), minU + 50f / 256f, 0, minU + 100f / 256f, 20f / 256f);
             int color = 0xFFFFFF;
             if(!enabled)
             {

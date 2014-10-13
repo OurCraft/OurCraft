@@ -326,12 +326,21 @@ public class OurCraft implements Runnable, Game
             boolean state = Mouse.getEventButtonState();
             int x = Mouse.getEventX();
             int y = displayHeight - Mouse.getEventY();
-            if(currentMenu != null && mouseButton != -1)
+            int deltaWheel = Mouse.getEventDWheel();
+            if(currentMenu != null)
             {
-                if(state)
-                    currentMenu.handleButtonPressed(x, y, mouseButton);
-                else
-                    currentMenu.handleButtonReleased(x, y, mouseButton);
+                if(mouseButton != -1)
+                {
+                    if(state)
+                        currentMenu.handleButtonPressed(x, y, mouseButton);
+                    else
+                        currentMenu.handleButtonReleased(x, y, mouseButton);
+                }
+
+                if(deltaWheel != 0)
+                {
+                    currentMenu.handleMouseWheelMovement(x, y, deltaWheel);
+                }
             }
             if(playerController != null && (currentMenu == null || !currentMenu.requiresMouse()))
             {
@@ -346,7 +355,6 @@ public class OurCraft implements Runnable, Game
                         playerController.onRightClick(getObjectInFront());
                     }
                 }
-                int deltaWheel = Mouse.getEventDWheel();
                 if(deltaWheel != 0)
                 {
                     playerController.onMouseWheelMoved(deltaWheel);

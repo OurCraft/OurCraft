@@ -202,4 +202,15 @@ public abstract class Gui
     }
 
     public abstract void update();
+
+    public void handleMouseWheelMovement(int mx, int my, int deltaWheel)
+    {
+        for(GuiWidget widget : widgets)
+        {
+            if(widget.handleMouseWheelMovement(mx, my, deltaWheel))
+            {
+                break;
+            }
+        }
+    }
 }

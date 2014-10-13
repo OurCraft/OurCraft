@@ -22,26 +22,16 @@ public class GuiSelectWorld extends Gui
     public class GuiWorldSlot extends GuiListSlot
     {
 
-        private String   worldFolderName;
-        private String   worldName;
-        private Calendar calendar;
+        private String worldFolderName;
+        private String worldName;
+        private String dateString;
 
         public GuiWorldSlot(String folderName, String name, long timestamp)
         {
             this.worldFolderName = folderName;
             this.worldName = name;
-            calendar = (Calendar) Calendar.getInstance().clone();
+            Calendar calendar = (Calendar) Calendar.getInstance().clone();
             calendar.setTimeInMillis(timestamp);
-        }
-
-        @Override
-        public void render(int index, int x, int y, int w, int h, int mx, int my, boolean selected, RenderEngine engine, GuiList<?> owner)
-        {
-            if(selected)
-                Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
-            FontRenderer font = OurCraft.getOurCraft().getFontRenderer();
-            font.drawShadowedString(worldName, 0xFFFFFFFF, x + 2, y, engine);
-            font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x + 2, y + 20, engine);
             String hour = "" + calendar.get(Calendar.HOUR_OF_DAY);
             String minute = "" + calendar.get(Calendar.MINUTE);
             String second = "" + calendar.get(Calendar.SECOND);
@@ -54,7 +44,18 @@ public class GuiSelectWorld extends Gui
                 second = "0" + second;
             if(day.length() < 2)
                 day = "0" + day;
-            String dateString = hour + ":" + minute + ":" + second + " " + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + day;
+            dateString = hour + ":" + minute + ":" + second + " " + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + day;
+
+        }
+
+        @Override
+        public void render(int index, int x, int y, int w, int h, int mx, int my, boolean selected, RenderEngine engine, GuiList<?> owner)
+        {
+            if(selected)
+                Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
+            FontRenderer font = OurCraft.getOurCraft().getFontRenderer();
+            font.drawShadowedString(worldName, 0xFFFFFFFF, x + 2, y, engine);
+            font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x + 2, y + 20, engine);
             font.drawShadowedString(dateString, 0xFFFFFFFF, x + 2, y + 40, engine);
         }
 

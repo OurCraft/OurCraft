@@ -25,6 +25,7 @@ public class NettyServerWrapper implements Runnable
     private Game                     game;
     private ArrayList<Channel>       channels;
     private HashMap<String, Channel> channelsMap;
+    private Channel                  serverChannel;
 
     public NettyServerWrapper(Game gameInstance, EventBus eventBus, int port)
     {
@@ -71,7 +72,8 @@ public class NettyServerWrapper implements Runnable
             // In this example, this does not happen, but you can do that to
             // gracefully
             // shut down your server.
-            f.channel().closeFuture().sync();
+            serverChannel = f.channel();
+            serverChannel.closeFuture().sync();
             eventBus.call(new SpongeServerStoppedEvent(game));
         }
         catch(Exception e)
@@ -96,5 +98,10 @@ public class NettyServerWrapper implements Runnable
         {
             ChannelHelper.writeAndFlush(packet, channel);
         }
+    }
+
+    public void stop()
+    {
+        serverChannel.close();
     }
 }

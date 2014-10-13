@@ -37,7 +37,8 @@ public class GuiTextField extends GuiWidget
         if(visible)
         {
             engine.bindLocation(Gui.widgetsTexture);
-            Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), 0, 20f / 256f, 100f / 256f, 40f / 256f);
+            Gui.drawTexturedRect(engine, getX(), getY(), getWidth() / 2, getHeight(), 0, 20f / 256f, 0 + 50f / 256f, 40f / 256f);
+            Gui.drawTexturedRect(engine, getX() + getWidth() / 2, getY(), getWidth() / 2, getHeight(), 0 + 50f / 256f, 20f / 256f, 0 + 100f / 256f, 40f / 256f);
             int color = 0xFFFFFF;
             int time = 54;
             if(cursorPos < offset)

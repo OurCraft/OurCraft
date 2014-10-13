@@ -48,19 +48,13 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     {
         if(visible)
         {
-            for(int index = 0; index < getSize(); index++ )
+            int start = (scroll) / slotHeight;
+            int end = (scroll + getHeight()) / slotHeight;
+            for(int index = start; index < getSize() && index < end; index++ )
             {
                 T slot = getSlot(index);
                 if(slot != null)
                 {
-                    if(-scroll + index * slotHeight + slotHeight < 0) // Too high
-                    {
-                        continue;
-                    }
-                    if(-scroll + index * slotHeight + slotHeight >= getHeight()) // Too low
-                    {
-                        continue;
-                    }
                     slot.render(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
                 }
             }
@@ -79,4 +73,27 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         return null;
     }
 
+    public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
+    {
+        if(isMouseOver(mx, my))
+        {
+            scroll += -(Math.signum(deltaWheel) * 15);
+
+            if(-scroll + getSize() * slotHeight + slotHeight <= getHeight())
+            {
+                /* -scroll + getSize() * slotHeight + slotHeight <= getHeight()
+                * getSize() * slotHeight + slotHeight <= getHeight()+scroll
+                * getSize() * slotHeight + slotHeight - getHeight() <= scroll
+                * scroll >= getSize() * slotHeight + slotHeight - getHeight()
+                */
+                scroll = getSize() * slotHeight + slotHeight - getHeight();
+            }
+            if(scroll < 0)
+            {
+                scroll = 0;
+            }
+            return true;
+        }
+        return false;
+    }
 }
