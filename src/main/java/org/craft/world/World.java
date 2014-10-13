@@ -169,7 +169,7 @@ public class World implements org.spongepowered.api.world.World
                 AABB blockBB = b.getSelectionBox(this, x, y, z);
                 if(blockBB != null)
                 {
-                    if(blockBB.intersectAABB(rayBB.translate(pos)).doesIntersects())
+                    if(blockBB.intersectAABB(rayBB.translate(pos)))
                     {
                         infos.x = x;
                         infos.y = y;
@@ -212,7 +212,7 @@ public class World implements org.spongepowered.api.world.World
             pos = origin.add(ray.mul((maxDist + step) - dist));
             for(Entity e : entities)
             {
-                if(e.getBoundingBox().intersectAABB(rayBB).doesIntersects())
+                if(e.getBoundingBox().intersectAABB(rayBB))
                 {
                     infos.type = CollisionType.ENTITY;
                     infos.value = e;

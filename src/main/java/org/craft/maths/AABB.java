@@ -20,14 +20,14 @@ public class AABB implements IDisposable
     /**
      * Returns infos from intersection between this AABB and given one
      */
-    public IntersectionInfos intersectAABB(AABB other)
+    public boolean intersectAABB(AABB other)
     {
         Vector3 dist1 = other.getMinExtents().sub(getMaxExtents());
         Vector3 dist2 = getMinExtents().sub(other.getMaxExtents());
         Vector3 dist = Vector3.max(dist1, dist2);
         float maxDistance = dist.max();
 
-        return new IntersectionInfos(maxDistance < 0.f, (float) maxDistance);
+        return maxDistance <= 0.f;
     }
 
     public Vector3 getMinExtents()

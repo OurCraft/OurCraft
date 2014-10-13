@@ -14,8 +14,8 @@ public class OpenGLBuffer
 
     private int                vboID;
     private int                iboID;
-    private ArrayList<Vertex>  vertices = new ArrayList<Vertex>();
-    private ArrayList<Integer> indices  = new ArrayList<Integer>();
+    private ArrayList<Vertex>  vertices = new ArrayList<Vertex>(); // TODO: Replace by dynamic-sized array
+    private ArrayList<Integer> indices  = new ArrayList<Integer>(); // TODO: Replace by dynamic-sized array
     private int                indicesLength;
     private int                verticesLength;
 
@@ -79,7 +79,7 @@ public class OpenGLBuffer
     public void setIndices(List<Integer> newIndices)
     {
         indicesLength = newIndices.size();
-        for(Integer index : newIndices)
+        for(int index : newIndices)
             addIndex(index);
     }
 

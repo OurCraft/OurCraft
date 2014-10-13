@@ -99,7 +99,7 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Matrix4 m)
     {
         int l = getLocation(uniform);
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4);
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4); // TODO: Pooling
         m.write(buffer);
         buffer.flip();
         glUniformMatrix4(l, true, buffer);

@@ -15,7 +15,6 @@ public class RenderBlocks
 
     public static class BlockRenderInfos
     {
-
         public Block block;
         public int   x;
         public int   y;
@@ -29,6 +28,7 @@ public class RenderBlocks
     private AbstractBlockRenderer                                  fallbackRenderer;
     private Comparator<Chunk>                                      chunkComparator;
     private Comparator<BlockRenderInfos>                           blockComparator;
+    private ArrayList<BlockRenderInfos>                            infosList;
     private static ResourceLocation                                blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
@@ -52,6 +52,7 @@ public class RenderBlocks
 
     public RenderBlocks(RenderEngine engine)
     {
+        infosList = new ArrayList<RenderBlocks.BlockRenderInfos>();
         this.renderEngine = engine;
         chunkBuffersPass0 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
         chunkBuffersPass1 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
@@ -98,7 +99,7 @@ public class RenderBlocks
     }
 
     /**
-     * Renders visibles chunks from World instance 'w'
+     * Renders visible chunks from World instance 'w'
      */
     public void render(World w, List<Chunk> visiblesChunks)
     {
@@ -176,7 +177,7 @@ public class RenderBlocks
                         else
                         {
 
-                            ArrayList<BlockRenderInfos> infosList = new ArrayList<BlockRenderInfos>();
+                            int infoIndex = 0;
                             for(int x = 0; x < 16; x++ )
                             {
                                 for(int y = 0; y < 16; y++ )
@@ -186,12 +187,13 @@ public class RenderBlocks
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
                                         if(b != null && b.shouldRender() && b.shouldRenderInPass(currentPass))
                                         {
-                                            BlockRenderInfos infos = new BlockRenderInfos();
+                                            if(infoIndex >= infosList.size())
+                                                infosList.add(new BlockRenderInfos());
+                                            BlockRenderInfos infos = infosList.get(infoIndex++ );
                                             infos.block = b;
                                             infos.x = x + c.getCoords().x * 16;
                                             infos.y = y + c.getCoords().y * 16;
                                             infos.z = z + c.getCoords().z * 16;
-                                            infosList.add(infos);
                                         }
                                     }
                                 }

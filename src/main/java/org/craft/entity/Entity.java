@@ -179,8 +179,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
                     AABB blockBB = block.getCollisionBox(worldObj, x, y, z);
                     if(blockBB == null)
                         continue;
-                    IntersectionInfos interInfos = boundingBox.intersectAABB(blockBB);
-                    if(interInfos.doesIntersects() || interInfos.getDistance() <= 0.10f)
+                    if(boundingBox.intersectAABB(blockBB))
                     {
                         return false;
                     }

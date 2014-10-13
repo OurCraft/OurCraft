@@ -36,6 +36,7 @@ public class RenderEngine implements IDisposable
     private Shader                                    postRenderShader;
     private RenderState                               renderState;
     private Stack<RenderState>                        renderStatesStack;
+    private Matrix4                                   translationMatrix;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
@@ -131,7 +132,9 @@ public class RenderEngine implements IDisposable
     {
         if(renderViewEntity != null && shouldProjectFromEntity())
         {
-            return projection.mul(renderViewEntity.getQuaternionRotation().conjugate().toRotationMatrix().mul(new Matrix4().initTranslation(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f)));
+            if(translationMatrix == null)
+                translationMatrix = new Matrix4();
+            return projection.mul(renderViewEntity.getQuaternionRotation().conjugate().toRotationMatrix().mul(translationMatrix.initTranslation(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f)));
         }
         return projection;
     }
