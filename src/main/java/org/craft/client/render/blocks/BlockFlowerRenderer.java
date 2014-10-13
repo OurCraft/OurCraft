@@ -15,29 +15,14 @@ public class BlockFlowerRenderer extends AbstractBlockRenderer
         if(w.getChunk(x, y, z) == null)
             return;
         TextureIcon icon = b.getBlockIcon(w, x, y, z, EnumSide.UNDEFINED);
-        float lightValue = w.getChunk(x, y, z).getLightValue(w, x, y, z);
-        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        buffer.addIndex(0);
-        buffer.addIndex(1);
-        buffer.addIndex(2);
-        buffer.addIndex(2);
-        buffer.addIndex(3);
-        buffer.addIndex(0);
-        buffer.setOffsetToEnd();
+        Vector3 sizeVec = Vector3.get(1, 1, 1);
+        renderFace(buffer, w, b, x, y, z, icon, Vector3.NULL, sizeVec);
+        sizeVec.dispose();
 
-        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 0 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 0
-        buffer.addVertex(Vertex.get(Vector3.get(0 + x, 1 + y, 1 + z), Vector2.get((float) icon.getMinU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 2
-        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 1 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMinV()), Vector3.get(lightValue, lightValue, lightValue))); // 4
-        buffer.addVertex(Vertex.get(Vector3.get(1 + x, 0 + y, 0 + z), Vector2.get((float) icon.getMaxU(), (float) icon.getMaxV()), Vector3.get(lightValue, lightValue, lightValue))); // 6
-        buffer.addIndex(0);
-        buffer.addIndex(1);
-        buffer.addIndex(2);
-        buffer.addIndex(2);
-        buffer.addIndex(3);
-        buffer.addIndex(0);
-        buffer.setOffsetToEnd();
+        Vector3 posVec = Vector3.get(0, 0, 1);
+        sizeVec = Vector3.get(1, 1, -1);
+        renderFace(buffer, w, b, x, y, z, icon, posVec, sizeVec);
+        sizeVec.dispose();
+        posVec.dispose();
     }
 }

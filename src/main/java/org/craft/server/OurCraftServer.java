@@ -78,7 +78,7 @@ public class OurCraftServer implements Game, CommandSource
         gen.addPopulator(new GrassPopulator());
         gen.addPopulator(new FlowerPopulator());
         gen.addPopulator(new TreePopulator());
-        worldLoader = new VanillaWorldLoader(new ResourceLocation("world"), new DiskSimpleResourceLoader());
+        worldLoader = new VanillaWorldLoader(new ResourceLocation("worlds"), new DiskSimpleResourceLoader());
         serverWorld = new org.craft.world.World("test-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 

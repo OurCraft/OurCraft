@@ -16,6 +16,8 @@ public class OpenGLBuffer
     private int                iboID;
     private ArrayList<Vertex>  vertices = new ArrayList<Vertex>();
     private ArrayList<Integer> indices  = new ArrayList<Integer>();
+    private int                indicesLength;
+    private int                verticesLength;
 
     /**
      * Creates an empty OpenGLBuffer instance
@@ -42,9 +44,10 @@ public class OpenGLBuffer
     public void upload()
     {
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.size() * Vertex.SIZE_IN_FLOATS);
-        for(Vertex vertex : vertices)
+        FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(verticesLength * Vertex.SIZE_IN_FLOATS);
+        for(int i = 0; i < verticesLength; i++ )
         {
+            Vertex vertex = vertices.get(i);
             verticesBuffer.put(vertex.getPos().getX());
             verticesBuffer.put(vertex.getPos().getY());
             verticesBuffer.put(vertex.getPos().getZ());
@@ -60,9 +63,10 @@ public class OpenGLBuffer
         GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
-        IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.size());
-        for(int indice : indices)
+        IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indicesLength);
+        for(int i = 0; i < indicesLength; i++ )
         {
+            int indice = indices.get(i);
             indicesBuffer.put(indice);
         }
         indicesBuffer.flip();
@@ -74,8 +78,9 @@ public class OpenGLBuffer
 
     public void setIndices(List<Integer> newIndices)
     {
-        indices.clear();
-        indices.addAll(newIndices);
+        indicesLength = newIndices.size();
+        for(Integer index : newIndices)
+            addIndex(index);
     }
 
     public void setVertices(List<Vertex> newVertices)
@@ -88,8 +93,11 @@ public class OpenGLBuffer
         if(disposePrevious)
             clearAndDisposeVertices();
         else
-            vertices.clear();
-        vertices.addAll(newVertices);
+        {
+            verticesLength = 0;
+        }
+        for(Vertex v : newVertices)
+            addVertex(v);
     }
 
     /**
@@ -97,7 +105,15 @@ public class OpenGLBuffer
      */
     public void addVertex(Vertex v)
     {
-        vertices.add(v);
+        if(vertices.size() <= verticesLength)
+        {
+            vertices.add(v);
+        }
+        else
+        {
+            vertices.set(verticesLength, v);
+        }
+        verticesLength++ ;
     }
 
     /**
@@ -105,7 +121,15 @@ public class OpenGLBuffer
      */
     public void addIndex(int i)
     {
-        indices.add(i);
+        if(indices.size() <= indicesLength)
+        {
+            indices.add(i);
+        }
+        else
+        {
+            indices.set(indicesLength, i);
+        }
+        indicesLength++ ;
     }
 
     public int getVboID()
@@ -120,7 +144,7 @@ public class OpenGLBuffer
 
     public int getIndicesCount()
     {
-        return indices.size();
+        return indicesLength;
     }
 
     /**
@@ -128,7 +152,7 @@ public class OpenGLBuffer
      */
     public void clear()
     {
-        indices.clear();
+        indicesLength = 0;
         clearAndDisposeVertices();
         upload();
     }
@@ -146,17 +170,17 @@ public class OpenGLBuffer
      */
     public void clearAndDisposeVertices()
     {
+        verticesLength = 0;
         for(Vertex v : vertices)
         {
             v.dispose();
         }
-        vertices.clear();
     }
 
     public void setToCube()
     {
         clearAndDisposeVertices();
-        indices.clear();
+        indicesLength = 0;
         int index = 0;
         addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
         addVertex(Vertex.get(Vector3.get(1, 0, 0), Vector2.get(1, 0)));
