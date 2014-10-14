@@ -35,28 +35,24 @@ public class World implements org.spongepowered.api.world.World
         entities = new LinkedList<Entity>();
     }
 
-    public void update(double delta, boolean canUpdate)
+    public void update(double delta)
     {
         while(!spawingQueue.isEmpty())
             entities.add(spawingQueue.remove(0));
         ArrayList<Entity> deadEntities = new ArrayList<Entity>();
-        if(canUpdate)
+        for(Entity e : entities)
         {
-            for(Entity e : entities)
-            {
-                Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
-                if(c != null)
-                    c.update();
-                e.update();
+            Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
+            if(c != null)
+                c.update();
+            e.update();
 
-                if(e.isDead())
-                {
-                    deadEntities.add(e);
-                }
+            if(e.isDead())
+            {
+                deadEntities.add(e);
             }
         }
         entities.removeAll(deadEntities);
-
     }
 
     /**

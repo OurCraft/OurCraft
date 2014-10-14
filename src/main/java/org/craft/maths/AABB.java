@@ -5,8 +5,9 @@ import org.craft.utils.*;
 public class AABB implements IDisposable
 {
 
-    private Vector3 minExtents;
-    private Vector3 maxExtents;
+    private Vector3   minExtents;
+    private Vector3   maxExtents;
+    private Vector3[] vertices;
 
     /**
      * Creates a new AABB from given min extents and max extents
@@ -15,6 +16,15 @@ public class AABB implements IDisposable
     {
         this.minExtents = minExtents;
         this.maxExtents = maxExtents;
+        vertices = new Vector3[8];
+        vertices[0] = minExtents;
+        vertices[1] = minExtents.add(maxExtents.getX() - minExtents.getX(), 0, 0);
+        vertices[2] = minExtents.add(0, maxExtents.getY() - minExtents.getY(), 0);
+        vertices[3] = minExtents.add(0, 0, maxExtents.getZ() - minExtents.getZ());
+        vertices[4] = maxExtents.sub(0, 0, maxExtents.getZ() - minExtents.getZ());
+        vertices[5] = maxExtents.sub(0, maxExtents.getY() - minExtents.getY(), 0);
+        vertices[6] = maxExtents.sub(maxExtents.getX() - minExtents.getX(), 0, 0);
+        vertices[7] = maxExtents;
     }
 
     /**
@@ -58,5 +68,12 @@ public class AABB implements IDisposable
     {
         minExtents.dispose();
         maxExtents.dispose();
+        for(Vector3 v : vertices)
+            v.dispose();
+    }
+
+    public Vector3 getVertex(int i)
+    {
+        return vertices[i];
     }
 }

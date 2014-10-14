@@ -82,7 +82,7 @@ public class OurCraft implements Runnable, Game
     private int                      fps;
     private double                   expectedFrameRate           = 60.0;
     private double                   timeBetweenUpdates          = 1000000000 / expectedFrameRate;
-    private final int                maxUpdatesBeforeRender      = 2;
+    private final int                maxUpdatesBeforeRender      = 5;
     private double                   lastUpdateTime              = System.nanoTime();
     private double                   lastRenderTime              = System.nanoTime();
 
@@ -411,54 +411,39 @@ public class OurCraft implements Runnable, Game
         else
             mouseHandler.grab();
         mouseHandler.update();
-        boolean canUpdate = (System.currentTimeMillis() - lastTime) >= delta;
-        if(canUpdate)
+        if(playerController != null)
         {
-            if(playerController != null)
+            if(Keyboard.isKeyDown(Keyboard.KEY_Z))
             {
-                if(Keyboard.isKeyDown(Keyboard.KEY_Z))
-                {
-                    playerController.onMoveForwardRequested();
-                }
-                if(Keyboard.isKeyDown(Keyboard.KEY_S))
-                {
-                    playerController.onMoveBackwardsRequested();
-                }
-                if(Keyboard.isKeyDown(Keyboard.KEY_Q))
-                {
-                    playerController.onMoveLeftRequested();
-                }
-                if(Keyboard.isKeyDown(Keyboard.KEY_D))
-                {
-                    playerController.onMoveRightRequested();
-                }
-                if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-                {
-                    playerController.onJumpRequested();
-                }
-                playerController.update();
+                playerController.onMoveForwardRequested();
             }
-            this.resetTime();
+            if(Keyboard.isKeyDown(Keyboard.KEY_S))
+            {
+                playerController.onMoveBackwardsRequested();
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_Q))
+            {
+                playerController.onMoveLeftRequested();
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_D))
+            {
+                playerController.onMoveRightRequested();
+            }
+            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+            {
+                playerController.onJumpRequested();
+            }
+            playerController.update();
         }
         if(clientWorld != null)
         {
             if(currentMenu != null && !currentMenu.pausesGame())
             {
-                clientWorld.update(delta, canUpdate);
+                clientWorld.update(delta);
             }
             else if(currentMenu == null)
-                clientWorld.update(delta, canUpdate);
+                clientWorld.update(delta);
         }
-    }
-
-    public void resetTime()
-    {
-        lastTime = System.currentTimeMillis();
-    }
-
-    public long getLastTime()
-    {
-        return lastTime;
     }
 
     private void render(double delta)
@@ -512,6 +497,7 @@ public class OurCraft implements Runnable, Game
         ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
         if(player != null)
         {
+            AABB chunkBB = new AABB(Vector3.NULL, Vector3.get(16, 16, 16));
             int renderDistance = 8;
             int ox = (int) renderEngine.getRenderViewEntity().getX();
             int oy = (int) renderEngine.getRenderViewEntity().getY();
@@ -531,7 +517,14 @@ public class OurCraft implements Runnable, Game
                         {
                             Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
                             if(c != null)
-                                visibleChunks.add(c);
+                            {
+                                AABB chunkBox = chunkBB.translate(x, y, z);
+                                if(renderEngine.getFrustum().boxIn(chunkBox))
+                                {
+                                    visibleChunks.add(c);
+                                }
+                                chunkBox.dispose();
+                            }
                         }
                     }
                 }

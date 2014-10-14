@@ -37,6 +37,11 @@ public class RenderEngine implements IDisposable
     private RenderState                               renderState;
     private Stack<RenderState>                        renderStatesStack;
     private Matrix4                                   translationMatrix;
+    private Frustum                                   frustum;
+    private float                                     fov;
+    private float                                     ratio;
+    private float                                     nearDist;
+    private float                                     farDist;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
@@ -45,7 +50,11 @@ public class RenderEngine implements IDisposable
         texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
         projectFromEntity = true;
         modelMatrix = new Matrix4().initIdentity();
-        projection3dMatrix = new Matrix4().initPerspective((float) Math.toRadians(90), 16f / 9f, 0.001f, 1000);
+        fov = (float) Math.toRadians(90);
+        ratio = 16f / 9f;
+        nearDist = 0.01f;
+        farDist = 100f;
+        projection3dMatrix = new Matrix4().initPerspective(fov, ratio, nearDist, farDist);
         projection = projection3dMatrix;
         projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
         loadShaders();
@@ -87,6 +96,8 @@ public class RenderEngine implements IDisposable
         renderBuffer.addIndex(0);
         renderBuffer.upload();
         renderBuffer.clearAndDisposeVertices();
+
+        this.frustum = new Frustum();
     }
 
     /**
@@ -134,7 +145,11 @@ public class RenderEngine implements IDisposable
         {
             if(translationMatrix == null)
                 translationMatrix = new Matrix4();
-            return projection.mul(renderViewEntity.getQuaternionRotation().conjugate().toRotationMatrix().mul(translationMatrix.initTranslation(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f)));
+            Quaternion camRot = renderViewEntity.getQuaternionRotation();
+            Vector3 camPos = Vector3.get(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f);
+            frustum.update(fov, ratio, nearDist, farDist, camPos, camRot.getForward(), camRot.getUp());
+            camPos.dispose();
+            return projection.mul(camRot.conjugate().toRotationMatrix().mul(translationMatrix.initTranslation(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f)));
         }
         return projection;
     }
@@ -465,5 +480,10 @@ public class RenderEngine implements IDisposable
     public Texture getColorBuffer()
     {
         return colorBuffer;
+    }
+
+    public Frustum getFrustum()
+    {
+        return frustum;
     }
 }

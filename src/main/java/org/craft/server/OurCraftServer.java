@@ -308,7 +308,7 @@ public class OurCraftServer implements Game, CommandSource
 
     private void update(double delta)
     {
-        serverWorld.update(delta, true);
+        serverWorld.update(delta);
     }
 
     public static OurCraftServer getServer()
