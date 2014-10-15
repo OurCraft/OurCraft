@@ -37,7 +37,7 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
         inventory.setInventorySlotContents(6, new Stack(Blocks.glass));
         inventory.setInventorySlotContents(7, new Stack(Blocks.leaves));
         inventory.setInventorySlotContents(8, new Stack(Blocks.rose));
-        inventory.setInventorySlotContents(8, new Stack(Blocks.cable));
+        inventory.setInventorySlotContents(9, new Stack(Blocks.cable));
         setSize(0.75f, 1.80f, 0.75f);
     }
 

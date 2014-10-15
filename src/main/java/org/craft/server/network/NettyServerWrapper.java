@@ -15,7 +15,6 @@ import org.craft.spongeimpl.events.state.*;
 import org.spongepowered.api.*;
 
 /**
- * Discards any incoming data.
  */
 public class NettyServerWrapper implements Runnable
 {

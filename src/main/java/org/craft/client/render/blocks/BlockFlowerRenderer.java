@@ -12,7 +12,10 @@ public class BlockFlowerRenderer extends AbstractBlockRenderer
     @Override
     public void render(RenderEngine engine, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z)
     {
-        if(w.getChunk(x, y, z) == null)
+        if(!b.shouldRender())
+            return;
+        Chunk chunk = w.getChunk(x, y, z);
+        if(chunk == null)
             return;
         TextureIcon icon = b.getBlockIcon(w, x, y, z, EnumSide.UNDEFINED);
         Vector3 sizeVec = Vector3.get(1, 1, 1);

@@ -28,8 +28,7 @@ public class RenderBlocks
     private AbstractBlockRenderer                                  fallbackRenderer;
     private Comparator<Chunk>                                      chunkComparator;
     private Comparator<BlockRenderInfos>                           blockComparator;
-    private ArrayList<BlockRenderInfos>                            infosList;
-    private static ResourceLocation                                blockMapLoc;
+    public static ResourceLocation                                 blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
     {
@@ -52,7 +51,6 @@ public class RenderBlocks
 
     public RenderBlocks(RenderEngine engine)
     {
-        infosList = new ArrayList<RenderBlocks.BlockRenderInfos>();
         this.renderEngine = engine;
         chunkBuffersPass0 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
         chunkBuffersPass1 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
@@ -131,31 +129,28 @@ public class RenderBlocks
                 if(currentPass == EnumRenderPass.ALPHA)
                 {
                     glDepthMask(false);
+                    glDepthFunc(GL_LESS);
                 }
                 for(Chunk c : visiblesChunks)
                 {
                     OffsettedOpenGLBuffer buffer = null;
+                    HashMap<ChunkCoord, OffsettedOpenGLBuffer> map = null;
                     if(currentPass == EnumRenderPass.NORMAL)
                     {
-                        buffer = chunkBuffersPass0.get(c.getCoords());
-                        if(buffer == null)
-                        {
-                            chunkBuffersPass0.put(c.getCoords(), new OffsettedOpenGLBuffer());
-                            buffer = chunkBuffersPass0.get(c.getCoords());
-                        }
+                        map = chunkBuffersPass0;
                     }
                     else if(currentPass == EnumRenderPass.ALPHA)
                     {
-                        buffer = chunkBuffersPass1.get(c.getCoords());
-                        if(buffer == null)
-                        {
-                            chunkBuffersPass1.put(c.getCoords(), new OffsettedOpenGLBuffer());
-                            buffer = chunkBuffersPass1.get(c.getCoords());
-                        }
+                        map = chunkBuffersPass1;
+                    }
+                    buffer = map.get(c.getCoords());
+                    if(buffer == null)
+                    {
+                        map.put(c.getCoords(), new OffsettedOpenGLBuffer());
+                        buffer = map.get(c.getCoords());
                     }
                     if(c.isDirty() || buffer == null)
                     {
-
                         startRendering(buffer);
                         if(currentPass == EnumRenderPass.NORMAL)
                         {
@@ -176,8 +171,7 @@ public class RenderBlocks
                         }
                         else
                         {
-
-                            int infoIndex = 0;
+                            ArrayList<BlockRenderInfos> infosList = new ArrayList<RenderBlocks.BlockRenderInfos>();
                             for(int x = 0; x < 16; x++ )
                             {
                                 for(int y = 0; y < 16; y++ )
@@ -187,13 +181,12 @@ public class RenderBlocks
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
                                         if(b != null && b.shouldRender() && b.shouldRenderInPass(currentPass))
                                         {
-                                            if(infoIndex >= infosList.size())
-                                                infosList.add(new BlockRenderInfos());
-                                            BlockRenderInfos infos = infosList.get(infoIndex++ );
+                                            BlockRenderInfos infos = new BlockRenderInfos();
                                             infos.block = b;
                                             infos.x = x + c.getCoords().x * 16;
                                             infos.y = y + c.getCoords().y * 16;
                                             infos.z = z + c.getCoords().z * 16;
+                                            infosList.add(infos);
                                         }
                                     }
                                 }
@@ -233,6 +226,7 @@ public class RenderBlocks
                 }
                 if(currentPass == EnumRenderPass.ALPHA)
                 {
+                    glDepthFunc(GL_LESS);
                     glDepthMask(true);
                 }
             }

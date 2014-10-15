@@ -14,6 +14,7 @@ import javax.imageio.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.client.gui.*;
+import org.craft.client.models.*;
 import org.craft.client.network.*;
 import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
@@ -151,6 +152,8 @@ public class OurCraft implements Runnable, Game
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
             renderBlocks.registerBlockRenderer(BlockHalfSlab.class, new BlockHalfSlabRenderer());
             renderBlocks.registerBlockRenderer(BlockCable.class, new BlockCableRenderer());
+            ModelLoader modelLoader = new ModelLoader();
+            renderBlocks.registerBlockRenderer(BlockFlower.class, modelLoader.createRenderer(new ResourceLocation("ourcraft", "models/block/rose.json")));
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(fontRenderer));

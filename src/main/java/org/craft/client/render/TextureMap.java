@@ -186,6 +186,19 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         texture = OpenGLHelper.loadTexture(stitchedImage);
     }
 
+    public TextureIcon get(String name)
+    {
+        return get(new ResourceLocation(name));
+    }
+
+    public TextureIcon get(ResourceLocation loc)
+    {
+        Log.message("Trying to get " + loc.getFullPath());
+        if(registredLocations.indexOf(loc) > 0)
+            return registredIcons.get(registredLocations.indexOf(loc));
+        return new TextureMapIcon(0, 0, 1, 1, 16, 16);
+    }
+
     public Texture getTexture()
     {
         return texture;

@@ -486,4 +486,9 @@ public class RenderEngine implements IDisposable
     {
         return frustum;
     }
+
+    public ITextureObject getByLocation(ResourceLocation loc)
+    {
+        return texturesLocs.get(loc);
+    }
 }

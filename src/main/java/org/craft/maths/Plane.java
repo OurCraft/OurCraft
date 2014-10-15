@@ -22,7 +22,7 @@ public class Plane
         float a = normal.getX();
         float b = normal.getY();
         float c = normal.getZ();
-        float d = -a * point.getX() - b * point.getY() - c * point.getZ(); // ?
+        float d = -a * this.point.getX() - b * this.point.getY() - c * this.point.getZ(); // Thog, I need help
         float numerator = Vector3.get(a * point.getX(), b * point.getY(), c * point.getZ()).add(d).length();
         float denominator = (float) Math.sqrt(a * a + b * b + c * c);
         return numerator / denominator;
