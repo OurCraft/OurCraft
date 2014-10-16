@@ -34,7 +34,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
     @Override
     public void render(RenderEngine engine, T e, float entX, float entY, float entZ)
     {
-        Matrix4 tmpMatrix = Matrix4.TMP;
+        Matrix4 tmpMatrix = Matrix4.get();
         for(ModelBox box : model.getChildren())
         {
             if(box == null)
