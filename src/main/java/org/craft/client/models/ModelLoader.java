@@ -94,6 +94,15 @@ public class ModelLoader
                             loadedElement.setFace(faceEntry.getKey(), face);
                         }
                     }
+                    if(element.has("rotation"))
+                    {
+                        loadedElement.setHasRotation(true);
+                        JsonObject rotationData = element.get("rotation").getAsJsonObject();
+                        JsonArray originArray = rotationData.get("origin").getAsJsonArray();
+                        loadedElement.setRotationOrigin(Vector3.get(originArray.get(0).getAsFloat() / 16f, originArray.get(1).getAsFloat() / 16f, originArray.get(2).getAsFloat() / 16f));
+                        loadedElement.setRotationAngle(rotationData.get("angle").getAsFloat());
+                        loadedElement.setRotationAxis(rotationData.get("axis").getAsString());
+                    }
                     loadedModel.addElement(loadedElement);
                 }
             }

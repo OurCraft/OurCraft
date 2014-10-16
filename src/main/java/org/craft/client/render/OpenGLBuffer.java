@@ -1,6 +1,7 @@
 package org.craft.client.render;
 
 import static org.lwjgl.opengl.GL15.*;
+import gnu.trove.*;
 
 import java.nio.*;
 import java.util.*;
@@ -12,12 +13,12 @@ import org.lwjgl.opengl.*;
 public class OpenGLBuffer
 {
 
-    private int                vboID;
-    private int                iboID;
-    private ArrayList<Vertex>  vertices = new ArrayList<Vertex>(); // TODO: Replace by dynamic-sized array
-    private ArrayList<Integer> indices  = new ArrayList<Integer>(); // TODO: Replace by dynamic-sized array
-    private int                indicesLength;
-    private int                verticesLength;
+    private int               vboID;
+    private int               iboID;
+    private ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+    private TIntArrayList     indices  = new TIntArrayList();
+    private int               indicesLength;
+    private int               verticesLength;
 
     /**
      * Creates an empty OpenGLBuffer instance
@@ -63,6 +64,7 @@ public class OpenGLBuffer
         GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
+        indicesLength = indices.size();
         IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indicesLength);
         for(int i = 0; i < indicesLength; i++ )
         {
@@ -78,7 +80,7 @@ public class OpenGLBuffer
 
     public void setIndices(List<Integer> newIndices)
     {
-        indicesLength = newIndices.size();
+        indices.clear();
         for(int index : newIndices)
             addIndex(index);
     }
@@ -121,15 +123,7 @@ public class OpenGLBuffer
      */
     public void addIndex(int i)
     {
-        if(indices.size() <= indicesLength)
-        {
-            indices.add(i);
-        }
-        else
-        {
-            indices.set(indicesLength, i);
-        }
-        indicesLength++ ;
+        indices.add(i);
     }
 
     public int getVboID()
@@ -144,7 +138,7 @@ public class OpenGLBuffer
 
     public int getIndicesCount()
     {
-        return indicesLength;
+        return indices.size();
     }
 
     /**
@@ -152,7 +146,7 @@ public class OpenGLBuffer
      */
     public void clear()
     {
-        indicesLength = 0;
+        indices.clear();
         clearAndDisposeVertices();
         upload();
     }
@@ -180,7 +174,7 @@ public class OpenGLBuffer
     public void setToCube()
     {
         clearAndDisposeVertices();
-        indicesLength = 0;
+        indices.clear();
         int index = 0;
         addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
         addVertex(Vertex.get(Vector3.get(1, 0, 0), Vector2.get(1, 0)));
@@ -220,5 +214,15 @@ public class OpenGLBuffer
 
         upload();
         clearAndDisposeVertices();
+    }
+
+    public Vertex getVertex(int vertexIndex)
+    {
+        return vertices.get(vertexIndex);
+    }
+
+    public int getIndex(int indexIndex)
+    {
+        return indices.get(indexIndex);
     }
 }

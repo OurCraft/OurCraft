@@ -1,14 +1,17 @@
 package org.craft.maths;
 
 import java.nio.*;
+import java.util.*;
 
-public class Matrix4
+import org.craft.utils.*;
+
+public class Matrix4 extends AbstractReference implements IDisposable
 {
 
     public static final Matrix4 TMP = new Matrix4();
     private float[][]           _m;
 
-    public Matrix4()
+    private Matrix4()
     {
         _m = new float[4][4];
     }
@@ -331,11 +334,58 @@ public class Matrix4
 
     public void translate(float x, float y, float z)
     {
-        this.set(this.mul(TMP.initTranslation(x, y, z)));
+        this.set(this.add(TMP.initTranslation(x, y, z)));
+    }
+
+    public Matrix4 add(Matrix4 m)
+    {
+        Matrix4 result = new Matrix4();
+        for(int i = 0; i < 4; i++ )
+        {
+            for(int j = 0; j < 4; j++ )
+            {
+                result.set(i, j, get(i, j) + m.get(i, j));
+            }
+        }
+        return result;
     }
 
     public void rotate(Vector3 axis, float radians)
     {
         this.set(this.mul(new Quaternion(axis, radians).toRotationMatrix()));
+    }
+
+    private static Stack<Matrix4> unused = new Stack<Matrix4>();
+
+    public static Matrix4 get()
+    {
+        Matrix4 v = null;
+        if(unused.isEmpty())
+        {
+            v = new Matrix4();
+        }
+        else
+        {
+            try
+            {
+                v = unused.pop();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                v = new Matrix4();
+            }
+        }
+        v.increaseReferenceCounter();
+        return v;
+    }
+
+    @Override
+    public void dispose()
+    {
+        if(decreaseReferenceCounter())
+        {
+            unused.push(this);
+        }
     }
 }

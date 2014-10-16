@@ -41,7 +41,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
                 continue;
             Matrix4 rot = box.getRotation().toRotationMatrix();
             Matrix4 scale = tmpMatrix.initScale(box.getWidth(), box.getHeight(), box.getDepth());
-            Matrix4 translation = new Matrix4().initTranslation(-box.getX(), -box.getY(), -box.getZ()).mul(new Matrix4().initTranslation(entX, entY, entZ));
+            Matrix4 translation = Matrix4.get().initTranslation(-box.getX(), -box.getY(), -box.getZ()).mul(Matrix4.get().initTranslation(entX, entY, entZ));
             Quaternion erot = new Quaternion(Vector3.yAxis, e.getYaw());
             Matrix4 rot1 = erot.toRotationMatrix();
 
@@ -49,6 +49,6 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             Shader.getCurrentlyBound().setUniform("modelview", finalMatrix);
             engine.renderBuffer(buffer, getTexture(e));
         }
-        Shader.getCurrentlyBound().setUniform("modelview", new Matrix4().initIdentity());
+        Shader.getCurrentlyBound().setUniform("modelview", Matrix4.get().initIdentity());
     }
 }

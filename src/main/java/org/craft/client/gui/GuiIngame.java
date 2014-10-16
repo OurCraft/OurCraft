@@ -28,7 +28,7 @@ public class GuiIngame extends Gui
     public void init()
     {
         scale = 1.85f;
-        scaleMatrix = new Matrix4().initScale(scale, scale, 1);
+        scaleMatrix = Matrix4.get().initScale(scale, scale, 1);
     }
 
     @Override

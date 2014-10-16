@@ -107,4 +107,9 @@ public class Vertex extends AbstractReference implements IDisposable
         return v;
     }
 
+    public Vertex copy()
+    {
+        return new Vertex(pos.copy(), texCoords.copy(), color.copy());
+    }
+
 }

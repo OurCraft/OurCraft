@@ -148,12 +148,11 @@ public class OurCraft implements Runnable, Game
             I18n.init(assetsLoader);
             eventBus.fireEvent(new SpongeInitEvent(this), null, null);
 
-            renderBlocks = new RenderBlocks(renderEngine);
+            ModelLoader modelLoader = new ModelLoader();
+            renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
             renderBlocks.registerBlockRenderer(BlockFlower.class, new BlockFlowerRenderer());
             renderBlocks.registerBlockRenderer(BlockHalfSlab.class, new BlockHalfSlabRenderer());
             renderBlocks.registerBlockRenderer(BlockCable.class, new BlockCableRenderer());
-            ModelLoader modelLoader = new ModelLoader();
-            renderBlocks.registerBlockRenderer(BlockFlower.class, modelLoader.createRenderer(new ResourceLocation("ourcraft", "models/block/rose.json")));
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(fontRenderer));
@@ -557,7 +556,7 @@ public class OurCraft implements Runnable, Game
             float sx = ratio.getX();
             float sy = ratio.getY();
             float sz = ratio.getZ();
-            Matrix4 selectionBoxMatrix = new Matrix4().initTranslation(objectInFront.x + blockSelectBB.getMinExtents().getX(), objectInFront.y + blockSelectBB.getMinExtents().getY(), objectInFront.z + blockSelectBB.getMinExtents().getZ()).mul(new Matrix4().initScale(sx, sy, sz));
+            Matrix4 selectionBoxMatrix = Matrix4.get().initTranslation(objectInFront.x + blockSelectBB.getMinExtents().getX(), objectInFront.y + blockSelectBB.getMinExtents().getY(), objectInFront.z + blockSelectBB.getMinExtents().getZ()).mul(Matrix4.get().initScale(sx, sy, sz));
             renderEngine.setModelviewMatrix(selectionBoxMatrix);
             renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
             renderEngine.setModelviewMatrix(modelView);

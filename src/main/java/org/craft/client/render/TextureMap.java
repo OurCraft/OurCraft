@@ -196,6 +196,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         Log.message("Trying to get " + loc.getFullPath());
         if(registredLocations.indexOf(loc) > 0)
             return registredIcons.get(registredLocations.indexOf(loc));
+        Log.message(" But failed :(");
         return new TextureMapIcon(0, 0, 1, 1, 16, 16);
     }
 

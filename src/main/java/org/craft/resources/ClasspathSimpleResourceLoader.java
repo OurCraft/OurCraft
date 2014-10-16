@@ -53,7 +53,7 @@ public class ClasspathSimpleResourceLoader extends ResourceLoader
     {
         try
         {
-            if(ClasspathSimpleResourceLoader.class.getResource("/" + location.getFullPath()) != null)
+            if(ClasspathSimpleResourceLoader.class.getResource("/" + base + location.getFullPath()) != null)
                 return true;
         }
         catch(Exception e)

@@ -1,5 +1,6 @@
 package org.craft.client.render;
 
+
 public class OffsettedOpenGLBuffer extends OpenGLBuffer
 {
 
@@ -33,4 +34,5 @@ public class OffsettedOpenGLBuffer extends OpenGLBuffer
     {
         offset += i;
     }
+
 }

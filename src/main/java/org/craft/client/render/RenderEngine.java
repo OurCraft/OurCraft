@@ -49,14 +49,14 @@ public class RenderEngine implements IDisposable
         this.loader = loader;
         texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
         projectFromEntity = true;
-        modelMatrix = new Matrix4().initIdentity();
+        modelMatrix = Matrix4.get().initIdentity();
         fov = (float) Math.toRadians(90);
         ratio = 16f / 9f;
         nearDist = 0.01f;
         farDist = 100f;
-        projection3dMatrix = new Matrix4().initPerspective(fov, ratio, nearDist, farDist);
+        projection3dMatrix = Matrix4.get().initPerspective(fov, ratio, nearDist, farDist);
         projection = projection3dMatrix;
-        projectionHud = new Matrix4().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+        projectionHud = Matrix4.get().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
         loadShaders();
         glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
@@ -144,7 +144,7 @@ public class RenderEngine implements IDisposable
         if(renderViewEntity != null && shouldProjectFromEntity())
         {
             if(translationMatrix == null)
-                translationMatrix = new Matrix4();
+                translationMatrix = Matrix4.get();
             Quaternion camRot = renderViewEntity.getQuaternionRotation();
             Vector3 camPos = Vector3.get(-renderViewEntity.posX - 0.5f, -renderViewEntity.posY - renderViewEntity.getEyeOffset(), -renderViewEntity.posZ - 0.5f);
             frustum.update(fov, ratio, nearDist, farDist, camPos, camRot.getForward(), camRot.getUp());
@@ -368,13 +368,13 @@ public class RenderEngine implements IDisposable
         basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
         basicShader.bind();
         basicShader.setUniform("projection", projectionHud);
-        basicShader.setUniform("modelview", new Matrix4().initIdentity());
+        basicShader.setUniform("modelview", Matrix4.get().initIdentity());
 
         currentShader = basicShader;
         postRenderShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
         postRenderShader.bind();
         postRenderShader.setUniform("projection", projectionHud);
-        postRenderShader.setUniform("modelview", new Matrix4().initIdentity());
+        postRenderShader.setUniform("modelview", Matrix4.get().initIdentity());
     }
 
     /**

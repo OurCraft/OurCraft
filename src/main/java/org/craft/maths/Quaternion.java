@@ -26,13 +26,7 @@ public class Quaternion
 
     public Quaternion(Vector3 axis, float angle)
     {
-        float sinHalfAngle = (float) Math.sin(angle / 2);
-        float cosHalfAngle = (float) Math.cos(angle / 2);
-
-        this.x = axis.getX() * sinHalfAngle;
-        this.y = axis.getY() * sinHalfAngle;
-        this.z = axis.getZ() * sinHalfAngle;
-        this.w = cosHalfAngle;
+        init(axis, angle);
     }
 
     // From Ken Shoemake's "Quaternion Calculus and Fast Animation" article
@@ -89,7 +83,7 @@ public class Quaternion
         Vector3 up = Vector3.get(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
         Vector3 right = Vector3.get(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
 
-        return new Matrix4().initRotation(forward, up, right);
+        return Matrix4.get().initRotation(forward, up, right);
     }
 
     public Vector3 getForward()
@@ -316,4 +310,21 @@ public class Quaternion
     {
         return new Quaternion(x / factor, y / factor, z / factor, w / factor);
     }
+
+    public void init(Vector3 axis, float angle)
+    {
+        float sinHalfAngle = (float) Math.sin(angle / 2);
+        float cosHalfAngle = (float) Math.cos(angle / 2);
+
+        this.x = axis.getX() * sinHalfAngle;
+        this.y = axis.getY() * sinHalfAngle;
+        this.z = axis.getZ() * sinHalfAngle;
+        this.w = cosHalfAngle;
+    }
+
+    public boolean isNull()
+    {
+        return x == 0 && y == 0 && z == 0 && w == 0;
+    }
+
 }

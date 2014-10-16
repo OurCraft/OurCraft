@@ -10,6 +10,10 @@ public class BlockElement
     private HashMap<String, BlockFace> faces;
     private Vector3                    from;
     private Vector3                    to;
+    private boolean                    hasRotation;
+    private Vector3                    rotationOrigin;
+    private float                      angle;
+    private String                     rotAxis;
 
     public BlockElement()
     {
@@ -49,5 +53,45 @@ public class BlockElement
     public HashMap<String, BlockFace> getFaces()
     {
         return faces;
+    }
+
+    public void setRotationAxis(String axis)
+    {
+        this.rotAxis = axis;
+    }
+
+    public String getRotationAxis()
+    {
+        return rotAxis;
+    }
+
+    public void setRotationAngle(float angle)
+    {
+        this.angle = angle;
+    }
+
+    public float getRotationAngle()
+    {
+        return angle;
+    }
+
+    public Vector3 getRotationOrigin()
+    {
+        return rotationOrigin;
+    }
+
+    public void setRotationOrigin(Vector3 origin)
+    {
+        this.rotationOrigin = origin;
+    }
+
+    public boolean hasRotation()
+    {
+        return hasRotation;
+    }
+
+    public void setHasRotation(boolean hasRotation)
+    {
+        this.hasRotation = hasRotation;
     }
 }

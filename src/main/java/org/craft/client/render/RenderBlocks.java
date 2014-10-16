@@ -6,8 +6,10 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
+import org.craft.client.models.*;
 import org.craft.client.render.blocks.*;
 import org.craft.resources.*;
+import org.craft.utils.*;
 import org.craft.world.*;
 
 public class RenderBlocks
@@ -25,9 +27,10 @@ public class RenderBlocks
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer>             chunkBuffersPass1;
     private RenderEngine                                           renderEngine;
     private HashMap<Class<? extends Block>, AbstractBlockRenderer> renderers;
-    private AbstractBlockRenderer                                  fallbackRenderer;
     private Comparator<Chunk>                                      chunkComparator;
     private Comparator<BlockRenderInfos>                           blockComparator;
+    private ModelLoader                                            modelLoader;
+    private ResourceLocation                                       fallbackRendererResource;
     public static ResourceLocation                                 blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
@@ -49,7 +52,7 @@ public class RenderBlocks
         engine.registerLocation(blockMapLoc, blockMap);
     }
 
-    public RenderBlocks(RenderEngine engine)
+    public RenderBlocks(RenderEngine engine, ModelLoader modelLoader, ResourceLocation resourceLocation)
     {
         this.renderEngine = engine;
         chunkBuffersPass0 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
@@ -58,7 +61,8 @@ public class RenderBlocks
         {
             createBlockMap(engine);
         }
-        fallbackRenderer = new FullCubeBlockRenderer();
+        this.modelLoader = modelLoader;
+        this.fallbackRendererResource = resourceLocation;
         renderers = new HashMap<Class<? extends Block>, AbstractBlockRenderer>();
     }
 
@@ -75,7 +79,22 @@ public class RenderBlocks
             AbstractBlockRenderer renderer = renderers.get(blockClass);
             return renderer;
         }
-        return fallbackRenderer;
+        try
+        {
+            ResourceLocation res = new ResourceLocation("ourcraft", "models/block/" + block.getID() + ".json");
+            if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
+                renderers.put(blockClass, modelLoader.createRenderer(res));
+            else
+            {
+                Log.message(res.getFullPath() + " doesn't exist.");
+                renderers.put(blockClass, modelLoader.createRenderer(fallbackRendererResource));
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return renderers.get(blockClass);
     }
 
     /**

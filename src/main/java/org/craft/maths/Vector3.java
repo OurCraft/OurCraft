@@ -308,7 +308,7 @@ public class Vector3 extends AbstractReference implements IDisposable
     public static Vector3 get(float x, float y, float z)
     {
         Vector3 v = null;
-        if(unused.isEmpty())
+        if(unused.isEmpty() || unused.size() == 0)
         {
             v = new Vector3(x, y, z);
         }
@@ -342,4 +342,10 @@ public class Vector3 extends AbstractReference implements IDisposable
             unused.push(this);
         }
     }
+
+    public boolean isNull()
+    {
+        return x == 0 && y == 0 && z == 0;
+    }
+
 }
