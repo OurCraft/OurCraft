@@ -3,8 +3,10 @@ package org.craft.client.models;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.google.common.collect.*;
 import com.google.gson.*;
 
+import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.client.render.blocks.*;
 import org.craft.maths.*;
@@ -29,19 +31,49 @@ public class ModelLoader
 
     public AbstractBlockRenderer createRenderer(AbstractResource modelFile) throws Exception
     {
-        return new BlockModelRenderer(loadModel(modelFile));
+        return new BlockModelRenderer(loadVariants(modelFile));
     }
 
-    public BlockModel loadModel(AbstractResource abstractResource) throws Exception
+    public List<BlockVariant> loadVariants(AbstractResource variantFile) throws Exception
     {
-        if(!models.containsKey(abstractResource.getResourceLocation()))
+        ArrayList<BlockVariant> variants = Lists.newArrayList();
+        String rawJsonData = new String(variantFile.getData(), "UTF-8");
+        JsonObject data = gson.fromJson(rawJsonData, JsonObject.class);
+        JsonObject variantsObject = data.get("variants").getAsJsonObject();
+        for(Entry<String, JsonElement> entry : variantsObject.entrySet())
+        {
+            BlockVariant variant = new BlockVariant();
+            if(!entry.getKey().equals("normal"))
+            {
+                String[] split = entry.getKey().split("=");
+                BlockState state = BlockStates.getState(split[0]);
+                variant.setBlockStateKey(state);
+                variant.setBlockStateValue(BlockStates.getValue(state, split[1]));
+            }
+            JsonArray array = entry.getValue().getAsJsonArray();
+            for(int i = 0; i < array.size(); i++ )
+            {
+                JsonObject model = array.get(0).getAsJsonObject();
+                variant.addBlockModel(loadModel(variantFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + model.get("model").getAsString() + ".json"))));
+
+                // TODO: rotations
+            }
+
+            variants.add(variant);
+        }
+        return variants;
+    }
+
+    public BlockModel loadModel(AbstractResource modelFile) throws Exception
+    {
+        if(!models.containsKey(modelFile.getResourceLocation()))
         {
             BlockModel loadedModel = new BlockModel();
-            String rawJsonData = new String(abstractResource.getData(), "UTF-8");
+            String rawJsonData = new String(modelFile.getData(), "UTF-8");
             JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
             if(model.has("parent"))
             {
-                loadedModel.copyFrom(loadModel(abstractResource.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json"))));
+                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json"))));
             }
 
             if(model.has("textures"))
@@ -107,8 +139,8 @@ public class ModelLoader
                 }
             }
 
-            models.put(abstractResource.getResourceLocation(), loadedModel);
+            models.put(modelFile.getResourceLocation(), loadedModel);
         }
-        return models.get(abstractResource.getResourceLocation());
+        return models.get(modelFile.getResourceLocation());
     }
 }

@@ -18,11 +18,12 @@ public class BlockModelRenderer extends AbstractBlockRenderer
 
     private BlockModel                   blockModel;
     private HashMap<String, TextureIcon> icons;
+    private List<BlockVariant>           blockVariants;
     private static Quaternion            rotationQuaternion;
 
-    public BlockModelRenderer(BlockModel blockModel)
+    public BlockModelRenderer(List<BlockVariant> list)
     {
-        this.blockModel = blockModel;
+        this.blockVariants = list;
         icons = Maps.newHashMap();
         if(rotationQuaternion == null)
             rotationQuaternion = new Quaternion();
@@ -36,6 +37,17 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         Chunk chunk = w.getChunk(x, y, z);
         if(chunk == null)
             return;
+        BlockVariant variant = blockVariants.get(0);
+        for(BlockVariant v : blockVariants)
+        {
+            if(v.getBlockState() != null)
+                if(w.getBlockState(x, y, z, v.getBlockState()) == v.getBlockStateValue())
+                {
+                    variant = v;
+                    break;
+                }
+        }
+        blockModel = variant.getModels().get(0); // TODO: random model ?
         float lightValue = chunk.getLightValue(w, x, y, z);
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {

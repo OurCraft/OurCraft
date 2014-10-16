@@ -1,0 +1,13 @@
+{
+    "variants": 
+    {
+        "normal": 
+        [
+            { "model": "log" }
+        ],
+        "orientation=up":
+        [
+        	{ "model": "rose" }
+        ]
+    }
+}

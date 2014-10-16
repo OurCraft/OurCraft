@@ -51,7 +51,6 @@ public class OurCraft implements Runnable, Game
 
     private int                      displayWidth                = 960;
     private int                      displayHeight               = 540;
-    private long                     lastTime                    = 0;
     private boolean                  running                     = true;
     private RenderEngine             renderEngine                = null;
     private AssetLoader              assetsLoader;
@@ -122,16 +121,17 @@ public class OurCraft implements Runnable, Game
             System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
             ContextAttribs context = new ContextAttribs(3, 2).withProfileCompatibility(true).withDebug(true);
             Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
-            Display.setIcon(new ByteBuffer[] {
+            Display.setIcon(new ByteBuffer[]
+            {
                     ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_128.png")),
-                    ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_32.png"))     
+                    ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_32.png"))
             });
             Display.setResizable(true);
             Display.setTitle("OurCraft - " + getVersion());
             Display.create(new PixelFormat(), context);
-            
+
             mouseHandler = new MouseHandler();
-            
+
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
             renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -366,8 +366,6 @@ public class OurCraft implements Runnable, Game
                     playerController.onMouseWheelMoved(deltaWheel);
                 }
             }
-
-            // TODO: Event queue
         }
         while(Keyboard.next())
         {
