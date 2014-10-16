@@ -1,11 +1,12 @@
 package org.craft.client.start;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.net.URLClassLoader;
+import java.util.HashMap;
 
-import org.craft.client.*;
-import org.craft.loader.*;
-import org.craft.utils.*;
+import org.craft.client.OurCraft;
+import org.craft.loader.OurClassLoader;
+import org.craft.utils.SystemUtils;
 
 public class OurCraftStartup
 {
@@ -13,8 +14,8 @@ public class OurCraftStartup
 
     public static void main(String[] args)
     {
-        //        classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
-        //        Thread.currentThread().setContextClassLoader(classLoader);
+                classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
+                Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
             final File gameFolder = SystemUtils.getGameFolder();

@@ -9,11 +9,13 @@ import org.craft.utils.*;
 public class OurClassLoader extends URLClassLoader
 {
     private List<URL> sources;
+    private URLClassLoader parent;
 
     public OurClassLoader(URL[] sources)
     {
         super(sources, null);
         this.sources = Arrays.asList(sources);
+        parent = (URLClassLoader) getClass().getClassLoader();
     }
 
     @Override
@@ -32,8 +34,9 @@ public class OurClassLoader extends URLClassLoader
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException
     {
+        //TODO : search into custom sourceURL
         Log.message("Loading class " + name);
-        return super.loadClass(name);
+        return parent.loadClass(name);
     }
 
 }

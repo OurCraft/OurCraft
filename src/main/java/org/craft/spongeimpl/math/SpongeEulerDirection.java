@@ -5,6 +5,7 @@ import org.spongepowered.api.math.*;
 public class SpongeEulerDirection implements EulerDirection
 {
 
+    private static final long serialVersionUID = 2611648956254518238L;
     private float yaw;
     private float pitch;
     private float roll;
