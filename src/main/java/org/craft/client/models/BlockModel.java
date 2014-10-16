@@ -7,11 +7,18 @@ public class BlockModel
 
     private HashMap<String, String> textures;
     private ArrayList<BlockElement> elements;
+    private String                  name;
 
-    public BlockModel()
+    public BlockModel(String name)
     {
+        this.name = name;
         textures = new HashMap<String, String>();
         elements = new ArrayList<BlockElement>();
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public void copyFrom(BlockModel other)

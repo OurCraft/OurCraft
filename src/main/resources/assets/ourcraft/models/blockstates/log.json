@@ -1,13 +1,17 @@
 {
     "variants": 
     {
-        "normal": 
-        [
-            { "model": "log" }
-        ],
         "orientation=up":
         [
-        	{ "model": "rose" }
+        	{ "model": "log_up" }
+        ],
+        "orientation=lying_ns":
+        [
+        	{ "model": "log_ns" }
+        ],
+        "orientation=lying_we":
+        [
+        	{ "model": "log_we" }
         ]
     }
 }

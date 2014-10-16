@@ -16,15 +16,16 @@ import org.craft.world.*;
 public class BlockModelRenderer extends AbstractBlockRenderer
 {
 
-    private BlockModel                   blockModel;
-    private HashMap<String, TextureIcon> icons;
-    private List<BlockVariant>           blockVariants;
-    private static Quaternion            rotationQuaternion;
+    private HashMap<BlockVariant, HashMap<String, TextureIcon>> icons;
+    private List<BlockVariant>                                  blockVariants;
+    private static Quaternion                                   rotationQuaternion;
 
     public BlockModelRenderer(List<BlockVariant> list)
     {
         this.blockVariants = list;
         icons = Maps.newHashMap();
+        for(BlockVariant v : list)
+            icons.put(v, new HashMap<String, TextureIcon>());
         if(rotationQuaternion == null)
             rotationQuaternion = new Quaternion();
     }
@@ -37,17 +38,20 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         Chunk chunk = w.getChunk(x, y, z);
         if(chunk == null)
             return;
-        BlockVariant variant = blockVariants.get(0);
+        BlockVariant variant = null;
         for(BlockVariant v : blockVariants)
         {
+            if(v.getBlockState() == null && variant == null)
+                variant = v;
             if(v.getBlockState() != null)
                 if(w.getBlockState(x, y, z, v.getBlockState()) == v.getBlockStateValue())
                 {
                     variant = v;
-                    break;
                 }
         }
-        blockModel = variant.getModels().get(0); // TODO: random model ?
+        if(variant == null)
+            return;
+        BlockModel blockModel = variant.getModels().get(0); // TODO: random model ?
         float lightValue = chunk.getLightValue(w, x, y, z);
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {
@@ -70,7 +74,7 @@ public class BlockModelRenderer extends AbstractBlockRenderer
             {
                 Vector3 faceStart = Vector3.NULL;
                 Vector3 faceSize = Vector3.NULL;
-                TextureIcon icon = getTexture(blockModel, element, entry.getValue().getTexture());
+                TextureIcon icon = getTexture(blockModel, variant, entry.getValue().getTexture());
                 boolean flip = false;
                 EnumSide cullface = EnumSide.fromString(entry.getValue().getCullface());
                 if(cullface != EnumSide.UNDEFINED)
@@ -128,23 +132,23 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         }
     }
 
-    private TextureIcon getTexture(BlockModel blockModel, BlockElement element, String texture)
+    private TextureIcon getTexture(BlockModel blockModel, BlockVariant variant, String texture)
     {
         if(texture == null)
             return null;
-        if(!icons.containsKey(texture))
+        if(!icons.get(variant).containsKey(texture))
         {
             if(texture.startsWith("#"))
             {
-                TextureIcon icon = getTexture(blockModel, element, blockModel.getTexturePath(texture.substring(1)));
-                icons.put(texture, icon);
+                TextureIcon icon = getTexture(blockModel, variant, blockModel.getTexturePath(texture.substring(1)));
+                icons.get(variant).put(texture, icon);
             }
             else
             {
                 TextureMap blockMap = (TextureMap) OurCraft.getOurCraft().getRenderEngine().getByLocation(RenderBlocks.blockMapLoc);
-                icons.put(texture, blockMap.get(texture + ".png"));
+                icons.get(variant).put(texture, blockMap.get(texture + ".png"));
             }
         }
-        return icons.get(texture);
+        return icons.get(variant).get(texture);
     }
 }

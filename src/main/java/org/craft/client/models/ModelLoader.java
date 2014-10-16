@@ -11,6 +11,7 @@ import org.craft.client.*;
 import org.craft.client.render.blocks.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
+import org.craft.utils.*;
 
 public class ModelLoader
 {
@@ -48,7 +49,9 @@ public class ModelLoader
                 String[] split = entry.getKey().split("=");
                 BlockState state = BlockStates.getState(split[0]);
                 variant.setBlockStateKey(state);
-                variant.setBlockStateValue(BlockStates.getValue(state, split[1]));
+                IBlockStateValue value = BlockStates.getValue(state, split[1]);
+                variant.setBlockStateValue(value);
+                Log.message("Found variant: " + state + "=" + value);
             }
             JsonArray array = entry.getValue().getAsJsonArray();
             for(int i = 0; i < array.size(); i++ )
@@ -68,7 +71,8 @@ public class ModelLoader
     {
         if(!models.containsKey(modelFile.getResourceLocation()))
         {
-            BlockModel loadedModel = new BlockModel();
+            Log.message("Loading model " + modelFile.getResourceLocation().getFullPath());
+            BlockModel loadedModel = new BlockModel(modelFile.getResourceLocation().getName());
             String rawJsonData = new String(modelFile.getData(), "UTF-8");
             JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
             if(model.has("parent"))
@@ -138,7 +142,6 @@ public class ModelLoader
                     loadedModel.addElement(loadedElement);
                 }
             }
-
             models.put(modelFile.getResourceLocation(), loadedModel);
         }
         return models.get(modelFile.getResourceLocation());

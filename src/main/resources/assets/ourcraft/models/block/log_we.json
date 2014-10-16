@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": 
+    {
+        "up": "log_lying_side",
+        "down": "log_lying_side",
+        "east": "log_bottom_and_top",
+        "west": "log_bottom_and_top",
+        "north": "log_lying_side",
+        "south": "log_lying_side"
+    }
+}
