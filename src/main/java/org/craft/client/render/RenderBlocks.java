@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.client.models.*;
@@ -23,15 +25,15 @@ public class RenderBlocks
         public int   z;
     }
 
-    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>             chunkBuffersPass0;
-    private HashMap<ChunkCoord, OffsettedOpenGLBuffer>             chunkBuffersPass1;
-    private RenderEngine                                           renderEngine;
-    private HashMap<Class<? extends Block>, AbstractBlockRenderer> renderers;
-    private Comparator<Chunk>                                      chunkComparator;
-    private Comparator<BlockRenderInfos>                           blockComparator;
-    private ModelLoader                                            modelLoader;
-    private ResourceLocation                                       fallbackRendererResource;
-    public static ResourceLocation                                 blockMapLoc;
+    private HashMap<ChunkCoord, OffsettedOpenGLBuffer> chunkBuffersPass0;
+    private HashMap<ChunkCoord, OffsettedOpenGLBuffer> chunkBuffersPass1;
+    private RenderEngine                               renderEngine;
+    private HashMap<Block, AbstractBlockRenderer>      renderers;
+    private Comparator<Chunk>                          chunkComparator;
+    private Comparator<BlockRenderInfos>               blockComparator;
+    private ModelLoader                                modelLoader;
+    private ResourceLocation                           fallbackRendererResource;
+    public static ResourceLocation                     blockMapLoc;
 
     public static void createBlockMap(RenderEngine engine)
     {
@@ -63,38 +65,40 @@ public class RenderBlocks
         }
         this.modelLoader = modelLoader;
         this.fallbackRendererResource = resourceLocation;
-        renderers = new HashMap<Class<? extends Block>, AbstractBlockRenderer>();
+        renderers = Maps.newHashMap();
     }
 
-    public void registerBlockRenderer(Class<? extends Block> blockClass, AbstractBlockRenderer renderer)
+    public void registerBlockRenderer(Block block, AbstractBlockRenderer renderer)
     {
-        renderers.put(blockClass, renderer);
+        renderers.put(block, renderer);
     }
 
     public AbstractBlockRenderer getRenderer(Block block)
     {
-        Class<? extends Block> blockClass = block.getClass();
-        if(renderers.containsKey(blockClass))
+        if(renderers.containsKey(block))
         {
-            AbstractBlockRenderer renderer = renderers.get(blockClass);
+            AbstractBlockRenderer renderer = renderers.get(block);
             return renderer;
         }
         try
         {
             ResourceLocation res = new ResourceLocation("ourcraft", "models/block/" + block.getID() + ".json");
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
-                renderers.put(blockClass, modelLoader.createRenderer(res));
+            {
+                Log.message(res.getFullPath() + " loaded.");
+                renderers.put(block, modelLoader.createRenderer(res));
+            }
             else
             {
                 Log.message(res.getFullPath() + " doesn't exist.");
-                renderers.put(blockClass, modelLoader.createRenderer(fallbackRendererResource));
+                renderers.put(block, modelLoader.createRenderer(fallbackRendererResource));
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        return renderers.get(blockClass);
+        return renderers.get(block);
     }
 
     /**
