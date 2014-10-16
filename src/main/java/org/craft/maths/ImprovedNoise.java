@@ -16,18 +16,18 @@ public final class ImprovedNoise
 
     public double noise(double x, double y, double z)
     {
-        int X = (int) Math.floor(x) & 255, // FIND UNIT CUBE THAT
-        Y = (int) Math.floor(y) & 255, // CONTAINS POINT.
-        Z = (int) Math.floor(z) & 255;
+        int unitCubeX = (int) Math.floor(x) & 255, // FIND UNIT CUBE THAT
+        unitCubeY = (int) Math.floor(y) & 255, // CONTAINS POINT.
+        unitCubeZ = (int) Math.floor(z) & 255;
         x -= Math.floor(x); // FIND RELATIVE X,Y,Z
         y -= Math.floor(y); // OF POINT IN CUBE.
         z -= Math.floor(z);
         double u = fade(x), // COMPUTE FADE CURVES
         v = fade(y), // FOR EACH OF X,Y,Z.
         w = fade(z);
-        int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z, // HASH COORDINATES
+        int A = p[unitCubeX] + unitCubeY, AA = p[A] + unitCubeZ, AB = p[A + 1] + unitCubeZ, // HASH COORDINATES
                                                             // OF
-        B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z; // THE 8 CUBE
+        B = p[unitCubeX + 1] + unitCubeY, BA = p[B] + unitCubeZ, BB = p[B + 1] + unitCubeZ; // THE 8 CUBE
                                                             // CORNERS,
 
         return lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), // AND ADD

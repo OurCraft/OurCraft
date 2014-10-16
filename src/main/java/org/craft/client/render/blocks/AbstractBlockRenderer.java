@@ -8,7 +8,7 @@ import org.craft.world.*;
 public abstract class AbstractBlockRenderer
 {
 
-    private static final TextureIcon nullIcon = new NullTextureIcon();
+    private static final TextureIcon NULLICON = new NullTextureIcon();
 
     /**
      * Renders given block at given coords
@@ -51,7 +51,7 @@ public abstract class AbstractBlockRenderer
         float height = size.getY();
         float depth = size.getZ();
         if(icon == null)
-            icon = nullIcon;
+            icon = NULLICON;
         float deltaX = icon.getMaxU() - icon.getMinU();
         float deltaY = icon.getMaxV() - icon.getMinV();
         float minU = icon.getMinU() + minUV.getX() * deltaX;

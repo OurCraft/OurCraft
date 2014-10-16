@@ -194,21 +194,21 @@ public class Quaternion
 
     public Quaternion mul(Quaternion r)
     {
-        float w_ = w * r.getW() - x * r.getX() - y * r.getY() - z * r.getZ();
-        float x_ = x * r.getW() + w * r.getX() + y * r.getZ() - z * r.getY();
-        float y_ = y * r.getW() + w * r.getY() + z * r.getX() - x * r.getZ();
-        float z_ = z * r.getW() + w * r.getZ() + x * r.getY() - y * r.getX();
+        float localW = w * r.getW() - x * r.getX() - y * r.getY() - z * r.getZ();
+        float localX = x * r.getW() + w * r.getX() + y * r.getZ() - z * r.getY();
+        float localY = y * r.getW() + w * r.getY() + z * r.getX() - x * r.getZ();
+        float localZ = z * r.getW() + w * r.getZ() + x * r.getY() - y * r.getX();
 
-        return new Quaternion(x_, y_, z_, w_);
+        return new Quaternion(localX, localY, localZ, localW);
     }
 
     public Quaternion mul(Vector3 r)
     {
-        float w_ = -x * r.getX() - y * r.getY() - z * r.getZ();
-        float x_ = w * r.getX() + y * r.getZ() - z * r.getY();
-        float y_ = w * r.getY() + z * r.getX() - x * r.getZ();
-        float z_ = w * r.getZ() + x * r.getY() - y * r.getX();
-        return new Quaternion(x_, y_, z_, w_);
+        float localW = -x * r.getX() - y * r.getY() - z * r.getZ();
+        float localX = w * r.getX() + y * r.getZ() - z * r.getY();
+        float localY = w * r.getY() + z * r.getX() - x * r.getZ();
+        float localZ = w * r.getZ() + x * r.getY() - y * r.getX();
+        return new Quaternion(localX, localY, localZ, localW);
     }
 
     public float getX()

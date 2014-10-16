@@ -29,15 +29,15 @@ public class Shader implements IDisposable
         glCompileShader(vertexId);
         if(glGetShaderi(vertexId, GL_COMPILE_STATUS) == 0)
         {
-            System.err.println("Compilation of vertex shader failed: ");
-            System.err.println(glGetShaderInfoLog(vertexId, 1024));
+            Log.error("Compilation of vertex shader failed: ");
+            Log.error(glGetShaderInfoLog(vertexId, 1024));
             return;
         }
         glCompileShader(fragmentId);
         if(glGetShaderi(fragmentId, GL_COMPILE_STATUS) == 0)
         {
-            System.err.println("Compilation of fragment shader failed: ");
-            System.err.println(glGetShaderInfoLog(fragmentId, 1024));
+            Log.error("Compilation of fragment shader failed: ");
+            Log.error(glGetShaderInfoLog(fragmentId, 1024));
             return;
         }
 
@@ -47,8 +47,8 @@ public class Shader implements IDisposable
         glLinkProgram(program);
         if(glGetProgrami(program, GL_LINK_STATUS) == 0)
         {
-            System.err.println("Linking of program failed: ");
-            System.err.println(glGetProgramInfoLog(program, 1024));
+            Log.error("Linking of program failed: ");
+            Log.error(glGetProgramInfoLog(program, 1024));
             return;
         }
     }

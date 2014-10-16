@@ -17,6 +17,7 @@ public class RenderState implements Cloneable
     private float                     clearColorB;
     private float                     clearColorA;
 
+    @Override
     public RenderState clone()
     {
         RenderState copy = new RenderState();

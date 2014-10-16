@@ -2,7 +2,7 @@ package org.craft.utils;
 
 import java.util.*;
 
-public class SessionManager
+public final class SessionManager
 {
 
     private static SessionManager  instance;

@@ -5,7 +5,7 @@ import java.util.*;
 
 import org.craft.utils.*;
 
-public class Vector2 extends AbstractReference implements IDisposable
+public final class Vector2 extends AbstractReference implements IDisposable
 {
 
     public static final Vector2 NULL = new Vector2(0, 0);
@@ -26,9 +26,9 @@ public class Vector2 extends AbstractReference implements IDisposable
     public Vector2 normalize()
     {
         float l = length();
-        float _x = this.x / l;
-        float _y = this.y / l;
-        return Vector2.get(_x, _y);
+        float localX = this.x / l;
+        float localY = this.y / l;
+        return Vector2.get(localX, localY);
     }
 
     /**
