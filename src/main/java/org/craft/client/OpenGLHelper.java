@@ -65,7 +65,6 @@ public class OpenGLHelper
         loadCapNames(GL30.class);
         loadCapNames(GL31.class);
         loadCapNames(GL32.class);
-        loadCapNames(GL33.class);
     }
 
     private static void loadCapNames(Class<?> glClass)

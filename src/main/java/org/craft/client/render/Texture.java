@@ -14,14 +14,16 @@ public class Texture implements ITextureObject, IDisposable
     private int texID;
     private int width;
     private int height;
-
+    private ByteBuffer pixels;
+    
     /**
      * Creates a texture with given width, height and pixel data
      */
-    public Texture(int w, int h, ByteBuffer pixels)
+    public Texture(int w, int h, ByteBuffer p)
     {
         this.width = w;
         this.height = h;
+        this.pixels = p;
         texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -56,5 +58,10 @@ public class Texture implements ITextureObject, IDisposable
     public int getHeight()
     {
         return height;
+    }
+    
+    public ByteBuffer getPixels()
+    {
+        return pixels;
     }
 }

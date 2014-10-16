@@ -23,9 +23,9 @@ public class GuiMainMenu extends Gui
     @Override
     public void init()
     {
-        addWidget(new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 - 20, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
-        addWidget(new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 40, 300, 40, I18n.format("main.play.multiplayer"), getFontRenderer()));
-        addWidget(new GuiButton(10, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 100, 300, 40, I18n.format("main.quit"), getFontRenderer()));
+        addWidget(new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
+        addWidget(new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.multiplayer"), getFontRenderer()));
+        addWidget(new GuiButton(10, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.quit"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -60,7 +60,7 @@ public class GuiMainMenu extends Gui
     {
         drawBackground(mx, my, renderEngine);
         renderEngine.bindLocation(logoTexture);
-        drawTexturedRect(renderEngine, OurCraft.getOurCraft().getDisplayWidth() / 2 - 350, 0, 700, 150, 0, 0, 1, 1);
+        drawTexturedRect(renderEngine, OurCraft.getOurCraft().getDisplayWidth() / 2 - 217, 20, 433, 240, 0, 0, 1, 1);
         super.draw(mx, my, renderEngine);
     }
 

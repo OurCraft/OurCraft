@@ -120,13 +120,18 @@ public class OurCraft implements Runnable, Game
             objectInFront.type = CollisionType.NONE;
             System.setProperty("org.lwjgl.util.Debug", "true");
             System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
-            ContextAttribs context = new ContextAttribs(3, 3).withProfileCompatibility(true).withDebug(true);
+            ContextAttribs context = new ContextAttribs(3, 2).withProfileCompatibility(true).withDebug(true);
             Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
+            Display.setIcon(new ByteBuffer[] {
+                    ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_128.png")),
+                    ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_32.png"))     
+            });
             Display.setResizable(true);
             Display.setTitle("OurCraft - " + getVersion());
             Display.create(new PixelFormat(), context);
+            
             mouseHandler = new MouseHandler();
-
+            
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
             renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -811,6 +816,7 @@ public class OurCraft implements Runnable, Game
     public void cleanup()
     {
         renderEngine.dispose();
+        AL.destroy();
         Display.destroy();
     }
 
