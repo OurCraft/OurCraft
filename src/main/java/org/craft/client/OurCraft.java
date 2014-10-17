@@ -142,8 +142,8 @@ public class OurCraft implements Runnable, Game
 
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             initSponge();
-
-            fontRenderer = new BaseFontRenderer();
+            //fontRenderer = new BaseFontRenderer();
+            fontRenderer = new TrueTypeFontRenderer("Consolas");
             OpenGLHelper.loadCapNames();
 
             Blocks.init();

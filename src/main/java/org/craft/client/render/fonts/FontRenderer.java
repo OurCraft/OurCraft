@@ -7,9 +7,9 @@ import org.craft.utils.*;
 public abstract class FontRenderer implements IDisposable
 {
 
-    private TextureAtlas atlas;
-    private String       supportedChars;
-    private OpenGLBuffer buffer;
+    protected TextureAtlas atlas;
+    protected String       supportedChars;
+    protected OpenGLBuffer buffer;
 
     public FontRenderer(TextureAtlas atlas, String supportedChars)
     {
@@ -112,7 +112,7 @@ public abstract class FontRenderer implements IDisposable
             {
                 int index = getIndex('_');
                 int xPos = index % atlas.getXNbr();
-                int yPos = index / atlas.getXNbr();
+                int yPos = index / atlas.getYNbr();
                 if(obfuscated)
                 {
                     xPos = (int) (Math.random() * atlas.getXNbr());
@@ -188,7 +188,7 @@ public abstract class FontRenderer implements IDisposable
         buffer.clearAndDisposeVertices();
     }
 
-    private int getIndex(char c)
+    protected int getIndex(char c)
     {
         if(supportedChars == null)
         {
