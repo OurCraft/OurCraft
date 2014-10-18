@@ -1,6 +1,5 @@
 package org.craft.entity;
 
-import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.world.*;
 import org.spongepowered.api.entity.*;

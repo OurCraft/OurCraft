@@ -56,7 +56,6 @@ public abstract class FontRenderer implements IDisposable
             if(i != text.length() - 1)
                 next = text.charAt(i + 1);
 
-            int lastIndex = currentIndex;
             if(c == TextFormatting.BEGINNING)
             {
                 TextFormatting format = TextFormatting.fromString(next);

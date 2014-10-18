@@ -2,8 +2,6 @@ package org.craft.modding;
 
 import java.io.*;
 import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.net.*;
 import java.util.*;
 
 import com.google.gson.*;
@@ -82,7 +80,7 @@ public class AddonsLoader
         }
     }
 
-    @SuppressWarnings("unused")
+
     public void loadAll(File... folders)
     {
 

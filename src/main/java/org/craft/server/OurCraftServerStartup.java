@@ -1,11 +1,9 @@
 package org.craft.server;
 
-import java.io.File;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 
 import org.craft.loader.OurClassLoader;
-import org.craft.utils.SystemUtils;
 
 public class OurCraftServerStartup
 {
@@ -18,7 +16,6 @@ public class OurCraftServerStartup
         Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
-            final File gameFolder = SystemUtils.getGameFolder();
             HashMap<String, String> properties = new HashMap<String, String>();
             properties.put("port", "35565");
             properties.put("nogui", "false");
