@@ -8,7 +8,7 @@ import org.craft.utils.*;
 public final class Matrix4 extends AbstractReference implements IDisposable
 {
 
-    private float[][]           m;
+    private float[][] m;
 
     private Matrix4()
     {

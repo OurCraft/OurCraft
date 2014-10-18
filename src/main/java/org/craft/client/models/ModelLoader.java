@@ -138,6 +138,8 @@ public class ModelLoader
                         loadedElement.setRotationOrigin(Vector3.get(originArray.get(0).getAsFloat() / 16f, originArray.get(1).getAsFloat() / 16f, originArray.get(2).getAsFloat() / 16f));
                         loadedElement.setRotationAngle(rotationData.get("angle").getAsFloat());
                         loadedElement.setRotationAxis(rotationData.get("axis").getAsString());
+                        if(rotationData.has("rescale"))
+                            loadedElement.shouldRescale(rotationData.get("rescale").getAsBoolean());
                     }
                     loadedModel.addElement(loadedElement);
                 }

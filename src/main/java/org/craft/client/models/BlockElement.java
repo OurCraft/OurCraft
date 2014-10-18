@@ -14,6 +14,7 @@ public class BlockElement
     private Vector3                    rotationOrigin;
     private float                      angle;
     private String                     rotAxis;
+    private boolean                    rescale;
 
     public BlockElement()
     {
@@ -93,5 +94,15 @@ public class BlockElement
     public void setHasRotation(boolean hasRotation)
     {
         this.hasRotation = hasRotation;
+    }
+
+    public void shouldRescale(boolean rescale)
+    {
+        this.rescale = rescale;
+    }
+
+    public boolean shouldRescale()
+    {
+        return rescale;
     }
 }

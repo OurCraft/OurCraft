@@ -43,6 +43,11 @@ public abstract class AbstractBlockRenderer
 
     public void renderFace(float lightValue, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipV, Vector2 minUV, Vector2 maxUV, Vector3 rotationOrigin, Quaternion rotation)
     {
+        renderFace(lightValue, buffer, w, b, x, y, z, icon, startPos, size, flipV, minUV, maxUV, rotationOrigin, rotation, false);
+    }
+
+    public void renderFace(float lightValue, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipV, Vector2 minUV, Vector2 maxUV, Vector3 rotationOrigin, Quaternion rotation, boolean rescale)
+    {
         float startX = startPos.getX();
         float startY = startPos.getY();
         float startZ = startPos.getZ();
@@ -126,6 +131,10 @@ public abstract class AbstractBlockRenderer
                 p1 = rotatedPos1;
                 p2 = rotatedPos2;
                 p3 = rotatedPos3;
+                if(rescale)
+                {
+                    // TODO: rescaling
+                }
                 quaternionAsMatrix.dispose();
                 initialTranslation.dispose();
                 initialTranslation2.dispose();
