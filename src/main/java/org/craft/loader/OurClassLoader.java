@@ -35,7 +35,6 @@ public class OurClassLoader extends URLClassLoader
     public Class<?> loadClass(String name) throws ClassNotFoundException
     {
         //TODO : search into custom sourceURL
-        Log.message("Loading class " + name);
         return parent.loadClass(name);
     }
 

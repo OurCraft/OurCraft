@@ -9,6 +9,7 @@ import java.util.*;
 import com.google.gson.*;
 
 import org.apache.logging.log4j.*;
+import org.craft.loader.OurClassLoader;
 import org.craft.modding.events.*;
 import org.craft.modding.script.lua.*;
 import org.craft.resources.*;
@@ -25,12 +26,14 @@ public class AddonsLoader
     private EventBus                                               eventBus;
     private Game                                                   game;
     private LuaEventBusListener                                    luaListener;
+    private OurClassLoader classLoader;
 
     public AddonsLoader(Game gameInstance, EventBus eventBus)
     {
+        this.classLoader = (OurClassLoader) Thread.currentThread().getContextClassLoader();
         luaListener = new LuaEventBusListener();
         eventBus.addListener(luaListener);
-
+        
         this.game = gameInstance;
         this.eventBus = eventBus;
         handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
@@ -130,8 +133,10 @@ public class AddonsLoader
                             {
                                 Log.error("Missing data when loading lua addon: luaAddon.json must contain fields \"id\", \"name\", \"version\" and \"mainClass\"");
                             }
+                            
+                            this.classLoader.addFile(file);
                         }
-                        tryToAddToClassPath(file);
+                        
                     }
                     catch(Exception e)
                     {
@@ -161,39 +166,4 @@ public class AddonsLoader
         }
     }
 
-    private boolean tryToAddToClassPath(URL path)
-    {
-        URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        try
-        {
-            Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", new Class<?>[]
-            {
-                    URL.class
-            });
-            addURL.setAccessible(true);
-            addURL.invoke(classLoader, new Object[]
-            {
-                    path
-            });
-            return true;
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private boolean tryToAddToClassPath(File f)
-    {
-        try
-        {
-            return tryToAddToClassPath(f.toURI().toURL());
-        }
-        catch(MalformedURLException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

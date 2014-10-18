@@ -10,12 +10,11 @@ import org.craft.utils.SystemUtils;
 
 public class OurCraftStartup
 {
-    private static OurClassLoader classLoader;
 
     public static void main(String[] args)
     {
-                classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
-                Thread.currentThread().setContextClassLoader(classLoader);
+        OurClassLoader classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
+        Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
             final File gameFolder = SystemUtils.getGameFolder();
@@ -36,17 +35,12 @@ public class OurCraftStartup
                     properties.put(current, arg);
                 }
             }
-            OurCraft instance = new OurCraft();
+            OurCraft instance = new OurCraft(classLoader);
             instance.start(properties);
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-    }
-
-    public static ClassLoader getClassLoader()
-    {
-        return classLoader;
     }
 }

@@ -23,6 +23,7 @@ import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.items.*;
+import org.craft.loader.OurClassLoader;
 import org.craft.maths.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
@@ -93,11 +94,12 @@ public class OurCraft implements Runnable, Game
     private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private ClientNetHandler         netHandler;
     private WorldLoader              worldLoader;
+    private OurClassLoader classLoader;
 
-    public OurCraft()
+    public OurCraft(OurClassLoader cL)
     {
         instance = this;
-
+        this.classLoader = cL;
         this.assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
         this.gameFolderLoader = new DiskSimpleResourceLoader(SystemUtils.getGameFolder().getAbsolutePath());
         runtime = Runtime.getRuntime();
@@ -117,8 +119,11 @@ public class OurCraft implements Runnable, Game
             AL.create();
             objectInFront = new CollisionInfos();
             objectInFront.type = CollisionType.NONE;
+            //LWJGL Properties
             System.setProperty("org.lwjgl.util.Debug", "true");
             System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
+            
+            //Init OpenGL context and settings up the display
             ContextAttribs context = new ContextAttribs(3, 2).withProfileCompatibility(true).withDebug(true);
             Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
             Display.setIcon(new ByteBuffer[]
@@ -129,22 +134,27 @@ public class OurCraft implements Runnable, Game
             Display.setResizable(true);
             Display.setTitle("OurCraft - " + getVersion());
             Display.create(new PixelFormat(), context);
-
-            mouseHandler = new MouseHandler();
-
+            fontRenderer = new BaseFontRenderer();
+            
+            //Init the RenderEngine
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
             renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
             renderEngine.switchToOrtho();
             renderEngine.renderSplashScreen();
             Display.update();
-
-            session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
-            initSponge();
-            fontRenderer = new BaseFontRenderer();
+            
+            mouseHandler = new MouseHandler();
             //fontRenderer = new TrueTypeFontRenderer("Consolas");
+            
+            
+            //Init OpenGL CapNames for crash report system
             OpenGLHelper.loadCapNames();
+            
+
+            //Init Game Content
+            session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
+            this.initSponge();
 
             Blocks.init();
             BlockStates.init();
@@ -238,6 +248,7 @@ public class OurCraft implements Runnable, Game
     @SuppressWarnings("unchecked")
     private void initSponge()
     {
+        Log.message("Loading SpongeAPI implementation...");
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus(SpongeEventHandler.class, OurModEventHandler.class);
         pluginManager = new SpongePluginManager();
@@ -939,5 +950,10 @@ public class OurCraft implements Runnable, Game
     public void setWorldLoader(WorldLoader loader)
     {
         this.worldLoader = loader;
+    }
+    
+    public OurClassLoader getClassLoader()
+    {
+        return classLoader;
     }
 }
