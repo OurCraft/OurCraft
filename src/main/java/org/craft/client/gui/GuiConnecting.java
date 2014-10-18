@@ -12,9 +12,9 @@ public class GuiConnecting extends Gui
     private int       updateCounter;
     private GuiButton gobackButton;
 
-    public GuiConnecting(FontRenderer font)
+    public GuiConnecting(OurCraft game)
     {
-        super(font);
+        super(game);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class GuiConnecting extends Gui
     @Override
     public void init()
     {
-        gobackButton = new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 100, OurCraft.getOurCraft().getDisplayHeight() / 2 + 50, 200, 40, I18n.format("menu.back"), getFontRenderer());
+        gobackButton = new GuiButton(0, oc.getDisplayWidth() / 2 - 100, oc.getDisplayHeight() / 2 + 50, 200, 40, I18n.format("menu.back"), getFontRenderer());
         gobackButton.visible = false;
         gobackButton.enabled = false;
         addWidget(gobackButton);
@@ -37,7 +37,7 @@ public class GuiConnecting extends Gui
     {
         if(widget.getID() == 0)
         {
-            OurCraft.getOurCraft().openMenu(new GuiMainMenu(getFontRenderer()));
+            oc.openMenu(new GuiMainMenu(oc));
         }
     }
 
@@ -51,7 +51,7 @@ public class GuiConnecting extends Gui
     {
         drawBackground(mx, my, renderEngine);
         super.draw(mx, my, renderEngine);
-        getFontRenderer().drawShadowedString(status, 0xFFFFFFFF, OurCraft.getOurCraft().getDisplayWidth() / 2 - (int) getFontRenderer().getTextLength(status) / 2, OurCraft.getOurCraft().getDisplayHeight() / 2 - (int) getFontRenderer().getCharHeight('A') / 2 - 50, renderEngine);
+        getFontRenderer().drawShadowedString(status, 0xFFFFFFFF, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextLength(status) / 2, oc.getDisplayHeight() / 2 - (int) getFontRenderer().getCharHeight('A') / 2 - 50, renderEngine);
 
         int length = 11;
         String finalLoadingTxt = "";
@@ -74,8 +74,9 @@ public class GuiConnecting extends Gui
             }
             else
                 finalLoadingTxt += TextFormatting.generateFromColor(180, 180, 180) + "_";
+            
         }
-        getFontRenderer().drawString(finalLoadingTxt, 0xFF000000, (int) (OurCraft.getOurCraft().getDisplayWidth() / 2 - getFontRenderer().getTextLength(finalLoadingTxt) / 2), (int) (OurCraft.getOurCraft().getDisplayHeight() / 2 - getFontRenderer().getCharHeight('A') / 2), renderEngine);
+        getFontRenderer().drawString(finalLoadingTxt, 0xFF000000, (int) (oc.getDisplayWidth() / 2 - getFontRenderer().getTextLength(finalLoadingTxt) / 2), (int) (oc.getDisplayHeight() / 2 - getFontRenderer().getCharHeight('A') / 2), renderEngine);
     }
 
     public void setStatus(String status)

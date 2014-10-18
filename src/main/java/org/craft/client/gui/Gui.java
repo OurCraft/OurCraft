@@ -19,14 +19,17 @@ public abstract class Gui
     private FontRenderer           fontRenderer;
     private ArrayList<GuiWidget>   widgets;
     private GuiWidget              selectedWidget;
-
-    public Gui(FontRenderer font)
+    
+    protected OurCraft oc;
+    
+    public Gui(OurCraft game)
     {
+        this.oc = game;
         if(backgroundTexture == null)
         {
             try
             {
-                backgroundTexture = OpenGLHelper.loadTexture(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/gui/background.png")));
+                backgroundTexture = OpenGLHelper.loadTexture(oc.getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/gui/background.png")));
             }
             catch(IOException e)
             {
@@ -38,7 +41,7 @@ public abstract class Gui
             }
         }
         widgets = new ArrayList<GuiWidget>();
-        this.fontRenderer = font;
+        this.fontRenderer = oc.getFontRenderer();
     }
 
     /**
@@ -198,7 +201,7 @@ public abstract class Gui
     public void drawBackground(int mx, int my, RenderEngine renderEngine)
     {
         renderEngine.bindTexture(backgroundTexture, 0);
-        drawTexturedRect(renderEngine, 0, 0, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0, 0, OurCraft.getOurCraft().getDisplayWidth() / backgroundTexture.getWidth(), OurCraft.getOurCraft().getDisplayHeight() / backgroundTexture.getHeight());
+        drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, oc.getDisplayWidth() / backgroundTexture.getWidth(), oc.getDisplayHeight() / backgroundTexture.getHeight());
     }
 
     public abstract void update();

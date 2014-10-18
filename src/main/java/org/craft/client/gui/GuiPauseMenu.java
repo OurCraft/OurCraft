@@ -8,9 +8,9 @@ import org.lwjgl.input.*;
 public class GuiPauseMenu extends Gui
 {
 
-    public GuiPauseMenu(FontRenderer font)
+    public GuiPauseMenu(OurCraft game)
     {
-        super(font);
+        super(game);
     }
 
     @Override
@@ -22,19 +22,19 @@ public class GuiPauseMenu extends Gui
     @Override
     public void init()
     {
-        addWidget(new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2, 300, 40, I18n.format("main.play.return"), getFontRenderer()));
-        addWidget(new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.quitToMainScreen"), getFontRenderer()));
+        addWidget(new GuiButton(0, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2, 300, 40, I18n.format("main.play.return"), getFontRenderer()));
+        addWidget(new GuiButton(1, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.quitToMainScreen"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 0)
         {
-            OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
+            oc.openMenu(new GuiIngame(oc));
         }
         else if(widget.getID() == 1)
         {
-            OurCraft.getOurCraft().quitToMainScreen();
+            oc.quitToMainScreen();
         }
     }
 
@@ -49,7 +49,7 @@ public class GuiPauseMenu extends Gui
         super.keyReleased(id, c);
         if(id == Keyboard.KEY_ESCAPE)
         {
-            OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
+            oc.openMenu(new GuiIngame(oc));
         }
     }
 

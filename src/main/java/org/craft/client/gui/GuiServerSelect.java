@@ -1,5 +1,6 @@
 package org.craft.client.gui;
 
+import org.craft.client.OurCraft;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
@@ -20,9 +21,9 @@ public class GuiServerSelect extends Gui
 
     private GuiList<GuiServerSlot> serverList;
 
-    public GuiServerSelect(FontRenderer font)
+    public GuiServerSelect(OurCraft game)
     {
-        super(font);
+        super(game);
     }
 
     @Override

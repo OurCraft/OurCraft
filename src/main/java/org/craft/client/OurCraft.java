@@ -169,7 +169,7 @@ public class OurCraft implements Runnable, Game
             renderBlocks.registerBlockRenderer(Blocks.cable, new BlockCableRenderer());
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
-            openMenu(new GuiMainMenu(fontRenderer));
+            openMenu(new GuiMainMenu(this));
 
             crosshairBuffer = new OpenGLBuffer();
             crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
@@ -395,7 +395,7 @@ public class OurCraft implements Runnable, Game
                     {
                         if(clientWorld != null && !(currentMenu instanceof GuiPauseMenu))
                         {
-                            openMenu(new GuiPauseMenu(fontRenderer));
+                            openMenu(new GuiPauseMenu(this));
                         }
                         else if(clientWorld == null)
                             running = false;
@@ -722,7 +722,7 @@ public class OurCraft implements Runnable, Game
         saveWorld();
         setWorld(null);
         setPlayer(null);
-        openMenu(new GuiMainMenu(fontRenderer));
+        openMenu(new GuiMainMenu(this));
     }
 
     public void saveWorld()

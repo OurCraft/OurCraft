@@ -53,7 +53,7 @@ public class GuiSelectWorld extends Gui
         {
             if(selected)
                 Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
-            FontRenderer font = OurCraft.getOurCraft().getFontRenderer();
+            FontRenderer font = oc.getFontRenderer();
             font.drawShadowedString(worldName, 0xFFFFFFFF, x + 2, y, engine);
             font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x + 2, y + 20, engine);
             font.drawShadowedString(dateString, 0xFFFFFFFF, x + 2, y + 40, engine);
@@ -75,9 +75,9 @@ public class GuiSelectWorld extends Gui
     private File                     saveFolder;
     private GuiButton                deleteButton;
 
-    public GuiSelectWorld(FontRenderer font, File saveFolder, File... worldFolders)
+    public GuiSelectWorld(OurCraft game, File saveFolder, File... worldFolders)
     {
-        super(font);
+        super(game);
         this.saveFolder = saveFolder;
         textureMap = new HashMap<String, Texture>();
         if(worldFolders == null)
@@ -86,7 +86,7 @@ public class GuiSelectWorld extends Gui
 
         try
         {
-            worldSnapshotShader = new Shader(new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.vsh")).getData(), "UTF-8"), new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.fsh")).getData(), "UTF-8"));
+            worldSnapshotShader = new Shader(new String(oc.getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.vsh")).getData(), "UTF-8"), new String(oc.getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.fsh")).getData(), "UTF-8"));
         }
         catch(UnsupportedEncodingException e)
         {
@@ -108,7 +108,7 @@ public class GuiSelectWorld extends Gui
     @Override
     public void init()
     {
-        worldList = new GuiList<GuiWorldSlot>(2, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 4, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 4, 80);
+        worldList = new GuiList<GuiWorldSlot>(2, oc.getDisplayWidth() / 8, oc.getDisplayHeight() / 8 - 40, oc.getDisplayWidth() - oc.getDisplayWidth() / 4, oc.getDisplayHeight() - oc.getDisplayHeight() / 4, 80);
         Arrays.sort(worldFolders, new Comparator<File>()
         {
 
@@ -156,21 +156,22 @@ public class GuiSelectWorld extends Gui
                 worldList.addSlot(new GuiWorldSlot(worldFolder.getName(), name, timestamp));
             }
         }
-        playButton = new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer());
+        playButton = new GuiButton(1, oc.getDisplayWidth() - oc.getDisplayWidth() / 8 - 200, oc.getDisplayHeight() - oc.getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.play"), getFontRenderer());
         playButton.enabled = false;
         addWidget(playButton);
         addWidget(worldList);
-        addWidget(new GuiButton(3, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.new"), getFontRenderer()));
-        addWidget(new GuiButton(4, OurCraft.getOurCraft().getDisplayWidth() - OurCraft.getOurCraft().getDisplayWidth() / 8 - 200, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.back"), getFontRenderer()));
+        addWidget(new GuiButton(3, oc.getDisplayWidth() / 8, oc.getDisplayHeight() - oc.getDisplayHeight() / 8 - 40, 200, 40, I18n.format("menu.selectworld.new"), getFontRenderer()));
+        addWidget(new GuiButton(4, oc.getDisplayWidth() - oc.getDisplayWidth() / 8 - 200, oc.getDisplayHeight() - oc.getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.back"), getFontRenderer()));
 
-        deleteButton = new GuiButton(5, OurCraft.getOurCraft().getDisplayWidth() / 8, OurCraft.getOurCraft().getDisplayHeight() - OurCraft.getOurCraft().getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.selectworld.delete"), getFontRenderer());
+        deleteButton = new GuiButton(5, oc.getDisplayWidth() / 8, oc.getDisplayHeight() - oc.getDisplayHeight() / 8 + 10, 200, 40, I18n.format("menu.selectworld.delete"), getFontRenderer());
         deleteButton.enabled = false;
         addWidget(deleteButton);
     }
 
     public void actionPerformed(GuiWidget widget)
     {
-        if(widget.getID() == 1)
+        final int id = widget.getID();
+        if(id == 1)
         {
             GuiWorldSlot worldSlot = worldList.getSelected();
             if(worldSlot != null)
@@ -178,7 +179,7 @@ public class GuiSelectWorld extends Gui
                 launchGameOnWorld(worldSlot.getName());
             }
         }
-        else if(widget.getID() == 2)
+        else if(id == 2)
         {
             playButton.enabled = worldList.getSelected() != null;
             deleteButton.enabled = worldList.getSelected() != null;
@@ -190,18 +191,18 @@ public class GuiSelectWorld extends Gui
             else
                 worldSnapshot = null;
         }
-        else if(widget.getID() == 3)
+        else if(id == 3)
         {
-            OurCraft.getOurCraft().openMenu(new GuiCreateWorld(getFontRenderer(), saveFolder, worldFolders));
+            oc.openMenu(new GuiCreateWorld(oc, saveFolder, worldFolders));
         }
-        else if(widget.getID() == 4)
+        else if(id == 4)
         {
-            OurCraft.getOurCraft().openMenu(new GuiMainMenu(getFontRenderer()));
+            oc.openMenu(new GuiMainMenu(oc));
         }
-        else if(widget.getID() == 5)
+        else if(id == 5)
         {
             GuiWorldSlot worldSlot = worldList.getSelected();
-            OurCraft.getOurCraft().openMenu(new GuiDeleteWorld(getFontRenderer(), saveFolder, worldFolders, worldSlot.worldFolderName));
+            oc.openMenu(new GuiDeleteWorld(oc, saveFolder, worldFolders, worldSlot.worldFolderName));
         }
     }
 
@@ -221,20 +222,20 @@ public class GuiSelectWorld extends Gui
             worldLoader = new VanillaWorldLoader(new ResourceLocation(worldName), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
             World clientWorld = new World(worldName, new BaseChunkProvider(worldLoader), generator, worldLoader);
 
-            EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
+            EntityPlayer player = new EntityPlayer(clientWorld, oc.getSession().getUUID());
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
-            OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
-            OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
+            oc.getRenderEngine().setRenderViewEntity(player);
+            oc.setPlayerController(new LocalPlayerController(player));
 
             Entity testEntity = new Entity(clientWorld);
             testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
             clientWorld.spawn(testEntity);
 
-            new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
-            OurCraft.getOurCraft().setWorld(clientWorld);
-            OurCraft.getOurCraft().setPlayer(player);
-            OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
+            new ThreadGetChunksFromCamera(oc).start();
+            oc.setWorld(clientWorld);
+            oc.setPlayer(player);
+            oc.openMenu(new GuiIngame(oc));
         }
         catch(Exception e)
         {
@@ -256,7 +257,7 @@ public class GuiSelectWorld extends Gui
             Shader oldShader = renderEngine.getCurrentShader();
             renderEngine.setCurrentShader(worldSnapshotShader);
             renderEngine.bindTexture(worldSnapshot);
-            drawTexturedRect(renderEngine, 0, 0, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), 0, 0, 1, 1);
+            drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, 1, 1);
             renderEngine.setCurrentShader(oldShader);
         }
         super.draw(mx, my, renderEngine);

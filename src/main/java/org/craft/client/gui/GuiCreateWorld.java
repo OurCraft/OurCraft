@@ -20,9 +20,9 @@ public class GuiCreateWorld extends Gui
     private File         saveFolder;
     private File[]       worldsFolders;
 
-    public GuiCreateWorld(FontRenderer font, File saveFolder, File... worldsFolders)
+    public GuiCreateWorld(OurCraft game, File saveFolder, File... worldsFolders)
     {
-        super(font);
+        super(game);
         this.saveFolder = saveFolder;
         this.worldsFolders = worldsFolders;
     }
@@ -37,14 +37,14 @@ public class GuiCreateWorld extends Gui
     public void init()
     {
         String txt = I18n.format("menu.createworld.title");
-        addWidget(new GuiLabel(-1, OurCraft.getOurCraft().getDisplayWidth() / 2 - (int) getFontRenderer().getTextLength(txt) / 2, OurCraft.getOurCraft().getDisplayHeight() / 2 - 60, txt, getFontRenderer()));
-        worldNameField = new GuiTextField(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 200, OurCraft.getOurCraft().getDisplayHeight() / 2 - 20, 400, 40, getFontRenderer());
+        addWidget(new GuiLabel(-1, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextLength(txt) / 2, oc.getDisplayHeight() / 2 - 60, txt, getFontRenderer()));
+        worldNameField = new GuiTextField(0, oc.getDisplayWidth() / 2 - 200, oc.getDisplayHeight() / 2 - 20, 400, 40, getFontRenderer());
         addWidget(worldNameField);
 
-        GuiButton back = new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 + 10, OurCraft.getOurCraft().getDisplayHeight() / 2 + 40, 190, 40, I18n.format("menu.back"), getFontRenderer());
+        GuiButton back = new GuiButton(1, oc.getDisplayWidth() / 2 + 10, oc.getDisplayHeight() / 2 + 40, 190, 40, I18n.format("menu.back"), getFontRenderer());
         addWidget(back);
 
-        GuiButton create = new GuiButton(2, OurCraft.getOurCraft().getDisplayWidth() / 2 - 190 - 10, OurCraft.getOurCraft().getDisplayHeight() / 2 + 40, 190, 40, I18n.format("menu.createworld.create"), getFontRenderer());
+        GuiButton create = new GuiButton(2, oc.getDisplayWidth() / 2 - 190 - 10, oc.getDisplayHeight() / 2 + 40, 190, 40, I18n.format("menu.createworld.create"), getFontRenderer());
         addWidget(create);
     }
 
@@ -58,7 +58,7 @@ public class GuiCreateWorld extends Gui
     {
         if(widget.getID() == 1)
         {
-            OurCraft.getOurCraft().openMenu(new GuiSelectWorld(getFontRenderer(), saveFolder, worldsFolders));
+            oc.openMenu(new GuiSelectWorld(oc, saveFolder, worldsFolders));
         }
         else if(widget.getID() == 2)
         {
@@ -83,20 +83,20 @@ public class GuiCreateWorld extends Gui
             worldLoader = new VanillaWorldLoader(new ResourceLocation(worldName), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
             World clientWorld = new World(worldName, new BaseChunkProvider(worldLoader), generator, worldLoader);
 
-            EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
+            EntityPlayer player = new EntityPlayer(clientWorld, oc.getSession().getUUID());
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
-            OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
-            OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
+            oc.getRenderEngine().setRenderViewEntity(player);
+            oc.setPlayerController(new LocalPlayerController(player));
 
             Entity testEntity = new Entity(clientWorld);
             testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
             clientWorld.spawn(testEntity);
 
-            new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
-            OurCraft.getOurCraft().setWorld(clientWorld);
-            OurCraft.getOurCraft().setPlayer(player);
-            OurCraft.getOurCraft().openMenu(new GuiIngame(getFontRenderer()));
+            new ThreadGetChunksFromCamera(oc).start();
+            oc.setWorld(clientWorld);
+            oc.setPlayer(player);
+            oc.openMenu(new GuiIngame(oc));
         }
         catch(Exception e)
         {

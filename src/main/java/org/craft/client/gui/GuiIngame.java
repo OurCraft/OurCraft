@@ -19,9 +19,9 @@ public class GuiIngame extends Gui
     private float   scale;
     private Matrix4 scaleMatrix;
 
-    public GuiIngame(FontRenderer fontRenderer)
+    public GuiIngame(OurCraft game)
     {
-        super(fontRenderer);
+        super(game);
     }
 
     @Override
@@ -35,14 +35,14 @@ public class GuiIngame extends Gui
     public void draw(int mx, int my, RenderEngine renderEngine)
     {
         super.draw(mx, my, renderEngine);
-        getFontRenderer().drawString("Playing as \"" + OurCraft.getOurCraft().getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
+        getFontRenderer().drawString("Playing as \"" + oc.getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
 
-        CollisionInfos infos = OurCraft.getOurCraft().getObjectInFront();
+        CollisionInfos infos = oc.getObjectInFront();
         if(infos != null && infos.type == CollisionType.BLOCK)
         {
             getFontRenderer().drawString("Block at " + infos.x + ", " + infos.y + ", " + infos.z + " is " + TextFormatting.generateFromColor(208, 208, 208) + ((Block) infos.value).getID(), 0xFFFFFFFF, 2, 75, renderEngine);
 
-            BlockStatesObject states = OurCraft.getOurCraft().getClientWorld().getBlockStates((int) infos.x, (int) infos.y, (int) infos.z);
+            BlockStatesObject states = oc.getClientWorld().getBlockStates((int) infos.x, (int) infos.y, (int) infos.z);
             if(states != null)
             {
                 Iterator<Entry<BlockState, IBlockStateValue>> it = states.getMap().entrySet().iterator();
@@ -53,19 +53,19 @@ public class GuiIngame extends Gui
                     if(entry.getKey() == null || entry.getValue() == null)
                         continue;
                     String s = entry.getKey().toString() + ":" + TextFormatting.generateFromColor(0, 255, 0) + entry.getValue().toString();
-                    getFontRenderer().drawString(s, 0xFFFFFFFF, OurCraft.getOurCraft().getDisplayWidth() - (int) getFontRenderer().getTextLength(s) - 2, (i++ ) * 15, renderEngine);
+                    getFontRenderer().drawString(s, 0xFFFFFFFF, oc.getDisplayWidth() - (int) getFontRenderer().getTextLength(s) - 2, (i++ ) * 15, renderEngine);
                 }
             }
         }
 
-        EntityPlayer player = (EntityPlayer) OurCraft.getOurCraft().getPlayer(null);
+        EntityPlayer player = (EntityPlayer) oc.getPlayer(null);
         org.craft.inventory.Stack stack = player.getHeldItem();
         if(stack != null)
         {
             String s = I18n.format(stack.getItem().getUnlocalizedID());
             Matrix4 m = renderEngine.getModelviewMatrix().copy();
             renderEngine.setModelviewMatrix(m.mul(scaleMatrix));
-            getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (OurCraft.getOurCraft().getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextLength(s) / (2 * scale)), (int) (OurCraft.getOurCraft().getDisplayHeight() / scale) - 40, renderEngine);
+            getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextLength(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);
             renderEngine.setModelviewMatrix(m);
         }
 

@@ -11,9 +11,11 @@ public class RemoteChunkProvider extends ChunkProvider
 
     private ChunkMap              chunkMap;
     private ArrayList<ChunkCoord> pending;
+    private OurCraft game;
 
     public RemoteChunkProvider()
     {
+        this.game = OurCraft.getOurCraft();
         this.pending = new ArrayList<ChunkCoord>();
         chunkMap = new ChunkMap();
     }
@@ -39,7 +41,7 @@ public class RemoteChunkProvider extends ChunkProvider
         ChunkCoord coords = ChunkCoord.get(chunkX, chunkY, chunkZ);
         if(!pending.contains(coords))
         {
-            OurCraft.getOurCraft().sendPacket(new C1AskForChunk(chunkX, chunkY, chunkZ));
+            game.sendPacket(new C1AskForChunk(chunkX, chunkY, chunkZ));
         }
         return null;
     }

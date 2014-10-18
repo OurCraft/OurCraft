@@ -21,6 +21,12 @@ import org.craft.world.populators.*;
 public class ClientNetHandler implements INetworkHandler
 {
     private Channel channel;
+    private OurCraft game;
+
+    public ClientNetHandler(OurCraft oc)
+    {
+        this.game = oc;
+    }
 
     public void connectTo(final String host, final int port)
     {
@@ -55,7 +61,7 @@ public class ClientNetHandler implements INetworkHandler
                 {
                     e.printStackTrace();
                     setGuiStatus(e.toString());
-                    Gui menu = OurCraft.getOurCraft().getCurrentMenu();
+                    Gui menu = game.getCurrentMenu();
                     if(menu instanceof GuiConnecting)
                     {
                         GuiConnecting connectingMenu = (GuiConnecting) menu;
@@ -77,19 +83,19 @@ public class ClientNetHandler implements INetworkHandler
         if(packet instanceof S0ConnectionAccepted)
         {
             setGuiStatus("Connected... Downloading terrain");
-            writeAndFlush(new C0PlayerInfos(OurCraft.getOurCraft().getSession()), ctx);
+            writeAndFlush(new C0PlayerInfos(game.getSession()), ctx);
             launchGame();
         }
         else if(packet instanceof S1ChatMessage)
         {
             S1ChatMessage chatMessage = (S1ChatMessage) packet;
-            OurCraft.getOurCraft().broadcastMessage(chatMessage.getMessage());
+            game.broadcastMessage(chatMessage.getMessage());
         }
         else if(packet instanceof S2ChunkData)
         {
             S2ChunkData chunkData = (S2ChunkData) packet;
             Chunk c = chunkData.getReadChunk();
-            OurCraft.getOurCraft().getClientWorld().addChunk(c);
+            game.getClientWorld().addChunk(c);
         }
     }
 
@@ -106,20 +112,20 @@ public class ClientNetHandler implements INetworkHandler
             worldLoader = new FallbackWorldLoader();
             World clientWorld = new World("remote world", new RemoteChunkProvider(), generator, worldLoader);
             clientWorld.isRemote = true;
-            EntityPlayer player = new EntityPlayer(clientWorld, OurCraft.getOurCraft().getSession().getUUID());
+            EntityPlayer player = new EntityPlayer(clientWorld, game.getSession().getUUID());
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
-            OurCraft.getOurCraft().getRenderEngine().setRenderViewEntity(player);
-            OurCraft.getOurCraft().setPlayerController(new LocalPlayerController(player));
+            game.getRenderEngine().setRenderViewEntity(player);
+            game.setPlayerController(new LocalPlayerController(player));
 
             Entity testEntity = new Entity(clientWorld);
             testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
             clientWorld.spawn(testEntity);
 
-            new ThreadGetChunksFromCamera(OurCraft.getOurCraft()).start();
-            OurCraft.getOurCraft().setWorld(clientWorld);
-            OurCraft.getOurCraft().setPlayer(player);
-            OurCraft.getOurCraft().openMenu(new GuiIngame(OurCraft.getOurCraft().getFontRenderer()));
+            new ThreadGetChunksFromCamera(game).start();
+            game.setWorld(clientWorld);
+            game.setPlayer(player);
+            game.openMenu(new GuiIngame(game));
         }
         catch(Exception e)
         {
@@ -135,7 +141,7 @@ public class ClientNetHandler implements INetworkHandler
 
     public void setGuiStatus(String status)
     {
-        Gui menu = OurCraft.getOurCraft().getCurrentMenu();
+        Gui menu = game.getCurrentMenu();
         if(menu instanceof GuiConnecting)
         {
             GuiConnecting connectingMenu = (GuiConnecting) menu;

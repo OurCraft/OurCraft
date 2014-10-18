@@ -15,17 +15,17 @@ public class GuiMainMenu extends Gui
 
     private ResourceLocation logoTexture = new ResourceLocation("ourcraft", "textures/logo.png");
 
-    public GuiMainMenu(FontRenderer font)
+    public GuiMainMenu(OurCraft game)
     {
-        super(font);
+        super(game);
     }
 
     @Override
     public void init()
     {
-        addWidget(new GuiButton(0, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
-        addWidget(new GuiButton(1, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.multiplayer"), getFontRenderer()));
-        addWidget(new GuiButton(10, OurCraft.getOurCraft().getDisplayWidth() / 2 - 150, OurCraft.getOurCraft().getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.quit"), getFontRenderer()));
+        addWidget(new GuiButton(0, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
+        addWidget(new GuiButton(1, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.multiplayer"), getFontRenderer()));
+        addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.quit"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -33,15 +33,15 @@ public class GuiMainMenu extends Gui
         if(widget.getID() == 0)
         {
             File worldFolder = new File(SystemUtils.getGameFolder(), "worlds");
-            OurCraft.getOurCraft().openMenu(new GuiSelectWorld(getFontRenderer(), worldFolder, worldFolder.listFiles()));
+            oc.openMenu(new GuiSelectWorld(oc, worldFolder, worldFolder.listFiles()));
         }
         else if(widget.getID() == 1)
         {
             try
             {
-                OurCraft.getOurCraft().openMenu(new GuiConnecting(getFontRenderer()));
-                ClientNetHandler netHandler = new ClientNetHandler();
-                OurCraft.getOurCraft().setNetHandler(netHandler);
+                oc.openMenu(new GuiConnecting(oc));
+                ClientNetHandler netHandler = new ClientNetHandler(oc);
+                oc.setNetHandler(netHandler);
                 netHandler.connectTo("localhost", 35565);
             }
             catch(Exception e)
@@ -51,7 +51,7 @@ public class GuiMainMenu extends Gui
         }
         else if(widget.getID() == 10)
         {
-            OurCraft.getOurCraft().shutdown();
+            oc.shutdown();
         }
     }
 
@@ -60,7 +60,7 @@ public class GuiMainMenu extends Gui
     {
         drawBackground(mx, my, renderEngine);
         renderEngine.bindLocation(logoTexture);
-        drawTexturedRect(renderEngine, OurCraft.getOurCraft().getDisplayWidth() / 2 - 217, 20, 433, 240, 0, 0, 1, 1);
+        drawTexturedRect(renderEngine, oc.getDisplayWidth() / 2 - 217, 20, 433, 240, 0, 0, 1, 1);
         super.draw(mx, my, renderEngine);
     }
 
