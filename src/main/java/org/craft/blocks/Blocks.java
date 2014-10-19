@@ -38,7 +38,7 @@ public final class Blocks
         register(glass = new BlockTransparent("glass"));
         register(rose = new BlockFlower("rose"));
         register(cable = new BlockCable("copper_cable"));
-        register(powerSource = new BlockPowerSource("powe_source"));
+        register(powerSource = new BlockPowerSource("power_source"));
 
         register(dirtSlab = new BlockHalfSlab("dirt"));
 
