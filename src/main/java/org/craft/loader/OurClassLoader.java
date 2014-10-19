@@ -1,21 +1,20 @@
 package org.craft.loader;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+import com.google.common.collect.*;
 
 public class OurClassLoader extends URLClassLoader
 {
-    private List<URL> sources;
+    private List<URL>      sources;
     private URLClassLoader parent;
 
     public OurClassLoader(URL[] sources)
     {
         super(sources, null);
-        this.sources = Arrays.asList(sources);
+        this.sources = Lists.newArrayList(sources);
         parent = (URLClassLoader) getClass().getClassLoader();
     }
 

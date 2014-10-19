@@ -23,7 +23,7 @@ import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.items.*;
-import org.craft.loader.OurClassLoader;
+import org.craft.loader.*;
 import org.craft.maths.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
@@ -94,7 +94,7 @@ public class OurCraft implements Runnable, Game
     private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private ClientNetHandler         netHandler;
     private WorldLoader              worldLoader;
-    private OurClassLoader classLoader;
+    private OurClassLoader           classLoader;
 
     public OurCraft(OurClassLoader cL)
     {
@@ -122,7 +122,7 @@ public class OurCraft implements Runnable, Game
             //LWJGL Properties
             System.setProperty("org.lwjgl.util.Debug", "true");
             System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
-            
+
             //Init OpenGL context and settings up the display
             ContextAttribs context = new ContextAttribs(3, 2).withProfileCompatibility(true).withDebug(true);
             Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
@@ -135,7 +135,7 @@ public class OurCraft implements Runnable, Game
             Display.setTitle("OurCraft - " + getVersion());
             Display.create(new PixelFormat(), context);
             fontRenderer = new BaseFontRenderer();
-            
+
             //Init the RenderEngine
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
@@ -143,14 +143,12 @@ public class OurCraft implements Runnable, Game
             renderEngine.switchToOrtho();
             renderEngine.renderSplashScreen();
             Display.update();
-            
+
             mouseHandler = new MouseHandler();
             //fontRenderer = new TrueTypeFontRenderer("Consolas");
-            
-            
+
             //Init OpenGL CapNames for crash report system
             OpenGLHelper.loadCapNames();
-            
 
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
@@ -166,7 +164,7 @@ public class OurCraft implements Runnable, Game
             ModelLoader modelLoader = new ModelLoader();
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
             renderBlocks.registerBlockRenderer(Blocks.dirtSlab, new BlockHalfSlabRenderer());
-            renderBlocks.registerBlockRenderer(Blocks.cable, new BlockCableRenderer());
+            //            renderBlocks.registerBlockRenderer(Blocks.cable, new BlockCableRenderer());
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(this));
@@ -951,7 +949,7 @@ public class OurCraft implements Runnable, Game
     {
         this.worldLoader = loader;
     }
-    
+
     public OurClassLoader getClassLoader()
     {
         return classLoader;

@@ -22,9 +22,9 @@ public abstract class NBTTag implements Cloneable
         return name;
     }
 
-    abstract void write(DataOutput dos) throws IOException;
+    public abstract void write(DataOutput dos) throws IOException;
 
-    abstract void read(DataInput dis) throws IOException;
+    public abstract void read(DataInput dis) throws IOException;
 
     public abstract String toString();
 

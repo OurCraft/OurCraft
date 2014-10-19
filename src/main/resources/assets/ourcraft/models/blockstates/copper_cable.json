@@ -1,0 +1,61 @@
+{
+    "variants": 
+    {
+        "normal": 
+        [
+            { "model": "copper_cable_all" }
+        ],
+        "connexions=ns": 
+        [
+            { "model": "copper_cable_ns" }
+        ],
+		"connexions=n": 
+        [
+            { "model": "copper_cable_n" }
+        ],
+		"connexions=s": 
+        [
+            { "model": "copper_cable_s" }
+        ],
+		"connexions=w": 
+        [
+            { "model": "copper_cable_w" }
+        ],
+		"connexions=e": 
+        [
+            { "model": "copper_cable_e" }
+        ],
+		"connexions=ne": 
+        [
+            { "model": "copper_cable_ne" }
+        ],
+		"connexions=nw": 
+        [
+            { "model": "copper_cable_nw" }
+        ],
+		"connexions=se": 
+        [
+            { "model": "copper_cable_se" }
+        ],
+		"connexions=sw": 
+        [
+            { "model": "copper_cable_sw" }
+        ],
+		"connexions=nes": 
+        [
+            { "model": "copper_cable_nes" }
+        ],
+		"connexions=nws": 
+        [
+            { "model": "copper_cable_nws" }
+        ],
+		"connexions=esw": 
+        [
+            { "model": "copper_cable_esw" }
+        ],
+		"connexions=enw": 
+        [
+            { "model": "copper_cable_enw" }
+        ]
+    }
+}

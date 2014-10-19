@@ -1,0 +1,7 @@
+{
+    "parent": "block/cable",
+    "textures":
+    {
+        "cable": "copper_cable_esw"
+    }
+}
