@@ -13,11 +13,6 @@ public class BlockAir extends Block
         super("air");
     }
 
-    public TextureIcon getBlockIcon(World w, int x, int y, int z, EnumSide side)
-    {
-        return null;
-    }
-
     public boolean shouldRender()
     {
         return false;

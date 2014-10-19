@@ -53,14 +53,9 @@ public class BlockHalfSlab extends Block
         return getCollisionBox(world, x, y, z);
     }
 
-    public TextureIcon getBlockIcon(World world, int x, int y, int z, EnumSide side)
-    {
-        return blockIcon;
-    }
-
     public void registerIcons(IconGenerator register)
     {
-        blockIcon = register.generateIcon(baseId + ".png");
+        register.generateIcon(baseId + ".png");
     }
 
     @Override

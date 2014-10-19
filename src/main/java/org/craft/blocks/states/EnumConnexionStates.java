@@ -1,6 +1,5 @@
 package org.craft.blocks.states;
 
-import org.craft.utils.*;
 
 public enum EnumConnexionStates implements IBlockStateValue
 {
@@ -31,7 +30,6 @@ public enum EnumConnexionStates implements IBlockStateValue
 
     public static IBlockStateValue fromFlag(int fullFlag)
     {
-        Log.message(">> " + Integer.toBinaryString(fullFlag));
         int northModifier = 1 << 0;
         int southModifier = 1 << 1;
         int eastModifier = 1 << 2;
@@ -68,11 +66,9 @@ public enum EnumConnexionStates implements IBlockStateValue
                 {
                     if(full.indexOf(c) < 0)
                     {
-                        Log.message(id + " != " + full);
                         continue stateLoop;
                     }
                 }
-                Log.message(id + " == " + full);
                 return state;
             }
         }

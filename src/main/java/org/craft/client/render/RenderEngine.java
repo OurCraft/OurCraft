@@ -356,7 +356,7 @@ public class RenderEngine implements IDisposable
                 Log.error("Could not reload texture at /" + key.getFullPath() + " because of: " + e.getClass().getCanonicalName() + " " + e.getLocalizedMessage());
             }
         }
-        RenderBlocks.createBlockMap(this);
+        OurCraft.getOurCraft().getRenderBlocks().createBlockMap(this);
         RenderItems.createItemMap(this);
     }
 

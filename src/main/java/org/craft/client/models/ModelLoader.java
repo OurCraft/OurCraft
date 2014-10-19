@@ -8,6 +8,7 @@ import com.google.gson.*;
 
 import org.craft.blocks.states.*;
 import org.craft.client.*;
+import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
@@ -25,17 +26,17 @@ public class ModelLoader
         models = new HashMap<ResourceLocation, BlockModel>();
     }
 
-    public AbstractBlockRenderer createRenderer(ResourceLocation modelFile) throws Exception
+    public AbstractBlockRenderer createRenderer(ResourceLocation modelFile, IconGenerator blockMap) throws Exception
     {
-        return createRenderer(OurCraft.getOurCraft().getAssetsLoader().getResource(modelFile));
+        return createRenderer(OurCraft.getOurCraft().getAssetsLoader().getResource(modelFile), blockMap);
     }
 
-    public AbstractBlockRenderer createRenderer(AbstractResource modelFile) throws Exception
+    public AbstractBlockRenderer createRenderer(AbstractResource modelFile, IconGenerator blockMap) throws Exception
     {
-        return new BlockModelRenderer(loadVariants(modelFile));
+        return new BlockModelRenderer(loadVariants(modelFile, blockMap));
     }
 
-    public List<BlockVariant> loadVariants(AbstractResource variantFile) throws Exception
+    public List<BlockVariant> loadVariants(AbstractResource variantFile, IconGenerator blockMap) throws Exception
     {
         ArrayList<BlockVariant> variants = Lists.newArrayList();
         String rawJsonData = new String(variantFile.getData(), "UTF-8");
@@ -57,7 +58,7 @@ public class ModelLoader
             for(int i = 0; i < array.size(); i++ )
             {
                 JsonObject model = array.get(0).getAsJsonObject();
-                variant.addBlockModel(loadModel(variantFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + model.get("model").getAsString() + ".json"))));
+                variant.addBlockModel(loadModel(variantFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + model.get("model").getAsString() + ".json")), blockMap));
 
                 // TODO: rotations
             }
@@ -67,7 +68,7 @@ public class ModelLoader
         return variants;
     }
 
-    public BlockModel loadModel(AbstractResource modelFile) throws Exception
+    public BlockModel loadModel(AbstractResource modelFile, IconGenerator blockMap) throws Exception
     {
         if(!models.containsKey(modelFile.getResourceLocation()))
         {
@@ -77,7 +78,7 @@ public class ModelLoader
             JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
             if(model.has("parent"))
             {
-                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json"))));
+                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json")), blockMap));
             }
 
             if(model.has("textures"))
@@ -87,7 +88,12 @@ public class ModelLoader
                 while(textureEntries.hasNext())
                 {
                     Entry<String, JsonElement> textureData = textureEntries.next();
-                    loadedModel.setTexturePath(textureData.getKey(), textureData.getValue().getAsString());
+                    String path = textureData.getValue().getAsString();
+                    if(!path.startsWith("#"))
+                    {
+                        blockMap.generateIcon(path + ".png");
+                    }
+                    loadedModel.setTexturePath(textureData.getKey(), path);
                 }
             }
 

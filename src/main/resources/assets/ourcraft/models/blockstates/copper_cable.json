@@ -33,6 +33,10 @@
         [
             { "model": "copper_cable_nw" }
         ],
+        "connexions=ew": 
+        [
+            { "model": "copper_cable_ew" }
+        ],
 		"connexions=se": 
         [
             { "model": "copper_cable_se" }

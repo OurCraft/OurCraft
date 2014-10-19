@@ -111,7 +111,7 @@ public abstract class FontRenderer implements IDisposable
             {
                 int index = getIndex('_');
                 int xPos = index % atlas.getXNbr();
-                int yPos = index / atlas.getYNbr();
+                int yPos = index / atlas.getXNbr();
                 if(obfuscated)
                 {
                     xPos = (int) (Math.random() * atlas.getXNbr());

@@ -7,6 +7,7 @@ public final class BlockStates
 
     public static BlockState                                                   orientation;
     public static BlockState                                                   cableConnexions;
+    public static BaseBlockState                                               electricPower;
 
     public static final HashMap<String, BlockState>                            BLOCK_STATES_REGISTRY        = new HashMap<String, BlockState>();
     public static final HashMap<BlockState, HashMap<String, IBlockStateValue>> BLOCK_STATES_VALUES_REGISTRY = new HashMap<BlockState, HashMap<String, IBlockStateValue>>();
@@ -26,6 +27,12 @@ public final class BlockStates
         for(EnumConnexionStates state : EnumConnexionStates.values())
         {
             registerValue(cableConnexions, state);
+        }
+
+        registerState(electricPower = new BaseBlockState("electricPower"));
+        for(EnumPowerStates state : EnumPowerStates.values())
+        {
+            registerValue(electricPower, state);
         }
     }
 

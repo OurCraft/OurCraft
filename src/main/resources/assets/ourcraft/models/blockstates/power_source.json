@@ -3,7 +3,7 @@
     {
         "normal": 
         [
-            { "model": "cable_all" }
+            { "model": "bedrock" }
         ]
     }
 }

@@ -1,7 +1,5 @@
 package org.craft.blocks;
 
-import java.util.*;
-
 import org.craft.blocks.states.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
@@ -11,15 +9,12 @@ import org.craft.world.*;
 public class BlockCable extends Block
 {
 
-    private static AABB                  selectionBB;
+    private static AABB selectionBB;
 
     static
     {
         selectionBB = new AABB(Vector3.get(0f, 0f, 0f), Vector3.get(1f, 2f / 16f, 1f));
     }
-
-    private TextureIcon                  allIcon;
-    private HashMap<String, TextureIcon> icons;
 
     public BlockCable(String id)
     {
@@ -72,35 +67,15 @@ public class BlockCable extends Block
         int westFlag = westBlock == this ? 1 << 3 : 0;
         int fullFlag = (northFlag | southFlag | eastFlag | westFlag);
         world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), false);
-    }
-
-    public TextureIcon getBlockIcon(World w, int x, int y, int z, EnumSide side)
-    {
-        IBlockStateValue value = w.getBlockState(x, y, z, BlockStates.cableConnexions);
-        if(value == null)
-            return allIcon;
-        if(value instanceof EnumConnexionStates)
-        {
-            switch((EnumConnexionStates) value)
-            {
-                case ALL:
-                    return allIcon;
-                case NONE:
-                    return allIcon;
-                default:
-                    return icons.get(value.toString());
-            }
-        }
-        return allIcon;
+        world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.getFromValue(world.getDirectElectricPowerAt(x, y, z) - 1), false);
     }
 
     public void registerIcons(IconGenerator register)
     {
-        allIcon = register.generateIcon(getID() + "_four.png");
-        icons = new HashMap<String, TextureIcon>();
+        register.generateIcon(getID() + "_four.png");
         for(EnumConnexionStates state : EnumConnexionStates.values())
         {
-            icons.put(state.toString(), register.generateIcon(getID() + "_" + state.toString() + ".png"));
+            register.generateIcon(getID() + "_" + state.toString() + ".png");
         }
     }
 }

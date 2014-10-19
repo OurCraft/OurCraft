@@ -32,15 +32,17 @@ public class RenderBlocks
     private Comparator<Chunk>                          chunkComparator;
     private Comparator<BlockRenderInfos>               blockComparator;
     private ModelLoader                                modelLoader;
-    private ResourceLocation                           fallbackRendererResource;
+    private FullCubeBlockRenderer                      fallbackRenderer;
+    private TextureMap                                 blockMap;
     public static ResourceLocation                     blockMapLoc;
 
-    public static void createBlockMap(RenderEngine engine)
+    public void createBlockMap(RenderEngine engine)
     {
-        TextureMap blockMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
+        blockMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
+        renderers.clear();
         for(Block b : Blocks.BLOCK_REGISTRY.values())
         {
-            b.registerIcons(blockMap);
+            getRenderer(b);
         }
         try
         {
@@ -59,13 +61,10 @@ public class RenderBlocks
         this.renderEngine = engine;
         chunkBuffersPass0 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
         chunkBuffersPass1 = new HashMap<ChunkCoord, OffsettedOpenGLBuffer>();
-        if(blockMapLoc == null)
-        {
-            createBlockMap(engine);
-        }
         this.modelLoader = modelLoader;
-        this.fallbackRendererResource = resourceLocation;
+        this.fallbackRenderer = new FullCubeBlockRenderer();
         renderers = Maps.newHashMap();
+        createBlockMap(engine);
     }
 
     public void registerBlockRenderer(Block block, AbstractBlockRenderer renderer)
@@ -85,13 +84,13 @@ public class RenderBlocks
             ResourceLocation res = new ResourceLocation("ourcraft", "models/blockstates/" + block.getID() + ".json");
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
-                renderers.put(block, modelLoader.createRenderer(res));
+                renderers.put(block, modelLoader.createRenderer(res, blockMap));
                 Log.message(res.getFullPath() + " loaded.");
             }
             else
             {
                 Log.message(res.getFullPath() + " doesn't exist.");
-                renderers.put(block, modelLoader.createRenderer(fallbackRendererResource));
+                renderers.put(block, fallbackRenderer);
             }
         }
         catch(Exception e)

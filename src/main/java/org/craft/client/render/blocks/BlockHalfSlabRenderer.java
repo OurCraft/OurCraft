@@ -20,39 +20,40 @@ public class BlockHalfSlabRenderer extends AbstractBlockRenderer
         if(chunk == null)
             return;
         float lightValue = chunk.getLightValue(world, x, y, z);
+        TextureIcon icon = ((TextureMap) engine.getByLocation(RenderBlocks.blockMapLoc)).get("bedrock.png");
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawNorthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.NORTH), x, y, z);
+            drawNorthFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.SOUTH;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawSouthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.SOUTH), x, y, z);
+            drawSouthFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.WEST;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawWestFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.WEST), x, y, z);
+            drawWestFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.EAST;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawEastFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.EAST), x, y, z);
+            drawEastFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.TOP;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawTopFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.TOP), x, y, z);
+            drawTopFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.BOTTOM;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawBottomFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.BOTTOM), x, y, z);
+            drawBottomFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
     }

@@ -22,39 +22,40 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
         if(chunk == null)
             return;
         float lightValue = chunk.getLightValue(world, x, y, z);
+        TextureIcon icon = ((TextureMap) engine.getByLocation(RenderBlocks.blockMapLoc)).get("bedrock.png");
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawNorthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.NORTH), x, y, z);
+            drawNorthFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.SOUTH;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawSouthFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.SOUTH), x, y, z);
+            drawSouthFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.WEST;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawWestFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.WEST), x, y, z);
+            drawWestFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.EAST;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawEastFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.EAST), x, y, z);
+            drawEastFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.TOP;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawTopFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.TOP), x, y, z);
+            drawTopFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
         side = EnumSide.BOTTOM;
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
-            drawBottomFace(buffer, world, block, lightValue, block.getBlockIcon(world, x, y, z, EnumSide.BOTTOM), x, y, z);
+            drawBottomFace(buffer, world, block, lightValue, icon, x, y, z);
         }
 
     }
@@ -62,7 +63,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     public void drawNorthFace(OffsettedOpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
         Vector3 sizeVec = Vector3.get(1, 1, 0);
-        renderFace(buffer, world, block, x, y, z, block.getBlockIcon(world, x, y, z, EnumSide.NORTH), Vector3.NULL, sizeVec);
+        renderFace(buffer, world, block, x, y, z, icon, Vector3.NULL, sizeVec);
         sizeVec.dispose();
     }
 
@@ -70,7 +71,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(0, 0, 1);
         Vector3 sizeVec = Vector3.get(1, 1, 0);
-        renderFace(buffer, world, block, x, y, z, block.getBlockIcon(world, x, y, z, EnumSide.SOUTH), startPos, sizeVec);
+        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec);
         sizeVec.dispose();
         startPos.dispose();
     }
@@ -79,7 +80,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.NULL;
         Vector3 sizeVec = Vector3.get(0, 1, 1);
-        renderFace(buffer, world, block, x, y, z, block.getBlockIcon(world, x, y, z, EnumSide.WEST), startPos, sizeVec);
+        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec);
         sizeVec.dispose();
     }
 
@@ -87,7 +88,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(1, 0, 0);
         Vector3 sizeVec = Vector3.get(0, 1, 1);
-        renderFace(buffer, world, block, x, y, z, block.getBlockIcon(world, x, y, z, EnumSide.EAST), startPos, sizeVec);
+        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec);
         sizeVec.dispose();
         startPos.dispose();
     }
@@ -96,7 +97,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(0, 1f, 0);
         Vector3 sizeVec = Vector3.get(1, 0, 1);
-        renderFace(buffer, world, block, x, y, z, block.getBlockIcon(world, x, y, z, EnumSide.TOP), startPos, sizeVec, true);
+        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec, true);
         sizeVec.dispose();
         startPos.dispose();
     }
@@ -105,7 +106,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(0, 0, 0);
         Vector3 sizeVec = Vector3.get(1, 0, 1);
-        renderFace(buffer, world, block, x, y, z, block.getBlockIcon(world, x, y, z, EnumSide.BOTTOM), startPos, sizeVec, true);
+        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec, true);
         sizeVec.dispose();
         startPos.dispose();
     }

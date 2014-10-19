@@ -327,6 +327,27 @@ public class World implements org.spongepowered.api.world.World
         updateBlockFromNeighbor(x - 1, y, z);
     }
 
+    public int getDirectElectricPowerAt(int x, int y, int z)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c == null)
+            return 0;
+        int maxPower = 0;
+        for(EnumSide side : EnumSide.values())
+        {
+            IBlockStateValue value = getBlockState(x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), BlockStates.electricPower);
+            if(value != null && value instanceof EnumPowerStates)
+            {
+                EnumPowerStates power = (EnumPowerStates) value;
+                if(power.powerValue() == 15)
+                    return 15;
+                else if(power.powerValue() > maxPower)
+                    maxPower = power.powerValue();
+            }
+        }
+        return maxPower;
+    }
+
     // -------------------------------------------------
     // START OF SPONGE IMPLEMENTATION
     // -------------------------------------------------

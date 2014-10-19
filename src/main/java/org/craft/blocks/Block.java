@@ -19,7 +19,6 @@ public class Block implements IStackable
     protected static AABB normalCubeAABB;
 
     private String        id;
-    protected TextureIcon blockIcon;
 
     private short         uniqueID;
 
@@ -34,25 +33,6 @@ public class Block implements IStackable
     public String getID()
     {
         return id;
-    }
-
-    /**
-     * Returns the icon depending on the current block state (side, position, etc.)
-     */
-    public TextureIcon getBlockIcon(World world, int x, int y, int z, EnumSide side)
-    {
-        return blockIcon;
-    }
-
-    /**
-     * Registers the required icons of the block.<br/>
-     * Usage: RenderBlocks.blockMap uses this method to create block icons from assets/ourcraft/textures/blocks/
-     * 
-     * @see RenderBlocks
-     */
-    public void registerIcons(IconGenerator register)
-    {
-        blockIcon = register.generateIcon(id + ".png");
     }
 
     /**
