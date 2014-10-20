@@ -1,6 +1,5 @@
 package org.craft.blocks;
 
-import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.utils.CollisionInfos.CollisionType;
@@ -17,12 +16,9 @@ public class BlockHalfSlab extends Block
         halfSlabBB = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 0.5f, 1));
     }
 
-    private String      baseId;
-
     public BlockHalfSlab(String id)
     {
-        super("slab_" + id);
-        this.baseId = id;
+        super(id);
     }
 
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
@@ -51,11 +47,6 @@ public class BlockHalfSlab extends Block
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         return getCollisionBox(world, x, y, z);
-    }
-
-    public void registerIcons(IconGenerator register)
-    {
-        register.generateIcon(baseId + ".png");
     }
 
     @Override

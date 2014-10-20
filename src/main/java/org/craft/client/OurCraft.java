@@ -17,7 +17,6 @@ import org.craft.client.gui.*;
 import org.craft.client.models.*;
 import org.craft.client.network.*;
 import org.craft.client.render.*;
-import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
@@ -163,7 +162,6 @@ public class OurCraft implements Runnable, Game
 
             ModelLoader modelLoader = new ModelLoader();
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
-            renderBlocks.registerBlockRenderer(Blocks.dirtSlab, new BlockHalfSlabRenderer());
             renderItems = new RenderItems(renderEngine);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(this));
@@ -476,13 +474,30 @@ public class OurCraft implements Runnable, Game
         if(clientWorld != null)
         {
             renderWorld(visiblesChunks, delta, drawGui);
+            renderEngine.switchToOrtho();
         }
         else
         {
-            glClear(GL_DEPTH_BUFFER_BIT);
             renderEngine.switchToOrtho();
         }
         renderEngine.end();
+
+        if(clientWorld != null)
+        {
+            glClear(GL_DEPTH_BUFFER_BIT);
+            renderEngine.switchToPerspective();
+            renderEngine.setProjectFromEntity(false);
+            if(player != null)
+            {
+                if(player.getHeldItem() != null)
+                {
+                    renderItems.renderItem(renderEngine, player.getHeldItem(), 0, 180, 0);
+                }
+            }
+            renderEngine.setProjectFromEntity(true);
+        }
+        glClear(GL_DEPTH_BUFFER_BIT);
+        renderEngine.switchToOrtho();
         renderEngine.disableGLCap(GL_DEPTH_TEST);
 
         if(drawGui)
@@ -571,7 +586,6 @@ public class OurCraft implements Runnable, Game
             renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
             renderEngine.setModelviewMatrix(modelView);
         }
-        renderEngine.switchToOrtho();
     }
 
     public void setResourcesPack(String fileName) throws Exception

@@ -40,7 +40,7 @@ public final class Blocks
         register(cable = new BlockCable("copper_cable"));
         register(powerSource = new BlockPowerSource("power_source"));
 
-        register(dirtSlab = new BlockHalfSlab("dirt"));
+        register(dirtSlab = new BlockHalfSlab("dirt_slab"));
 
         for(short i = 0; i < blockByID.size(); i++ )
         {
