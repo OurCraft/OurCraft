@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.common.collect.*;
 
 import org.craft.blocks.states.*;
+import org.craft.client.render.*;
 
 public class BlockVariant
 {
@@ -12,9 +13,11 @@ public class BlockVariant
     private BlockState            state;
     private IBlockStateValue      value;
     private ArrayList<BlockModel> models;
+    private EnumRenderPass        pass;
 
     public BlockVariant()
     {
+        pass = EnumRenderPass.NORMAL;
         models = Lists.newArrayList();
     }
 
@@ -46,5 +49,17 @@ public class BlockVariant
     public List<BlockModel> getModels()
     {
         return models;
+    }
+
+    public void setPass(EnumRenderPass pass)
+    {
+        if(pass == null)
+            throw new NullPointerException("Render Pass can't be null");
+        this.pass = pass;
+    }
+
+    public EnumRenderPass getPass()
+    {
+        return pass;
     }
 }

@@ -24,9 +24,11 @@ public class World implements org.spongepowered.api.world.World
     private String             name;
     private WorldLoader        worldLoader;
     public boolean             isRemote;
+    private Random             rng;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
+        this.rng = new Random(generator.getSeed());
         this.worldLoader = worldLoader;
         this.name = name;
         this.generator = generator;
@@ -439,5 +441,10 @@ public class World implements org.spongepowered.api.world.World
     public WorldLoader getLoader()
     {
         return worldLoader;
+    }
+
+    public Random getRNG()
+    {
+        return rng;
     }
 }

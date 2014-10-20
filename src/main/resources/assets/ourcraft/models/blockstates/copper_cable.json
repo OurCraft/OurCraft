@@ -3,63 +3,63 @@
     {
         "normal": 
         [
-            { "model": "copper_cable_all" }
+            { "model": "copper_cable_all", "renderPass":"alpha" }
         ],
         "connexions=ns": 
         [
-            { "model": "copper_cable_ns" }
+            { "model": "copper_cable_ns", "renderPass":"alpha" }
         ],
 		"connexions=n": 
         [
-            { "model": "copper_cable_n" }
+            { "model": "copper_cable_n", "renderPass":"alpha" }
         ],
 		"connexions=s": 
         [
-            { "model": "copper_cable_s" }
+            { "model": "copper_cable_s", "renderPass":"alpha" }
         ],
 		"connexions=w": 
         [
-            { "model": "copper_cable_w" }
+            { "model": "copper_cable_w", "renderPass":"alpha" }
         ],
 		"connexions=e": 
         [
-            { "model": "copper_cable_e" }
+            { "model": "copper_cable_e", "renderPass":"alpha" }
         ],
 		"connexions=ne": 
         [
-            { "model": "copper_cable_ne" }
+            { "model": "copper_cable_ne", "renderPass":"alpha" }
         ],
 		"connexions=nw": 
         [
-            { "model": "copper_cable_nw" }
+            { "model": "copper_cable_nw", "renderPass":"alpha" }
         ],
         "connexions=ew": 
         [
-            { "model": "copper_cable_ew" }
+            { "model": "copper_cable_ew", "renderPass":"alpha" }
         ],
 		"connexions=se": 
         [
-            { "model": "copper_cable_se" }
+            { "model": "copper_cable_se", "renderPass":"alpha" }
         ],
 		"connexions=sw": 
         [
-            { "model": "copper_cable_sw" }
+            { "model": "copper_cable_sw", "renderPass":"alpha" }
         ],
 		"connexions=nes": 
         [
-            { "model": "copper_cable_nes" }
+            { "model": "copper_cable_nes", "renderPass":"alpha" }
         ],
 		"connexions=nws": 
         [
-            { "model": "copper_cable_nws" }
+            { "model": "copper_cable_nws", "renderPass":"alpha" }
         ],
 		"connexions=esw": 
         [
-            { "model": "copper_cable_esw" }
+            { "model": "copper_cable_esw", "renderPass":"alpha" }
         ],
 		"connexions=enw": 
         [
-            { "model": "copper_cable_enw" }
+            { "model": "copper_cable_enw", "renderPass":"alpha" }
         ]
     }
 }

@@ -38,20 +38,11 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         Chunk chunk = w.getChunk(x, y, z);
         if(chunk == null)
             return;
-        BlockVariant variant = null;
-        for(BlockVariant v : blockVariants)
-        {
-            if(v.getBlockState() == null && variant == null)
-                variant = v;
-            if(v.getBlockState() != null)
-                if(w.getBlockState(x, y, z, v.getBlockState()) == v.getBlockStateValue())
-                {
-                    variant = v;
-                }
-        }
+        BlockVariant variant = getVariant(w, b, x, y, z);
+
         if(variant == null)
             return;
-        BlockModel blockModel = variant.getModels().get(0); // TODO: random model ?
+        BlockModel blockModel = variant.getModels().get(w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
         float lightValue = chunk.getLightValue(w, x, y, z);
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {
@@ -132,6 +123,22 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         }
     }
 
+    private BlockVariant getVariant(World w, Block b, int x, int y, int z)
+    {
+        BlockVariant variant = null;
+        for(BlockVariant v : blockVariants)
+        {
+            if(v.getBlockState() == null && variant == null)
+                variant = v;
+            if(v.getBlockState() != null)
+                if(w.getBlockState(x, y, z, v.getBlockState()) == v.getBlockStateValue())
+                {
+                    variant = v;
+                }
+        }
+        return variant;
+    }
+
     private TextureIcon getTexture(BlockModel blockModel, BlockVariant variant, String texture)
     {
         if(texture == null)
@@ -150,5 +157,14 @@ public class BlockModelRenderer extends AbstractBlockRenderer
             }
         }
         return icons.get(variant).get(texture);
+    }
+
+    @Override
+    public boolean shouldRenderInPass(EnumRenderPass currentPass, World w, Block b, int x, int y, int z)
+    {
+        BlockVariant variant = getVariant(w, b, x, y, z);
+        if(variant == null)
+            return false;
+        return currentPass == variant.getPass();
     }
 }

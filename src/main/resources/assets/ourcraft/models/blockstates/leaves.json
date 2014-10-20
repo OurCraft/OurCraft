@@ -1,7 +1,9 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "leaves" }
+    "variants": 
+    {
+        "normal": 
+        [
+            { "model": "leaves", "renderPass":"alpha" }
         ]
     }
 }

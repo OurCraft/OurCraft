@@ -3,7 +3,7 @@
     {
         "normal": 
         [
-            { "model": "bedrock" }
+            { "model": "power_source", "renderPass": "alpha" }
         ]
     }
 }

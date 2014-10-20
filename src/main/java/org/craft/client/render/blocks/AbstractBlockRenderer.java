@@ -158,4 +158,6 @@ public abstract class AbstractBlockRenderer
         buffer.addIndex(0);
         buffer.setOffsetToEnd();
     }
+
+    public abstract boolean shouldRenderInPass(EnumRenderPass currentPass, World w, Block b, int x, int y, int z);
 }

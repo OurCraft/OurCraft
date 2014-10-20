@@ -111,4 +111,10 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
         startPos.dispose();
     }
 
+    @Override
+    public boolean shouldRenderInPass(EnumRenderPass currentPass, World w, Block b, int x, int y, int z)
+    {
+        return b.shouldRenderInPass(currentPass);
+    }
+
 }

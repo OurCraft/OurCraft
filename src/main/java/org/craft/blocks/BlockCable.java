@@ -6,7 +6,7 @@ import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
-public class BlockCable extends Block
+public class BlockCable extends Block implements IPowerableBlock
 {
 
     private static AABB selectionBB;
@@ -61,10 +61,10 @@ public class BlockCable extends Block
         Block eastBlock = world.getBlockNextTo(x, y, z, EnumSide.EAST);
         Block westBlock = world.getBlockNextTo(x, y, z, EnumSide.WEST);
 
-        int northFlag = northBlock == this ? 1 << 0 : 0;
-        int southFlag = southBlock == this ? 1 << 1 : 0;
-        int eastFlag = eastBlock == this ? 1 << 2 : 0;
-        int westFlag = westBlock == this ? 1 << 3 : 0;
+        int northFlag = northBlock instanceof IPowerableBlock ? 1 << 0 : 0;
+        int southFlag = southBlock instanceof IPowerableBlock ? 1 << 1 : 0;
+        int eastFlag = eastBlock instanceof IPowerableBlock ? 1 << 2 : 0;
+        int westFlag = westBlock instanceof IPowerableBlock ? 1 << 3 : 0;
         int fullFlag = (northFlag | southFlag | eastFlag | westFlag);
         world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), false);
         world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.getFromValue(world.getDirectElectricPowerAt(x, y, z) - 1), false);

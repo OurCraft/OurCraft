@@ -3,7 +3,7 @@
     {
         "normal": 
         [
-            { "model": "dirt_slab" }
+            { "model": "dirt_slab", "renderPass":"alpha" }
         ]
     }
 }

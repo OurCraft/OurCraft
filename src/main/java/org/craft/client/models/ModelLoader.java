@@ -60,6 +60,8 @@ public class ModelLoader
                 JsonObject model = array.get(0).getAsJsonObject();
                 variant.addBlockModel(loadModel(variantFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + model.get("model").getAsString() + ".json")), blockMap));
 
+                if(model.has("renderPass"))
+                    variant.setPass(EnumRenderPass.valueOf(model.get("renderPass").getAsString().toUpperCase()));
                 // TODO: rotations
             }
 

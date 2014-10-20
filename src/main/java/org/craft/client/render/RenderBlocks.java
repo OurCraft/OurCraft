@@ -183,9 +183,14 @@ public class RenderBlocks
                                     for(int z = 0; z < 16; z++ )
                                     {
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                        if(b != null && b.shouldRender() && b.shouldRenderInPass(currentPass))
+                                        if(b != null && b.shouldRender())
                                         {
-                                            getRenderer(b).render(renderEngine, buffer, w, b, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
+                                            AbstractBlockRenderer renderer = getRenderer(b);
+                                            int fx = x + c.getCoords().x * 16;
+                                            int fy = y + c.getCoords().y * 16;
+                                            int fz = z + c.getCoords().z * 16;
+                                            if(renderer != null && renderer.shouldRenderInPass(currentPass, w, b, fx, fy, fz))
+                                                renderer.render(renderEngine, buffer, w, b, fx, fy, fz);
                                         }
                                     }
                                 }
@@ -201,14 +206,21 @@ public class RenderBlocks
                                     for(int z = 0; z < 16; z++ )
                                     {
                                         Block b = c.getBlock(w, x + c.getCoords().x * 16, y + c.getCoords().y * 16, z + c.getCoords().z * 16);
-                                        if(b != null && b.shouldRender() && b.shouldRenderInPass(currentPass))
+                                        if(b != null && b.shouldRender())
                                         {
-                                            BlockRenderInfos infos = new BlockRenderInfos();
-                                            infos.block = b;
-                                            infos.x = x + c.getCoords().x * 16;
-                                            infos.y = y + c.getCoords().y * 16;
-                                            infos.z = z + c.getCoords().z * 16;
-                                            infosList.add(infos);
+                                            AbstractBlockRenderer renderer = getRenderer(b);
+                                            int fx = x + c.getCoords().x * 16;
+                                            int fy = y + c.getCoords().y * 16;
+                                            int fz = z + c.getCoords().z * 16;
+                                            if(renderer != null && renderer.shouldRenderInPass(currentPass, w, b, fx, fy, fz))
+                                            {
+                                                BlockRenderInfos infos = new BlockRenderInfos();
+                                                infos.block = b;
+                                                infos.x = x + c.getCoords().x * 16;
+                                                infos.y = y + c.getCoords().y * 16;
+                                                infos.z = z + c.getCoords().z * 16;
+                                                infosList.add(infos);
+                                            }
                                         }
                                     }
                                 }

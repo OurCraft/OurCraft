@@ -1,7 +1,9 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "rose" }
+    "variants": 
+    {
+        "normal": 
+        [
+            { "model": "rose", "renderPass":"alpha" }
         ]
     }
 }

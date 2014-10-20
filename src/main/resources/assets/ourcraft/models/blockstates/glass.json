@@ -1,7 +1,9 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "glass" }
+    "variants": 
+    {
+        "normal": 
+        [
+            { "model": "glass", "renderPass":"alpha" }
         ]
     }
 }

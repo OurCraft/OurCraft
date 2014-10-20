@@ -1,7 +1,9 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "grass" }
+    "variants": 
+    {
+        "normal": 
+        [
+            { "model": "grass", "renderPass":"normal" }
         ]
     }
 }
