@@ -14,12 +14,14 @@ public class Stitcher
     private int                      tileWidth;
     private int                      tileHeight;
     private BufferedImage            emptySlotImage;
+    private boolean                  putInCorner;
 
-    public Stitcher(BufferedImage emptyImage)
+    public Stitcher(BufferedImage emptyImage, boolean putInCorner)
     {
         this.emptySlotImage = emptyImage;
         slots = new ArrayList<Slot>();
         imgs = new ArrayList<BufferedImage>();
+        this.putInCorner = putInCorner;
         tileWidth = -1;
         tileHeight = -1;
     }
@@ -44,11 +46,11 @@ public class Stitcher
         }
         else if((img.getWidth() != tileWidth || img.getHeight() != tileHeight))
         {
-            if(!forceResize)
+            if(!forceResize && !putInCorner)
             {
                 Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
             }
-            else
+            else if(forceResize)
             {
                 img = ImageUtils.resize(img, tileWidth, tileHeight);
             }

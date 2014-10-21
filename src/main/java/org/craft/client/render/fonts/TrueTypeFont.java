@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 
-import org.craft.client.*;
-import org.craft.client.render.*;
-
 public class TrueTypeFont
 {
     /** Array that holds necessary information about the font characters */
@@ -14,23 +11,18 @@ public class TrueTypeFont
 
     /** Map of user defined font characters (Character <-> IntObject) */
     private Map<Character, CharProperties> customChars         = new HashMap<Character, CharProperties>();
+
     /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean                        antiAlias;
 
     /** Font's size */
     private int                            fontSize            = 0;
 
+    /** Font's width */
+    private int                            fontWidth;
+
     /** Font's height */
     private int                            fontHeight          = 0;
-
-    /** Texture used to cache the font 0-255 characters */
-    private Texture                        fontTexture;
-
-    /** Default font texture width */
-    private int                            textureWidth        = 512;
-
-    /** Default font texture height */
-    private int                            textureHeight       = 512;
 
     /** A reference to Java's AWT Font that we create our font texture from */
     private Font                           font;
@@ -65,7 +57,7 @@ public class TrueTypeFont
         BufferedImage tempfontImage = new BufferedImage(1, 1,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) tempfontImage.getGraphics();
-        if(antiAlias == true)
+        if(antiAlias)
         {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
@@ -89,7 +81,7 @@ public class TrueTypeFont
         fontImage = new BufferedImage(charwidth, charheight,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics2D gt = (Graphics2D) fontImage.getGraphics();
-        if(antiAlias == true)
+        if(antiAlias)
         {
             gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
@@ -113,75 +105,37 @@ public class TrueTypeFont
      */
     private void createSet(char[] customCharsArray)
     {
-        if(customCharsArray != null && customCharsArray.length > 0)
-        {
-            textureWidth *= 2;
-        }
-
-        BufferedImage imgTemp = new BufferedImage(textureWidth, textureHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = (Graphics2D) imgTemp.getGraphics();
-
-        g.setColor(new Color(255, 255, 255, 1));
-        g.fillRect(0, 0, textureWidth, textureHeight);
-
-        int rowHeight = 0;
-        int positionX = 0;
-        int positionY = 0;
-
         int customCharsLength = (customCharsArray != null) ? customCharsArray.length : 0;
 
         for(int i = 0; i < 256 + customCharsLength; i++ )
         {
-
             // get 0-255 characters and then custom characters
             char ch = (i < 256) ? (char) i : customCharsArray[i - 256];
 
             BufferedImage fontImage = getFontImage(ch);
 
-            CharProperties newIntObject = new CharProperties();
+            CharProperties charProps = new CharProperties();
 
-            newIntObject.width = fontImage.getWidth();
-            newIntObject.height = fontImage.getHeight();
+            charProps.width = fontImage.getWidth();
+            charProps.height = fontImage.getHeight();
 
-            if(positionX + newIntObject.width >= textureWidth)
+            if(charProps.height > fontHeight)
             {
-                positionX = 0;
-                positionY += rowHeight;
-                rowHeight = 0;
+                fontHeight = charProps.height;
             }
 
-            newIntObject.x = positionX;
-            newIntObject.y = positionY;
-
-            if(newIntObject.height > fontHeight)
+            if(charProps.width > fontWidth)
             {
-                fontHeight = newIntObject.height;
+                fontWidth = charProps.width;
             }
-
-            if(newIntObject.height > rowHeight)
-            {
-                rowHeight = newIntObject.height;
-            }
-
-            // Draw it to buffer!
-            g.drawImage(fontImage, positionX, positionY, null);
-
-            positionX += newIntObject.width;
-
             if(i < 256)
-                charPropertiesArray[i] = newIntObject;
+                charPropertiesArray[i] = charProps;
             else
-                customChars.put(new Character(ch), newIntObject);
+                customChars.put(new Character(ch), charProps);
 
             //Force clean tmpImg
-            fontImage = null;
+            fontImage.flush();
         }
-        fontTexture = OpenGLHelper.loadTexture(imgTemp);
-    }
-
-    public Texture getTexture()
-    {
-        return fontTexture;
     }
 
     public float getCharWidth(char c)
@@ -193,7 +147,7 @@ public class TrueTypeFont
             charProperty = customChars.get(c);
         if(charProperty != null)
             return charProperty.width;
-        return fontHeight;
+        return fontWidth;
     }
 
     public float getCharHeight(char c)
@@ -209,10 +163,13 @@ public class TrueTypeFont
         return fontHeight;
     }
 
-}
+    public String getName()
+    {
+        return font.getFontName();
+    }
 
-class CharProperties
-{
-    public int     width, height, x, y;
-    public Texture texture;
+    private static class CharProperties
+    {
+        public int width, height;
+    }
 }

@@ -28,7 +28,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     private Texture                     texture;
     private BufferedImage               nullImage;
     private BufferedImage               emptyImage;
-    private boolean                     lenient;
+    private boolean                     forceResize;
     private Stitcher                    stitcher;
     private ArrayList<TextureMapSprite> registredSprites;
 
@@ -43,16 +43,21 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     /**
      * Creates TextureMap with given loader and base
      */
-    public TextureMap(ResourceLoader loader, ResourceLocation base, boolean lenientOnSizes)
+    public TextureMap(ResourceLoader loader, ResourceLocation base, boolean resize)
     {
-        this.lenient = lenientOnSizes;
+        this(loader, base, resize, false);
+    }
+
+    public TextureMap(ResourceLoader loader, ResourceLocation base, boolean resize, boolean putInCorner)
+    {
+        this.forceResize = resize;
         this.loader = loader;
         this.base = base;
 
         registredSprites = new ArrayList<TextureMapSprite>();
 
         initNullAndEmptyImages();
-        stitcher = new Stitcher(emptyImage);
+        stitcher = new Stitcher(emptyImage, putInCorner);
     }
 
     /**
@@ -189,7 +194,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
             {
                 img = sprite.rawImage;
             }
-            indexes.put(stitcher.addImage(img, lenient), icon);
+            indexes.put(stitcher.addImage(img, forceResize), icon);
         }
 
         BufferedImage stitchedImage = stitcher.stitch();

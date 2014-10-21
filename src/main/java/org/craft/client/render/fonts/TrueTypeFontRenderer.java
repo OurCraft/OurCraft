@@ -9,28 +9,19 @@ import org.craft.resources.*;
 public class TrueTypeFontRenderer extends FontRenderer
 {
 
-    private static TrueTypeFont font;
+    private TrueTypeFont font;
 
     public TrueTypeFontRenderer(String fontName)
     {
-        super(createAtlas(font = new TrueTypeFont(new Font("Times New Roman", Font.PLAIN, 16), false)), genChars());
-    }
-
-    private static String genChars()
-    {
-        String s = "";
+        super(null, null);
+        supportedChars = "";
         for(char c = 0; c <= 256; c++ )
-            s += c;
-        return s;
-    }
+            supportedChars += c;
+        this.font = new TrueTypeFont(new Font(fontName, Font.PLAIN, 16), false, supportedChars.toCharArray());
+        TextureMap map = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("Font_" + fontName), true);
 
-    private static TextureAtlas createAtlas(TrueTypeFont ttf)
-    {
-        TextureMap map = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation(""), true);
-
-        String s = genChars();
-        for(char c : s.toCharArray())
-            map.generateIcon(ttf.getFontImage(c));
+        for(char c : supportedChars.toCharArray())
+            map.generateIcon(font.getFontImage(c));
         try
         {
             map.compile();
@@ -39,9 +30,7 @@ public class TrueTypeFontRenderer extends FontRenderer
         {
             e.printStackTrace();
         }
-        Texture texture = map.getTexture();
-        TextureAtlas atlas = new TextureAtlas(texture, map.getTileWidth(), map.getTileHeight());
-        return atlas;
+        atlas = new TextureAtlas(map.getTexture(), map.getTileWidth(), map.getTileHeight());
     }
 
     @Override
@@ -58,12 +47,7 @@ public class TrueTypeFontRenderer extends FontRenderer
 
     public double getCharSpacing(char c, char next)
     {
-        return 2;
-    }
-
-    public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
-    {
-        super.drawString(text, color, xo, yo, renderEngine);
+        return 1;
     }
 
 }
