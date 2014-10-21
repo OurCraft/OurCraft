@@ -1,16 +1,11 @@
 package org.craft.client.render.fonts;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.*;
+import java.awt.image.*;
+import java.util.*;
 
-import org.craft.client.OpenGLHelper;
-import org.craft.client.render.Texture;
+import org.craft.client.*;
+import org.craft.client.render.*;
 
 public class TrueTypeFont
 {
@@ -64,7 +59,7 @@ public class TrueTypeFont
      * 
      * @return A BufferedImage containing the character
      */
-    private BufferedImage getFontImage(char ch)
+    public BufferedImage getFontImage(char ch)
     {
         // Create a temporary image to extract the character's size
         BufferedImage tempfontImage = new BufferedImage(1, 1,
@@ -212,25 +207,6 @@ public class TrueTypeFont
         if(charProperty != null)
             return charProperty.height;
         return fontHeight;
-    }
-
-    public Texture getCharTexture(char c)
-    {
-        Texture result = null;
-        CharProperties charProperty = null;
-        if(c < 256)
-            charProperty = charPropertiesArray[c];
-        else
-            charProperty = customChars.get(c);
-
-        result = charProperty.texture;
-        if(result == null)
-        {
-            charProperty.texture = result;
-            result = OpenGLHelper.loadTexture(getFontImage(c));
-        }
-
-        return result;
     }
 
 }

@@ -144,7 +144,7 @@ public class OurCraft implements Runnable, Game
             Display.update();
 
             mouseHandler = new MouseHandler();
-            //fontRenderer = new TrueTypeFontRenderer("Consolas");
+            fontRenderer = new TrueTypeFontRenderer("Consolas");
 
             //Init OpenGL CapNames for crash report system
             OpenGLHelper.loadCapNames();

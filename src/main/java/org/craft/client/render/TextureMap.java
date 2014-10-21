@@ -14,15 +14,23 @@ import org.craft.utils.*;
 public class TextureMap implements IconGenerator, ITextureObject, IDisposable
 {
 
+    public static class TextureMapSprite
+    {
+        public ResourceLocation location;
+        public TextureIcon      icon;
+        public BufferedImage    rawImage;
+
+        public boolean          useRawImage = false;
+    }
+
     private ResourceLoader              loader;
     private ResourceLocation            base;
-    private ArrayList<TextureIcon>      registredIcons;
-    private ArrayList<ResourceLocation> registredLocations;
     private Texture                     texture;
     private BufferedImage               nullImage;
     private BufferedImage               emptyImage;
     private boolean                     lenient;
     private Stitcher                    stitcher;
+    private ArrayList<TextureMapSprite> registredSprites;
 
     /**
      * Creates TextureMap with given loader and base
@@ -40,8 +48,8 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         this.lenient = lenientOnSizes;
         this.loader = loader;
         this.base = base;
-        registredIcons = new ArrayList<TextureIcon>();
-        registredLocations = new ArrayList<ResourceLocation>();
+
+        registredSprites = new ArrayList<TextureMapSprite>();
 
         initNullAndEmptyImages();
         stitcher = new Stitcher(emptyImage);
@@ -122,11 +130,32 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     @Override
     public TextureIcon generateIcon(ResourceLocation loc)
     {
-        if(registredLocations.contains(loc))
-            return registredIcons.get(registredLocations.indexOf(loc));
+        for(TextureMapSprite sprite : registredSprites)
+        {
+            if(!sprite.useRawImage && sprite.location.equals(loc))
+                return sprite.icon;
+        }
+        TextureMapSprite sprite = new TextureMapSprite();
         TextureMapIcon icon = new TextureMapIcon(0, 0, 0, 0, 0, 0);
-        registredIcons.add(icon);
-        registredLocations.add(loc);
+        sprite.location = loc;
+        sprite.icon = icon;
+        registredSprites.add(sprite);
+        return icon;
+    }
+
+    public TextureIcon generateIcon(BufferedImage img)
+    {
+        for(TextureMapSprite sprite : registredSprites)
+        {
+            if(sprite.useRawImage && sprite.rawImage.equals(img))
+                return sprite.icon;
+        }
+        TextureMapSprite sprite = new TextureMapSprite();
+        TextureMapIcon icon = new TextureMapIcon(0, 0, 0, 0, 0, 0);
+        sprite.rawImage = img;
+        sprite.icon = icon;
+        sprite.useRawImage = true;
+        registredSprites.add(sprite);
         return icon;
     }
 
@@ -136,22 +165,31 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     public void compile() throws Exception
     {
         HashMap<Integer, TextureIcon> indexes = new HashMap<Integer, TextureIcon>();
-        for(int i = 0; i < registredIcons.size(); i++ )
+        for(int i = 0; i < registredSprites.size(); i++ )
         {
-            ResourceLocation loc = completeLocation(registredLocations.get(i));
-            TextureIcon icon = registredIcons.get(i);
-            try
-            {
-                AbstractResource res = loader.getResource(loc);
-                BufferedImage img = ImageUtils.loadImage(res);
-                indexes.put(stitcher.addImage(img, lenient), icon);
-            }
-            catch(Exception e)
-            {
-                Log.error("Unable to find icon: /" + loc.getFullPath());
-                indexes.put(stitcher.addImage(nullImage, true), icon);
-            }
+            TextureMapSprite sprite = registredSprites.get(i);
 
+            TextureIcon icon = sprite.icon;
+            BufferedImage img = null;
+            if(!sprite.useRawImage)
+            {
+                ResourceLocation loc = completeLocation(sprite.location);
+                try
+                {
+                    AbstractResource res = loader.getResource(loc);
+                    img = ImageUtils.loadImage(res);
+                }
+                catch(Exception e)
+                {
+                    Log.error("Unable to find icon: /" + loc.getFullPath());
+                    img = nullImage;
+                }
+            }
+            else
+            {
+                img = sprite.rawImage;
+            }
+            indexes.put(stitcher.addImage(img, lenient), icon);
         }
 
         BufferedImage stitchedImage = stitcher.stitch();
@@ -159,13 +197,14 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         while(indexesIt.hasNext())
         {
             int index = indexesIt.next();
-            TextureIcon icon = indexes.get(index);
-            ((TextureMapIcon) icon).setMinU(stitcher.getMinU(index));
-            ((TextureMapIcon) icon).setMinV(stitcher.getMinV(index));
-            ((TextureMapIcon) icon).setMaxU(stitcher.getMaxU(index));
-            ((TextureMapIcon) icon).setMaxV(stitcher.getMaxV(index));
-            ((TextureMapIcon) icon).setWidth(stitcher.getWidth(index));
-            ((TextureMapIcon) icon).setHeight(stitcher.getHeight(index));
+            TextureMapSprite sprite = registredSprites.get(index);
+            TextureMapIcon icon = (TextureMapIcon) sprite.icon;
+            icon.setMinU(stitcher.getMinU(index));
+            icon.setMinV(stitcher.getMinV(index));
+            icon.setMaxU(stitcher.getMaxU(index));
+            icon.setMaxV(stitcher.getMaxV(index));
+            icon.setWidth(stitcher.getWidth(index));
+            icon.setHeight(stitcher.getHeight(index));
         }
 
         if(false) // TODO: needs to know if we are in a debug mode
@@ -193,10 +232,11 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
 
     public TextureIcon get(ResourceLocation loc)
     {
-        // Log.message("Trying to get " + loc.getFullPath());
-        if(registredLocations.indexOf(loc) >= 0)
-            return registredIcons.get(registredLocations.indexOf(loc));
-        // Log.message(" But failed :(");
+        for(TextureMapSprite sprite : registredSprites)
+        {
+            if(!sprite.useRawImage && sprite.location.equals(loc))
+                return sprite.icon;
+        }
         return new TextureMapIcon(0, 0, 1, 1, 16, 16);
     }
 
@@ -209,6 +249,16 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     {
         stitcher.setTileWidth(w);
         stitcher.setTileHeight(h);
+    }
+
+    public int getTileWidth()
+    {
+        return stitcher.getTileWidth();
+    }
+
+    public int getTileHeight()
+    {
+        return stitcher.getTileHeight();
     }
 
     private class TextureMapIcon implements TextureIcon
