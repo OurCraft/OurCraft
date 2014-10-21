@@ -19,6 +19,7 @@ import org.craft.client.network.*;
 import org.craft.client.render.*;
 import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
+import org.craft.client.sound.*;
 import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.items.*;
@@ -45,6 +46,7 @@ import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.util.scheduler.*;
 
 public class OurCraft implements Runnable, Game
 {
@@ -94,6 +96,7 @@ public class OurCraft implements Runnable, Game
     private ClientNetHandler         netHandler;
     private WorldLoader              worldLoader;
     private OurClassLoader           classLoader;
+    private SoundEngine              sndEngine;
 
     public OurCraft(OurClassLoader cL)
     {
@@ -152,6 +155,8 @@ public class OurCraft implements Runnable, Game
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             this.initSponge();
+
+            sndEngine = new SoundEngine();
 
             Blocks.init();
             BlockStates.init();
@@ -971,5 +976,17 @@ public class OurCraft implements Runnable, Game
     public RenderBlocks getRenderBlocks()
     {
         return renderBlocks;
+    }
+
+    public SoundEngine getSoundEngine()
+    {
+        return sndEngine;
+    }
+
+    @Override
+    public Scheduler getScheduler()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -181,4 +181,18 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
 
     }
 
+    @Override
+    public void interact()
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void interactWith(ItemStack itemStack)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }

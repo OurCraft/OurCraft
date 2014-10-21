@@ -10,6 +10,7 @@ import org.craft.spongeimpl.math.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.spongepowered.api.entity.*;
+import org.spongepowered.api.item.inventory.*;
 import org.spongepowered.api.math.*;
 
 public class Entity implements org.spongepowered.api.entity.Entity
@@ -405,6 +406,20 @@ public class Entity implements org.spongepowered.api.entity.Entity
     public void remove()
     {
         setDead();
+    }
+
+    @Override
+    public void interact()
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void interactWith(ItemStack itemStack)
+    {
+        // TODO Auto-generated method stub
+
     }
 
 }

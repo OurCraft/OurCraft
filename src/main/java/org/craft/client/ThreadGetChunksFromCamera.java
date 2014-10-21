@@ -26,24 +26,27 @@ public class ThreadGetChunksFromCamera extends Thread
                 int ox = (int) renderEngine.getRenderViewEntity().getX();
                 int oy = (int) renderEngine.getRenderViewEntity().getY();
                 int oz = (int) renderEngine.getRenderViewEntity().getZ();
-                for(int x = -renderDistance; x < renderDistance; x++ )
+                for(int radius = 0; radius < renderDistance; radius++ )
                 {
-                    yLoop: for(int y = -renderDistance; y < renderDistance; y++ )
+                    for(int x = -radius; x < radius; x++ )
                     {
-                        for(int z = -renderDistance; z < renderDistance; z++ )
+                        yLoop: for(int y = -radius; y < radius; y++ )
                         {
-                            int fx = x * 16 + ox;
-                            int fy = y * 16 + oy;
-                            int fz = z * 16 + oz;
+                            for(int z = -radius; z < radius; z++ )
+                            {
+                                int fx = x * 16 + ox;
+                                int fy = y * 16 + oy;
+                                int fz = z * 16 + oz;
 
-                            if(fy < 0)
-                                continue yLoop;
-                            if(clientWorld != null)
-                                synchronized(clientWorld)
-                                {
-                                    if(!clientWorld.doesChunkExists((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f)))
-                                        clientWorld.createChunk((int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
-                                }
+                                if(fy < 0)
+                                    continue yLoop;
+                                if(clientWorld != null)
+                                    synchronized(clientWorld)
+                                    {
+                                        if(!clientWorld.doesChunkExists((int) Math.floor(fx / 16f), (int) Math.floor(fy / 16f), (int) Math.floor(fz / 16f)))
+                                            clientWorld.createChunk((int) Math.floor(fx / 16f), (int) Math.floor(fy / 16f), (int) Math.floor(fz / 16f));
+                                    }
+                            }
                         }
                     }
                 }

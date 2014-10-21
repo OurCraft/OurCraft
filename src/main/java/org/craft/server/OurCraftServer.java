@@ -28,6 +28,7 @@ import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.util.command.*;
+import org.spongepowered.api.util.scheduler.*;
 
 public class OurCraftServer implements Game, CommandSource
 {
@@ -340,5 +341,12 @@ public class OurCraftServer implements Game, CommandSource
     public void shutdown()
     {
         running = false;
+    }
+
+    @Override
+    public Scheduler getScheduler()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

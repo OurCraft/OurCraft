@@ -5,7 +5,7 @@ import java.util.*;
 
 import org.craft.utils.*;
 
-public class Vector3 extends AbstractReference implements IDisposable
+public class Vector3 extends AbstractReference implements IDisposable, IBufferWritable
 {
 
     public static final Vector3 NULL  = new Vector3(0, 0, 0);
