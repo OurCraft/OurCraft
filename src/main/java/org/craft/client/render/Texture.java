@@ -11,11 +11,11 @@ import org.lwjgl.opengl.*;
 public class Texture implements ITextureObject, IDisposable
 {
 
-    private int texID;
-    private int width;
-    private int height;
+    private int        texID;
+    private int        width;
+    private int        height;
     private ByteBuffer pixels;
-    
+
     /**
      * Creates a texture with given width, height and pixel data
      */
@@ -40,6 +40,9 @@ public class Texture implements ITextureObject, IDisposable
         glBindTexture(GL_TEXTURE_2D, texID);
     }
 
+    /**
+     * Returns corresponding OpenGL texture
+     */
     public int getTextureID()
     {
         return texID;
@@ -50,16 +53,25 @@ public class Texture implements ITextureObject, IDisposable
         glDeleteTextures(texID);
     }
 
+    /**
+     * Returns width of this texture (in pixels)
+     */
     public int getWidth()
     {
         return width;
     }
 
+    /**
+     * Returns height of this texture (in pixels)
+     */
     public int getHeight()
     {
         return height;
     }
-    
+
+    /**
+     * Returns a buffer containing all pixels in RGBA format
+     */
     public ByteBuffer getPixels()
     {
         return pixels;

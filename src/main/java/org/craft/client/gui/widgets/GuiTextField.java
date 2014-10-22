@@ -74,13 +74,13 @@ public class GuiTextField extends GuiWidget
                 offset2 = offset + getMaxDisplayableChars();
             }
             int delta = (int) ((offset) * (font.getCharWidth(' ') + font.getCharSpacing(' ', ' ')));
-            float cursorOffset = font.getTextLength(txt.substring(0, cursorPos)) - delta;
+            float cursorOffset = font.getTextWidth(txt.substring(0, cursorPos)) - delta;
             if(secondCursorPos < 0)
                 secondCursorPos = 0;
             if(secondCursorPos > txt.length())
                 secondCursorPos = txt.length();
             String toDisplay = txt.substring(offset, Math.max(0, Math.min(offset2, txt.length())));
-            float cursor2Offset = font.getTextLength(txt.substring(0, secondCursorPos)) - delta;
+            float cursor2Offset = font.getTextWidth(txt.substring(0, secondCursorPos)) - delta;
             font.drawShadowedString(toDisplay, color, (int) (getX() + 4), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
             int cx = (int) (getX() + 4 + cursorOffset);
 
@@ -110,6 +110,9 @@ public class GuiTextField extends GuiWidget
         }
     }
 
+    /**
+     * Returns the number of displayable chars in this field
+     */
     private int getMaxDisplayableChars()
     {
         return (int) ((getWidth() - 8) / (font.getCharWidth(' ') + font.getCharSpacing(' ', ' ')));
@@ -133,7 +136,7 @@ public class GuiTextField extends GuiWidget
             for(; index < txt.length(); index++ )
             {
                 String subtxt = txt.substring(0, index);
-                if(indexX < font.getTextLength(subtxt))
+                if(indexX < font.getTextWidth(subtxt))
                     break;
             }
             this.cursorPos = index;
@@ -141,6 +144,9 @@ public class GuiTextField extends GuiWidget
         return true;
     }
 
+    /**
+     * Increments cursor counter
+     */
     public void updateCursorCounter()
     {
         cursorCounter++ ;
@@ -188,41 +194,50 @@ public class GuiTextField extends GuiWidget
             else if(id == Keyboard.KEY_DELETE)
             {
                 if(cursorPos == secondCursorPos)
-                    deleteFromCursor(cursorPos, cursorPos + 1);
+                    deleteBetweenPos(cursorPos, cursorPos + 1);
                 else
-                    deleteFromCursor(cursorPos, secondCursorPos);
+                    deleteBetweenPos(cursorPos, secondCursorPos);
             }
             else if(id == Keyboard.KEY_BACK)
             {
                 if(cursorPos == secondCursorPos)
-                    deleteFromCursor(cursorPos - 1, cursorPos);
+                    deleteBetweenPos(cursorPos - 1, cursorPos);
                 else
-                    deleteFromCursor(cursorPos, secondCursorPos);
+                    deleteBetweenPos(cursorPos, secondCursorPos);
             }
             else if(isValid(c))
             {
-                deleteFromCursor(cursorPos, secondCursorPos);
+                deleteBetweenPos(cursorPos, secondCursorPos);
                 insertFromCursorPos(cursorPos, cursorPos, Character.toString(c));
             }
         }
         return focused;
     }
 
+    /**
+     * Returns true if given char is valid to be written
+     */
     private boolean isValid(char c)
     {
         return c >= ' ' && c != 127;
     }
 
+    /**
+     * Inserts given string that replaces text between pos0 and pos1
+     */
     private void insertFromCursorPos(int pos0, int pos1, String string)
     {
-        deleteFromCursor(pos0, pos1);
+        deleteBetweenPos(pos0, pos1);
         String newText = txt.substring(0, cursorPos) + string + txt.substring(cursorPos, txt.length());
         txt = newText;
         cursorPos += string.length();
         secondCursorPos = cursorPos;
     }
 
-    private void deleteFromCursor(int pos0, int pos1)
+    /**
+     * Deletes text between pos0 and pos1
+     */
+    private void deleteBetweenPos(int pos0, int pos1)
     {
         int min = Math.min(pos0, pos1);
         int max = Math.max(pos0, pos1);
@@ -271,6 +286,9 @@ public class GuiTextField extends GuiWidget
         }
     }
 
+    /**
+     * Returns text written in this field
+     */
     public String getText()
     {
         return txt;

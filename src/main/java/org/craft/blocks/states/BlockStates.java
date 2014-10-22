@@ -5,11 +5,29 @@ import java.util.*;
 public final class BlockStates
 {
 
-    public static BlockState                                                   orientation;
-    public static BlockState                                                   cableConnexions;
-    public static BaseBlockState                                               electricPower;
+    /**
+     * Block state handling logs orientation
+     */
+    public static BlockState                                                   logOrientation;
 
+    /**
+     * Block states handling connexions between cables
+     */
+    public static BlockState                                                   cableConnexions;
+
+    /**
+     * Block state handling electric power (0-15)
+     */
+    public static BlockState                                                   electricPower;
+
+    /**
+     * Maps String representations of block states to their respective BlockState object
+     */
     public static final HashMap<String, BlockState>                            BLOCK_STATES_REGISTRY        = new HashMap<String, BlockState>();
+
+    /**
+     * Maps String representations of block states values to their respective IBlockStateValue instance.
+     */
     public static final HashMap<BlockState, HashMap<String, IBlockStateValue>> BLOCK_STATES_VALUES_REGISTRY = new HashMap<BlockState, HashMap<String, IBlockStateValue>>();
 
     /**
@@ -17,10 +35,10 @@ public final class BlockStates
      */
     public static void init()
     {
-        registerState(orientation = new BaseBlockState("orientation"));
+        registerState(logOrientation = new BaseBlockState("orientation"));
         for(EnumLogBlockStates state : EnumLogBlockStates.values())
         {
-            registerValue(orientation, state);
+            registerValue(logOrientation, state);
         }
 
         registerState(cableConnexions = new BaseBlockState("connexions"));

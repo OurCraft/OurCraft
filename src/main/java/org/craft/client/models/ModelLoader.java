@@ -26,16 +26,25 @@ public class ModelLoader
         models = new HashMap<ResourceLocation, BlockModel>();
     }
 
+    /**
+     * Generates a new block renderer from given ResourceLocation. Actual resource will be get from the assets loader
+     */
     public AbstractBlockRenderer createRenderer(ResourceLocation modelFile, IconGenerator blockMap) throws Exception
     {
         return createRenderer(OurCraft.getOurCraft().getAssetsLoader().getResource(modelFile), blockMap);
     }
 
+    /**
+     * Generates a new block renderer from given Resource
+     */
     public AbstractBlockRenderer createRenderer(AbstractResource modelFile, IconGenerator blockMap) throws Exception
     {
         return new BlockModelRenderer(loadVariants(modelFile, blockMap));
     }
 
+    /**
+     * Load a list of block variant from given resource
+     */
     public List<BlockVariant> loadVariants(AbstractResource variantFile, IconGenerator blockMap) throws Exception
     {
         ArrayList<BlockVariant> variants = Lists.newArrayList();
@@ -70,6 +79,9 @@ public class ModelLoader
         return variants;
     }
 
+    /**
+     * Loads model from given resource.<br/>Loaded models are then cached
+     */
     public BlockModel loadModel(AbstractResource modelFile, IconGenerator blockMap) throws Exception
     {
         if(!models.containsKey(modelFile.getResourceLocation()))

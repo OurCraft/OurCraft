@@ -2,6 +2,9 @@ package org.craft.client.models;
 
 import java.util.*;
 
+/**
+ * UNDOCUMENTED: System far from being done and/or even kept
+ */
 public class ModelBase
 {
 

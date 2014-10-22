@@ -5,7 +5,6 @@ import java.io.*;
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
-import org.craft.client.render.fonts.*;
 import org.craft.utils.*;
 
 public class GuiDeleteWorld extends Gui
@@ -33,7 +32,7 @@ public class GuiDeleteWorld extends Gui
     public void init()
     {
         String title = I18n.format("menu.deleteworld.title");
-        addWidget(new GuiLabel(-1, oc.getDisplayWidth() / 2 + 10 - (int) getFontRenderer().getTextLength(title) / 2, oc.getDisplayHeight() / 2 - 90, title, getFontRenderer()));
+        addWidget(new GuiLabel(-1, oc.getDisplayWidth() / 2 + 10 - (int) getFontRenderer().getTextWidth(title) / 2, oc.getDisplayHeight() / 2 - 90, title, getFontRenderer()));
         GuiButton back = new GuiButton(1, oc.getDisplayWidth() / 2 + 10, oc.getDisplayHeight() / 2 + 40, 150, 40, I18n.format("menu.back"), getFontRenderer());
         addWidget(back);
 
@@ -62,14 +61,14 @@ public class GuiDeleteWorld extends Gui
 
         String desc0 = I18n.format("menu.deleteworld.desc0");
         String desc1 = I18n.format("menu.deleteworld.desc1");
-        getFontRenderer().drawShadowedString(desc0, 0xFFFFFFFF, oc.getDisplayWidth() / 2 + 10 - (int) getFontRenderer().getTextLength(desc0) / 2, oc.getDisplayHeight() / 2 - 25, renderEngine);
-        getFontRenderer().drawShadowedString(desc1, 0xFFFFFFFF, oc.getDisplayWidth() / 2 + 10 - (int) getFontRenderer().getTextLength(desc1) / 2, oc.getDisplayHeight() / 2 - 5, renderEngine);
+        getFontRenderer().drawShadowedString(desc0, 0xFFFFFFFF, oc.getDisplayWidth() / 2 + 10 - (int) getFontRenderer().getTextWidth(desc0) / 2, oc.getDisplayHeight() / 2 - 25, renderEngine);
+        getFontRenderer().drawShadowedString(desc1, 0xFFFFFFFF, oc.getDisplayWidth() / 2 + 10 - (int) getFontRenderer().getTextWidth(desc1) / 2, oc.getDisplayHeight() / 2 - 5, renderEngine);
     }
 
     @Override
     public void update()
     {
-
+        super.update();
     }
 
 }

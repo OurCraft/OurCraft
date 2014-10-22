@@ -6,8 +6,19 @@ import org.craft.client.render.fonts.*;
 public class GuiLabel extends GuiWidget
 {
 
-    private FontRenderer font;
+    /**
+     * The text to display
+     */
     private String       txt;
+
+    /**
+     * The font to render {@link #displayText}
+     */
+    private FontRenderer font;
+
+    /**
+     * The color in which the txt must be rendered
+     */
     private int          color;
 
     public GuiLabel(int id, int x, int y, String txt, FontRenderer font)

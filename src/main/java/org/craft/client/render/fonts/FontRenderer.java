@@ -11,6 +11,9 @@ public abstract class FontRenderer implements IDisposable
     protected String       supportedChars;
     protected OpenGLBuffer buffer;
 
+    /**
+     * Creates font renderer for given supportedChars and given texture atlas
+     */
     public FontRenderer(TextureAtlas atlas, String supportedChars)
     {
         this.atlas = atlas;
@@ -18,12 +21,18 @@ public abstract class FontRenderer implements IDisposable
         this.buffer = new OpenGLBuffer();
     }
 
+    /**
+     * Draws a string with a shadow behind it
+     */
     public void drawShadowedString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
         drawString(text, 0xFF000000, xo + 1, yo + 1, renderEngine);
         drawString(text, color, xo, yo, renderEngine);
     }
 
+    /**
+     * Draws a string at given coordinates and given color
+     */
     public void drawString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
         if(text.replace(" ", "").trim().isEmpty())
@@ -58,15 +67,15 @@ public abstract class FontRenderer implements IDisposable
 
             if(c == TextFormatting.BEGINNING)
             {
-                TextFormatting format = TextFormatting.fromString(next);
+                TextFormatting format = TextFormatting.fromChar(next);
                 if(format != null)
                 {
                     String after = "";
-                    for(int j = 0; j < format.getCharsAfter(); j++ )
+                    for(int j = 0; j < format.charsAfter(); j++ )
                     {
                         after += text.charAt(j + i + 2);
                     }
-                    toSkip = format.getCharsAfter() + 1;
+                    toSkip = format.charsAfter() + 1;
                     if(format == TextFormatting.RESET)
                     {
                         obfuscated = false;
@@ -197,26 +206,44 @@ public abstract class FontRenderer implements IDisposable
             return supportedChars.indexOf(c);
     }
 
+    /**
+     * Gets spacing between given chars
+     */
     public double getCharSpacing(char c, char next)
     {
         return 0;
     }
 
+    /**
+     * Returns texture atlas used to render text
+     */
     public TextureAtlas getAtlas()
     {
         return atlas;
     }
 
+    /**
+     * Gets all supported chars by this font <b>or null if all are supported.</b> 
+     */
     public String getSupportedChars()
     {
         return supportedChars;
     }
 
+    /**
+     * Gets the width of given char
+     */
     public abstract float getCharWidth(char c);
 
+    /**
+     * Gets the height of given char
+     */
     public abstract float getCharHeight(char c);
 
-    public float getTextLength(String text)
+    /**
+     * Gets the width of given text
+     */
+    public float getTextWidth(String text)
     {
         float l = 0;
         int toSkip = 0;
@@ -233,10 +260,10 @@ public abstract class FontRenderer implements IDisposable
                 next = text.charAt(i + 1);
             if(c == TextFormatting.BEGINNING)
             {
-                TextFormatting format = TextFormatting.fromString(next);
+                TextFormatting format = TextFormatting.fromChar(next);
                 if(format != null)
                 {
-                    toSkip = format.getCharsAfter() + 1;
+                    toSkip = format.charsAfter() + 1;
                     continue;
                 }
             }

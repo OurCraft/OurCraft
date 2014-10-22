@@ -17,6 +17,9 @@ public enum EnumPowerStates implements IBlockStateValue
         this.id = "power_" + powerValue;
     }
 
+    /**
+     * Returns the int power value of this instance (0-15)
+     */
     public int powerValue()
     {
         return powerValue;
@@ -28,15 +31,20 @@ public enum EnumPowerStates implements IBlockStateValue
         return id;
     }
 
-    public static EnumPowerStates getFromValue(int i)
+    /**
+     * Returns a power state value depending on given powerValue.<br/>
+     * If powerValue <= 0 then this method returns {@link #POWER_0}<br/>
+     * If powerValue >= 15 then this method returns {@link #POWER_15}<br/>
+     */
+    public static EnumPowerStates fromPowerValue(int powerValue)
     {
-        if(i <= 0)
+        if(powerValue <= 0)
             return POWER_0;
-        if(i >= 15)
+        if(powerValue >= 15)
             return POWER_15;
         for(EnumPowerStates power : values())
         {
-            if(power.powerValue == i)
+            if(power.powerValue == powerValue)
                 return power;
         }
         return POWER_0;

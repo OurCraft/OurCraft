@@ -2,7 +2,6 @@ package org.craft.client.gui;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
-import org.craft.client.render.fonts.*;
 import org.lwjgl.input.*;
 
 public class GuiPauseMenu extends Gui
@@ -41,7 +40,7 @@ public class GuiPauseMenu extends Gui
     @Override
     public void update()
     {
-
+        super.update();
     }
 
     public void keyReleased(int id, char c)

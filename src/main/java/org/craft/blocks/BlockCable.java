@@ -67,15 +67,7 @@ public class BlockCable extends Block implements IPowerableBlock
         int westFlag = westBlock instanceof IPowerableBlock ? 1 << 3 : 0;
         int fullFlag = (northFlag | southFlag | eastFlag | westFlag);
         world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), false);
-        world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.getFromValue(world.getDirectElectricPowerAt(x, y, z) - 1), false);
+        world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.fromPowerValue(world.getDirectElectricPowerAt(x, y, z) - 1), false);
     }
 
-    public void registerIcons(IconGenerator register)
-    {
-        register.generateIcon(getID() + "_four.png");
-        for(EnumConnexionStates state : EnumConnexionStates.values())
-        {
-            register.generateIcon(getID() + "_" + state.toString() + ".png");
-        }
-    }
 }

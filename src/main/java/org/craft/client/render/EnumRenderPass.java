@@ -1,6 +1,5 @@
 package org.craft.client.render;
 
-
 public enum EnumRenderPass
 {
     NORMAL(0), ALPHA(1);
@@ -12,12 +11,18 @@ public enum EnumRenderPass
         this.id = id;
     }
 
-    public int getId()
+    /**
+     * Gets id of pass
+     */
+    public int id()
     {
         return id;
     }
 
-    public static EnumRenderPass getFromId(int id)
+    /**
+     * Returns pass from id
+     */
+    public static EnumRenderPass fromID(int id)
     {
         for(EnumRenderPass pass : values())
         {

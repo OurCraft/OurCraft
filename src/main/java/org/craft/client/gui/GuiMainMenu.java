@@ -6,7 +6,6 @@ import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.network.*;
 import org.craft.client.render.*;
-import org.craft.client.render.fonts.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 
@@ -67,7 +66,7 @@ public class GuiMainMenu extends Gui
     @Override
     public void update()
     {
-
+        super.update();
     }
 
     @Override

@@ -148,6 +148,9 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         return icon;
     }
 
+    /**
+     * Generates an icon from given image
+     */
     public TextureIcon generateIcon(BufferedImage img)
     {
         for(TextureMapSprite sprite : registredSprites)
@@ -230,11 +233,17 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         texture = OpenGLHelper.loadTexture(stitchedImage);
     }
 
+    /**
+     * Gets a texture icon from given name or null if none exists with given name
+     */
     public TextureIcon get(String name)
     {
         return get(new ResourceLocation(name));
     }
 
+    /**
+     * Gets a texture icon from given location or null if none exists with given location
+     */
     public TextureIcon get(ResourceLocation loc)
     {
         for(TextureMapSprite sprite : registredSprites)
@@ -245,22 +254,34 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
         return new TextureMapIcon(0, 0, 1, 1, 16, 16);
     }
 
+    /**
+     * Returns generated texture
+     */
     public Texture getTexture()
     {
         return texture;
     }
 
-    public void fixSize(int w, int h)
+    /**
+     * Sets tile size
+     */
+    public void setTileDimensions(int w, int h)
     {
         stitcher.setTileWidth(w);
         stitcher.setTileHeight(h);
     }
 
+    /**
+     * Gets tile width
+     */
     public int getTileWidth()
     {
         return stitcher.getTileWidth();
     }
 
+    /**
+     * Gets tile height
+     */
     public int getTileHeight()
     {
         return stitcher.getTileHeight();

@@ -98,31 +98,49 @@ public class Stitcher
         return result;
     }
 
+    /**
+     * Gets min U coordinate for given index 
+     */
     public float getMinU(int index)
     {
         return slots.get(index).minU;
     }
 
+    /**
+     * Gets min V coordinate for given index 
+     */
     public float getMinV(int index)
     {
         return slots.get(index).minV;
     }
 
+    /**
+     * Gets max U coordinate for given index 
+     */
     public float getMaxU(int index)
     {
         return slots.get(index).maxU;
     }
 
+    /**
+     * Gets max V coordinate for given index 
+     */
     public float getMaxV(int index)
     {
         return slots.get(index).maxV;
     }
 
+    /**
+     * Gets width for given index 
+     */
     public int getWidth(int index)
     {
         return slots.get(index).width;
     }
 
+    /**
+     * Gets height for given index
+     */
     public int getHeight(int index)
     {
         return slots.get(index).height;
@@ -148,21 +166,33 @@ public class Stitcher
         }
     }
 
+    /**
+     * Sets tile width 
+     */
     public void setTileWidth(int w)
     {
         tileWidth = w;
     }
 
+    /**
+     * Sets tile height
+     */
     public void setTileHeight(int h)
     {
         tileHeight = h;
     }
 
+    /**
+     * Gets tile width 
+     */
     public int getTileWidth()
     {
         return tileWidth;
     }
 
+    /**
+     * Gets tile height 
+     */
     public int getTileHeight()
     {
         return tileHeight;

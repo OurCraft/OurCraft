@@ -7,8 +7,19 @@ import org.craft.client.render.fonts.*;
 public class GuiButton extends GuiWidget
 {
 
+    /**
+     * The text to display
+     */
     private String       displayText;
+
+    /**
+     * The font to render {@link #displayText}
+     */
     private FontRenderer font;
+
+    /**
+     * A boolean to know if this button is pressed
+     */
     private boolean      pressed;
 
     public GuiButton(int id, int x, int y, int w, int h, String txt, FontRenderer font)
@@ -36,7 +47,7 @@ public class GuiButton extends GuiWidget
             {
                 color = 0xFFFFF544;
             }
-            font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextLength(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
+            font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextWidth(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
         }
     }
 

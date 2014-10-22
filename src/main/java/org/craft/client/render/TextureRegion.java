@@ -28,6 +28,9 @@ public class TextureRegion implements TextureIcon
         this.maxV = maxV;
     }
 
+    /**
+     * Gets texture from which this icon is extracted
+     */
     public Texture getTexture()
     {
         return texture;

@@ -15,11 +15,17 @@ public abstract class AbstractBlockRenderer
      */
     public abstract void render(RenderEngine engine, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z);
 
+    /**
+     * Convinience method to render a face
+     */
     public void renderFace(OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size)
     {
         renderFace(buffer, w, b, x, y, z, icon, startPos, size, false);
     }
 
+    /**
+     * Convinience method to render a face
+     */
     public void renderFace(OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipZ)
     {
         Vector2 maxUV = Vector2.get(1, 1);
@@ -27,11 +33,17 @@ public abstract class AbstractBlockRenderer
         maxUV.dispose();
     }
 
+    /**
+     * Convinience method to render a face
+     */
     public void renderFace(OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipZ, Vector2 minUV, Vector2 maxUV)
     {
         renderFace(buffer, w, b, x, y, z, icon, startPos, size, flipZ, minUV, maxUV, Vector3.NULL, Quaternion.NULL);
     }
 
+    /**
+     * Convinience method to render a face
+     */
     public void renderFace(OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipV, Vector2 minUV, Vector2 maxUV, Vector3 rotationOrigin, Quaternion rotation)
     {
         Chunk chunk = w.getChunk(x, y, z);
@@ -41,11 +53,17 @@ public abstract class AbstractBlockRenderer
         renderFace(lightValue, buffer, w, b, x, y, z, icon, startPos, size, flipV, minUV, maxUV, rotationOrigin, rotation);
     }
 
+    /**
+     * Convinience method to render a face
+     */
     public void renderFace(float lightValue, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipV, Vector2 minUV, Vector2 maxUV, Vector3 rotationOrigin, Quaternion rotation)
     {
         renderFace(lightValue, buffer, w, b, x, y, z, icon, startPos, size, flipV, minUV, maxUV, rotationOrigin, rotation, false);
     }
 
+    /**
+     * Convinience method to render a face
+     */
     public void renderFace(float lightValue, OffsettedOpenGLBuffer buffer, World w, Block b, int x, int y, int z, TextureIcon icon, Vector3 startPos, Vector3 size, boolean flipV, Vector2 minUV, Vector2 maxUV, Vector3 rotationOrigin, Quaternion rotation, boolean rescale)
     {
         float startX = startPos.getX();
@@ -159,5 +177,8 @@ public abstract class AbstractBlockRenderer
         buffer.setOffsetToEnd();
     }
 
-    public abstract boolean shouldRenderInPass(EnumRenderPass currentPass, World w, Block b, int x, int y, int z);
+    /**
+     * Returns true if block should be rendered in given pass
+     */
+    public abstract boolean shouldRenderInPass(EnumRenderPass pass, World w, Block b, int x, int y, int z);
 }

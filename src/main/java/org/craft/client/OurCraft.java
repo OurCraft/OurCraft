@@ -246,6 +246,9 @@ public class OurCraft implements Runnable, Game
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * Init sponge plugins and other mods
+     */
     private void initSponge()
     {
         Log.message("Loading SpongeAPI implementation...");
@@ -270,11 +273,17 @@ public class OurCraft implements Runnable, Game
         }
     }
 
+    /**
+     * Opens given gui
+     */
     public void openMenu(Gui gui)
     {
         this.newMenu = gui;
     }
 
+    /**
+     * Performs one tick of the game
+     */
     private final void tick()
     {
         double now = System.nanoTime();
@@ -325,6 +334,9 @@ public class OurCraft implements Runnable, Game
         }
     }
 
+    /**
+     * Update the game (world, menus, etc.)
+     */
     private void update(final double delta)
     {
         if(player != null)
@@ -461,11 +473,17 @@ public class OurCraft implements Runnable, Game
         }
     }
 
+    /**
+     * Renders the game
+     */
     private void render(double delta)
     {
         render(delta, true);
     }
 
+    /**
+     * Renders the game with or without the gui
+     */
     private void render(double delta, boolean drawGui)
     {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -524,6 +542,9 @@ public class OurCraft implements Runnable, Game
         printIfGLError();
     }
 
+    /**
+     * Gets a list of visible chunks
+     */
     private ArrayList<Chunk> getVisibleChunks()
     {
         ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
@@ -565,6 +586,9 @@ public class OurCraft implements Runnable, Game
         return visibleChunks;
     }
 
+    /**
+     * Renders world
+     */
     private void renderWorld(ArrayList<Chunk> visiblesChunks, double delta, boolean drawGui)
     {
         renderBlocks.render(clientWorld, visiblesChunks);
@@ -593,6 +617,9 @@ public class OurCraft implements Runnable, Game
         }
     }
 
+    /**
+     * Loads and sets current resources pack. Throws an exception if given pack does not exist or is invalid
+     */
     public void setResourcesPack(String fileName) throws Exception
     {
         ResourceLocation location = new ResourceLocation("resourcepacks", fileName);
@@ -602,6 +629,9 @@ public class OurCraft implements Runnable, Game
         renderEngine.reloadLocations();
     }
 
+    /**
+     * Print an error log only if OpenGL <code>getError()</code> returns an error
+     */
     public static void printIfGLError()
     {
         int errorFlag = glGetError();
@@ -613,16 +643,25 @@ public class OurCraft implements Runnable, Game
         }
     }
 
+    /**
+     * Gets the username used by the player
+     */
     public String getClientUsername()
     {
         return username;
     }
 
+    /**
+     * Returns the instance of the game
+     */
     public static OurCraft getOurCraft()
     {
         return instance;
     }
 
+    /**
+     * Returns the game's assets loader
+     */
     public ResourceLoader getAssetsLoader()
     {
         return assetsLoader;
@@ -633,36 +672,57 @@ public class OurCraft implements Runnable, Game
         return mouseHandler;
     }
 
+    /**
+     * Gets the object in front of the player. Updated each tick
+     */
     public CollisionInfos getObjectInFront()
     {
         return objectInFront;
     }
 
+    /**
+     * Returns true if the game is currently running
+     */
     public boolean isRunning()
     {
         return running;
     }
 
+    /**
+     * Gets the client world
+     */
     public World getClientWorld()
     {
         return clientWorld;
     }
 
+    /**
+     * Returns render engine
+     */
     public RenderEngine getRenderEngine()
     {
         return renderEngine;
     }
 
+    /**
+     * Returns the version of the game attributed during the build process
+     */
     public static String getVersion()
     {
         return "OurCraft:BuildNumber";
     }
 
+    /**
+     * Gets the display width
+     */
     public int getDisplayWidth()
     {
         return displayWidth;
     }
 
+    /**
+     * Gets the display height
+     */
     public int getDisplayHeight()
     {
         return displayHeight;
@@ -693,11 +753,17 @@ public class OurCraft implements Runnable, Game
         return runtime.totalMemory() - runtime.freeMemory();
     }
 
+    /**
+     * Gets the font renderer
+     */
     public FontRenderer getFontRenderer()
     {
         return fontRenderer;
     }
 
+    /**
+     * Loads and sets given world
+     */
     public void setWorld(World world)
     {
         if(world == null)
@@ -720,11 +786,17 @@ public class OurCraft implements Runnable, Game
         this.clientWorld = world;
     }
 
+    /**
+     * Sets client player
+     */
     public void setPlayer(EntityPlayer player)
     {
         this.player = player;
     }
 
+    /**
+     * Shutdowns gracefully the game
+     */
     public void shutdown()
     {
         running = false;
@@ -741,6 +813,9 @@ public class OurCraft implements Runnable, Game
         openMenu(new GuiMainMenu(this));
     }
 
+    /**
+     * Saves the current world
+     */
     public void saveWorld()
     {
         if(clientWorld.isRemote)
@@ -831,6 +906,9 @@ public class OurCraft implements Runnable, Game
         return gameFolderLoader;
     }
 
+    /**
+     * Forces a crash with given crash report
+     */
     public void crash(CrashReport crashReport)
     {
         crashReport.printStack();
@@ -838,6 +916,9 @@ public class OurCraft implements Runnable, Game
         System.exit(-1);
     }
 
+    /**
+     * Disposes all resources held by the game
+     */
     public void cleanup()
     {
         renderEngine.dispose();
@@ -938,6 +1019,9 @@ public class OurCraft implements Runnable, Game
         return "OurCraft's Unofficial Sponge Implementation - 1.0";
     }
 
+    /**
+     * Gets current session
+     */
     public Session getSession()
     {
         return session;
@@ -953,6 +1037,9 @@ public class OurCraft implements Runnable, Game
         return netHandler;
     }
 
+    /**
+     * Send given packet to the server
+     */
     public void sendPacket(AbstractPacket packet)
     {
         netHandler.send(packet);

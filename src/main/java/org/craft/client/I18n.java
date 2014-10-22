@@ -16,17 +16,26 @@ public final class I18n
         languages = new HashMap<String, HashMap<String, String>>();
     }
 
+    /**
+     * Sets currently used language
+     */
     public static void setCurrentLanguage(String id)
     {
         current = id;
     }
 
+    /**
+     * Init langs from given loader
+     */
     public static void init(ResourceLoader loader) throws Exception
     {
         load(loader, "en_US");
         load(loader, "fr_FR");
     }
 
+    /**
+     * Loads a language with given id
+     */
     private static void load(ResourceLoader loader, String id) throws Exception
     {
         AbstractResource res = loader.getResource(new ResourceLocation("ourcraft", "langs/" + id + ".lang"));
@@ -60,6 +69,36 @@ public final class I18n
         languages.put(id, lang);
     }
 
+    /**
+     * Translates given message into current language and then format it:
+     * <br/>If message equals <code>"players.joined"</code>, then it would be translated to <code>"%1$s joined the game!"</code> when using 'en_US' language,
+     * where <code>"%1"</code> means the first object in the 'objects' argument and <code>"$s"</code> means cast it as a String.
+     * <br/>By calling format("players.joined", "Marc"):
+     * <br/>"players.joined" would be formatted to "Marc joined the game!"
+     * 
+     * <hr/>
+     * Supported types:<br/>
+     * <table summary="" style="border: 1px black groove">
+     *      <tr>
+     *          <td>String</td><td>s</td>
+     *      </tr>
+     *      <tr>
+     *          <td>Integers</td><td>i</td>
+     *      </tr>
+     *      <tr>
+     *          <td>Doubles</td><td>d</td>
+     *      </tr>
+     *      <tr>
+     *          <td>Longs</td><td>l</td>
+     *      </tr>
+     *      <tr>
+     *          <td>Floats</td><td>f</td>
+     *      </tr>
+     *      <tr>
+     *          <td>Booleans</td><td>z</td>
+     *      </tr>
+     * </table>
+     */
     public static String format(String message, Object... objects)
     {
         String translated = getCurrentLanguage().get(message);

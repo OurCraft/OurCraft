@@ -101,6 +101,9 @@ public class LWJGLSetup
         System.setProperty("net.java.games.input.librarypath", folder.getAbsolutePath());
     }
 
+    /**
+     * Extract given file from classpath into given folder
+     */
     private static void extractFromClasspath(String fileName, File folder)
     {
         try

@@ -163,6 +163,9 @@ public class TrueTypeFont
         return fontHeight;
     }
 
+    /**
+     * Returns name of font
+     */
     public String getName()
     {
         return font.getFontName();

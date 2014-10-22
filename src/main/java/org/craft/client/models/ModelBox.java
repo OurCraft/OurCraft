@@ -2,6 +2,9 @@ package org.craft.client.models;
 
 import org.craft.maths.*;
 
+/**
+ * UNDOCUMENTED: System far from being done and/or even kept
+ */
 public class ModelBox
 {
 

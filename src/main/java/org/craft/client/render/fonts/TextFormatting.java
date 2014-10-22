@@ -20,7 +20,10 @@ public enum TextFormatting
         this.charsAfter = charsAfter;
     }
 
-    public int getCharsAfter()
+    /**
+     * Gets the expected number of chars after this object
+     */
+    public int charsAfter()
     {
         return charsAfter;
     }
@@ -30,7 +33,10 @@ public enum TextFormatting
         return "" + BEGINNING + s;
     }
 
-    public static TextFormatting fromString(char id)
+    /**
+     * Gets a TextFormatting instance from given char
+     */
+    public static TextFormatting fromChar(char id)
     {
         for(TextFormatting f : values())
         {
@@ -40,11 +46,17 @@ public enum TextFormatting
         return null;
     }
 
+    /**
+     * Generates a string representation of given color
+     */
     public static String generateFromColor(int red, int green, int blue)
     {
         return generateFromColor(255, red, green, blue);
     }
 
+    /**
+     * Generates a string representation of given color
+     */
     public static String generateFromColor(int alpha, int red, int green, int blue)
     {
         String alphaStr = Integer.toHexString(alpha);

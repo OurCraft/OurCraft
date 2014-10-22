@@ -59,7 +59,10 @@ public class GuiSelectWorld extends Gui
             font.drawShadowedString(dateString, 0xFFFFFFFF, x + 2, y + 40, engine);
         }
 
-        public String getName()
+        /**
+         * Returns world's folder name
+         */
+        public String getFolderName()
         {
             return worldFolderName;
         }
@@ -176,7 +179,7 @@ public class GuiSelectWorld extends Gui
             GuiWorldSlot worldSlot = worldList.getSelected();
             if(worldSlot != null)
             {
-                launchGameOnWorld(worldSlot.getName());
+                launchGameOnWorld(worldSlot.getFolderName());
             }
         }
         else if(id == 2)
@@ -206,6 +209,9 @@ public class GuiSelectWorld extends Gui
         }
     }
 
+    /**
+     * Opens given world
+     */
     private void launchGameOnWorld(String worldName)
     {
         WorldGenerator generator = new WorldGenerator();
@@ -246,7 +252,7 @@ public class GuiSelectWorld extends Gui
     @Override
     public void update()
     {
-
+        super.update();
     }
 
     public void draw(int mx, int my, RenderEngine renderEngine)

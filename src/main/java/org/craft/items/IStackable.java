@@ -8,12 +8,12 @@ import org.spongepowered.api.item.*;
 public interface IStackable extends org.spongepowered.api.item.ItemType, ItemBlock
 {
 
-    /*
-     * Method called when trying to use this item/block
+    /**
+     * Defines the behavior of this stackable instance when used
      */
     void onUse(Entity user, float x, float y, float z, EnumSide side, CollisionType type);
 
-    /*
+    /**
      * Returns an unlocalized string depending on the object's id
      */
     String getUnlocalizedID();

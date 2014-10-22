@@ -18,23 +18,53 @@ public abstract class PlayerController
         return player;
     }
 
+    /**
+     * Called when the sneak key is pressed
+     */
     public abstract void onSneakRequested();
 
+    /**
+     * Called when the jump key is pressed
+     */
     public abstract void onJumpRequested();
 
+    /**
+     * Called when the strafe left key is pressed
+     */
     public abstract void onMoveLeftRequested();
 
+    /**
+     * Called when the strafe right key is pressed
+     */
     public abstract void onMoveRightRequested();
 
+    /**
+     * Called when the move forward key is pressed
+     */
     public abstract void onMoveForwardRequested();
 
+    /**
+     * Called when the move backwards key is pressed
+     */
     public abstract void onMoveBackwardsRequested();
 
+    /**
+     * Called when the left click key is pressed
+     */
     public abstract void onLeftClick(CollisionInfos infos);
 
+    /**
+     * Called when the right click key is pressed
+     */
     public abstract void onRightClick(CollisionInfos infos);
 
+    /**
+     * Called when the mouse wheel is moved
+     */
     public abstract void onMouseWheelMoved(int amount);
 
+    /**
+     * Called each tick
+     */
     public abstract void update();
 }

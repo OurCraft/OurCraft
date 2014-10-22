@@ -97,7 +97,6 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
     @Override
     public boolean digWith(ItemStack itemStack)
     {
-        // TODO Auto-generated method stub
         return dig();
     }
 

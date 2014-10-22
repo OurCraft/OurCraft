@@ -36,8 +36,12 @@ public class ChunkCoord
         return false;
     }
 
+    /**
+     * Returns a chunk coords instance from given coordinates
+     */
     public static ChunkCoord get(int chunkX, int chunkY, int chunkZ)
     {
+        // TODO pooling
         return new ChunkCoord(chunkX, chunkY, chunkZ);
     }
 }

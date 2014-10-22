@@ -53,7 +53,7 @@ public class GuiIngame extends Gui
                     if(entry.getKey() == null || entry.getValue() == null)
                         continue;
                     String s = entry.getKey().toString() + ":" + TextFormatting.generateFromColor(0, 255, 0) + entry.getValue().toString();
-                    getFontRenderer().drawString(s, 0xFFFFFFFF, oc.getDisplayWidth() - (int) getFontRenderer().getTextLength(s) - 2, (i++ ) * 15, renderEngine);
+                    getFontRenderer().drawString(s, 0xFFFFFFFF, oc.getDisplayWidth() - (int) getFontRenderer().getTextWidth(s) - 2, (i++ ) * 15, renderEngine);
                 }
             }
         }
@@ -65,7 +65,7 @@ public class GuiIngame extends Gui
             String s = I18n.format(stack.getItem().getUnlocalizedID());
             Matrix4 m = renderEngine.getModelviewMatrix().copy();
             renderEngine.setModelviewMatrix(m.mul(scaleMatrix));
-            getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextLength(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);
+            getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextWidth(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);
             renderEngine.setModelviewMatrix(m);
         }
 
@@ -74,6 +74,7 @@ public class GuiIngame extends Gui
     @Override
     public void update()
     {
+        super.update();
     }
 
     @Override

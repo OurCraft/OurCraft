@@ -1,7 +1,6 @@
 package org.craft.blocks;
 
 import org.craft.blocks.states.*;
-import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -12,13 +11,6 @@ public class BlockLog extends Block
     public BlockLog(String id)
     {
         super(id);
-    }
-
-    public void registerIcons(IconGenerator register)
-    {
-        register.generateIcon(getID() + "_lying_side.png");
-        register.generateIcon(getID() + "_side.png");
-        register.generateIcon(getID() + "_bottom_and_top.png");
     }
 
     public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
@@ -33,6 +25,6 @@ public class BlockLog extends Block
         {
             orientation = EnumLogBlockStates.LYING_WE;
         }
-        w.setBlockState(x, y, z, BlockStates.orientation, orientation);
+        w.setBlockState(x, y, z, BlockStates.logOrientation, orientation);
     }
 }

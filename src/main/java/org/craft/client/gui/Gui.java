@@ -19,9 +19,9 @@ public abstract class Gui
     private FontRenderer           fontRenderer;
     private ArrayList<GuiWidget>   widgets;
     private GuiWidget              selectedWidget;
-    
-    protected OurCraft oc;
-    
+
+    protected OurCraft             oc;
+
     public Gui(OurCraft game)
     {
         this.oc = game;
@@ -52,6 +52,9 @@ public abstract class Gui
         widgets.add(widget);
     }
 
+    /**
+     * Returns the font renderer of this gui
+     */
     public FontRenderer getFontRenderer()
     {
         return fontRenderer;
@@ -182,6 +185,9 @@ public abstract class Gui
      */
     public abstract boolean requiresMouse();
 
+    /**
+     * Creates this gui (adds buttons'n'stuff)
+     */
     public abstract void init();
 
     /**
@@ -204,8 +210,17 @@ public abstract class Gui
         drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, oc.getDisplayWidth() / backgroundTexture.getWidth(), oc.getDisplayHeight() / backgroundTexture.getHeight());
     }
 
-    public abstract void update();
+    /**
+     * Updates this gui
+     */
+    public void update()
+    {
 
+    }
+
+    /**
+     * Handles a 'mouse wheel moved' event
+     */
     public void handleMouseWheelMovement(int mx, int my, int deltaWheel)
     {
         for(GuiWidget widget : widgets)

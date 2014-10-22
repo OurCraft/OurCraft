@@ -49,16 +49,25 @@ public class Vertex extends AbstractReference implements IDisposable
         this.color = color;
     }
 
+    /**
+     * Returns the position vector of this vertex
+     */
     public Vector3 getPos()
     {
         return pos;
     }
 
+    /**
+     * Returns the uv coords vector of this vertex
+     */
     public Vector2 getTexCoords()
     {
         return texCoords;
     }
 
+    /**
+     * Returns the color vector of this vertex (RGB color model)
+     */
     public Vector3 getColor()
     {
         return color;
@@ -79,16 +88,25 @@ public class Vertex extends AbstractReference implements IDisposable
 
     private static Stack<Vertex> unused = new Stack<Vertex>();
 
+    /**
+     * Returns a vertex with given position
+     */
     public static Vertex get(Vector3 pos)
     {
         return get(pos, Vector2.NULL);
     }
 
+    /**
+     * Returns a vertex with given position and texture coordinates
+     */
     public static Vertex get(Vector3 pos, Vector2 texCoords)
     {
         return get(pos, texCoords, Vector3.get(1, 1, 1));
     }
 
+    /**
+     * Returns a vertex with given position, texture coordinates and color
+     */
     public static Vertex get(Vector3 pos, Vector2 texCoords, Vector3 color)
     {
         Vertex v = null;
@@ -107,6 +125,9 @@ public class Vertex extends AbstractReference implements IDisposable
         return v;
     }
 
+    /**
+     * Returns an uncached copy of this vertex.
+     */
     public Vertex copy()
     {
         return new Vertex(pos.copy(), texCoords.copy(), color.copy());

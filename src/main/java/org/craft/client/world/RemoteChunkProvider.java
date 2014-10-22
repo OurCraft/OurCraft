@@ -11,7 +11,7 @@ public class RemoteChunkProvider extends ChunkProvider
 
     private ChunkMap              chunkMap;
     private ArrayList<ChunkCoord> pending;
-    private OurCraft game;
+    private OurCraft              game;
 
     public RemoteChunkProvider()
     {
@@ -73,6 +73,9 @@ public class RemoteChunkProvider extends ChunkProvider
         return chunkMap.iterator();
     }
 
+    /**
+     * Removes a chunk from the pending list
+     */
     public void removePending(ChunkCoord coords)
     {
         pending.remove(coords);

@@ -139,6 +139,9 @@ public class RenderEngine implements IDisposable
         glDisableVertexAttribArray(0);
     }
 
+    /**
+     * Returns projected view (from entity if {@link #shouldProjectFromEntity()} returns true
+     */
     public Matrix4 getProjectedViewMatrix()
     {
         if(renderViewEntity != null && shouldProjectFromEntity())
@@ -154,16 +157,27 @@ public class RenderEngine implements IDisposable
         return projection;
     }
 
+    /**
+     * Sets the render view entity.
+     * <br/>The render view entity is the entity at which the render engine will place the camera in order to render the scene
+     */
     public void setRenderViewEntity(Entity e)
     {
         this.renderViewEntity = e;
     }
 
+    /**
+     * Gets the render view entity.
+     * <br/>The render view entity is the entity at which the render engine will place the camera in order to render the scene
+     */
     public Entity getRenderViewEntity()
     {
         return renderViewEntity;
     }
 
+    /**
+     * Renders splash screen.
+     */
     public void renderSplashScreen()
     {
         OpenGLBuffer buffer = new OpenGLBuffer();
@@ -184,17 +198,26 @@ public class RenderEngine implements IDisposable
         buffer.dispose();
     }
 
+    /**
+     * Sets the modelview matrix.<br/>Also update shaders to use the new model matrix.
+     */
     public void setModelviewMatrix(Matrix4 modelMatrix)
     {
         this.modelMatrix = modelMatrix;
         updateOpenGL();
     }
 
+    /**
+     * Gets the modelview matrix.
+     */
     public Matrix4 getModelviewMatrix()
     {
         return modelMatrix;
     }
 
+    /**
+     * Updates shaders (bind the current one and attach modelview & projected view matrices)
+     */
     public void updateOpenGL()
     {
         currentShader.bind();
@@ -202,50 +225,77 @@ public class RenderEngine implements IDisposable
         currentShader.setUniform("projection", getProjectedViewMatrix());
     }
 
+    /**
+     * Sets the current shader and binds it
+     */
     public void setCurrentShader(Shader shader)
     {
         this.currentShader = shader;
         updateOpenGL();
     }
 
+    /**
+     * Gets the current shader
+     */
     public Shader getCurrentShader()
     {
         return currentShader;
     }
 
+    /**
+     * Sets the projection matrix and updates shaders to take it in account
+     */
     public void setProjectionMatrix(Matrix4 projection)
     {
         this.projection = projection;
         updateOpenGL();
     }
 
+    /**
+     * Sets the projection matrix
+     */
     public Matrix4 getProjectionMatrix()
     {
         return projection;
     }
 
+    /**
+     * Sets the projection matrix to an orthogonal matrix
+     */
     public void switchToOrtho()
     {
         projectFromEntity = false;
         setProjectionMatrix(projectionHud);
     }
 
+    /**
+     * Sets the projection matrix to an perspective matrix
+     */
     public void switchToPerspective()
     {
         projectFromEntity = true;
         setProjectionMatrix(projection3dMatrix);
     }
 
+    /**
+     * Returns true if the render engine should project the scene from the entity
+     */
     public boolean shouldProjectFromEntity()
     {
         return projectFromEntity;
     }
 
+    /**
+     * Sets the flag if the render engine should project the scene from the entity
+     */
     public void setProjectFromEntity(boolean flag)
     {
         this.projectFromEntity = flag;
     }
 
+    /**
+     * Sets the blending function of OpenGL
+     */
     public void setBlendFunc(int blendSrc, int blendDst)
     {
         renderState.setBlendFunc(blendSrc, blendDst);
@@ -422,11 +472,17 @@ public class RenderEngine implements IDisposable
         return this;
     }
 
+    /**
+     * Gets the current render state
+     */
     public RenderState getRenderState()
     {
         return renderState;
     }
 
+    /**
+     * Returns true if given OpenGL cap is enabled
+     */
     public boolean isGLCapEnabled(int cap)
     {
         return glIsEnabled(cap);
@@ -472,21 +528,33 @@ public class RenderEngine implements IDisposable
         return this;
     }
 
+    /**
+     * Gets the orthogonal matrix used to project onto the screen
+     */
     public Matrix4 getHUDProjectionMatrix()
     {
         return projectionHud;
     }
 
+    /**
+     * Returns the color buffer
+     */
     public Texture getColorBuffer()
     {
         return colorBuffer;
     }
 
+    /**
+     * Returns the frustum
+     */
     public Frustum getFrustum()
     {
         return frustum;
     }
 
+    /**
+     * Returns a texture registered to given location or null if none is bound to this location
+     */
     public ITextureObject getByLocation(ResourceLocation loc)
     {
         return texturesLocs.get(loc);

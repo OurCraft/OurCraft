@@ -9,7 +9,7 @@ import org.craft.utils.*;
 import org.craft.world.*;
 import org.spongepowered.api.block.*;
 
-public class Block implements IStackable
+public class Block implements IStackable, BlockType
 {
 
     static
@@ -18,8 +18,14 @@ public class Block implements IStackable
     }
     protected static AABB normalCubeAABB;
 
+    /**
+     * The string id of this block
+     */
     private String        id;
 
+    /**
+     * An id given at launch of the game used to identify the block.
+     */
     private short         uniqueID;
 
     /**
@@ -30,6 +36,9 @@ public class Block implements IStackable
         this.id = id;
     }
 
+    /**
+     * Returns the String id of this block
+     */
     public String getID()
     {
         return id;
@@ -109,14 +118,22 @@ public class Block implements IStackable
      */
     public void updateTick(World world, int x, int y, int z)
     {
-        // Log.message("UPDATE " + this.getID());
     }
 
-    public void setUniqueID(short id)
+    /**
+     * Sets the UID of this block
+     * <br/>
+     * UID: An id given at launch of the game used to identify the block.
+     */
+    void setUniqueID(short id)
     {
         this.uniqueID = id;
     }
 
+    /**
+     * Returns the UID of this block.<br/>
+     * UID: An id given at launch of the game used to identify the block.
+     */
     public short getUniqueID()
     {
         return uniqueID;
@@ -180,7 +197,7 @@ public class Block implements IStackable
     @Override
     public BlockType getBlock()
     {
-        return null;
+        return this;
     }
 
 }

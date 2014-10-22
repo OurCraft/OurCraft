@@ -20,11 +20,17 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         list = new ArrayList<T>();
     }
 
+    /**
+     * Returns a slot at given index or null if index is out of bounds 
+     */
     public T getSlot(int index)
     {
         return list.get(index);
     }
 
+    /**
+     * Returns the number of slots
+     */
     public int getSize()
     {
         return list.size();
@@ -61,11 +67,17 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         }
     }
 
+    /**
+     * Adds a new slot to this list
+     */
     public void addSlot(T newSlot)
     {
         list.add(newSlot);
     }
 
+    /**
+     * Returns currently selected slot or null if none selected
+     */
     public T getSelected()
     {
         if(selectedIndex != -1)

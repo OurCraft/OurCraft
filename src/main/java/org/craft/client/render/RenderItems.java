@@ -29,23 +29,26 @@ public class RenderItems
 
     public static void createItemMap(RenderEngine engine)
     {
-        TextureMap blockMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft/textures", "items"), true);
+        TextureMap itemMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft/textures", "items"), true);
         for(Item b : Items.ITEM_REGISTRY.values())
         {
-            b.registerIcons(blockMap);
+            b.registerIcons(itemMap);
         }
         try
         {
-            blockMap.compile();
+            itemMap.compile();
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
         itemMapLoc = new ResourceLocation("ourcraft", "textures/atlases/items.png");
-        engine.registerLocation(itemMapLoc, blockMap);
+        engine.registerLocation(itemMapLoc, itemMap);
     }
 
+    /**
+     * Gets a renderer from given stack
+     */
     public ItemRenderer getRenderer(Stack s)
     {
         if(!renderers.containsKey(s.getItem()))
@@ -55,6 +58,9 @@ public class RenderItems
         return renderers.get(s.getItem());
     }
 
+    /**
+     * Renders given item
+     */
     public void renderItem(RenderEngine engine, Stack item, float x, float y, float z)
     {
         buffer.clear();

@@ -20,6 +20,9 @@ public class BlockModelRenderer extends AbstractBlockRenderer
     private List<BlockVariant>                                  blockVariants;
     private static Quaternion                                   rotationQuaternion;
 
+    /**
+     * Creates a new renderer for given block variants
+     */
     public BlockModelRenderer(List<BlockVariant> list)
     {
         this.blockVariants = list;
@@ -123,6 +126,9 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         }
     }
 
+    /**
+     * Returns most revelant variant depending on block states values at (x,y,z)
+     */
     private BlockVariant getVariant(World w, Block b, int x, int y, int z)
     {
         BlockVariant variant = null;
@@ -139,6 +145,9 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         return variant;
     }
 
+    /**
+     * Gets TextureIcon from texture variable found in json model file
+     */
     private TextureIcon getTexture(BlockModel blockModel, BlockVariant variant, String texture)
     {
         if(texture == null)

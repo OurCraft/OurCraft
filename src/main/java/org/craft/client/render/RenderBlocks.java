@@ -36,6 +36,9 @@ public class RenderBlocks
     private TextureMap                                 blockMap;
     public static ResourceLocation                     blockMapLoc;
 
+    /**
+     * Creates a new block map
+     */
     public void createBlockMap(RenderEngine engine)
     {
         blockMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
@@ -67,11 +70,17 @@ public class RenderBlocks
         createBlockMap(engine);
     }
 
+    /**
+     * Registers a block renderer for given block
+     */
     public void registerBlockRenderer(Block block, AbstractBlockRenderer renderer)
     {
         renderers.put(block, renderer);
     }
 
+    /**
+     * Gets renderer for given block
+     */
     public AbstractBlockRenderer getRenderer(Block block)
     {
         if(renderers.containsKey(block))
@@ -147,7 +156,7 @@ public class RenderBlocks
             Collections.sort(visiblesChunks, chunkComparator);
             for(int passId = 0; passId < 2; passId++ )
             {
-                EnumRenderPass currentPass = EnumRenderPass.getFromId(passId);
+                EnumRenderPass currentPass = EnumRenderPass.fromID(passId);
                 if(currentPass == EnumRenderPass.ALPHA)
                 {
                     glDepthMask(false);

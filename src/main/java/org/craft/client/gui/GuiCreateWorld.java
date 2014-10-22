@@ -5,7 +5,6 @@ import java.io.*;
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
-import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
@@ -37,7 +36,7 @@ public class GuiCreateWorld extends Gui
     public void init()
     {
         String txt = I18n.format("menu.createworld.title");
-        addWidget(new GuiLabel(-1, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextLength(txt) / 2, oc.getDisplayHeight() / 2 - 60, txt, getFontRenderer()));
+        addWidget(new GuiLabel(-1, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextWidth(txt) / 2, oc.getDisplayHeight() / 2 - 60, txt, getFontRenderer()));
         worldNameField = new GuiTextField(0, oc.getDisplayWidth() / 2 - 200, oc.getDisplayHeight() / 2 - 20, 400, 40, getFontRenderer());
         addWidget(worldNameField);
 
@@ -51,6 +50,7 @@ public class GuiCreateWorld extends Gui
     @Override
     public void update()
     {
+        super.update();
         worldNameField.updateCursorCounter();
     }
 
@@ -66,6 +66,9 @@ public class GuiCreateWorld extends Gui
         }
     }
 
+    /**
+     * Creates world with given name
+     */
     private void createWorld(String worldName)
     {
         // TODO: Loading screen

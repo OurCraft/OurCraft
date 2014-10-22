@@ -1,9 +1,8 @@
 package org.craft.client.gui;
 
-import org.craft.client.OurCraft;
+import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
-import org.craft.client.render.fonts.*;
 
 public class GuiServerSelect extends Gui
 {
@@ -43,7 +42,7 @@ public class GuiServerSelect extends Gui
     @Override
     public void update()
     {
-
+        super.update();
     }
 
 }

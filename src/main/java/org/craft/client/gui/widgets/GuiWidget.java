@@ -5,12 +5,27 @@ import org.craft.client.render.*;
 public abstract class GuiWidget
 {
 
+    /**
+     * The id of the widget
+     */
     private int    id;
+
     private int    x;
+
     private int    y;
+
     private int    w;
+
     private int    h;
+
+    /**
+     * This boolean decides whether or not this widget will be drawn.<br/>The implementation might ignore it.
+     */
     public boolean visible;
+
+    /**
+     * This boolean decides whether or not this widget can be clicked/focused.
+     */
     public boolean enabled;
 
     public GuiWidget(int id, int x, int y, int w, int h)
@@ -112,6 +127,9 @@ public abstract class GuiWidget
         return true;
     }
 
+    /**
+     * Handle a 'mouse wheel moved' event. Returns true if event was consumed
+     */
     public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
     {
         return false;

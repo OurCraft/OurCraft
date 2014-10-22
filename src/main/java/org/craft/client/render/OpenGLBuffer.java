@@ -78,6 +78,9 @@ public class OpenGLBuffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
+    /**
+     * Clears old indices and add all indices from given list
+     */
     public void setIndices(List<Integer> newIndices)
     {
         indices.clear();
@@ -85,11 +88,17 @@ public class OpenGLBuffer
             addIndex(index);
     }
 
+    /**
+     * Clears old vertices and add all vertices from given list
+     */
     public void setVertices(List<Vertex> newVertices)
     {
         setVertices(newVertices, true);
     }
 
+    /**
+     * Clears old vertices plus dispose them if disposePrevious is true and add all vertices from given list
+     */
     public void setVertices(List<Vertex> newVertices, boolean disposePrevious)
     {
         if(disposePrevious)
@@ -126,16 +135,25 @@ public class OpenGLBuffer
         indices.add(i);
     }
 
+    /**
+     * Gets VBO ID held by this object
+     */
     public int getVboID()
     {
         return vboID;
     }
 
+    /**
+     * Gets IBO ID held by this object
+     */
     public int getIboID()
     {
         return iboID;
     }
 
+    /**
+     * Gets indices list size
+     */
     public int getIndicesCount()
     {
         return indices.size();
@@ -151,6 +169,9 @@ public class OpenGLBuffer
         upload();
     }
 
+    /**
+     * Disposes of all vertices and OGL's buffers
+     */
     public void dispose()
     {
         clearAndDisposeVertices();
@@ -173,6 +194,7 @@ public class OpenGLBuffer
 
     public void setToCube()
     {
+        // TODO: Finish
         clearAndDisposeVertices();
         indices.clear();
         int index = 0;
@@ -216,11 +238,17 @@ public class OpenGLBuffer
         clearAndDisposeVertices();
     }
 
+    /**
+     * Gets vertex at given index
+     */
     public Vertex getVertex(int vertexIndex)
     {
         return vertices.get(vertexIndex);
     }
 
+    /**
+     * Gets index at given index
+     */
     public int getIndex(int indexIndex)
     {
         return indices.get(indexIndex);

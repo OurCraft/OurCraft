@@ -45,6 +45,9 @@ public class OpenGLHelper
         return new Texture(w, h, pixelBuf);
     }
 
+    /**
+     * Loads given texture
+     */
     public static Texture loadTexture(AbstractResource resource) throws IOException
     {
         BufferedImage img = ImageUtils.loadImage(resource);
@@ -53,6 +56,9 @@ public class OpenGLHelper
 
     private static HashMap<Integer, String> capNamesMap = new HashMap<Integer, String>();
 
+    /**
+     * Loads all GL_* fields with their respective values (used mostly for crash reports)
+     */
     public static void loadCapNames()
     {
         loadCapNames(GL11.class);
@@ -67,6 +73,9 @@ public class OpenGLHelper
         loadCapNames(GL32.class);
     }
 
+    /**
+     * Loads all GL_* fields with their respective values from given class (used mostly for crash reports)
+     */
     private static void loadCapNames(Class<?> glClass)
     {
         Field[] fields = glClass.getFields();
@@ -97,16 +106,25 @@ public class OpenGLHelper
         }
     }
 
+    /**
+     * Returns OpenGL version
+     */
     public static String getOpenGLVersion()
     {
         return glGetString(GL_VERSION);
     }
 
+    /**
+     * Returns OpenGL vendor
+     */
     public static String getOpenGLVendor()
     {
         return glGetString(GL_VENDOR);
     }
 
+    /**
+     * Returns OpenGL capability name
+     */
     public static String getCapName(int cap)
     {
         if(!capNamesMap.containsKey(cap))

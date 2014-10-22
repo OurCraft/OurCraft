@@ -44,6 +44,7 @@ public class GuiConnecting extends Gui
     @Override
     public void update()
     {
+        super.update();
         updateCounter++ ;
     }
 
@@ -51,7 +52,7 @@ public class GuiConnecting extends Gui
     {
         drawBackground(mx, my, renderEngine);
         super.draw(mx, my, renderEngine);
-        getFontRenderer().drawShadowedString(status, 0xFFFFFFFF, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextLength(status) / 2, oc.getDisplayHeight() / 2 - (int) getFontRenderer().getCharHeight('A') / 2 - 50, renderEngine);
+        getFontRenderer().drawShadowedString(status, 0xFFFFFFFF, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextWidth(status) / 2, oc.getDisplayHeight() / 2 - (int) getFontRenderer().getCharHeight('A') / 2 - 50, renderEngine);
 
         int length = 11;
         String finalLoadingTxt = "";
@@ -74,11 +75,14 @@ public class GuiConnecting extends Gui
             }
             else
                 finalLoadingTxt += TextFormatting.generateFromColor(180, 180, 180) + "_";
-            
+
         }
-        getFontRenderer().drawString(finalLoadingTxt, 0xFF000000, (int) (oc.getDisplayWidth() / 2 - getFontRenderer().getTextLength(finalLoadingTxt) / 2), (int) (oc.getDisplayHeight() / 2 - getFontRenderer().getCharHeight('A') / 2), renderEngine);
+        getFontRenderer().drawString(finalLoadingTxt, 0xFF000000, (int) (oc.getDisplayWidth() / 2 - getFontRenderer().getTextWidth(finalLoadingTxt) / 2), (int) (oc.getDisplayHeight() / 2 - getFontRenderer().getCharHeight('A') / 2), renderEngine);
     }
 
+    /**
+     * Sets status written on gui
+     */
     public void setStatus(String status)
     {
         this.status = status;

@@ -30,6 +30,9 @@ public abstract class ChunkProvider implements Iterable<Chunk>
      */
     public abstract boolean doesChunkExists(World world, int chunkX, int chunkY, int chunkZ);
 
+    /**
+     * Adds a chunk into the chunk list
+     */
     public abstract void addChunk(World w, Chunk c);
 
     public abstract Iterator<Chunk> iterator();

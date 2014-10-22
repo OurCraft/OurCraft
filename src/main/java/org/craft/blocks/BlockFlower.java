@@ -30,9 +30,6 @@ public class BlockFlower extends Block
         return null;
     }
 
-    /**
-     * Returns selection box depending on the current block state (side, position, etc.)
-     */
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         Vector3 translation = Vector3.get(x, y, z);
