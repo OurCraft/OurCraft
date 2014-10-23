@@ -3,6 +3,8 @@ package org.craft.nbt;
 import java.io.*;
 import java.util.*;
 
+import com.google.gson.*;
+
 /**
  * Inspired by NBT classes given by Mojang AB <a href="https://mojang.com/2012/02/new-minecraft-map-format-anvil/">here</a>
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
@@ -107,4 +109,14 @@ public class NBTListTag<T extends NBTTag> extends NBTTag
         return false;
     }
 
+    @Override
+    public JsonElement toJson()
+    {
+        JsonArray array = new JsonArray();
+        for(int i = 0; i < list.size(); i++ )
+        {
+            array.add(list.get(i).toJson());
+        }
+        return array;
+    }
 }

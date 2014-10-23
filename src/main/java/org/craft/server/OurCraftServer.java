@@ -81,7 +81,7 @@ public class OurCraftServer implements Game, CommandSource
         gen.addPopulator(new FlowerPopulator());
         gen.addPopulator(new TreePopulator());
         worldLoader = new VanillaWorldLoader(new ResourceLocation("worlds"), new DiskSimpleResourceLoader());
-        serverWorld = new org.craft.world.World("remote-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
+        serverWorld = new ServerWorld("remote-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 
     public void start(HashMap<String, String> properties)

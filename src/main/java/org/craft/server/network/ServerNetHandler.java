@@ -4,6 +4,7 @@ import io.netty.channel.*;
 
 import org.craft.client.*;
 import org.craft.client.render.fonts.*;
+import org.craft.entity.*;
 import org.craft.network.*;
 import org.craft.network.packets.*;
 import org.craft.server.*;
@@ -20,7 +21,9 @@ public class ServerNetHandler implements INetworkHandler
         {
             C0PlayerInfos playerInfos = (C0PlayerInfos) packet;
             SessionManager.getInstance().registerSession(playerInfos.getSession());
-            OurCraftServer.getServer().getNettyWrapper().registerChannel(playerInfos.getSession().getId(), ctx.channel());
+            EntityPlayerMP playerEntity = new EntityPlayerMP(OurCraftServer.getServer().getWorld(""), playerInfos.getSession().getUUID());
+            OurCraftServer.getServer().getWorld("").spawn(playerEntity);
+            OurCraftServer.getServer().getNettyWrapper().registerChannel(playerInfos.getSession().getId(), ctx.channel(), playerEntity);
             OurCraftServer.getServer().broadcastMessage(TextFormatting.generateFromColor(200, 200, 50) + I18n.format("players.joined", playerInfos.getSession().getDisplayName()));
         }
         else if(packet instanceof C1AskForChunk)

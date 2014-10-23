@@ -2,6 +2,8 @@ package org.craft.nbt;
 
 import java.io.*;
 
+import com.google.gson.*;
+
 /**
  * Inspired by NBT classes given by Mojang AB <a href="https://mojang.com/2012/02/new-minecraft-map-format-anvil/">here</a>
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
@@ -67,6 +69,12 @@ public class NBTShortTag extends NBTTag
             return o.value == value;
         }
         return false;
+    }
+
+    @Override
+    public JsonElement toJson()
+    {
+        return new JsonPrimitive(value);
     }
 
 }

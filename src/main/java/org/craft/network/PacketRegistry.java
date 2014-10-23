@@ -30,6 +30,7 @@ public class PacketRegistry
         registerPacket(NetworkSide.SERVER, 0x0, S0ConnectionAccepted.class);
         registerPacket(NetworkSide.SERVER, 0x1, S1ChatMessage.class);
         registerPacket(NetworkSide.SERVER, 0x2, S2ChunkData.class);
+        registerPacket(NetworkSide.SERVER, 0x3, S3EntitySpawn.class);
     }
 
     public static int getPacketId(Class<? extends AbstractPacket> packet)

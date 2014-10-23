@@ -9,6 +9,7 @@ import io.netty.util.concurrent.*;
 
 import java.util.*;
 
+import org.craft.entity.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.spongeimpl.events.state.*;
@@ -19,17 +20,21 @@ import org.spongepowered.api.*;
 public class NettyServerWrapper implements Runnable
 {
 
-    private int                      port;
-    private EventBus                 eventBus;
-    private Game                     game;
-    private ArrayList<Channel>       channels;
-    private HashMap<String, Channel> channelsMap;
-    private Channel                  serverChannel;
+    private int                              port;
+    private EventBus                         eventBus;
+    private Game                             game;
+    private ArrayList<Channel>               channels;
+    private HashMap<String, Channel>         channelsMap;
+    private Channel                          serverChannel;
+    private HashMap<Channel, EntityPlayerMP> channels2players;
+    private HashMap<EntityPlayerMP, Channel> players2channels;
 
     public NettyServerWrapper(Game gameInstance, EventBus eventBus, int port)
     {
         channels = new ArrayList<Channel>();
         channelsMap = new HashMap<String, Channel>();
+        channels2players = new HashMap<Channel, EntityPlayerMP>();
+        players2channels = new HashMap<EntityPlayerMP, Channel>();
 
         this.game = gameInstance;
         this.port = port;
@@ -86,9 +91,11 @@ public class NettyServerWrapper implements Runnable
         }
     }
 
-    public void registerChannel(String id, Channel channel)
+    public void registerChannel(String id, Channel channel, EntityPlayerMP player)
     {
         channelsMap.put(id, channel);
+        channels2players.put(channel, player);
+        players2channels.put(player, channel);
     }
 
     public void sendPacketToAll(AbstractPacket packet)
@@ -97,6 +104,13 @@ public class NettyServerWrapper implements Runnable
         {
             ChannelHelper.writeAndFlush(packet, channel);
         }
+    }
+
+    public void sendPacketToPlayer(AbstractPacket packet, EntityPlayerMP player)
+    {
+        Channel channel = players2channels.get(player);
+        if(channel != null)
+            ChannelHelper.writeAndFlush(packet, channel);
     }
 
     public void stop()

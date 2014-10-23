@@ -1,6 +1,10 @@
 package org.craft.nbt;
 
 import java.io.*;
+import java.util.*;
+import java.util.Map.Entry;
+
+import com.google.gson.*;
 
 /**
  * Inspired by NBT classes given by Mojang AB <a href="https://mojang.com/2012/02/new-minecraft-map-format-anvil/">here</a>
@@ -11,10 +15,12 @@ public abstract class NBTTag implements Cloneable
 {
 
     private String name;
+    protected Gson gson;
 
     protected NBTTag(String name)
     {
         this.name = name;
+        gson = new Gson();
     }
 
     public String getName()
@@ -27,6 +33,8 @@ public abstract class NBTTag implements Cloneable
     public abstract void read(DataInput dis) throws IOException;
 
     public abstract String toString();
+
+    public abstract JsonElement toJson();
 
     public abstract NBTTypes getID();
 
@@ -95,6 +103,61 @@ public abstract class NBTTag implements Cloneable
         NBTTag tag = createTag(name, type);
         tag.read(dis);
         return tag;
+    }
+
+    public static NBTCompoundTag readCompoundFromJson(JsonObject object)
+    {
+        NBTCompoundTag compound = new NBTCompoundTag();
+        Iterator<Entry<String, JsonElement>> it = object.entrySet().iterator();
+        while(it.hasNext())
+        {
+            Entry<String, JsonElement> entry = it.next();
+            if(entry.getValue().isJsonNull())
+            {
+                ;
+            }
+            else if(entry.getValue().isJsonObject())
+            {
+                compound.putCompound(entry.getKey(), readCompoundFromJson(entry.getValue().getAsJsonObject()));
+            }
+            else if(entry.getValue().isJsonPrimitive())
+            {
+                JsonPrimitive primitive = entry.getValue().getAsJsonPrimitive();
+                if(primitive.isBoolean())
+                {
+                    compound.putBoolean(entry.getKey(), primitive.getAsBoolean());
+                }
+                else if(primitive.isNumber()) // Tell me if you have a better way
+                {
+                    compound.putByte(entry.getKey(), primitive.getAsByte());
+                    compound.putInt(entry.getKey(), primitive.getAsInt());
+                    compound.putFloat(entry.getKey(), primitive.getAsFloat());
+                    compound.putDouble(entry.getKey(), primitive.getAsDouble());
+                    compound.putShort(entry.getKey(), primitive.getAsShort());
+                    compound.putLong(entry.getKey(), primitive.getAsLong());
+                }
+                else if(primitive.isString())
+                {
+                    compound.putString(entry.getKey(), primitive.getAsString());
+                }
+            }
+            else if(entry.getValue().isJsonArray())
+            {
+                JsonArray array = entry.getValue().getAsJsonArray();
+                byte[] byteArray = new byte[array.size()];
+                int[] intArray = new int[array.size()];
+
+                for(int i = 0; i < array.size(); i++ )
+                {
+                    byteArray[i] = array.get(i).getAsByte();
+                    intArray[i] = array.get(i).getAsInt();
+                }
+
+                compound.putByteArray(entry.getKey(), byteArray);
+                compound.putIntArray(entry.getKey(), intArray);
+            }
+        }
+        return compound;
     }
 
 }

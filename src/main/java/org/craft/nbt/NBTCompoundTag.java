@@ -2,6 +2,9 @@ package org.craft.nbt;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
+
+import com.google.gson.*;
 
 /**
  * Inspired by NBT classes given by Mojang AB <a href="https://mojang.com/2012/02/new-minecraft-map-format-anvil/">here</a>
@@ -233,6 +236,17 @@ public class NBTCompoundTag extends NBTTag
             return tags.entrySet().equals(o.tags.entrySet());
         }
         return false;
+    }
+
+    @Override
+    public JsonElement toJson()
+    {
+        JsonObject object = new JsonObject();
+        for(Entry<String, NBTTag> tagEntry : tags.entrySet())
+        {
+            object.add(tagEntry.getKey(), tagEntry.getValue().toJson());
+        }
+        return object;
     }
 
 }
