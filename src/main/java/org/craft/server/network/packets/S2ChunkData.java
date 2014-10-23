@@ -93,6 +93,11 @@ public class S2ChunkData extends AbstractPacket
                         while(states.hasNext())
                         {
                             BlockState state = states.next();
+                            if(state == null)
+                            {
+                                ByteBufUtils.writeString(buffer, "/blockstates/null");
+                                continue;
+                            }
                             IBlockStateValue value = o.get(state);
                             ByteBufUtils.writeString(buffer, state.toString());
                             if(value == null)
