@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.commands.*;
 import org.craft.items.*;
@@ -80,7 +81,7 @@ public class OurCraftServer implements Game, CommandSource
         gen.addPopulator(new FlowerPopulator());
         gen.addPopulator(new TreePopulator());
         worldLoader = new VanillaWorldLoader(new ResourceLocation("worlds"), new DiskSimpleResourceLoader());
-        serverWorld = new org.craft.world.World("test-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
+        serverWorld = new org.craft.world.World("remote-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 
     public void start(HashMap<String, String> properties)
@@ -106,6 +107,7 @@ public class OurCraftServer implements Game, CommandSource
         Commands.init();
         Commands.register(new StopCommand(), "stop");
         Blocks.init();
+        BlockStates.init();
         Items.init();
         try
         {

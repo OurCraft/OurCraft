@@ -2,7 +2,10 @@ package org.craft.server.network.packets;
 
 import io.netty.buffer.*;
 
+import java.util.*;
+
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.network.*;
 import org.craft.utils.*;
@@ -45,6 +48,16 @@ public class S2ChunkData extends AbstractPacket
                         }
                         else
                             Log.message("Unknown block at " + x + "," + y + "," + z + " = " + blockId);
+                        int nStates = buffer.readInt();
+                        for(int i = 0; i < nStates; i++ )
+                        {
+                            BlockState state = BlockStates.getState(ByteBufUtils.readString(buffer));
+                            if(state != null)
+                            {
+                                IBlockStateValue value = BlockStates.getValue(state, ByteBufUtils.readString(buffer));
+                                chunk.setChunkBlockState(x, y, z, state, value);
+                            }
+                        }
                     }
                 }
             }
@@ -68,6 +81,26 @@ public class S2ChunkData extends AbstractPacket
                 for(int z = 0; z < 16; z++ )
                 {
                     ByteBufUtils.writeString(buffer, chunk.getChunkBlock(x, y, z).getId());
+                    BlockStatesObject o = chunk.getBlockStates(x, y, z);
+                    if(o == null)
+                    {
+                        buffer.writeInt(0);
+                    }
+                    else
+                    {
+                        buffer.writeInt(o.size());
+                        Iterator<BlockState> states = o.getMap().keySet().iterator();
+                        while(states.hasNext())
+                        {
+                            BlockState state = states.next();
+                            IBlockStateValue value = o.get(state);
+                            ByteBufUtils.writeString(buffer, state.toString());
+                            if(value == null)
+                                ByteBufUtils.writeString(buffer, "null");
+                            else
+                                ByteBufUtils.writeString(buffer, value.toString());
+                        }
+                    }
                 }
             }
         }
