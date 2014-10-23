@@ -3,7 +3,6 @@ package org.craft.client.sound;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
-import org.lwjgl.*;
 import org.lwjgl.openal.*;
 
 public class SoundEngine
@@ -17,14 +16,6 @@ public class SoundEngine
     {
         maxSourcesPerSound = 16;
 
-        try
-        {
-            AL.create();
-        }
-        catch(LWJGLException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public void init()
