@@ -400,6 +400,21 @@ public class OurCraft implements Runnable, Game
                 if(!state)
                 {
                     currentMenu.keyPressed(id, c);
+                    if(id == Keyboard.KEY_F2)
+                    {
+                        File out = new File(SystemUtils.getGameFolder(), "screenshots/" + System.currentTimeMillis() + ".png");
+                        try
+                        {
+                            if(!out.getParentFile().exists())
+                                out.getParentFile().mkdirs();
+                            out.createNewFile();
+                            ImageIO.write(takeScreenshot(), "png", out);
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 else
                 {
