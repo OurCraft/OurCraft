@@ -5,6 +5,7 @@ import java.util.*;
 import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.inventory.Stack;
+import org.craft.nbt.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.spongepowered.api.component.attribute.*;
@@ -121,5 +122,27 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
     public void sendMessage(String message)
     {
 
+    }
+
+    public void readFromNBT(NBTCompoundTag compound)
+    {
+        super.readFromNBT(compound);
+        xpLevel = compound.getInt("xpLevel");
+        experience = compound.getDouble("experience");
+
+        saturation = compound.getDouble("saturation");
+        hunger = compound.getDouble("hunger");
+        displayName = compound.getString("displayName");
+    }
+
+    public void writeToNBT(NBTCompoundTag compound)
+    {
+        super.writeToNBT(compound);
+        compound.putInt("xpLevel", xpLevel);
+        compound.putDouble("experience", experience);
+
+        compound.putDouble("saturation", saturation);
+        compound.putDouble("hunger", hunger);
+        compound.putString("displayName", displayName);
     }
 }

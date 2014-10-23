@@ -6,6 +6,7 @@ import com.google.common.base.Optional;
 
 import org.craft.blocks.*;
 import org.craft.maths.*;
+import org.craft.nbt.*;
 import org.craft.spongeimpl.math.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -41,10 +42,11 @@ public class Entity implements org.spongepowered.api.entity.Entity
     private boolean           onFire;
     private int               fireTicks;
     private UUID              uuid;
-    protected float           stepHeight = 0.f;
+    protected float           stepHeight;
     private boolean           wasOnGround;
+    public int                entityID;
 
-    public static final float G          = 9.81f / 360f;
+    public static final float G = 9.81f / 360f;
 
     /**
      * Instantiates an Entity with given world
@@ -338,6 +340,60 @@ public class Entity implements org.spongepowered.api.entity.Entity
         float dy = (float) (other.getY() - posY);
         float dz = (float) (other.getZ() - posZ);
         return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    /**
+     * Reads all data from the compound to update/init this entity
+     */
+    public void readFromNBT(NBTCompoundTag compound)
+    {
+        posX = compound.getFloat("posX");
+        posY = compound.getFloat("posY");
+        posZ = compound.getFloat("posZ");
+        velX = compound.getFloat("motionX");
+        velY = compound.getFloat("motionY");
+        velZ = compound.getFloat("motionZ");
+
+        yaw = compound.getFloat("yaw");
+        pitch = compound.getFloat("pitch");
+        roll = compound.getFloat("roll");
+
+        lastYaw = compound.getFloat("lastYaw");
+        lastPitch = compound.getFloat("lastPitch");
+
+        onFire = compound.getBoolean("onFire");
+        fireTicks = compound.getInt("fireTicks");
+
+        stepHeight = compound.getFloat("stepHeight");
+
+        isDead = compound.getBoolean("dead");
+    }
+
+    /**
+     * Writes all data belonging to this entity into the compound for later use
+     */
+    public void writeToNBT(NBTCompoundTag compound)
+    {
+        compound.putFloat("posX", posX);
+        compound.putFloat("posY", posY);
+        compound.putFloat("posZ", posZ);
+        compound.putFloat("motionX", velX);
+        compound.putFloat("motionY", velY);
+        compound.putFloat("motionZ", velZ);
+
+        compound.putFloat("yaw", yaw);
+        compound.putFloat("pitch", pitch);
+        compound.putFloat("roll", roll);
+
+        compound.putFloat("lastYaw", lastYaw);
+        compound.putFloat("lastPitch", lastPitch);
+
+        compound.putBoolean("onFire", onFire);
+        compound.putInt("fireTicks", fireTicks);
+
+        compound.putFloat("stepHeight", stepHeight);
+
+        compound.putBoolean("dead", isDead);
     }
 
     @Override

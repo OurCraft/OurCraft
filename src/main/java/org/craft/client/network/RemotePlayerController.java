@@ -26,8 +26,7 @@ public class RemotePlayerController extends PlayerController
     @Override
     public void onJumpRequested()
     {
-        // TODO Auto-generated method stub
-
+        oc.sendPacket(new C3PlayerJump());
     }
 
     @Override

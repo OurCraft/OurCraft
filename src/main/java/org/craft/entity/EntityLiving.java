@@ -1,6 +1,7 @@
 package org.craft.entity;
 
 import org.craft.inventory.*;
+import org.craft.nbt.*;
 import org.craft.world.*;
 import org.spongepowered.api.entity.*;
 
@@ -47,6 +48,18 @@ public class EntityLiving extends Entity implements LivingEntity
     public org.craft.inventory.Stack getHeldItem()
     {
         return null;
+    }
+
+    public void readFromNBT(NBTCompoundTag compound)
+    {
+        super.readFromNBT(compound);
+        health = compound.getDouble("health");
+    }
+
+    public void writeToNBT(NBTCompoundTag compound)
+    {
+        super.writeToNBT(compound);
+        compound.putDouble("health", health);
     }
 
 }

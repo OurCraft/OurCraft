@@ -24,6 +24,8 @@ public class PacketRegistry
 
         registerPacket(NetworkSide.CLIENT, 0x0, C0PlayerInfos.class);
         registerPacket(NetworkSide.CLIENT, 0x1, C1AskForChunk.class);
+        registerPacket(NetworkSide.CLIENT, 0x2, C2MovePlayer.class);
+        registerPacket(NetworkSide.CLIENT, 0x3, C3PlayerJump.class);
 
         registerPacket(NetworkSide.SERVER, 0x0, S0ConnectionAccepted.class);
         registerPacket(NetworkSide.SERVER, 0x1, S1ChatMessage.class);

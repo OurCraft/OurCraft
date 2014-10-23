@@ -1,9 +1,9 @@
 package org.craft.server;
 
-import java.net.URLClassLoader;
-import java.util.HashMap;
+import java.net.*;
+import java.util.*;
 
-import org.craft.loader.OurClassLoader;
+import org.craft.loader.*;
 
 public class OurCraftServerStartup
 {
@@ -23,7 +23,7 @@ public class OurCraftServerStartup
             for(int i = 0; i < args.length; i++ )
             {
                 String arg = args[i];
-                if(arg.startsWith("-"))
+                if(arg.startsWith("--"))
                 {
                     current = arg.substring(1);
                 }

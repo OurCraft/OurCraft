@@ -1,12 +1,12 @@
 package org.craft.client.start;
 
-import java.io.File;
-import java.net.URLClassLoader;
-import java.util.HashMap;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
-import org.craft.client.OurCraft;
-import org.craft.loader.OurClassLoader;
-import org.craft.utils.SystemUtils;
+import org.craft.client.*;
+import org.craft.loader.*;
+import org.craft.utils.*;
 
 public class OurCraftStartup
 {
@@ -26,7 +26,7 @@ public class OurCraftStartup
             for(int i = 0; i < args.length; i++ )
             {
                 String arg = args[i];
-                if(arg.startsWith("-"))
+                if(arg.startsWith("--"))
                 {
                     current = arg.substring(1);
                 }
