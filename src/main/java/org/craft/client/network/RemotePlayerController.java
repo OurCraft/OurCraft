@@ -1,6 +1,7 @@
 package org.craft.client.network;
 
 import org.craft.client.*;
+import org.craft.client.network.packets.*;
 import org.craft.entity.*;
 import org.craft.utils.*;
 
@@ -32,28 +33,25 @@ public class RemotePlayerController extends PlayerController
     @Override
     public void onMoveLeftRequested()
     {
-        oc.sendPacket(new C2MovePlayer(0));
+        oc.sendPacket(new C2MovePlayer(C2MovePlayer.LEFT));
     }
 
     @Override
     public void onMoveRightRequested()
     {
-        // TODO Auto-generated method stub
-
+        oc.sendPacket(new C2MovePlayer(C2MovePlayer.RIGHT));
     }
 
     @Override
     public void onMoveForwardRequested()
     {
-        // TODO Auto-generated method stub
-
+        oc.sendPacket(new C2MovePlayer(C2MovePlayer.FORWARD));
     }
 
     @Override
     public void onMoveBackwardsRequested()
     {
-        // TODO Auto-generated method stub
-
+        oc.sendPacket(new C2MovePlayer(C2MovePlayer.BACKWARDS));
     }
 
     @Override

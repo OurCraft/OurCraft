@@ -116,7 +116,7 @@ public class ClientNetHandler implements INetworkHandler
             player.setLocation(0, 160 + 17, 0);
             clientWorld.spawn(player);
             game.getRenderEngine().setRenderViewEntity(player);
-            game.setPlayerController(new RemotePlayerController(player));
+            game.setPlayerController(new RemotePlayerController(player, game));
 
             Entity testEntity = new Entity(clientWorld);
             testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
