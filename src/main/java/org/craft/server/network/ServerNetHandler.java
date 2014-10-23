@@ -3,11 +3,10 @@ package org.craft.server.network;
 import io.netty.channel.*;
 
 import org.craft.client.*;
-import org.craft.client.network.packets.*;
 import org.craft.client.render.fonts.*;
 import org.craft.network.*;
+import org.craft.network.packets.*;
 import org.craft.server.*;
-import org.craft.server.network.packets.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 

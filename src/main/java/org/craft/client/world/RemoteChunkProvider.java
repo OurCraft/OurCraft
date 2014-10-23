@@ -3,7 +3,7 @@ package org.craft.client.world;
 import java.util.*;
 
 import org.craft.client.*;
-import org.craft.client.network.packets.*;
+import org.craft.network.packets.*;
 import org.craft.world.*;
 
 public class RemoteChunkProvider extends ChunkProvider

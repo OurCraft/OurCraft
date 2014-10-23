@@ -4,7 +4,7 @@ import io.netty.channel.*;
 
 import org.craft.network.*;
 import org.craft.network.ChannelHandler;
-import org.craft.server.network.packets.*;
+import org.craft.network.packets.*;
 import org.craft.utils.*;
 
 public class NettyServerChannelHandler extends ChannelHandler

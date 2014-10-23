@@ -1,8 +1,8 @@
 package org.craft.client.network;
 
 import org.craft.client.*;
-import org.craft.client.network.packets.*;
 import org.craft.entity.*;
+import org.craft.network.packets.*;
 import org.craft.utils.*;
 
 public class RemotePlayerController extends PlayerController

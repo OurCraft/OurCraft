@@ -9,11 +9,10 @@ import io.netty.channel.socket.nio.*;
 
 import org.craft.client.*;
 import org.craft.client.gui.*;
-import org.craft.client.network.packets.*;
 import org.craft.client.world.*;
 import org.craft.entity.*;
 import org.craft.network.*;
-import org.craft.server.network.packets.*;
+import org.craft.network.packets.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
