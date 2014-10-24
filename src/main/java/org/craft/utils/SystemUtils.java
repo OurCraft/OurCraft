@@ -10,6 +10,8 @@ public class SystemUtils
         WINDOWS, LINUX, MACOSX, SOLARIS, UNKNOWN;
     }
 
+    private static File gameFolder;
+
     public static OperatingSystem getOS()
     {
         String os = System.getProperty("os.name").toLowerCase();
@@ -46,12 +48,14 @@ public class SystemUtils
      */
     public static File getGameFolder()
     {
-        File gameFolder = null;
-        String appdata = System.getenv("APPDATA");
-        if(appdata != null)
-            gameFolder = new File(appdata, ".ourcraft");
-        else
-            gameFolder = new File(System.getProperty("user.home"), ".ourcraft");
+        if(gameFolder == null)
+        {
+            String appdata = System.getenv("APPDATA");
+            if(appdata != null)
+                gameFolder = new File(appdata, ".ourcraft");
+            else
+                gameFolder = new File(System.getProperty("user.home"), ".ourcraft");
+        }
         return gameFolder;
     }
 
@@ -68,5 +72,10 @@ public class SystemUtils
                 }
         }
         file.delete();
+    }
+
+    public static void setGameFolder(File file)
+    {
+        gameFolder = file;
     }
 }

@@ -25,7 +25,7 @@ public class OurCraftServerStartup
                 String arg = args[i];
                 if(arg.startsWith("--"))
                 {
-                    current = arg.substring(1);
+                    current = arg.substring(2);
                 }
                 else
                 {
