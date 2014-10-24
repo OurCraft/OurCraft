@@ -5,77 +5,78 @@ def filteredSourceDir = file("${buildDir}/filtered")
 def versionValue = 'InDev 0.1'
 def mainClass = "org.craft.client.start.OurCraftStartup"
 
-    apply plugin: 'java'
-    sourceCompatibility = 1.6
-    archivesBaseName = 'OurCraft'
-    version = versionValue
+apply plugin: 'java'
+sourceCompatibility = 1.6
+archivesBaseName = 'OurCraft'
+version = versionValue
 
-    //IDE
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
+//IDE
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
-    repositories {
-        mavenCentral()
+repositories {
+    mavenCentral()
+}
+
+//Tasks
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+task processVersion(type: Copy) {
+    from sourceSets.main.java 
+    into filteredSourceDir 
+    // Substitute property references in files
+    // Use some of the filters provided by Ant
+    filter(FixCrLfFilter)
+    filter(ReplaceTokens, tokens: ['version': versionValue])
+    // Use a closure to filter each line
+    filter { String line ->
+        ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+versionValue+'"'))
     }
+}
 
-    //Tasks
-
-    task wrapper(type: Wrapper) {
-        gradleVersion = '2.0'
-    }
-
-    task processVersion(type: Copy) {
-        from sourceSets.main.java 
-        into filteredSourceDir 
-        // Substitute property references in files
-        // Use some of the filters provided by Ant
-        filter(FixCrLfFilter)
-        filter(ReplaceTokens, tokens: ['version': versionValue])
-        // Use a closure to filter each line
-        filter { String line ->
-            ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+versionValue+'"'))
-        }
-    }
-
-    sourceSets { 
-        // This source set will contain all sources that we filter 
-        filtered { 
-            java { 
-                srcDirs = [filteredSourceDir] 
-            } 
+sourceSets { 
+    // This source set will contain all sources that we filter 
+    filtered { 
+        java { 
+            srcDirs = [filteredSourceDir] 
         } 
     } 
+} 
 
-    //force UTF-8 to the compileJava task
-    compileJava.options.encoding = 'UTF-8'
+//force UTF-8 to the compileJava task
+compileJava.options.encoding = 'UTF-8'
 
-    // tell the compileJava task to compile the filtered source 
-    compileJava.source = sourceSets.filtered.java 
+// tell the compileJava task to compile the filtered source 
+compileJava.source = sourceSets.filtered.java 
 
-    // Add dependencies processVersion to compileJava task
-    compileJava.dependsOn processVersion 
+// Add dependencies processVersion to compileJava task
+compileJava.dependsOn processVersion 
 
-    dependencies {
-        compile fileTree(dir: 'libs', include: '*.jar')
-        compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
-        compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-        
-        compile 'io.netty:netty-all:4.0.23.Final'
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
+    
+    compile 'io.netty:netty-all:4.0.23.Final'
 
-        compile 'com.google.guava:guava:18.0'
-        compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.code.gson:gson:2.3'
 
-        compile 'org.reflections:reflections:0.9.9'
-        compile 'org.javassist:javassist:3.18.2-GA'
+    compile 'org.reflections:reflections:0.9.9'
+    compile 'org.javassist:javassist:3.18.2-GA'
 
-        compile 'org.luaj:luaj-jse:3.0'
+    compile 'org.luaj:luaj-jse:3.0'
 
-        compile 'trove:trove:1.0.2'
+    compile 'trove:trove:1.0.2'
 
-        compile project(':SpongeAPI')
-    }
+    compile project(':SpongeAPI')
+}
 
-    jar {
+jar
+{
     manifest {
         attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': mainClass
     }
