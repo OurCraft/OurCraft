@@ -29,7 +29,7 @@ public class ClientDevStart
         final File gameFolder = new File(properties.get("gamefolder"));
         SystemUtils.setGameFolder(gameFolder);
         LWJGLSetup.load(new File(gameFolder, "natives"));
-        OurCraftStartup.start(properties);
+        OurCraftStartup.main(args);
     }
 
 }
