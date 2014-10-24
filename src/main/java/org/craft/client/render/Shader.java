@@ -7,7 +7,6 @@ import java.util.*;
 
 import org.craft.maths.*;
 import org.craft.utils.*;
-import org.lwjgl.*;
 
 public class Shader implements IDisposable
 {
@@ -15,6 +14,9 @@ public class Shader implements IDisposable
     private static Shader            current = null;
     private int                      program;
     private HashMap<String, Integer> locsMap;
+    private static FloatBuffer       floatBuffer8;
+    private static FloatBuffer       floatBuffer12;
+    private static FloatBuffer       floatBuffer16;
 
     public Shader(String vert, String frag)
     {
@@ -73,7 +75,12 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Vector2 v)
     {
         int l = getLocation(uniform);
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 2);
+        if(floatBuffer8 == null)
+        {
+            floatBuffer8 = Buffers.createFloatBuffer(4 * 2);
+        }
+        floatBuffer8.clear();
+        FloatBuffer buffer = floatBuffer8;
         v.write(buffer);
         buffer.flip();
         glUniform2(l, buffer);
@@ -86,7 +93,12 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Vector3 v)
     {
         int l = getLocation(uniform);
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 3);
+        if(floatBuffer12 == null)
+        {
+            floatBuffer12 = Buffers.createFloatBuffer(4 * 3);
+        }
+        floatBuffer12.clear();
+        FloatBuffer buffer = floatBuffer12;
         v.write(buffer);
         buffer.flip();
         glUniform3(l, buffer);
@@ -99,7 +111,12 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Matrix4 m)
     {
         int l = getLocation(uniform);
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4); // TODO: Pooling
+        if(floatBuffer16 == null)
+        {
+            floatBuffer16 = Buffers.createFloatBuffer(4 * 4);
+        }
+        floatBuffer16.clear();
+        FloatBuffer buffer = floatBuffer16;
         m.write(buffer);
         buffer.flip();
         glUniformMatrix4(l, true, buffer);

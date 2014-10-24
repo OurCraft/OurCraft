@@ -35,7 +35,7 @@ public class GuiIngame extends Gui
     public void draw(int mx, int my, RenderEngine renderEngine)
     {
         super.draw(mx, my, renderEngine);
-        getFontRenderer().drawString("Playing as \"" + oc.getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFF, 2, 0, renderEngine);
+        getFontRenderer().drawString("Playing as \"" + oc.getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFFFF, 2, 0, renderEngine);
 
         CollisionInfos infos = oc.getObjectInFront();
         if(infos != null && infos.type == CollisionType.BLOCK)
@@ -65,7 +65,7 @@ public class GuiIngame extends Gui
             String s = I18n.format(stack.getItem().getUnlocalizedID());
             Matrix4 m = renderEngine.getModelviewMatrix().copy();
             renderEngine.setModelviewMatrix(m.mul(scaleMatrix));
-            getFontRenderer().drawShadowedString(s, 0xFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextWidth(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);
+            getFontRenderer().drawShadowedString(s, 0xFFFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextWidth(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);
             renderEngine.setModelviewMatrix(m);
         }
 

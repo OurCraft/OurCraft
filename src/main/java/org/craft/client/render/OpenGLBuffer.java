@@ -65,8 +65,8 @@ public class OpenGLBuffer
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
         indicesLength = indices.size();
-        IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indicesLength);
-        for(int i = 0; i < indicesLength; i++ )
+        IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.size());
+        for(int i = 0; i < indices.size(); i++ )
         {
             int indice = indices.get(i);
             indicesBuffer.put(indice);

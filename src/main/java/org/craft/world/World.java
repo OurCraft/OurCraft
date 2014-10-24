@@ -155,7 +155,7 @@ public class World implements org.spongepowered.api.world.World
         int z = 0;
         float step = 0.005f;
         AABB rayBB = new AABB(Vector3.get(0, 0, 0), Vector3.get(size, size, size));
-        Vector3 blockPos = Vector3.get(x, y, z);
+        Vector3 blockPos = null;
         for(float dist = 0f; dist <= maxDist + step; dist += step)
         {
             x = (int) Math.round(pos.getX());
@@ -167,7 +167,8 @@ public class World implements org.spongepowered.api.world.World
                 AABB blockBB = b.getSelectionBox(this, x, y, z);
                 if(blockBB != null)
                 {
-                    if(blockBB.intersectAABB(rayBB.translate(pos)))
+                    AABB translatedRay = rayBB.translate(pos);
+                    if(blockBB.intersectAABB(translatedRay))
                     {
                         infos.x = x;
                         infos.y = y;
@@ -178,6 +179,7 @@ public class World implements org.spongepowered.api.world.World
                         blockPos = Vector3.get(x + 0.5f, y + 0.5f, z + 0.5f);
 
                         Vector3 diff = blockPos.sub(pos.add(0.5f));
+                        blockPos.dispose();
 
                         float absx = Math.abs(diff.getX());
                         float absy = Math.abs(diff.getY());
@@ -204,10 +206,17 @@ public class World implements org.spongepowered.api.world.World
                             else
                                 infos.side = EnumSide.SOUTH;
                         }
+                        diff.dispose();
                     }
+                    translatedRay.dispose();
+                    blockBB.dispose();
                 }
             }
-            pos = origin.add(ray.mul((maxDist + step) - dist));
+            if(pos != origin)
+                pos.dispose();
+            Vector3 multipliedRay = ray.mul((maxDist + step) - dist);
+            pos = origin.add(multipliedRay);
+            multipliedRay.dispose();
             for(Entity e : entities)
             {
                 if(e.getBoundingBox().intersectAABB(rayBB))
@@ -221,6 +230,8 @@ public class World implements org.spongepowered.api.world.World
                 }
             }
         }
+        if(blockPos != null)
+            blockPos.dispose();
         origin.dispose();
         pos.dispose();
         ray.dispose();

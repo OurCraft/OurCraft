@@ -1,5 +1,7 @@
 package org.craft.client.render.fonts;
 
+import java.util.*;
+
 import org.craft.client.render.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
@@ -7,15 +9,57 @@ import org.craft.utils.*;
 public abstract class FontRenderer implements IDisposable
 {
 
-    protected TextureAtlas atlas;
-    protected String       supportedChars;
-    protected OpenGLBuffer buffer;
+    private final static class TextInfos
+    {
+        public String text;
+        public int    color;
+        public int    posX;
+        public int    posY;
+
+        public TextInfos()
+        {
+
+        }
+
+        public int hashCode()
+        {
+            final int BASE = 17;
+            final int MULTIPLIER = 31;
+
+            int result = BASE;
+            result = MULTIPLIER * result + posX;
+            result = MULTIPLIER * result + posY;
+            result = MULTIPLIER * result + color;
+            result = MULTIPLIER * result + text.hashCode();
+
+            return result;
+        }
+
+        public boolean equals(Object o)
+        {
+            if(o instanceof TextInfos)
+            {
+                TextInfos infos = (TextInfos) o;
+                return infos.text.equals(text) && infos.color == color && infos.posX == posX && infos.posY == posY;
+            }
+            return false;
+        }
+
+    }
+
+    protected TextureAtlas                   atlas;
+    protected String                         supportedChars;
+    protected OpenGLBuffer                   buffer;
+    private HashMap<TextInfos, OpenGLBuffer> cache;
+    private TextInfos                        textInfos;
 
     /**
      * Creates font renderer for given supportedChars and given texture atlas
      */
     public FontRenderer(TextureAtlas atlas, String supportedChars)
     {
+        textInfos = new TextInfos();
+        cache = new HashMap<TextInfos, OpenGLBuffer>();
         this.atlas = atlas;
         this.supportedChars = supportedChars;
         this.buffer = new OpenGLBuffer();
@@ -37,6 +81,22 @@ public abstract class FontRenderer implements IDisposable
     {
         if(text.replace(" ", "").trim().isEmpty())
             return;
+        String colorAsHex = Integer.toHexString(color);
+        for(int i = 8; i > colorAsHex.length(); i-- )
+            colorAsHex = '0' + colorAsHex;
+        text = TextFormatting.COLOR.toString() + colorAsHex + text;
+        textInfos.text = text;
+        textInfos.color = color;
+        textInfos.posX = xo;
+        textInfos.posY = yo;
+        if(!text.contains(TextFormatting.OBFUSCATED.toString()))
+        {
+            if(cache.containsKey(textInfos))
+            {
+                renderEngine.renderBuffer(cache.get(textInfos), atlas.getTexture());
+                return;
+            }
+        }
         int currentIndex = 0;
         float x = (float) xo;
         float y = (float) yo;
@@ -86,6 +146,7 @@ public abstract class FontRenderer implements IDisposable
                         r = (currentColor >> 16 & 0xFF) / 255f;
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
+                        colorVec.dispose();
                         colorVec = Vector3.get(r, g, b);
                     }
                     else if(format == TextFormatting.OBFUSCATED)
@@ -98,6 +159,7 @@ public abstract class FontRenderer implements IDisposable
                         r = (currentColor >> 16 & 0xFF) / 255f;
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
+                        colorVec.dispose();
                         colorVec = Vector3.get(r, g, b);
                     }
                     else if(format == TextFormatting.ITALIC)
@@ -186,14 +248,24 @@ public abstract class FontRenderer implements IDisposable
 
                 currentIndex += 4;
 
-                x += getCharWidth(c) + getCharSpacing(c, next);
-                x = (float) Math.floor(x);
+                x += Math.floor(getCharWidth(c) + getCharSpacing(c, next));
             }
         }
         buffer.upload();
         renderEngine.renderBuffer(buffer, atlas.getTexture());
         colorVec.dispose();
-        buffer.clearAndDisposeVertices();
+        if(!text.contains(TextFormatting.OBFUSCATED.toString()))
+        {
+            TextInfos textInfos1 = new TextInfos();
+            textInfos1.text = text;
+            textInfos1.color = color;
+            textInfos1.posX = xo;
+            textInfos1.posY = yo;
+            cache.put(textInfos1, buffer);
+            buffer = new OpenGLBuffer();
+        }
+        else
+            buffer.clearAndDisposeVertices();
     }
 
     protected int getIndex(char c)
@@ -272,8 +344,16 @@ public abstract class FontRenderer implements IDisposable
         return l;
     }
 
+    public void disposeCache()
+    {
+        for(OpenGLBuffer cachedBuffer : cache.values())
+            cachedBuffer.dispose();
+        cache.clear();
+    }
+
     public void dispose()
     {
+        disposeCache();
         buffer.dispose();
     }
 }

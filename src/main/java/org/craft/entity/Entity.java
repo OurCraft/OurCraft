@@ -9,6 +9,7 @@ import org.craft.maths.*;
 import org.craft.nbt.*;
 import org.craft.spongeimpl.math.*;
 import org.craft.utils.*;
+import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.item.inventory.*;
@@ -45,6 +46,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
     protected float           stepHeight;
     private boolean           wasOnGround;
     public int                entityID;
+    private CollisionInfos    collInfos;
 
     public static final float G = 9.81f / 360f;
 
@@ -53,6 +55,7 @@ public class Entity implements org.spongepowered.api.entity.Entity
      */
     public Entity(World world)
     {
+        collInfos = new CollisionInfos();
         uuid = generateUUID();
         this.boundingBox = new AABB(Vector3.get(0, 0, 0), Vector3.get(1, 1, 1));
         this.isDead = false;
@@ -326,9 +329,9 @@ public class Entity implements org.spongepowered.api.entity.Entity
      */
     public CollisionInfos getObjectInFront(float maxDist)
     {
-        CollisionInfos infos = new CollisionInfos();
-        worldObj.performRayCast(this, infos, maxDist);
-        return infos;
+        collInfos.type = CollisionType.NONE;
+        worldObj.performRayCast(this, collInfos, maxDist);
+        return collInfos;
     }
 
     /**

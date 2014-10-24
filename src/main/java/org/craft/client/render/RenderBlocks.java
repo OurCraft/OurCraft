@@ -223,7 +223,7 @@ public class RenderBlocks
                                             int fz = z + c.getCoords().z * 16;
                                             if(renderer != null && renderer.shouldRenderInPass(currentPass, w, b, fx, fy, fz))
                                             {
-                                                BlockRenderInfos infos = new BlockRenderInfos();
+                                                BlockRenderInfos infos = getBlockRenderInfos();
                                                 infos.block = b;
                                                 infos.x = x + c.getCoords().x * 16;
                                                 infos.y = y + c.getCoords().y * 16;
@@ -257,6 +257,7 @@ public class RenderBlocks
                             for(BlockRenderInfos infos : infosList)
                             {
                                 getRenderer(infos.block).render(renderEngine, buffer, w, infos.block, infos.x, infos.y, infos.z);
+                                disposeBlockRenderInfos(infos);
                             }
                         }
                         flush(buffer);
@@ -275,4 +276,34 @@ public class RenderBlocks
             }
         }
     }
+
+    private Stack<BlockRenderInfos> unused = new Stack<BlockRenderInfos>();
+
+    public BlockRenderInfos getBlockRenderInfos()
+    {
+        BlockRenderInfos v = null;
+        if(unused.isEmpty())
+        {
+            v = new BlockRenderInfos();
+        }
+        else
+        {
+            try
+            {
+                v = unused.pop();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                v = new BlockRenderInfos();
+            }
+        }
+        return v;
+    }
+
+    public void disposeBlockRenderInfos(BlockRenderInfos infos)
+    {
+        unused.push(infos);
+    }
+
 }

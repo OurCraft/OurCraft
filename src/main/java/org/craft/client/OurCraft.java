@@ -63,6 +63,7 @@ public class OurCraft implements Runnable, Game
     private static OurCraft          instance;
     private CollisionInfos           objectInFront               = null;
     private OpenGLBuffer             crosshairBuffer;
+    private ResourceLocation         crosshairLocation;
     private FallbackRender<Entity>   fallbackRenderer;
     private Runtime                  runtime;
     private FontRenderer             fontRenderer;
@@ -84,7 +85,7 @@ public class OurCraft implements Runnable, Game
     private int                      fps;
     private double                   expectedFrameRate           = 60.0;
     private double                   timeBetweenUpdates          = 1000000000 / expectedFrameRate;
-    private final int                maxUpdatesBeforeRender      = 5;
+    private final int                maxUpdatesBeforeRender      = 3;
     private double                   lastUpdateTime              = System.nanoTime();
     private double                   lastRenderTime              = System.nanoTime();
 
@@ -105,6 +106,7 @@ public class OurCraft implements Runnable, Game
         this.assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
         this.gameFolderLoader = new DiskSimpleResourceLoader(SystemUtils.getGameFolder().getAbsolutePath());
         runtime = Runtime.getRuntime();
+        crosshairLocation = new ResourceLocation("ourcraft", "textures/crosshair.png");
     }
 
     public void start(HashMap<String, String> properties)
@@ -279,6 +281,8 @@ public class OurCraft implements Runnable, Game
     public void openMenu(Gui gui)
     {
         this.newMenu = gui;
+        if(currentMenu != newMenu)
+            fontRenderer.disposeCache();
     }
 
     /**
@@ -544,7 +548,7 @@ public class OurCraft implements Runnable, Game
             {
                 renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
                 glLogicOp(GL_XOR);
-                renderEngine.bindLocation(new ResourceLocation("ourcraft", "textures/crosshair.png"));
+                renderEngine.bindLocation(crosshairLocation);
                 renderEngine.renderBuffer(crosshairBuffer);
                 renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
             }
@@ -629,6 +633,10 @@ public class OurCraft implements Runnable, Game
             renderEngine.setModelviewMatrix(selectionBoxMatrix);
             renderEngine.renderBuffer(selectionBoxBuffer, GL_LINES);
             renderEngine.setModelviewMatrix(modelView);
+            ratio.dispose();
+            blockSelectBB.dispose();
+            modelView.dispose();
+            selectionBoxMatrix.dispose();
         }
     }
 
