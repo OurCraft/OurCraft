@@ -2,7 +2,7 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 
 def filteredSourceDir = file("${buildDir}/filtered") 
-def versionValue = 'InDev 0.1'
+def versionValue = 'InDev-0.1'
 def mainClass = "org.craft.client.start.OurCraftStartup"
 
 apply plugin: 'java'
