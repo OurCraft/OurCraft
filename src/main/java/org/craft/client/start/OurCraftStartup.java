@@ -35,6 +35,8 @@ public class OurCraftStartup
                 }
             }
             SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
+            System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
+            System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));
             OurCraft instance = new OurCraft(classLoader);
             instance.start(properties);
         }

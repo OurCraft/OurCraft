@@ -24,3 +24,4 @@ ourcraft_textures_blocks.png
 # Intellij IDEA #
 .idea/
 *.iml
+/build/
