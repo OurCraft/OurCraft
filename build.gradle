@@ -19,6 +19,11 @@ def mainClass = "org.craft.client.start.OurCraftStartup"
     }
 
     //Tasks
+
+    task wrapper(type: Wrapper) {
+        gradleVersion = '2.0'
+    }
+
     task processVersion(type: Copy) {
         from sourceSets.main.java 
         into filteredSourceDir 
@@ -64,6 +69,7 @@ def mainClass = "org.craft.client.start.OurCraftStartup"
         compile 'org.javassist:javassist:3.18.2-GA'
 
         compile 'org.luaj:luaj-jse:3.0'
+
         compile 'trove:trove:1.0.2'
 
         compile project(':SpongeAPI')
