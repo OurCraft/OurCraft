@@ -21,6 +21,7 @@ public class OurCraftStartup
             properties.put("username", "Player_" + System.currentTimeMillis());
             properties.put("lang", "en_US");
             properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
+            properties.put("nativesFolder", SystemUtils.getGameFolder().getAbsolutePath() + "/natives");
             String current = null;
             for(int i = 0; i < args.length; i++ )
             {
