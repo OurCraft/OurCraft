@@ -146,6 +146,11 @@ public class OurCraft implements Runnable, Game
                 if(e.getMessage().contains("Could not create context"))
                     Display.create();
             }
+            if(!GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
+            {
+                Log.fatal("Sorry, but this game only works with Vertex Buffer Objects and it seems your graphical card can't support it. :(");
+            }
+
             fontRenderer = new BaseFontRenderer();
 
             //Init the RenderEngine
