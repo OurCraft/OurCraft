@@ -173,21 +173,7 @@ public class OurCraft implements Runnable, Game
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(this));
 
-            crosshairBuffer = new OpenGLBuffer();
-            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
-            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
-            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), Vector2.get(1, 1)));
-            crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), Vector2.get(0, 1)));
-
-            crosshairBuffer.addIndex(0);
-            crosshairBuffer.addIndex(1);
-            crosshairBuffer.addIndex(2);
-
-            crosshairBuffer.addIndex(2);
-            crosshairBuffer.addIndex(3);
-            crosshairBuffer.addIndex(0);
-            crosshairBuffer.upload();
-            crosshairBuffer.clearAndDisposeVertices();
+            loadCrosshairBuffer();
 
             selectionBoxBuffer = new OpenGLBuffer();
             selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 0))); //0
@@ -245,6 +231,30 @@ public class OurCraft implements Runnable, Game
         {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads crosshair buffer
+     */
+    private void loadCrosshairBuffer()
+    {
+        if(crosshairBuffer != null)
+            crosshairBuffer.dispose();
+        crosshairBuffer = new OpenGLBuffer();
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), Vector2.get(1, 1)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), Vector2.get(0, 1)));
+
+        crosshairBuffer.addIndex(0);
+        crosshairBuffer.addIndex(1);
+        crosshairBuffer.addIndex(2);
+
+        crosshairBuffer.addIndex(2);
+        crosshairBuffer.addIndex(3);
+        crosshairBuffer.addIndex(0);
+        crosshairBuffer.upload();
+        crosshairBuffer.clearAndDisposeVertices();
     }
 
     @SuppressWarnings("unchecked")
@@ -309,6 +319,27 @@ public class OurCraft implements Runnable, Game
             render(delta);
             Display.update();
 
+            if(Display.wasResized())
+            {
+                int w = Display.getWidth();
+                int h = Display.getHeight();
+                displayWidth = w;
+                displayHeight = h;
+
+                renderEngine.loadMatrices();
+                try
+                {
+                    renderEngine.loadShaders();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+                currentMenu.removeAllWidgets();
+                currentMenu.init();
+                loadCrosshairBuffer();
+            }
+
             lastRenderTime = now;
             // Update the frames we got.
             int thisSecond = (int) (lastUpdateTime / 1000000000);
@@ -351,7 +382,10 @@ public class OurCraft implements Runnable, Game
         {
             currentMenu = newMenu;
             if(currentMenu != null)
+            {
+                currentMenu.removeAllWidgets();
                 currentMenu.init();
+            }
         }
         while(Mouse.next())
         {
@@ -508,7 +542,7 @@ public class OurCraft implements Runnable, Game
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.begin();
         ArrayList<Chunk> visiblesChunks = getVisibleChunks();
-        glViewport(0, 0, Display.getWidth(), Display.getHeight());
+        glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 0.6666667f, 1, 0);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);

@@ -19,6 +19,8 @@ public class Plane
 
     public float getDistance(Vector3 point)
     {
+        if(point == null || point == null || this.point == null)
+            return 0f;
         float a = normal.getX();
         float b = normal.getY();
         float c = normal.getZ();

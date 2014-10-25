@@ -42,6 +42,8 @@ public class RenderEngine implements IDisposable
     private float                                     ratio;
     private float                                     nearDist;
     private float                                     farDist;
+    private int                                       displayWidth;
+    private int                                       displayHeight;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
@@ -49,53 +51,11 @@ public class RenderEngine implements IDisposable
         this.loader = loader;
         texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
         projectFromEntity = true;
-        modelMatrix = Matrix4.get().initIdentity();
-        fov = (float) Math.toRadians(90);
-        ratio = 16f / 9f;
-        nearDist = 0.01f;
-        farDist = 100f;
-        projection3dMatrix = Matrix4.get().initPerspective(fov, ratio, nearDist, farDist);
-        projection = projection3dMatrix;
-        projectionHud = Matrix4.get().initOrthographic(0, Display.getWidth(), Display.getHeight(), 0, -1, 1);
+        depthBuffer = -1;
+        framebufferId = -1;
+        loadMatrices();
         loadShaders();
         glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-
-        colorBuffer = new Texture(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), null);
-
-        depthBuffer = glGenRenderbuffers();
-        glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight());
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-        framebufferId = glGenFramebuffers();
-        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer.getTextureID(), 0);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-        glDrawBuffers((IntBuffer) BufferUtils.createIntBuffer(2).put(GL_COLOR_ATTACHMENT0).put(GL_NONE).flip());
-
-        int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if(status != GL_FRAMEBUFFER_COMPLETE)
-        {
-            Log.fatal("Framebuffer could not be created, status code: " + status);
-        }
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        renderBuffer = new OpenGLBuffer();
-
-        renderBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 1)));
-        renderBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth(), 0, 0), Vector2.get(1, 1)));
-        renderBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth(), Display.getHeight(), 0), Vector2.get(1, 0)));
-        renderBuffer.addVertex(Vertex.get(Vector3.get(0, Display.getHeight(), 0), Vector2.get(0, 0)));
-
-        renderBuffer.addIndex(0);
-        renderBuffer.addIndex(1);
-        renderBuffer.addIndex(2);
-
-        renderBuffer.addIndex(2);
-        renderBuffer.addIndex(3);
-        renderBuffer.addIndex(0);
-        renderBuffer.upload();
-        renderBuffer.clearAndDisposeVertices();
 
         this.frustum = new Frustum();
     }
@@ -415,16 +375,21 @@ public class RenderEngine implements IDisposable
      */
     public void loadShaders() throws Exception
     {
+        glUseProgram(0);
+        if(basicShader != null)
+            basicShader.dispose();
+        if(postRenderShader != null)
+            postRenderShader.dispose();
         basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
         basicShader.bind();
         basicShader.setUniform("projection", projectionHud);
-        basicShader.setUniform("modelview", Matrix4.get().initIdentity());
+        basicShader.setUniform("modelview", modelMatrix);
 
         currentShader = basicShader;
         postRenderShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
         postRenderShader.bind();
         postRenderShader.setUniform("projection", projectionHud);
-        postRenderShader.setUniform("modelview", Matrix4.get().initIdentity());
+        postRenderShader.setUniform("modelview", modelMatrix);
     }
 
     /**
@@ -434,6 +399,7 @@ public class RenderEngine implements IDisposable
     {
         currentShader.bind();
         glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+        glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 1, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -445,6 +411,7 @@ public class RenderEngine implements IDisposable
     public void end()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, displayWidth, displayHeight);
         postRenderShader.bind();
         bindTexture(colorBuffer, 0);
         renderBuffer(renderBuffer);
@@ -558,5 +525,79 @@ public class RenderEngine implements IDisposable
     public ITextureObject getByLocation(ResourceLocation loc)
     {
         return texturesLocs.get(loc);
+    }
+
+    /**
+     * Loads all matrices (projection/hud)
+     */
+    public void loadMatrices()
+    {
+        this.displayWidth = OurCraft.getOurCraft().getDisplayWidth();
+        this.displayHeight = OurCraft.getOurCraft().getDisplayHeight();
+        if(modelMatrix != null)
+        {
+            modelMatrix.dispose();
+            if(projection != projection3dMatrix)
+                projection.dispose();
+            projection3dMatrix.dispose();
+            projectionHud.dispose();
+        }
+        modelMatrix = Matrix4.get().initIdentity();
+        fov = (float) Math.toRadians(90);
+        ratio = (float) displayWidth / (float) displayHeight;
+        nearDist = 0.01f;
+        farDist = 100f;
+        projection3dMatrix = Matrix4.get().initPerspective(fov, ratio, nearDist, farDist);
+        projection = projection3dMatrix;
+        projectionHud = Matrix4.get().initOrthographic(0, displayWidth, displayHeight, 0, -1, 1);
+
+        if(renderBuffer != null)
+            renderBuffer.dispose();
+        renderBuffer = new OpenGLBuffer();
+
+        renderBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 1)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(displayWidth, 0, 0), Vector2.get(1, 1)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(displayWidth, displayHeight, 0), Vector2.get(1, 0)));
+        renderBuffer.addVertex(Vertex.get(Vector3.get(0, displayHeight, 0), Vector2.get(0, 0)));
+
+        renderBuffer.addIndex(0);
+        renderBuffer.addIndex(1);
+        renderBuffer.addIndex(2);
+
+        renderBuffer.addIndex(2);
+        renderBuffer.addIndex(3);
+        renderBuffer.addIndex(0);
+        renderBuffer.upload();
+        renderBuffer.clearAndDisposeVertices();
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        if(colorBuffer != null)
+            colorBuffer.dispose();
+        if(depthBuffer != -1)
+            glDeleteRenderbuffers(depthBuffer);
+        if(framebufferId != -1)
+            glDeleteFramebuffers(framebufferId);
+        colorBuffer = new Texture(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), null);
+
+        depthBuffer = glGenRenderbuffers();
+        glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight());
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        framebufferId = glGenFramebuffers();
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer.getTextureID(), 0);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+        glDrawBuffers((IntBuffer) BufferUtils.createIntBuffer(2).put(GL_COLOR_ATTACHMENT0).put(GL_NONE).flip());
+
+        int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(status != GL_FRAMEBUFFER_COMPLETE)
+        {
+            Log.fatal("Framebuffer could not be created, status code: " + status);
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     }
 }

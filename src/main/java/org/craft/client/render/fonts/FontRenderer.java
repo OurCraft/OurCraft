@@ -97,6 +97,8 @@ public abstract class FontRenderer implements IDisposable
                 return;
             }
         }
+        buffer.clearAndDisposeVertices();
+
         int currentIndex = 0;
         float x = (float) xo;
         float y = (float) yo;
@@ -146,7 +148,6 @@ public abstract class FontRenderer implements IDisposable
                         r = (currentColor >> 16 & 0xFF) / 255f;
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
-                        colorVec.dispose();
                         colorVec = Vector3.get(r, g, b);
                     }
                     else if(format == TextFormatting.OBFUSCATED)
@@ -159,7 +160,6 @@ public abstract class FontRenderer implements IDisposable
                         r = (currentColor >> 16 & 0xFF) / 255f;
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
-                        colorVec.dispose();
                         colorVec = Vector3.get(r, g, b);
                     }
                     else if(format == TextFormatting.ITALIC)
@@ -264,8 +264,6 @@ public abstract class FontRenderer implements IDisposable
             cache.put(textInfos1, buffer);
             buffer = new OpenGLBuffer();
         }
-        else
-            buffer.clearAndDisposeVertices();
     }
 
     protected int getIndex(char c)

@@ -231,4 +231,12 @@ public abstract class Gui
             }
         }
     }
+
+    /**
+     * Clears widget list
+     */
+    public void removeAllWidgets()
+    {
+        widgets.clear();
+    }
 }
