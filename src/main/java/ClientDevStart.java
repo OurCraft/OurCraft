@@ -1,11 +1,12 @@
-import org.craft.client.start.OurCraftStartup;
-import org.craft.utils.SystemUtils;
+import java.io.*;
+import java.util.*;
 
-import java.io.File;
-import java.util.HashMap;
+import org.craft.client.start.*;
+import org.craft.utils.*;
 
 public class ClientDevStart
 {
+
     public static void main(String[] args) throws Exception
     {
         HashMap<String, String> properties = new HashMap<String, String>();
@@ -13,9 +14,10 @@ public class ClientDevStart
         properties.put("username", "Player_" + (int) (Math.random() * 100000L));
         properties.put("lang", "en_US");
         properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
-        for (String arg : args)
+        for(int i = 0; i < args.length; i++ )
         {
-            if (arg.startsWith("--"))
+            String arg = args[i];
+            if(arg.startsWith("--"))
             {
                 current = arg.substring(2);
             }
