@@ -1,52 +1,73 @@
 package org.craft.client;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
-
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.nio.*;
-import java.util.*;
-
-import javax.imageio.*;
-
-import org.craft.blocks.*;
-import org.craft.blocks.states.*;
-import org.craft.client.gui.*;
-import org.craft.client.models.*;
-import org.craft.client.network.*;
+import org.craft.blocks.Block;
+import org.craft.blocks.Blocks;
+import org.craft.blocks.states.BlockStates;
+import org.craft.client.gui.Gui;
+import org.craft.client.gui.GuiMainMenu;
+import org.craft.client.gui.GuiPauseMenu;
+import org.craft.client.models.ModelLoader;
+import org.craft.client.network.ClientNetHandler;
 import org.craft.client.render.*;
-import org.craft.client.render.entity.*;
-import org.craft.client.render.fonts.*;
-import org.craft.client.sound.*;
-import org.craft.entity.*;
+import org.craft.client.render.entity.FallbackRender;
+import org.craft.client.render.fonts.BaseFontRenderer;
+import org.craft.client.render.fonts.FontRenderer;
+import org.craft.client.render.fonts.TrueTypeFontRenderer;
+import org.craft.client.sound.SoundEngine;
 import org.craft.entity.Entity;
-import org.craft.items.*;
-import org.craft.loader.*;
-import org.craft.maths.*;
-import org.craft.modding.*;
-import org.craft.modding.events.*;
-import org.craft.network.*;
+import org.craft.entity.EntityPlayer;
+import org.craft.items.Items;
+import org.craft.loader.OurClassLoader;
+import org.craft.maths.AABB;
+import org.craft.maths.Matrix4;
+import org.craft.maths.Vector2;
+import org.craft.maths.Vector3;
+import org.craft.modding.AddonsLoader;
+import org.craft.modding.OurModEventHandler;
+import org.craft.modding.events.EventBus;
+import org.craft.network.AbstractPacket;
+import org.craft.network.PacketRegistry;
 import org.craft.resources.*;
-import org.craft.spongeimpl.events.state.*;
-import org.craft.spongeimpl.events.world.*;
-import org.craft.spongeimpl.game.*;
-import org.craft.spongeimpl.plugin.*;
+import org.craft.spongeimpl.events.state.SpongeInitEvent;
+import org.craft.spongeimpl.events.state.SpongePostInitEvent;
+import org.craft.spongeimpl.events.world.SpongeWorldLoadEvent;
+import org.craft.spongeimpl.events.world.SpongeWorldUnloadEvent;
+import org.craft.spongeimpl.game.SpongeGameRegistry;
+import org.craft.spongeimpl.plugin.SpongePluginManager;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
-import org.craft.utils.crash.*;
-import org.craft.world.*;
-import org.lwjgl.*;
-import org.lwjgl.input.*;
-import org.lwjgl.openal.*;
+import org.craft.utils.crash.CrashReport;
+import org.craft.world.Chunk;
+import org.craft.world.World;
+import org.craft.world.WorldLoader;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
-import org.spongepowered.api.*;
-import org.spongepowered.api.entity.*;
-import org.spongepowered.api.event.*;
-import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.util.scheduler.*;
+import org.spongepowered.api.Game;
+import org.spongepowered.api.GameRegistry;
+import org.spongepowered.api.Platform;
+import org.spongepowered.api.entity.Player;
+import org.spongepowered.api.event.EventManager;
+import org.spongepowered.api.event.SpongeEventHandler;
+import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginManager;
+import org.spongepowered.api.util.scheduler.Scheduler;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.*;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 public class OurCraft implements Runnable, Game
 {
@@ -99,6 +120,8 @@ public class OurCraft implements Runnable, Game
     private OurClassLoader           classLoader;
     private SoundEngine              sndEngine;
 
+    private boolean                  useQwerty                   = false;
+
     public OurCraft(OurClassLoader cL)
     {
         instance = this;
@@ -112,6 +135,7 @@ public class OurCraft implements Runnable, Game
     public void start(HashMap<String, String> properties)
     {
         username = properties.get("username");
+        useQwerty = Boolean.parseBoolean(properties.get("useqwerty"));
         I18n.setCurrentLanguage(properties.get("lang"));
         new Thread(this).start();
     }
@@ -459,21 +483,43 @@ public class OurCraft implements Runnable, Game
         mouseHandler.update();
         if(playerController != null)
         {
-            if(Keyboard.isKeyDown(Keyboard.KEY_Z))
+            if (useQwerty)
             {
-                playerController.onMoveForwardRequested();
+                if(Keyboard.isKeyDown(Keyboard.KEY_W))
+                {
+                    playerController.onMoveForwardRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_S))
+                {
+                    playerController.onMoveBackwardsRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_A))
+                {
+                    playerController.onMoveLeftRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_D))
+                {
+                    playerController.onMoveRightRequested();
+                }
             }
-            if(Keyboard.isKeyDown(Keyboard.KEY_S))
+            else
             {
-                playerController.onMoveBackwardsRequested();
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_Q))
-            {
-                playerController.onMoveLeftRequested();
-            }
-            if(Keyboard.isKeyDown(Keyboard.KEY_D))
-            {
-                playerController.onMoveRightRequested();
+                if(Keyboard.isKeyDown(Keyboard.KEY_Z))
+                {
+                    playerController.onMoveForwardRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_S))
+                {
+                    playerController.onMoveBackwardsRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_Q))
+                {
+                    playerController.onMoveLeftRequested();
+                }
+                if(Keyboard.isKeyDown(Keyboard.KEY_D))
+                {
+                    playerController.onMoveRightRequested();
+                }
             }
             if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
