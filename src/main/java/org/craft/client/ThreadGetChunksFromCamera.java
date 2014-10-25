@@ -41,11 +41,11 @@ public class ThreadGetChunksFromCamera extends Thread
                                 if(fy < 0)
                                     continue yLoop;
                                 if(clientWorld != null)
-                                //                                    synchronized(clientWorld)
-                                {
-                                    if(!clientWorld.doesChunkExists((int) Math.floor(fx / 16f), (int) Math.floor(fy / 16f), (int) Math.floor(fz / 16f)))
-                                        clientWorld.createChunk((int) Math.floor(fx / 16f), (int) Math.floor(fy / 16f), (int) Math.floor(fz / 16f));
-                                }
+                                    synchronized(clientWorld)
+                                    {
+                                        if(!clientWorld.doesChunkExists((int) Math.floor(fx / 16f), (int) Math.floor(fy / 16f), (int) Math.floor(fz / 16f)))
+                                            clientWorld.createChunk((int) Math.floor(fx / 16f), (int) Math.floor(fy / 16f), (int) Math.floor(fz / 16f));
+                                    }
                             }
                         }
                     }
