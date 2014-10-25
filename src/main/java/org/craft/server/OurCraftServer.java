@@ -48,18 +48,14 @@ public class OurCraftServer implements Game, CommandSource
     private org.craft.world.World serverWorld;
 
     private int                   frame;
-    private int                   fps;
-    private double                expectedFrameRate           = 60.0;
-    private double                timeBetweenUpdates          = 1000000000 / expectedFrameRate;
-    private final int             maxUpdatesBeforeRender      = 3;
-    private double                lastUpdateTime              = System.nanoTime();
-    private double                lastRenderTime              = System.nanoTime();
+    private int                   ups;
+    private double                expectedFrameRate  = 60.0;
+    private double                timeBetweenUpdates = 1000000000 / expectedFrameRate;
+    private double                lastUpdateTime     = System.nanoTime();
 
     // If we are able to get as high as this FPS, don't render again.
-    private final double          TARGET_FPS                  = 60;
-    private final double          TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
-    private int                   lastSecondTime              = (int) (lastUpdateTime / 1000000000);
+    private int                   lastSecondTime     = (int) (lastUpdateTime / 1000000000);
     private boolean               running;
     private AssetLoader           assetsLoader;
     private WorldLoader           worldLoader;
@@ -263,16 +259,13 @@ public class OurCraftServer implements Game, CommandSource
     private final void tick()
     {
         double now = System.nanoTime();
-        int updateCount = 0;
 
         {
             double delta = timeBetweenUpdates / 1000000000;
-            while(now - lastUpdateTime > timeBetweenUpdates && updateCount < maxUpdatesBeforeRender)
+            while(now - lastUpdateTime > timeBetweenUpdates)
             {
-
                 update(delta);
                 lastUpdateTime += timeBetweenUpdates;
-                updateCount++ ;
             }
 
             if(now - lastUpdateTime > timeBetweenUpdates)
@@ -280,18 +273,17 @@ public class OurCraftServer implements Game, CommandSource
                 lastUpdateTime = now - timeBetweenUpdates;
             }
 
-            lastRenderTime = now;
             // Update the frames we got.
             int thisSecond = (int) (lastUpdateTime / 1000000000);
             frame++ ;
             if(thisSecond > lastSecondTime)
             {
-                fps = frame;
+                ups = frame;
                 frame = 0;
                 lastSecondTime = thisSecond;
             }
 
-            while(now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < timeBetweenUpdates)
+            while(now - lastUpdateTime < timeBetweenUpdates)
             {
                 Thread.yield();
 

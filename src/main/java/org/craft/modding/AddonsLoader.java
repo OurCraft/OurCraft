@@ -7,7 +7,7 @@ import java.util.*;
 import com.google.gson.*;
 
 import org.apache.logging.log4j.*;
-import org.craft.loader.OurClassLoader;
+import org.craft.loader.*;
 import org.craft.modding.events.*;
 import org.craft.modding.script.lua.*;
 import org.craft.resources.*;
@@ -24,14 +24,14 @@ public class AddonsLoader
     private EventBus                                               eventBus;
     private Game                                                   game;
     private LuaEventBusListener                                    luaListener;
-    private OurClassLoader classLoader;
+    private OurClassLoader                                         classLoader;
 
     public AddonsLoader(Game gameInstance, EventBus eventBus)
     {
         this.classLoader = (OurClassLoader) Thread.currentThread().getContextClassLoader();
         luaListener = new LuaEventBusListener();
         eventBus.addListener(luaListener);
-        
+
         this.game = gameInstance;
         this.eventBus = eventBus;
         handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
@@ -79,7 +79,6 @@ public class AddonsLoader
             Log.error("Tried to register addon " + clazz.getName() + " but it is not supported");
         }
     }
-
 
     public void loadAll(File... folders)
     {
@@ -131,10 +130,10 @@ public class AddonsLoader
                             {
                                 Log.error("Missing data when loading lua addon: luaAddon.json must contain fields \"id\", \"name\", \"version\" and \"mainClass\"");
                             }
-                            
+
                             this.classLoader.addFile(file);
                         }
-                        
+
                     }
                     catch(Exception e)
                     {

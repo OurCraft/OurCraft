@@ -17,7 +17,6 @@ public class OpenGLBuffer
     private int               iboID;
     private ArrayList<Vertex> vertices = new ArrayList<Vertex>();
     private TIntArrayList     indices  = new TIntArrayList();
-    private int               indicesLength;
     private int               verticesLength;
 
     /**
@@ -64,7 +63,6 @@ public class OpenGLBuffer
         GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
-        indicesLength = indices.size();
         IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.size());
         for(int i = 0; i < indices.size(); i++ )
         {

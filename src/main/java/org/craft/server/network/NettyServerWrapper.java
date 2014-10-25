@@ -23,7 +23,6 @@ public class NettyServerWrapper implements Runnable
     private int                              port;
     private EventBus                         eventBus;
     private Game                             game;
-    private ArrayList<Channel>               channels;
     private HashMap<String, Channel>         channelsMap;
     private Channel                          serverChannel;
     private HashMap<Channel, EntityPlayerMP> channels2players;
@@ -31,7 +30,6 @@ public class NettyServerWrapper implements Runnable
 
     public NettyServerWrapper(Game gameInstance, EventBus eventBus, int port)
     {
-        channels = new ArrayList<Channel>();
         channelsMap = new HashMap<String, Channel>();
         channels2players = new HashMap<Channel, EntityPlayerMP>();
         players2channels = new HashMap<EntityPlayerMP, Channel>();
