@@ -1,3 +1,5 @@
+lang.name=Français (France)
+
 lang.test1=OurCraft!
 lang.test2=OurCraft et l'argument donné est: %1$d
 lang.test3=OurCraft et l'argument donné est: %1$s
@@ -8,6 +10,8 @@ main.play.multiplayer=Jeu multijoueur
 main.quit=Quitter
 main.play.return=Retourner dans le jeu
 main.play.quitToMainScreen=Returner sur le menu principal
+main.settings=Options
+main.lang=Langue
 
 block.log=Bûche
 
@@ -26,3 +30,9 @@ menu.deleteworld.title=Supprimer le monde
 menu.deleteworld.delete=Oui, j'en suis sûr
 menu.deleteworld.desc0=Supprimer le monde dure pour §ul'éternité§r (une période de temps extrêmement longue).
 menu.deleteworld.desc1=Êtes-vous sûr de vouloir le supprimer ?
+
+settings.jumpKey=Sauter
+settings.forwardKey=Se déplacer vers l'avant
+settings.backwardsKey=Se déplacer vers l'arrière
+settings.leftKey=Se déplacer à gauche
+settings.rightKey=Se déplacer à droite

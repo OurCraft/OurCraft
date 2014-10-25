@@ -45,6 +45,22 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             selectedIndex = index;
             if(selectedIndex < 0 || selectedIndex >= getSize())
                 selectedIndex = -1;
+            else
+                getSlot(selectedIndex).onButtonReleased(selectedIndex, getX(), getY() - scroll + selectedIndex * slotHeight, getWidth(), slotHeight, mx, my, button);
+        }
+        return true;
+    }
+
+    public boolean onButtonPressed(int mx, int my, int button)
+    {
+        if(isMouseOver(mx, my))
+        {
+            int y = my + scroll - getY();
+            int index = y / slotHeight;
+            if(index < 0 || index >= getSize())
+                index = -1;
+            else
+                getSlot(index).onButtonPressed(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, button);
         }
         return true;
     }
@@ -107,5 +123,15 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             return true;
         }
         return false;
+    }
+
+    public int getSelectedIndex()
+    {
+        return selectedIndex;
+    }
+
+    public void setSelectedIndex(int selectedIndex)
+    {
+        this.selectedIndex = selectedIndex;
     }
 }

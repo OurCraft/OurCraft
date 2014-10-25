@@ -47,7 +47,8 @@ public class GuiButton extends GuiWidget
             {
                 color = 0xFFFFF544;
             }
-            font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextWidth(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
+            if(font != null)
+                font.drawString(displayText, color, (int) (getX() + getWidth() / 2 - font.getTextWidth(displayText) / 2), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
         }
     }
 
@@ -63,4 +64,20 @@ public class GuiButton extends GuiWidget
         pressed = false;
         return true;
     }
+
+    public boolean isPressed()
+    {
+        return pressed;
+    }
+
+    public void setText(String string)
+    {
+        this.displayText = string;
+    }
+
+    public String getText()
+    {
+        return displayText;
+    }
+
 }

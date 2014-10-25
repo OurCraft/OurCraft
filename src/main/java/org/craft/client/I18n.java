@@ -8,12 +8,14 @@ import org.craft.utils.*;
 public final class I18n
 {
 
+    private static HashMap<String, String>                  languagesNames;
     private static HashMap<String, HashMap<String, String>> languages;
     private static String                                   current = "en_US";
 
     static
     {
         languages = new HashMap<String, HashMap<String, String>>();
+        languagesNames = new HashMap<String, String>();
     }
 
     /**
@@ -34,7 +36,7 @@ public final class I18n
     }
 
     /**
-     * Loads a language with given id
+     * Loads a language with given id.<br/>Makes the game crash if the language doesn't not contain a 'lang.name' field
      */
     private static void load(ResourceLoader loader, String id) throws Exception
     {
@@ -66,6 +68,9 @@ public final class I18n
                 key = null;
             }
         }
+        if(!lang.containsKey("lang.name"))
+            Log.fatal("Lang file " + id + " doesn't not contain lang.name field!");
+        languagesNames.put(id, lang.get("lang.name"));
         languages.put(id, lang);
     }
 
@@ -155,8 +160,23 @@ public final class I18n
         }
     }
 
+    public static String getCurrentLanguageID()
+    {
+        return current;
+    }
+
     private static HashMap<String, String> getCurrentLanguage()
     {
         return languages.get(current);
+    }
+
+    public static String getLangName(String lang)
+    {
+        return languagesNames.get(lang);
+    }
+
+    public static HashMap<String, HashMap<String, String>> getAllLanguages()
+    {
+        return languages;
     }
 }

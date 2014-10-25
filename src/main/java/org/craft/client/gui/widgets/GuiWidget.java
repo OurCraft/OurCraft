@@ -134,4 +134,13 @@ public abstract class GuiWidget
     {
         return false;
     }
+
+    /**
+     * Sets the location of this widget at given coords
+     */
+    public void setLocation(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
 }

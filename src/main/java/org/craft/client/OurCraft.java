@@ -98,6 +98,7 @@ public class OurCraft implements Runnable, Game
     private WorldLoader              worldLoader;
     private OurClassLoader           classLoader;
     private SoundEngine              sndEngine;
+    private GameSettings             settings;
 
     public OurCraft(OurClassLoader cL)
     {
@@ -151,8 +152,6 @@ public class OurCraft implements Runnable, Game
                 Log.fatal("Sorry, but this game only works with Vertex Buffer Objects and it seems your graphical card can't support it. :(");
             }
 
-            fontRenderer = new BaseFontRenderer();
-
             //Init the RenderEngine
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
@@ -162,8 +161,6 @@ public class OurCraft implements Runnable, Game
             Display.update();
 
             mouseHandler = new MouseHandler();
-            fontRenderer = new TrueTypeFontRenderer("Consolas");
-
             //Init OpenGL CapNames for crash report system
             OpenGLHelper.loadCapNames();
 
@@ -172,12 +169,22 @@ public class OurCraft implements Runnable, Game
             this.initSponge();
 
             sndEngine = new SoundEngine();
+            settings = new GameSettings();
+            File propsFile = new File(SystemUtils.getGameFolder(), "properties.txt");
+            settings.loadFrom(propsFile);
+            settings.saveTo(propsFile);
+
+            if(settings.font.getValue().equals("default"))
+                fontRenderer = new BaseFontRenderer();
+            else
+                fontRenderer = new TrueTypeFontRenderer(settings.font.getValue());
 
             Blocks.init();
             BlockStates.init();
             Items.init();
             PacketRegistry.init();
             I18n.init(assetsLoader);
+            I18n.setCurrentLanguage(settings.lang.getValue());
             eventBus.fireEvent(new SpongeInitEvent(this), null, null);
 
             ModelLoader modelLoader = new ModelLoader();
@@ -509,23 +516,23 @@ public class OurCraft implements Runnable, Game
         mouseHandler.update();
         if(playerController != null)
         {
-            if(Keyboard.isKeyDown(Keyboard.KEY_Z))
+            if(Keyboard.isKeyDown(settings.forwardKey.getValueAsInt()))
             {
                 playerController.onMoveForwardRequested();
             }
-            if(Keyboard.isKeyDown(Keyboard.KEY_S))
+            if(Keyboard.isKeyDown(settings.backwardsKey.getValueAsInt()))
             {
                 playerController.onMoveBackwardsRequested();
             }
-            if(Keyboard.isKeyDown(Keyboard.KEY_Q))
+            if(Keyboard.isKeyDown(settings.leftKey.getValueAsInt()))
             {
                 playerController.onMoveLeftRequested();
             }
-            if(Keyboard.isKeyDown(Keyboard.KEY_D))
+            if(Keyboard.isKeyDown(settings.rightKey.getValueAsInt()))
             {
                 playerController.onMoveRightRequested();
             }
-            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+            if(Keyboard.isKeyDown(settings.jumpKey.getValueAsInt()))
             {
                 playerController.onJumpRequested();
             }
@@ -1148,5 +1155,23 @@ public class OurCraft implements Runnable, Game
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public GameSettings getGameSettings()
+    {
+        return settings;
+    }
+
+    public void saveSettings()
+    {
+        File file = new File(SystemUtils.getGameFolder(), "properties.txt");
+        try
+        {
+            settings.saveTo(file);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

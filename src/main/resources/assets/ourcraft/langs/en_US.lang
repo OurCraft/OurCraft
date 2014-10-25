@@ -1,3 +1,5 @@
+lang.name=English (US)
+
 lang.test1=OurCraft!
 lang.test2=OurCraft and given argument is %1$d
 lang.test3=OurCraft and given argument is %1$s
@@ -8,6 +10,8 @@ main.play.multiplayer=Multiplayer
 main.quit=Quit
 main.play.return=Return to game
 main.play.quitToMainScreen=Return to main screen
+main.settings=Settings
+main.lang=Language
 
 block.log=Log
 
@@ -26,3 +30,9 @@ menu.deleteworld.title=Delete world
 menu.deleteworld.delete=Yes, I'm sure
 menu.deleteworld.desc0=Deleting the world will last §uforever§r (kind of a very long time).
 menu.deleteworld.desc1=Are you really sure you want to do it ?
+
+settings.jumpKey=Jump
+settings.forwardKey=Move forward
+settings.backwardsKey=Move backwards
+settings.leftKey=Move to the left
+settings.rightKey=Move to the right

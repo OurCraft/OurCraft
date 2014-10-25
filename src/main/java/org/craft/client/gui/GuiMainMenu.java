@@ -41,8 +41,10 @@ public class GuiMainMenu extends Gui
     {
         addWidget(new GuiButton(0, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));
         addWidget(new GuiButton(1, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.multiplayer"), getFontRenderer()));
-        addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.quit"), getFontRenderer()));
+        addWidget(new GuiButton(2, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.settings"), getFontRenderer()));
+        addWidget(new GuiLanguageButton(3, 0, oc.getDisplayHeight() - 40));
 
+        addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 180, 300, 40, I18n.format("main.quit"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -65,6 +67,14 @@ public class GuiMainMenu extends Gui
             {
                 e.printStackTrace();
             }
+        }
+        else if(widget.getID() == 2)
+        {
+            oc.openMenu(new GuiSettings(oc, this));
+        }
+        else if(widget.getID() == 3)
+        {
+            oc.openMenu(new GuiLanguage(oc, this));
         }
         else if(widget.getID() == 10)
         {
