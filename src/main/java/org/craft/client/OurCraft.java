@@ -137,7 +137,15 @@ public class OurCraft implements Runnable, Game
             });
             Display.setResizable(true);
             Display.setTitle("OurCraft - " + getVersion());
-            Display.create(new PixelFormat(), context);
+            try
+            {
+                Display.create(new PixelFormat(), context);
+            }
+            catch(LWJGLException e)
+            {
+                if(e.getMessage().contains("Could not create context"))
+                    Display.create();
+            }
             fontRenderer = new BaseFontRenderer();
 
             //Init the RenderEngine
@@ -225,7 +233,7 @@ public class OurCraft implements Runnable, Game
                 tick();
             }
             cleanup();
-            System.exit(100);
+            System.exit(0);
         }
         catch(Exception e)
         {
