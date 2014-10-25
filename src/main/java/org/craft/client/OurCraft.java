@@ -214,18 +214,18 @@ public class OurCraft implements Runnable, Game
 
             selectionBoxBuffer.upload();
             selectionBoxBuffer.clearAndDisposeVertices();
-            running = true;
 
             eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
 
             expectedFrameRate = 60;
             timeBetweenUpdates = 1000000000 / expectedFrameRate;
-            while(running && !Display.isCloseRequested())
+            running = true;
+            while(running)
             {
                 tick();
             }
             cleanup();
-            System.exit(0);
+            System.exit(100);
         }
         catch(Exception e)
         {
@@ -318,6 +318,9 @@ public class OurCraft implements Runnable, Game
 
             render(delta);
             Display.update();
+
+            if(Display.isCloseRequested())
+                running = false;
 
             if(Display.wasResized())
             {
