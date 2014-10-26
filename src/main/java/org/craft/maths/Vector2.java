@@ -1,7 +1,6 @@
 package org.craft.maths;
 
 import java.nio.*;
-import java.util.*;
 
 import org.craft.utils.*;
 
@@ -11,6 +10,11 @@ public final class Vector2 extends AbstractReference implements IDisposable
     public static final Vector2 NULL = new Vector2(0, 0);
     public float                x;
     public float                y;
+
+    private Vector2()
+    {
+        ;
+    }
 
     private Vector2(float x, float y)
     {
@@ -172,24 +176,15 @@ public final class Vector2 extends AbstractReference implements IDisposable
     {
         if(decreaseReferenceCounter())
         {
-            unused.push(this);
+            pool.dispose(this);
         }
     }
 
-    private static Stack<Vector2> unused = new Stack<Vector2>();
+    private static ObjectPool<Vector2> pool = ObjectPool.of(Vector2.class);
 
     public static Vector2 get(float x, float y)
     {
-        Vector2 v = null;
-        if(unused.isEmpty())
-        {
-            v = new Vector2(x, y);
-        }
-        else
-        {
-            v = unused.pop();
-            v.set(x, y);
-        }
+        Vector2 v = pool.get();
         v.increaseReferenceCounter();
         return v;
     }

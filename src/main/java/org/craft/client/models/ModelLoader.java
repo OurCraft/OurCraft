@@ -105,7 +105,7 @@ public class ModelLoader
                     String path = textureData.getValue().getAsString();
                     if(!path.startsWith("#"))
                     {
-                        blockMap.generateIcon(path + ".png");
+                        blockMap.generateIcon(path);
                     }
                     loadedModel.setTexturePath(textureData.getKey(), path);
                 }

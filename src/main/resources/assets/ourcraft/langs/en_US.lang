@@ -14,6 +14,15 @@ main.settings=Settings
 main.lang=Language
 
 block.log=Log
+block.dirt=Dirt
+block.grass=Grass
+block.stone=Stone
+block.power_source=Electric power source
+block.dirt_slab=Dirt half-slab
+block.glass=Glass
+block.leaves=Leaves
+block.rose=Rose
+block.copper_cable=Cable
 
 players.joined=%1$s joined the game!
 

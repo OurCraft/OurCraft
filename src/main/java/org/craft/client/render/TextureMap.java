@@ -11,17 +11,8 @@ import org.craft.client.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 
-public class TextureMap implements IconGenerator, ITextureObject, IDisposable
+public class TextureMap implements IconGenerator, ITextureObject, IDisposable, ITickable
 {
-
-    public static class TextureMapSprite
-    {
-        public ResourceLocation location;
-        public TextureIcon      icon;
-        public BufferedImage    rawImage;
-
-        public boolean          useRawImage = false;
-    }
 
     private ResourceLoader              loader;
     private ResourceLocation            base;
@@ -376,7 +367,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     @Override
     public TextureIcon generateIcon(String loc)
     {
-        return generateIcon(new ResourceLocation(loc));
+        return generateIcon(new ResourceLocation(loc + ".png"));
     }
 
     @Override
@@ -389,6 +380,15 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable
     public void dispose()
     {
         texture.dispose();
+    }
+
+    @Override
+    public void tick()
+    {
+        for(TextureMapSprite sprite : registredSprites)
+        {
+            sprite.tick();
+        }
     }
 
 }

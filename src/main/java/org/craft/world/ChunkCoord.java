@@ -1,5 +1,6 @@
 package org.craft.world;
 
+
 public class ChunkCoord
 {
 

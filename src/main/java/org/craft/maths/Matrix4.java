@@ -1,7 +1,6 @@
 package org.craft.maths;
 
 import java.nio.*;
-import java.util.*;
 
 import org.craft.utils.*;
 
@@ -354,29 +353,13 @@ public final class Matrix4 extends AbstractReference implements IDisposable
         this.set(this.mul(new Quaternion(axis, radians).toRotationMatrix()));
     }
 
-    private static Stack<Matrix4> unused = new Stack<Matrix4>();
+    private static ObjectPool<Matrix4> pool = ObjectPool.of(Matrix4.class);
 
     public static Matrix4 get()
     {
-        Matrix4 v = null;
-        if(unused.isEmpty())
-        {
-            v = new Matrix4();
-        }
-        else
-        {
-            try
-            {
-                v = unused.pop();
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-                v = new Matrix4();
-            }
-        }
-        v.increaseReferenceCounter();
-        return v;
+        Matrix4 matrix = pool.get();
+        matrix.increaseReferenceCounter();
+        return matrix;
     }
 
     @Override
@@ -384,7 +367,7 @@ public final class Matrix4 extends AbstractReference implements IDisposable
     {
         if(decreaseReferenceCounter())
         {
-            unused.push(this);
+            pool.dispose(this);
         }
     }
 }

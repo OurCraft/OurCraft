@@ -53,7 +53,7 @@ public class Item implements IStackable
 
     public void registerIcons(IconGenerator register)
     {
-        icon = register.generateIcon(id + ".png");
+        icon = register.generateIcon(id);
     }
 
     @Override

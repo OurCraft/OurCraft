@@ -1,7 +1,6 @@
 package org.craft.maths;
 
 import java.nio.*;
-import java.util.*;
 
 import org.craft.utils.*;
 
@@ -27,8 +26,9 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         this.z = z;
     }
 
-    public Vector3()
+    private Vector3()
     {
+        ;
     }
 
     public String toString()
@@ -303,29 +303,13 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         return Vector3.get((float) Math.max(a.x, b.x), (float) Math.max(a.y, b.y), (float) Math.max(a.z, b.z));
     }
 
-    private static Stack<Vector3> unused = new Stack<Vector3>();
+    private static ObjectPool<Vector3> pool = ObjectPool.of(Vector3.class);
 
     public static Vector3 get(float x, float y, float z)
     {
-        Vector3 v = null;
-        if(unused.isEmpty() || unused.size() == 0)
-        {
-            v = new Vector3(x, y, z);
-        }
-        else
-        {
-            try
-            {
-                v = unused.pop();
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-                v = new Vector3(x, y, z);
-            }
-            v.set(x, y, z);
-        }
+        Vector3 v = pool.get();
         v.increaseReferenceCounter();
+        v.set(x, y, z);
         return v;
     }
 
@@ -339,7 +323,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
     {
         if(decreaseReferenceCounter())
         {
-            unused.push(this);
+            pool.dispose(this);
         }
     }
 

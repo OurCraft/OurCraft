@@ -14,6 +14,15 @@ main.settings=Options
 main.lang=Langue
 
 block.log=Bûche
+block.dirt=Terre
+block.grass=Herbe
+block.stone=Pierre
+block.power_source=Source électrique
+block.dirt_slab=Demi-bloc de terre
+block.glass=Verre
+block.leaves=Feuilles
+block.rose=Rose
+block.copper_cable=Cable
 
 players.joined=%1$s a rejoint la partie!
 
