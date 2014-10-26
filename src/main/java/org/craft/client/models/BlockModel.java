@@ -29,7 +29,6 @@ public class BlockModel
      */
     public void copyFrom(BlockModel other)
     {
-        this.name = other.name;
         textures.putAll(other.textures);
         elements.addAll(other.elements);
     }

@@ -2,7 +2,7 @@
 	"parent":"block/generator",
 	"textures":
 	{
-		"cable": "copper_cable_four",
+		"cable": "copper_cables/copper_cable_four_powered",
 		"north": "electricity_generator_side",
 		"south": "electricity_generator_side",
 		"west": "electricity_generator_side",

@@ -25,6 +25,7 @@ public class World implements org.spongepowered.api.world.World
     private WorldLoader        worldLoader;
     public boolean             isRemote;
     private Random             rng;
+    private long               tick;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
@@ -55,6 +56,8 @@ public class World implements org.spongepowered.api.world.World
             }
         }
         entities.removeAll(deadEntities);
+        tick++ ;
+
     }
 
     /**
@@ -102,7 +105,7 @@ public class World implements org.spongepowered.api.world.World
      */
     public void setBlockState(int x, int y, int z, BlockState state, IBlockStateValue value)
     {
-        setBlockState(x, y, z, state, value, true);
+        setBlockState(x, y, z, state, value, false);
     }
 
     public void setBlockState(int x, int y, int z, BlockState state, IBlockStateValue value, boolean notify)
@@ -112,7 +115,7 @@ public class World implements org.spongepowered.api.world.World
             return;
         c.setBlockState(x, y, z, state, value);
         if(notify)
-            updateBlockAndNeighbors(x, y, z);
+            updateBlockNeighbors(x, y, z, false);
     }
 
     /**
@@ -120,14 +123,20 @@ public class World implements org.spongepowered.api.world.World
      */
     public void setBlock(int x, int y, int z, Block block)
     {
+        setBlock(x, y, z, block, true);
+    }
+
+    public void setBlock(int x, int y, int z, Block block, boolean notify)
+    {
         Chunk c = getChunk(x, y, z);
         if(c == null)
         {
             return;
         }
         c.setBlock(this, x, y, z, block);
-        updateBlockAndNeighbors(x, y, z);
         c.markDirty();
+        if(notify)
+            updateBlockNeighbors(x, y, z, false);
     }
 
     /**
@@ -135,7 +144,6 @@ public class World implements org.spongepowered.api.world.World
      */
     public void spawn(Entity e)
     {
-        Log.message("added " + e.getClass());
         this.spawingQueue.add(e);
     }
 
@@ -307,37 +315,65 @@ public class World implements org.spongepowered.api.world.World
         return null;
     }
 
-    public boolean updateBlock(int x, int y, int z)
+    public boolean updateBlock(int x, int y, int z, boolean force)
     {
         Block b = getBlockAt(x, y, z);
         if(b != null)
         {
-            b.onBlockUpdate(this, x, y, z);
+            if(force || !isDirty(x, y, z))
+            {
+                b.onBlockUpdate(this, x, y, z);
+                getChunk(x, y, z).markDirty(x, y, z);
+            }
             return true;
         }
         return false;
     }
 
-    protected boolean updateBlockFromNeighbor(int x, int y, int z)
+    public void cleanDirtiness(int x, int y, int z)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c != null)
+            c.cleanDirtiness(x, y, z);
+    }
+
+    public boolean isDirty(int x, int y, int z)
+    {
+        Chunk c = getChunk(x, y, z);
+        if(c != null)
+            return c.isDirty(x, y, z);
+        return false;
+    }
+
+    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force)
     {
         Block b = getBlockAt(x, y, z);
         if(b != null)
         {
-            b.onBlockUpdateFromNeighbor(this, x, y, z);
+            if(force || !isDirty(x, y, z))
+            {
+                b.onBlockUpdateFromNeighbor(this, x, y, z);
+                getChunk(x, y, z).markDirty(x, y, z);
+            }
             return true;
         }
         return false;
     }
 
-    public void updateBlockAndNeighbors(int x, int y, int z)
+    public void updateBlockAndNeighbors(int x, int y, int z, boolean force)
     {
-        updateBlock(x, y, z);
-        updateBlockFromNeighbor(x, y, z + 1);
-        updateBlockFromNeighbor(x, y, z - 1);
-        updateBlockFromNeighbor(x, y + 1, z);
-        updateBlockFromNeighbor(x, y - 1, z);
-        updateBlockFromNeighbor(x + 1, y, z);
-        updateBlockFromNeighbor(x - 1, y, z);
+        updateBlock(x, y, z, force);
+        updateBlockNeighbors(x, y, z, force);
+    }
+
+    public void updateBlockNeighbors(int x, int y, int z, boolean force)
+    {
+        updateBlockFromNeighbor(x, y, z + 1, force);
+        updateBlockFromNeighbor(x, y, z - 1, force);
+        updateBlockFromNeighbor(x, y + 1, z, force);
+        updateBlockFromNeighbor(x, y - 1, z, force);
+        updateBlockFromNeighbor(x + 1, y, z, force);
+        updateBlockFromNeighbor(x - 1, y, z, force);
     }
 
     public int getDirectElectricPowerAt(int x, int y, int z)
@@ -457,5 +493,10 @@ public class World implements org.spongepowered.api.world.World
     public Random getRNG()
     {
         return rng;
+    }
+
+    public long getTick()
+    {
+        return tick;
     }
 }

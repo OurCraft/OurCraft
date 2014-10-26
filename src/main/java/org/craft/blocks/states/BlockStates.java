@@ -20,6 +20,8 @@ public final class BlockStates
      */
     public static BlockState                                                   electricPower;
 
+    public static BlockState                                                   powered;
+
     /**
      * Maps String representations of block states to their respective BlockState object
      */
@@ -52,6 +54,10 @@ public final class BlockStates
         {
             registerValue(electricPower, state);
         }
+
+        registerState(powered = new BaseBlockState("powered"));
+        registerValue(powered, new BaseBlockStateValue("true"));
+        registerValue(powered, new BaseBlockStateValue("false"));
     }
 
     /**
@@ -80,10 +86,6 @@ public final class BlockStates
      */
     public static void registerValue(BlockState state, IBlockStateValue value)
     {
-        if(BLOCK_STATES_VALUES_REGISTRY.containsKey(value.toString()))
-        {
-            throw new IllegalArgumentException("Id " + value.toString() + " is already used by " + BLOCK_STATES_VALUES_REGISTRY.get(value.toString()) + " when trying to add " + value);
-        }
         HashMap<String, IBlockStateValue> map = BLOCK_STATES_VALUES_REGISTRY.get(state);
         map.put(value.toString(), value);
     }

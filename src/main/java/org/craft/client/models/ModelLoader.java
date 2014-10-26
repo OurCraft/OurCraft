@@ -54,15 +54,34 @@ public class ModelLoader
         for(Entry<String, JsonElement> entry : variantsObject.entrySet())
         {
             BlockVariant variant = new BlockVariant();
-            if(!entry.getKey().equals("normal"))
+            String[] conditions = null;
+            if(entry.getKey().contains("&"))
             {
-                String[] split = entry.getKey().split("=");
-                BlockState state = BlockStates.getState(split[0]);
-                variant.setBlockStateKey(state);
-                IBlockStateValue value = BlockStates.getValue(state, split[1]);
-                variant.setBlockStateValue(value);
-                Log.message("Found variant: " + state + "=" + value);
+                conditions = entry.getKey().split("&");
             }
+            else
+                conditions = new String[]
+                {
+                        entry.getKey()
+                };
+            ArrayList<BlockState> states = new ArrayList<BlockState>();
+            ArrayList<IBlockStateValue> values = new ArrayList<IBlockStateValue>();
+            for(String condition : conditions)
+            {
+                String[] split = condition.split("=");
+                if(!condition.equals("normal"))
+                {
+                    BlockState state = BlockStates.getState(split[0]);
+
+                    IBlockStateValue value = BlockStates.getValue(state, split[1]);
+                    states.add(state);
+                    values.add(value);
+
+                    Log.message("Found variant: " + state + "=" + value);
+                }
+            }
+            variant.setBlockStateKeys(states);
+            variant.setBlockStateValues(values);
             JsonArray array = entry.getValue().getAsJsonArray();
             for(int i = 0; i < array.size(); i++ )
             {

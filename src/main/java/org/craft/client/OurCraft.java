@@ -237,8 +237,6 @@ public class OurCraft implements Runnable, Game
 
             eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
 
-            expectedFrameRate = 60;
-            timeBetweenUpdates = 1000000000 / expectedFrameRate;
             running = true;
             while(running)
             {
@@ -647,12 +645,12 @@ public class OurCraft implements Runnable, Game
                             Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
                             if(c != null)
                             {
-                                AABB chunkBox = chunkBB.translate(x, y, z);
-                                if(renderEngine.getFrustum().boxIn(chunkBox))
+                                //  AABB chunkBox = chunkBB.translate(x, y, z);
+                                //  if(renderEngine.getFrustum().boxIn(chunkBox))
                                 {
                                     visibleChunks.add(c);
                                 }
-                                chunkBox.dispose();
+                                // chunkBox.dispose();
                             }
                         }
                     }

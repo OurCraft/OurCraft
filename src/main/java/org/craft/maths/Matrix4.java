@@ -353,21 +353,16 @@ public final class Matrix4 extends AbstractReference implements IDisposable
         this.set(this.mul(new Quaternion(axis, radians).toRotationMatrix()));
     }
 
-    private static ObjectPool<Matrix4> pool = ObjectPool.of(Matrix4.class);
+    private static ReferencedObjectPool<Matrix4> pool = ReferencedObjectPool.of(Matrix4.class);
 
     public static Matrix4 get()
     {
-        Matrix4 matrix = pool.get();
-        matrix.increaseReferenceCounter();
-        return matrix;
+        return pool.get();
     }
 
     @Override
     public void dispose()
     {
-        if(decreaseReferenceCounter())
-        {
-            pool.dispose(this);
-        }
+        pool.dispose(this);
     }
 }

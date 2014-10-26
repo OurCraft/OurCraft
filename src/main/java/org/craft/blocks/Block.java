@@ -106,7 +106,7 @@ public class Block implements IStackable, BlockType
     }
 
     /**
-     * Called when a block is placed by an entity
+     * Called before a block is placed by an entity
      */
     public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
     {
@@ -159,9 +159,8 @@ public class Block implements IStackable, BlockType
         int x1 = (int) (x + side.getTranslationX());
         int y1 = (int) (y + side.getTranslationY());
         int z1 = (int) (z + side.getTranslationZ());
-        user.worldObj.setBlock(x1, y1, z1, this);
         onBlockAdded(user.worldObj, x1, y1, z1, side, user);
-        user.worldObj.updateBlockAndNeighbors(x1, y1, z1);
+        user.worldObj.setBlock(x1, y1, z1, this);
     }
 
     @Override
@@ -183,7 +182,7 @@ public class Block implements IStackable, BlockType
      */
     public void onBlockUpdateFromNeighbor(World world, int x, int y, int z)
     {
-        onBlockUpdate(world, x, y, z);
+        ;
     }
 
     /**

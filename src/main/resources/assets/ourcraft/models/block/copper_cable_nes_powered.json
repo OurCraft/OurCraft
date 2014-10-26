@@ -1,0 +1,7 @@
+{
+    "parent": "block/cable",
+    "textures":
+    {
+        "cable": "copper_cables/copper_cable_nes_powered"
+    }
+}

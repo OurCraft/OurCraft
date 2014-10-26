@@ -303,14 +303,11 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         return Vector3.get((float) Math.max(a.x, b.x), (float) Math.max(a.y, b.y), (float) Math.max(a.z, b.z));
     }
 
-    private static ObjectPool<Vector3> pool = ObjectPool.of(Vector3.class);
+    private static ReferencedObjectPool<Vector3> pool = ReferencedObjectPool.of(Vector3.class);
 
     public static Vector3 get(float x, float y, float z)
     {
-        Vector3 v = pool.get();
-        v.increaseReferenceCounter();
-        v.set(x, y, z);
-        return v;
+        return pool.get().set(x, y, z);
     }
 
     public float min()
@@ -321,10 +318,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
     @Override
     public void dispose()
     {
-        if(decreaseReferenceCounter())
-        {
-            pool.dispose(this);
-        }
+        pool.dispose(this);
     }
 
     public boolean isNull()

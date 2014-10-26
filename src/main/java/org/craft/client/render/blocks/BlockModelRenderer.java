@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.*;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.client.models.*;
 import org.craft.client.render.*;
@@ -132,15 +133,41 @@ public class BlockModelRenderer extends AbstractBlockRenderer
     private BlockVariant getVariant(World w, Block b, int x, int y, int z)
     {
         BlockVariant variant = null;
-        for(BlockVariant v : blockVariants)
+        variantLoop: for(BlockVariant v : blockVariants)
         {
-            if(v.getBlockState() == null && variant == null)
+            if(v.getBlockStates() == null && variant == null)
+            {
                 variant = v;
-            if(v.getBlockState() != null)
-                if(w.getBlockState(x, y, z, v.getBlockState()) == v.getBlockStateValue())
+            }
+            else if(v.getBlockStates().isEmpty() && variant == null)
+            {
+                variant = v;
+            }
+            else
+            {
+                for(int i = 0; i < v.getBlockStates().size(); i++ )
+                {
+                    BlockState state = v.getBlockStates().get(i);
+                    IBlockStateValue value = v.getBlockStateValues().get(i);
+                    if(w.getBlockState(x, y, z, state) != value)
+                    {
+                        continue variantLoop;
+                    }
+                }
+                if(variant != null)
+                {
+                    if(variant.getBlockStates().size() <= v.getBlockStates().size())
+                    {
+                        variant = v;
+                    }
+                    else if(variant.getBlockStates().size() > v.getBlockStates().size())
+                        continue variantLoop;
+                }
+                else
                 {
                     variant = v;
                 }
+            }
         }
         return variant;
     }

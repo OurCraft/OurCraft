@@ -3,63 +3,137 @@
     {
         "normal": 
         [
+            { "model": "copper_cable_none", "renderPass":"alpha" }
+        ],
+        "connexions=none": 
+        [
+            { "model": "copper_cable_none", "renderPass":"alpha" }
+        ],
+        "connexions=none&powered=true": 
+        [
+            { "model": "copper_cable_none_powered", "renderPass":"alpha" }
+        ],
+        "connexions=all": 
+        [
             { "model": "copper_cable_all", "renderPass":"alpha" }
         ],
-        "connexions=ns": 
+        "connexions=all&powered=true": 
+        [
+            { "model": "copper_cable_all_powered", "renderPass":"alpha" }
+        ],
+        "connexions=ns&powered=false": 
         [
             { "model": "copper_cable_ns", "renderPass":"alpha" }
         ],
-		"connexions=n": 
+		"connexions=n&powered=false": 
         [
             { "model": "copper_cable_n", "renderPass":"alpha" }
         ],
-		"connexions=s": 
+		"connexions=s&powered=false": 
         [
             { "model": "copper_cable_s", "renderPass":"alpha" }
         ],
-		"connexions=w": 
+		"connexions=w&powered=false": 
         [
             { "model": "copper_cable_w", "renderPass":"alpha" }
         ],
-		"connexions=e": 
+		"connexions=e&powered=false": 
         [
             { "model": "copper_cable_e", "renderPass":"alpha" }
         ],
-		"connexions=ne": 
+		"connexions=ne&powered=false": 
         [
             { "model": "copper_cable_ne", "renderPass":"alpha" }
         ],
-		"connexions=nw": 
+		"connexions=nw&powered=false": 
         [
             { "model": "copper_cable_nw", "renderPass":"alpha" }
         ],
-        "connexions=ew": 
+        "connexions=ew&powered=false": 
         [
             { "model": "copper_cable_ew", "renderPass":"alpha" }
         ],
-		"connexions=se": 
+		"connexions=se&powered=false": 
         [
             { "model": "copper_cable_se", "renderPass":"alpha" }
         ],
-		"connexions=sw": 
+		"connexions=sw&powered=false": 
         [
             { "model": "copper_cable_sw", "renderPass":"alpha" }
         ],
-		"connexions=nes": 
+		"connexions=nes&powered=false": 
         [
             { "model": "copper_cable_nes", "renderPass":"alpha" }
         ],
-		"connexions=nws": 
+		"connexions=nws&powered=false": 
         [
             { "model": "copper_cable_nws", "renderPass":"alpha" }
         ],
-		"connexions=esw": 
+		"connexions=esw&powered=false": 
         [
             { "model": "copper_cable_esw", "renderPass":"alpha" }
         ],
-		"connexions=enw": 
+		"connexions=enw&powered=false": 
         [
             { "model": "copper_cable_enw", "renderPass":"alpha" }
+        ],
+
+
+        "connexions=ns&powered=true": 
+        [
+            { "model": "copper_cable_ns_powered", "renderPass":"alpha" }
+        ],
+        "connexions=n&powered=true": 
+        [
+            { "model": "copper_cable_n_powered", "renderPass":"alpha" }
+        ],
+        "connexions=s&powered=true": 
+        [
+            { "model": "copper_cable_s_powered", "renderPass":"alpha" }
+        ],
+        "connexions=w&powered=true": 
+        [
+            { "model": "copper_cable_w_powered", "renderPass":"alpha" }
+        ],
+        "connexions=e&powered=true": 
+        [
+            { "model": "copper_cable_e_powered", "renderPass":"alpha" }
+        ],
+        "connexions=ne&powered=true": 
+        [
+            { "model": "copper_cable_ne_powered", "renderPass":"alpha" }
+        ],
+        "connexions=nw&powered=true": 
+        [
+            { "model": "copper_cable_nw_powered", "renderPass":"alpha" }
+        ],
+        "connexions=ew&powered=true": 
+        [
+            { "model": "copper_cable_ew_powered", "renderPass":"alpha" }
+        ],
+        "connexions=se&powered=true": 
+        [
+            { "model": "copper_cable_se_powered", "renderPass":"alpha" }
+        ],
+        "connexions=sw&powered=true": 
+        [
+            { "model": "copper_cable_sw_powered", "renderPass":"alpha" }
+        ],
+        "connexions=nes&powered=true": 
+        [
+            { "model": "copper_cable_nes_powered", "renderPass":"alpha" }
+        ],
+        "connexions=nws&powered=true": 
+        [
+            { "model": "copper_cable_nws_powered", "renderPass":"alpha" }
+        ],
+        "connexions=esw&powered=true": 
+        [
+            { "model": "copper_cable_esw_powered", "renderPass":"alpha" }
+        ],
+        "connexions=enw&powered=true": 
+        [
+            { "model": "copper_cable_enw_powered", "renderPass":"alpha" }
         ]
     }
 }

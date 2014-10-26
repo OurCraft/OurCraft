@@ -10,47 +10,49 @@ import org.craft.client.render.*;
 public class BlockVariant
 {
 
-    private BlockState            state;
-    private IBlockStateValue      value;
-    private ArrayList<BlockModel> models;
-    private EnumRenderPass        pass;
+    private ArrayList<BlockState>       states;
+    private ArrayList<IBlockStateValue> values;
+    private ArrayList<BlockModel>       models;
+    private EnumRenderPass              pass;
 
     public BlockVariant()
     {
         pass = EnumRenderPass.NORMAL;
         models = Lists.newArrayList();
+        states = Lists.newArrayList();
+        values = Lists.newArrayList();
     }
 
     /**
      * Sets block state of this variant
      */
-    public void setBlockStateKey(BlockState state)
+    public void setBlockStateKeys(ArrayList<BlockState> states)
     {
-        this.state = state;
+        this.states = states;
     }
 
     /**
      * Sets block state value of this variant
      */
-    public void setBlockStateValue(IBlockStateValue value)
+    public void setBlockStateValues(ArrayList<IBlockStateValue> values)
     {
-        this.value = value;
+        this.values = values;
     }
 
     /**
      * Gets block state of this variant
      */
-    public BlockState getBlockState()
+    public ArrayList<BlockState> getBlockStates()
     {
-        return state;
+        return states;
     }
 
     /**
      * Gets block state value of this variant
      */
-    public IBlockStateValue getBlockStateValue()
+    public ArrayList<IBlockStateValue> getBlockStateValues()
     {
-        return value;
+        return values;
     }
 
     /**

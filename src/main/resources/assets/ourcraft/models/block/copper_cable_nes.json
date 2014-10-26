@@ -2,6 +2,6 @@
     "parent": "block/cable",
     "textures":
     {
-        "cable": "copper_cable_nes"
+        "cable": "copper_cables/copper_cable_nes"
     }
 }

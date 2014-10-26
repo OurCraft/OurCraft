@@ -18,18 +18,22 @@ public class Chunk implements org.spongepowered.api.world.Chunk
     public short[][][]                         blocks;
     public int[][]                             highest;
     public float[][][]                         lightValues;
+    public boolean[][][]                       dirty;
     public HashMap<Vector3, BlockStatesObject> blockStatesObjects;
     private ChunkCoord                         coords;
     private boolean                            isDirty;
     private World                              owner;
+    private boolean                            shouldUpdate;
 
     public Chunk(World owner, ChunkCoord coords)
     {
+        this.shouldUpdate = true; // TODO: Needs to be based on entities living in this chunk
         this.owner = owner;
         this.coords = coords;
         this.blocks = new short[16][16][16];
         this.highest = new int[16][16];
         this.lightValues = new float[16][16][16];
+        this.dirty = new boolean[16][16][16];
         blockStatesObjects = new HashMap<Vector3, BlockStatesObject>();
         for(int x = 0; x < 16; x++ )
         {
@@ -38,8 +42,17 @@ public class Chunk implements org.spongepowered.api.world.Chunk
             {
                 Arrays.fill(blocks[x][y], Blocks.air.getUniqueID());
                 Arrays.fill(lightValues[x][y], 1f);
+                Arrays.fill(dirty[x][y], false);
             }
         }
+    }
+
+    /**
+     * Returns true if this chunk should be updated next tick
+     */
+    public boolean shouldBeUpdated()
+    {
+        return shouldUpdate;
     }
 
     /**
@@ -136,6 +149,16 @@ public class Chunk implements org.spongepowered.api.world.Chunk
     public void cleanUpDirtiness()
     {
         isDirty = false;
+        for(int x = 0; x < 16; x++ )
+        {
+            for(int y = 0; y < 16; y++ )
+            {
+                for(int z = 0; z < 16; z++ )
+                {
+                    dirty[x][y][z] = false;
+                }
+            }
+        }
     }
 
     public void fill(Block block)
@@ -348,12 +371,17 @@ public class Chunk implements org.spongepowered.api.world.Chunk
         {
             for(int z = 0; z < 16; z++ )
             {
-                int maxY = (int) Math.round(4f * MathHelper.perlinNoise(x + this.getCoords().x * 16, z + this.getCoords().z * 16, owner.getGenerator().getSeed())) - (this.getCoords().y - 11) * 16 + 1;
-                for(int y = 0; y <= maxY && y < 16; y++ )
+                for(int y = 0; y < 16; y++ )
                 {
                     Block b = Blocks.getByID(blocks[x][y][z]);
                     if(b != null)
+                    {
                         b.updateTick(owner, x, y, z);
+                        if(dirty[x][y][z])
+                        {
+                            owner.updateBlockAndNeighbors(x + 16 * coords.x, y + 16 * coords.y, z + 16 * coords.z, false);
+                        }
+                    }
                 }
             }
         }
@@ -430,5 +458,50 @@ public class Chunk implements org.spongepowered.api.world.Chunk
     public org.spongepowered.api.block.Block getBlock(int x, int y, int z)
     {
         return getBlock(x, y, z);
+    }
+
+    public void cleanDirtiness(int worldX, int worldY, int worldZ)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        dirty[x][y][z] = false;
+    }
+
+    public boolean isDirty(int worldX, int worldY, int worldZ)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        return dirty[x][y][z];
+    }
+
+    public void markDirty(int worldX, int worldY, int worldZ)
+    {
+        int x = worldX % 16;
+        int y = worldY % 16;
+        int z = worldZ % 16;
+
+        if(x < 0)
+            x = 16 + x;
+        if(y < 0)
+            y = 16 + y;
+        if(z < 0)
+            z = 16 + z;
+        dirty[x][y][z] = true;
     }
 }

@@ -33,24 +33,24 @@ public class ObjectPool<T> implements Collection<T>
 
     public T get()
     {
-        T v = null;
+        T instance = null;
         if(stack.isEmpty() || stack.size() == 0)
         {
-            v = fact.createNew(typeClass);
+            instance = fact.createNew(typeClass);
         }
         else
         {
             try
             {
-                v = stack.pop();
+                instance = stack.pop();
             }
             catch(Exception e)
             {
                 e.printStackTrace(); // Silently ignore this
-                v = fact.createNew(typeClass);
+                instance = fact.createNew(typeClass);
             }
         }
-        return v;
+        return instance;
     }
 
     public void dispose(T item)
