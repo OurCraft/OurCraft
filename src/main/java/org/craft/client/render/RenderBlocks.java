@@ -144,14 +144,13 @@ public class RenderBlocks
                         float adx = a.getCoords().x * 16 + 8 - renderEngine.getRenderViewEntity().posX;
                         float ady = a.getCoords().y * 16 + 8 - renderEngine.getRenderViewEntity().posY;
                         float adz = a.getCoords().z * 16 + 8 - renderEngine.getRenderViewEntity().posZ;
-                        float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
+                        float adist = adx * adx + ady * ady + adz * adz;
 
                         float bdx = b.getCoords().x * 16 + 8 - renderEngine.getRenderViewEntity().posX;
                         float bdy = b.getCoords().y * 16 + 8 - renderEngine.getRenderViewEntity().posY;
                         float bdz = b.getCoords().z * 16 + 8 - renderEngine.getRenderViewEntity().posZ;
-                        float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
-                        int f = Float.compare(bdist, adist);
-                        return f;
+                        float bdist = bdx * bdx + bdy * bdy + bdz * bdz;
+                        return Float.compare(bdist, adist);
                     }
                 };
             Collections.sort(visiblesChunks, chunkComparator);
@@ -245,12 +244,12 @@ public class RenderBlocks
                                         float adx = a.x + 0.5f - renderEngine.getRenderViewEntity().posX;
                                         float ady = a.y + 0.5f - renderEngine.getRenderViewEntity().posY;
                                         float adz = a.z + 0.5f - renderEngine.getRenderViewEntity().posZ;
-                                        float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
+                                        float adist = adx * adx + ady * ady + adz * adz;
 
                                         float bdx = b.x + 0.5f - renderEngine.getRenderViewEntity().posX;
                                         float bdy = b.y + 0.5f - renderEngine.getRenderViewEntity().posY;
                                         float bdz = b.z + 0.5f - renderEngine.getRenderViewEntity().posZ;
-                                        float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
+                                        float bdist = bdx * bdx + bdy * bdy + bdz * bdz;
                                         return Float.compare(bdist, adist);
                                     }
                                 };

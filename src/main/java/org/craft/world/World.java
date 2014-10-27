@@ -368,10 +368,20 @@ public class World implements org.spongepowered.api.world.World
 
     public void updateBlockAndNeighbors(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
     {
+        boolean disposeList = false;
         if(visited == null)
+        {
+            disposeList = true;
             visited = new ArrayList<Vector3>();
+        }
         updateBlock(x, y, z, force, visited);
         updateBlockNeighbors(x, y, z, force, visited);
+        if(disposeList)
+        {
+            for(Vector3 v : visited)
+                v.dispose();
+            visited.clear();
+        }
     }
 
     public void updateBlockNeighbors(int x, int y, int z, boolean force)
@@ -381,9 +391,11 @@ public class World implements org.spongepowered.api.world.World
 
     public void updateBlockNeighbors(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
     {
+        boolean disposeList = false;
         if(visited == null)
         {
             visited = new ArrayList<Vector3>();
+            disposeList = true;
         }
         updateBlockFromNeighbor(x, y, z + 1, force, visited);
         updateBlockFromNeighbor(x, y, z - 1, force, visited);
@@ -391,6 +403,13 @@ public class World implements org.spongepowered.api.world.World
         updateBlockFromNeighbor(x, y - 1, z, force, visited);
         updateBlockFromNeighbor(x + 1, y, z, force, visited);
         updateBlockFromNeighbor(x - 1, y, z, force, visited);
+        if(disposeList)
+        {
+            for(Vector3 v : visited)
+                v.dispose();
+            visited.clear();
+        }
+
     }
 
     public int getDirectElectricPowerAt(int x, int y, int z)
