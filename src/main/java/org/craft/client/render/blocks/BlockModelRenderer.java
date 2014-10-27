@@ -72,6 +72,14 @@ public class BlockModelRenderer extends AbstractBlockRenderer
                 TextureIcon icon = getTexture(blockModel, variant, entry.getValue().getTexture());
                 boolean flip = false;
                 EnumSide cullface = EnumSide.fromString(entry.getValue().getCullface());
+                EnumSide side = EnumSide.fromString(entry.getKey());
+                if(side != null)
+                {
+                    if(entry.getValue().hideIfSameAdjacent() && w.getBlockNextTo(x, y, z, side) == b)
+                    {
+                        continue;
+                    }
+                }
                 if(cullface != EnumSide.UNDEFINED)
                 {
                     Block next = w.getBlockNextTo(x, y, z, cullface);

@@ -9,11 +9,13 @@ public class BlockFace
     private String  texture;
     private Vector2 maxUV;
     private Vector2 minUV;
+    private boolean hideIfSameAdjacent;
 
     public BlockFace()
     {
         minUV = Vector2.NULL;
         maxUV = Vector2.get(1, 1);
+        this.hideIfSameAdjacent = false;
     }
 
     /**
@@ -78,5 +80,15 @@ public class BlockFace
     public Vector2 getMaxUV()
     {
         return maxUV;
+    }
+
+    public boolean hideIfSameAdjacent()
+    {
+        return hideIfSameAdjacent;
+    }
+
+    public void hideIfSameAdjacent(boolean hide)
+    {
+        hideIfSameAdjacent = hide;
     }
 }

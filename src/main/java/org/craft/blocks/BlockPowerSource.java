@@ -13,7 +13,7 @@ public class BlockPowerSource extends Block implements IPowerableBlock
 
     static
     {
-        aabb = new AABB(Vector3.get(6f / 16f, 0f, 6f / 16f), Vector3.get(10f / 16f, 1f, 10f / 16f));
+        aabb = new AABB(Vector3.get(4f / 16f, 0f, 4f / 16f), Vector3.get(12f / 16f, 14f / 16f, 12f / 16f));
     }
 
     public BlockPowerSource(String id)

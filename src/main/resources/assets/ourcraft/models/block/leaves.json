@@ -1,5 +1,5 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/transparent_cube_all",
     "textures": 
     {
         "all": "leaves"

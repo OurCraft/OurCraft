@@ -166,6 +166,8 @@ public class ModelLoader
                                 face.setMinUV(Vector2.get(uvArray.get(0).getAsFloat() / 16f, uvArray.get(1).getAsFloat() / 16f));
                                 face.setMaxUV(Vector2.get(uvArray.get(2).getAsFloat() / 16f, uvArray.get(3).getAsFloat() / 16f));
                             }
+                            if(faceData.has("hideIfSameAdjacent"))
+                                face.hideIfSameAdjacent(faceData.get("hideIfSameAdjacent").getAsBoolean());
                             loadedElement.setFace(faceEntry.getKey(), face);
                         }
                     }
