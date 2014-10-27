@@ -379,7 +379,7 @@ public class Chunk implements org.spongepowered.api.world.Chunk
                         b.updateTick(owner, x, y, z);
                         if(dirty[x][y][z])
                         {
-                            owner.updateBlockAndNeighbors(x + 16 * coords.x, y + 16 * coords.y, z + 16 * coords.z, false);
+                            owner.updateBlockAndNeighbors(x + 16 * coords.x, y + 16 * coords.y, z + 16 * coords.z, false, null);
                         }
                     }
                 }

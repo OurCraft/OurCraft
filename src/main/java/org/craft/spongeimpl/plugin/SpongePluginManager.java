@@ -2,6 +2,8 @@ package org.craft.spongeimpl.plugin;
 
 import java.util.*;
 
+import com.google.common.base.Optional;
+
 import org.apache.logging.log4j.*;
 import org.craft.modding.*;
 import org.craft.spongeimpl.*;
@@ -22,9 +24,9 @@ public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
     }
 
     @Override
-    public PluginContainer getPlugin(String id)
+    public Optional<PluginContainer> getPlugin(String id)
     {
-        return plugins.get(id);
+        return Optional.of(plugins.get(id));
     }
 
     @Override
@@ -47,7 +49,7 @@ public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
     @Override
     public AddonContainer getAddon(String id)
     {
-        return (AddonContainer) getPlugin(id);
+        return (AddonContainer) getPlugin(id).get();
     }
 
     @Override

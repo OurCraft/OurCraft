@@ -47,14 +47,14 @@ public class CommandsDispatcher implements CommandDispatcher
     }
 
     @Override
-    public CommandMapping get(String alias)
+    public com.google.common.base.Optional<CommandMapping> get(String alias)
     {
         for(CommandMapping mapping : commandMappings)
         {
             if(mapping.getAllAliases().contains(alias))
-                return mapping;
+                return com.google.common.base.Optional.of(mapping);
         }
-        return null;
+        return com.google.common.base.Optional.absent();
     }
 
     @Override

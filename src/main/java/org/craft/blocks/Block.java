@@ -1,5 +1,7 @@
 package org.craft.blocks;
 
+import java.util.*;
+
 import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.items.*;
@@ -171,18 +173,20 @@ public class Block implements IStackable, BlockType
 
     /**
      * Called when a neighbor block is updated
+     * @param visited : Positions already visited by a call on updateBlocks
      */
-    public void onBlockUpdate(World world, int x, int y, int z)
+    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
     {
         ;
     }
 
     /**
      * Called when a neighbor block is updated
+     * @param visited : Positions already visited by a call on updateBlocks
      */
-    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z)
+    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z, ArrayList<Vector3> visited)
     {
-        ;
+        onBlockUpdate(world, x, y, z, visited);
     }
 
     /**

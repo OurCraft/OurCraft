@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+import com.google.common.base.Optional;
+
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.client.*;
@@ -25,6 +27,7 @@ import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
 import org.spongepowered.api.*;
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
@@ -202,14 +205,14 @@ public class OurCraftServer implements Game, CommandSource
     }
 
     @Override
-    public Player getPlayer(UUID uniqueId)
+    public com.google.common.base.Optional<Player> getPlayer(UUID uniqueId)
     {
         for(Player player : onlinePlayers)
         {
             if(player.getDisplayName().equals(SessionManager.getInstance().getDisplayName(uniqueId)))
-                return player;
+                return com.google.common.base.Optional.of(player);
         }
-        return null;
+        return com.google.common.base.Optional.absent();
     }
 
     @Override
@@ -339,6 +342,13 @@ public class OurCraftServer implements Game, CommandSource
 
     @Override
     public Scheduler getScheduler()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<Player> getPlayer(String name)
     {
         // TODO Auto-generated method stub
         return null;

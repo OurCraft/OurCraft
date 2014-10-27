@@ -315,16 +315,19 @@ public class World implements org.spongepowered.api.world.World
         return null;
     }
 
-    public boolean updateBlock(int x, int y, int z, boolean force)
+    public boolean updateBlock(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
     {
         Block b = getBlockAt(x, y, z);
         if(b != null)
         {
-            if(force || !isDirty(x, y, z))
+            Vector3 posVec = Vector3.get(x, y, z);
+            if(!visited.contains(posVec) || force)
             {
-                b.onBlockUpdate(this, x, y, z);
+                visited.add(Vector3.get(x, y, z));
+                b.onBlockUpdate(this, x, y, z, visited);
                 getChunk(x, y, z).markDirty(x, y, z);
             }
+            posVec.dispose();
             return true;
         }
         return false;
@@ -345,35 +348,49 @@ public class World implements org.spongepowered.api.world.World
         return false;
     }
 
-    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force)
+    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
     {
         Block b = getBlockAt(x, y, z);
         if(b != null)
         {
-            if(force || !isDirty(x, y, z))
+            Vector3 posVec = Vector3.get(x, y, z);
+            if(!visited.contains(posVec) || force)
             {
-                b.onBlockUpdateFromNeighbor(this, x, y, z);
+                visited.add(Vector3.get(x, y, z));
+                b.onBlockUpdateFromNeighbor(this, x, y, z, visited);
                 getChunk(x, y, z).markDirty(x, y, z);
             }
+            posVec.dispose();
             return true;
         }
         return false;
     }
 
-    public void updateBlockAndNeighbors(int x, int y, int z, boolean force)
+    public void updateBlockAndNeighbors(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
     {
-        updateBlock(x, y, z, force);
-        updateBlockNeighbors(x, y, z, force);
+        if(visited == null)
+            visited = new ArrayList<Vector3>();
+        updateBlock(x, y, z, force, visited);
+        updateBlockNeighbors(x, y, z, force, visited);
     }
 
     public void updateBlockNeighbors(int x, int y, int z, boolean force)
     {
-        updateBlockFromNeighbor(x, y, z + 1, force);
-        updateBlockFromNeighbor(x, y, z - 1, force);
-        updateBlockFromNeighbor(x, y + 1, z, force);
-        updateBlockFromNeighbor(x, y - 1, z, force);
-        updateBlockFromNeighbor(x + 1, y, z, force);
-        updateBlockFromNeighbor(x - 1, y, z, force);
+        updateBlockNeighbors(x, y, z, force, null);
+    }
+
+    public void updateBlockNeighbors(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
+    {
+        if(visited == null)
+        {
+            visited = new ArrayList<Vector3>();
+        }
+        updateBlockFromNeighbor(x, y, z + 1, force, visited);
+        updateBlockFromNeighbor(x, y, z - 1, force, visited);
+        updateBlockFromNeighbor(x, y + 1, z, force, visited);
+        updateBlockFromNeighbor(x, y - 1, z, force, visited);
+        updateBlockFromNeighbor(x + 1, y, z, force, visited);
+        updateBlockFromNeighbor(x - 1, y, z, force, visited);
     }
 
     public int getDirectElectricPowerAt(int x, int y, int z)
@@ -422,24 +439,27 @@ public class World implements org.spongepowered.api.world.World
     }
 
     @Override
-    public org.spongepowered.api.world.Chunk getChunk(Vector2i position)
+    public Optional<org.spongepowered.api.world.Chunk> getChunk(Vector2i position)
     {
-        return getChunk(position.getX(), 0, position.getY());
+        //return getChunk(position.getX(), 0, position.getY());
+        return Optional.absent();
     }
 
     @Override
-    public org.spongepowered.api.world.Chunk loadChunk(Vector2i position, boolean shouldGenerate)
+    public Optional<org.spongepowered.api.world.Chunk> loadChunk(Vector2i position, boolean shouldGenerate)
     {
-        if(shouldGenerate)
-            return chunkProvider.getOrCreate(this, position.getX(), 0, position.getY());
-        else
-            return getChunk(position);
+        /*  if(shouldGenerate)
+              return chunkProvider.getOrCreate(this, position.getX(), 0, position.getY());
+          else
+              return getChunk(position);*/
+        return Optional.absent();
     }
 
     @Override
     public org.spongepowered.api.world.Chunk loadChunk(Vector2i position)
     {
-        return loadChunk(position, false);
+        //return loadChunk(position, false);
+        return null;
     }
 
     @Override

@@ -1,12 +1,16 @@
 {
     "elements":
     [
-        {   "from": [ 0, 0.8, 0 ],
-            "to": [ 16, 0.8, 16 ],
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 2, 16 ],
             "faces": 
             {
                 "up": { "texture": "#cable" },
-                "down": { "texture": "#cable" }
+                "down": { "texture": "#cable" },
+                "east": { "texture": "#cable" },
+                "west": { "texture": "#cable" },
+                "north": { "texture": "#cable" },
+                "south": { "texture": "#cable" }
             }
         },
         {   "from": [ 6, 0, 6 ],

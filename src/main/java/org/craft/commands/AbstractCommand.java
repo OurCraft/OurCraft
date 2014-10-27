@@ -2,6 +2,7 @@ package org.craft.commands;
 
 import java.util.*;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.*;
 
 import org.spongepowered.api.util.command.*;
@@ -28,13 +29,13 @@ public abstract class AbstractCommand implements CommandCallable, Description
     }
 
     @Override
-    public String getShortDescription()
+    public Optional<String> getShortDescription()
     {
-        return null;
+        return Optional.absent();
     }
 
     @Override
-    public String getHelp()
+    public Optional<String> getHelp()
     {
         return getShortDescription();
     }

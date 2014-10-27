@@ -40,9 +40,9 @@ public class HelpCommand extends AbstractCommand
         return true;
     }
 
-    public String getShortDescription()
+    public com.google.common.base.Optional<String> getShortDescription()
     {
-        return "Displays an usage tip about every command in the game";
+        return com.google.common.base.Optional.of("Displays an usage tip about every command in the game");
     }
 
     @Override

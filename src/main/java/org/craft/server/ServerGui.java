@@ -79,7 +79,7 @@ public class ServerGui extends JFrame
                     if(txt.startsWith("/"))
                     {
                         String command = txt.substring(1);
-                        CommandMapping callable = Commands.getDispatcher().get(command);
+                        CommandMapping callable = Commands.getDispatcher().get(command).get();
                         if(callable != null)
                         {
                             try

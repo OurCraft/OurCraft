@@ -1,5 +1,7 @@
 package org.craft.blocks;
 
+import java.util.*;
+
 import org.craft.blocks.states.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
@@ -54,7 +56,7 @@ public class BlockCable extends Block implements IPowerableBlock
         return true;
     }
 
-    public void onBlockUpdate(World world, int x, int y, int z)
+    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
     {
         world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.NONE, false);
         world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.POWER_0, false);
@@ -70,29 +72,14 @@ public class BlockCable extends Block implements IPowerableBlock
         int eastFlag = eastBlock instanceof IPowerableBlock ? 1 << 2 : 0;
         int westFlag = westBlock instanceof IPowerableBlock ? 1 << 3 : 0;
         int fullFlag = (northFlag | southFlag | eastFlag | westFlag);
-        world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), true);
+        world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), false);
         int powerValue = world.getDirectElectricPowerAt(x, y, z) - 1;
         if(EnumConnexionStates.fromFlag(fullFlag) == EnumConnexionStates.NONE && powerValue > 0)
             powerValue = 0;
-        world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.fromPowerValue(powerValue), true);
-        world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, powerValue > 0 ? "true" : "false"), true);
-    }
-
-    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z)
-    {
-        Block northBlock = world.getBlockNextTo(x, y, z, EnumSide.NORTH);
-        Block southBlock = world.getBlockNextTo(x, y, z, EnumSide.SOUTH);
-        Block eastBlock = world.getBlockNextTo(x, y, z, EnumSide.EAST);
-        Block westBlock = world.getBlockNextTo(x, y, z, EnumSide.WEST);
-
-        int northFlag = northBlock instanceof IPowerableBlock ? 1 << 0 : 0;
-        int southFlag = southBlock instanceof IPowerableBlock ? 1 << 1 : 0;
-        int eastFlag = eastBlock instanceof IPowerableBlock ? 1 << 2 : 0;
-        int westFlag = westBlock instanceof IPowerableBlock ? 1 << 3 : 0;
-        int fullFlag = (northFlag | southFlag | eastFlag | westFlag);
-        world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.fromFlag(fullFlag), false);
-        int powerValue = world.getDirectElectricPowerAt(x, y, z) - 1;
         world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.fromPowerValue(powerValue), false);
         world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, powerValue > 0 ? "true" : "false"), false);
+
+        world.updateBlockNeighbors(x, y, z, false, visited);
     }
+
 }

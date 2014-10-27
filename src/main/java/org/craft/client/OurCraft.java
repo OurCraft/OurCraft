@@ -11,6 +11,8 @@ import java.util.*;
 
 import javax.imageio.*;
 
+import com.google.common.base.Optional;
+
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.client.gui.*;
@@ -43,6 +45,7 @@ import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.api.*;
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
@@ -1056,9 +1059,9 @@ public class OurCraft implements Runnable, Game
     }
 
     @Override
-    public Player getPlayer(UUID uniqueId)
+    public Optional<Player> getPlayer(UUID uniqueId)
     {
-        return player;
+        return Optional.of((Player) player);
     }
 
     @Override
@@ -1171,5 +1174,12 @@ public class OurCraft implements Runnable, Game
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Optional<Player> getPlayer(String name)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
