@@ -15,29 +15,33 @@ public class GameSettings
     public GameOption rightKey;
     public GameOption lang;
     public GameOption font;
+    public GameOption sensitivity;
 
     public GameSettings()
     {
-        jumpKey = new GameOption("jumpKey");
+        jumpKey = new GameOption("jumpKey", OptionType.INPUT);
         jumpKey.setValue(Keyboard.KEY_SPACE + "");
 
-        forwardKey = new GameOption("forwardKey");
+        forwardKey = new GameOption("forwardKey", OptionType.INPUT);
         forwardKey.setValue(Keyboard.KEY_W + "");
 
-        backwardsKey = new GameOption("backwardsKey");
+        backwardsKey = new GameOption("backwardsKey", OptionType.INPUT);
         backwardsKey.setValue(Keyboard.KEY_S + "");
 
-        leftKey = new GameOption("leftKey");
+        leftKey = new GameOption("leftKey", OptionType.INPUT);
         leftKey.setValue(Keyboard.KEY_A + "");
 
-        rightKey = new GameOption("rightKey");
+        rightKey = new GameOption("rightKey", OptionType.INPUT);
         rightKey.setValue(Keyboard.KEY_D + "");
 
-        lang = new GameOption("lang");
+        lang = new GameOption("lang", OptionType.PLAIN_TEXT);
         lang.setValue("en_US");
 
-        font = new GameOption("font");
+        font = new GameOption("font", OptionType.PLAIN_TEXT);
         font.setValue("default");
+
+        sensitivity = new GameOption("sensitivity", OptionType.RANGE);
+        sensitivity.setValue("1");
     }
 
     public void loadFrom(File file) throws IOException

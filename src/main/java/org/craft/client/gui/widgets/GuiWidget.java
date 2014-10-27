@@ -143,4 +143,12 @@ public abstract class GuiWidget
         this.x = x;
         this.y = y;
     }
+
+    /**
+     * Handles a 'mouse moved' event. Returns true if event was consumed
+     */
+    public boolean handleMouseMovement(int mx, int my, int dx, int dy)
+    {
+        return false;
+    }
 }

@@ -13,19 +13,33 @@ public class GuiSettings extends Gui
     {
 
         private GameOption option;
-        private GuiButton  button;
+        private GuiWidget  widget;
 
         public GuiOptionSlot(GameOption option)
         {
             this.option = option;
-            String value = Keyboard.getKeyName(Integer.parseInt(option.getValue()));
-            button = new GuiButton(0, 0, 0, 200, 40, value, oc.getFontRenderer());
+            if(option.getType() == OptionType.INPUT)
+            {
+                String value = Keyboard.getKeyName(Integer.parseInt(option.getValue()));
+                widget = new GuiButton(0, 0, 0, 200, 40, value, oc.getFontRenderer());
+            }
+            else if(option.getType() == OptionType.RANGE)
+            {
+                widget = new GuiSlider(0, 0, 0, 200, 40, 0, 1, oc.getFontRenderer());
+            }
         }
 
         public void setValue(String v)
         {
             option.setValue(v);
-            button.setText(Keyboard.getKeyName(Integer.parseInt(option.getValue())));
+            if(option.getType() == OptionType.INPUT)
+            {
+                ((GuiButton) widget).setText(Keyboard.getKeyName(Integer.parseInt(option.getValue())));
+            }
+            else if(option.getType() == OptionType.INPUT)
+            {
+
+            }
         }
 
         @Override
@@ -34,23 +48,40 @@ public class GuiSettings extends Gui
             FontRenderer font = oc.getFontRenderer();
             String name = I18n.format("settings." + option.getID());
             font.drawShadowedString(name, 0xFFFFFFFF, x, y + h / 2 - (int) font.getCharHeight('A') / 2, engine);
-            button.setLocation(x + w - 220, y + (h / 2 - 20));
-            button.render(mx, my, engine);
+            widget.setLocation(x + w - 220, y + (h / 2 - 20));
+            widget.render(mx, my, engine);
         }
 
         public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button)
         {
-            this.button.onButtonPressed(mx, my, button);
+            this.widget.onButtonPressed(mx, my, button);
         }
 
         public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button)
         {
-            if(this.button.isPressed() && this.button.isMouseOver(mx, my) && pending == null)
+            this.widget.onButtonReleased(mx, my, button);
+            if(option.getType() == OptionType.INPUT)
             {
-                this.button.setText(">> ? <<");
-                pending = this;
+                if(((GuiButton) this.widget).isPressed() && this.widget.isMouseOver(mx, my) && pending == null)
+                {
+                    ((GuiButton) this.widget).setText(">> ? <<");
+                    pending = this;
+                }
             }
-            this.button.onButtonReleased(mx, my, button);
+            else if(option.getType() == OptionType.RANGE)
+            {
+                option.setValue("" + ((GuiSlider) widget).getValue());
+            }
+        }
+
+        public void handleMouseMovement(int index, int x, int y, int w, int h, int mx, int my, int dx, int dy)
+        {
+            this.widget.handleMouseMovement(mx, my, dx, dy);
+        }
+
+        public GuiWidget getWidget()
+        {
+            return widget;
         }
     }
 
@@ -88,6 +119,10 @@ public class GuiSettings extends Gui
         optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().backwardsKey));
         optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().leftKey));
         optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().rightKey));
+        GuiOptionSlot sensitivitySlot = new GuiOptionSlot(oc.getGameSettings().sensitivity);
+        ((GuiSlider) sensitivitySlot.getWidget()).setRangeMax(3);
+        ((GuiSlider) sensitivitySlot.getWidget()).setValue(OurCraft.getOurCraft().getGameSettings().sensitivity.getValueAsFloat());
+        optionsList.addSlot(sensitivitySlot);
         addWidget(optionsList);
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));
     }

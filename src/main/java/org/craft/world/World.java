@@ -325,7 +325,6 @@ public class World implements org.spongepowered.api.world.World
             {
                 visited.add(Vector3.get(x, y, z));
                 b.onBlockUpdate(this, x, y, z, visited);
-                getChunk(x, y, z).markDirty(x, y, z);
             }
             posVec.dispose();
             return true;
@@ -358,7 +357,6 @@ public class World implements org.spongepowered.api.world.World
             {
                 visited.add(Vector3.get(x, y, z));
                 b.onBlockUpdateFromNeighbor(this, x, y, z, visited);
-                getChunk(x, y, z).markDirty(x, y, z);
             }
             posVec.dispose();
             return true;

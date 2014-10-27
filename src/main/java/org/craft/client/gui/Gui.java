@@ -239,4 +239,22 @@ public abstract class Gui
     {
         widgets.clear();
     }
+
+    /**
+     * Handles a 'mouse moved event'
+     * @param mx : The new position of mouse on X axis
+     * @param my : The new position of mouse on Y axis
+     * @param dx : The movement of mouse on X axis
+     * @param dy : The movement of mouse on Y axis
+     */
+    public void handleMouseMovement(int mx, int my, int dx, int dy)
+    {
+        for(GuiWidget widget : widgets)
+        {
+            if(widget.handleMouseMovement(mx, my, dx, dy))
+            {
+                break;
+            }
+        }
+    }
 }

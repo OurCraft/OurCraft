@@ -65,8 +65,8 @@ public class LocalPlayerController extends PlayerController
     {
         if(!OurCraft.getOurCraft().getCurrentMenu().requiresMouse())
         {
-            player.yaw += (float) Math.toRadians(OurCraft.getOurCraft().getMouseHandler().getDX());
-            player.pitch += (float) Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY());
+            player.yaw += (float) Math.toRadians(OurCraft.getOurCraft().getMouseHandler().getDX()) * OurCraft.getOurCraft().getGameSettings().sensitivity.getValueAsFloat();
+            player.pitch += (float) Math.toRadians(-OurCraft.getOurCraft().getMouseHandler().getDY()) * OurCraft.getOurCraft().getGameSettings().sensitivity.getValueAsFloat();
         }
     }
 

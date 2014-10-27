@@ -45,6 +45,7 @@ import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.api.*;
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
@@ -416,6 +417,8 @@ public class OurCraft implements Runnable, Game
             boolean state = Mouse.getEventButtonState();
             int x = Mouse.getEventX();
             int y = displayHeight - Mouse.getEventY();
+            int dx = Mouse.getEventDX();
+            int dy = Mouse.getEventDY();
             int deltaWheel = Mouse.getEventDWheel();
             if(currentMenu != null)
             {
@@ -430,6 +433,10 @@ public class OurCraft implements Runnable, Game
                 if(deltaWheel != 0)
                 {
                     currentMenu.handleMouseWheelMovement(x, y, deltaWheel);
+                }
+                else
+                {
+                    currentMenu.handleMouseMovement(x, y, dx, dy);
                 }
             }
             if(playerController != null && (currentMenu == null || !currentMenu.requiresMouse()))
@@ -591,7 +598,7 @@ public class OurCraft implements Runnable, Game
             {
                 if(player.getHeldItem() != null)
                 {
-                    renderItems.renderItem(renderEngine, player.getHeldItem(), 0, 180, 0);
+                    renderItems.renderItem(renderEngine, player.getHeldItem(), 0, 0, 0);
                 }
             }
             renderEngine.setProjectFromEntity(true);

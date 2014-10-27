@@ -25,4 +25,12 @@ public abstract class GuiListSlot
         ;
     }
 
+    /**
+     * Handles an event where the mouse is moved
+     */
+    public void handleMouseMovement(int index, int x, int y, int w, int h, int mx, int my, int dx, int dy)
+    {
+        ;
+    }
+
 }

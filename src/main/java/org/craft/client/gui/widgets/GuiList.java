@@ -2,6 +2,7 @@ package org.craft.client.gui.widgets;
 
 import java.util.*;
 
+import org.craft.client.gui.*;
 import org.craft.client.render.*;
 
 public class GuiList<T extends GuiListSlot> extends GuiWidget
@@ -65,6 +66,20 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         return true;
     }
 
+    public boolean handleMouseMovement(int mx, int my, int dx, int dy)
+    {
+        if(isMouseOver(mx, my))
+        {
+            int y = my + scroll - getY();
+            int index = y / slotHeight;
+            if(index < 0 || index >= getSize())
+                index = -1;
+            else
+                getSlot(index).handleMouseMovement(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, dx, dy);
+        }
+        return true;
+    }
+
     @Override
     public void render(int mx, int my, RenderEngine engine)
     {
@@ -72,7 +87,11 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         {
             int start = (scroll) / slotHeight;
             int end = (scroll + getHeight()) / slotHeight;
-            for(int index = start; index < getSize() && index < end; index++ )
+            if(start < 0)
+                start = 0;
+            if(end > getSize())
+                end = getSize();
+            for(int index = start; index < end; index++ )
             {
                 T slot = getSlot(index);
                 if(slot != null)
@@ -80,6 +99,19 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
                     slot.render(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
                 }
             }
+
+            engine.bindLocation(Gui.widgetsTexture);
+            Gui.drawTexturedRect(engine, getX() + getWidth(), getY(), 10, getHeight() - slotHeight, 0, 60f / 256f, 10f / 256f, 70f / 256f);
+            float startf = (float) scroll / (float) slotHeight;
+            float endf = ((float) scroll + (float) getHeight()) / (float) slotHeight;
+            if(startf < 0.f)
+                startf = 0f;
+            if(endf > getSize())
+                endf = getSize();
+            float maxHeight = getHeight() - slotHeight;
+            Gui.drawTexturedRect(engine, getX() + getWidth(),
+                    getY() + (int) (startf / (float) getSize() * maxHeight), 10,
+                    (int) ((endf - startf) / (float) getSize() * maxHeight), 10f / 256f, 60f / 256f, 20f / 256f, 70f / 256f);
         }
     }
 

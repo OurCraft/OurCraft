@@ -7,12 +7,19 @@ public class GameOption
 
     private String                                   id;
     private String                                   value;
+    private OptionType                               type;
     private static final HashMap<String, GameOption> options = new HashMap<String, GameOption>();
 
-    public GameOption(String id)
+    public GameOption(String id, OptionType type)
     {
         this.id = id;
+        this.type = type;
         options.put(id, this);
+    }
+
+    public OptionType getType()
+    {
+        return type;
     }
 
     public String getID()
@@ -38,5 +45,10 @@ public class GameOption
     public int getValueAsInt()
     {
         return Integer.parseInt(value);
+    }
+
+    public float getValueAsFloat()
+    {
+        return Float.parseFloat(value);
     }
 }
