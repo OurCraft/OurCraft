@@ -16,6 +16,18 @@ public abstract class AbstractCommand implements CommandCallable, Description
         return Lists.newArrayList();
     }
 
+    @Deprecated
+    public final Optional<String> getShortDescription()
+    {
+        return Optional.of(getShortCommandDescription());
+    }
+
+    @Deprecated
+    public final Optional<String> getHelp()
+    {
+        return Optional.of(getCommandHelp());
+    }
+
     @Override
     public Description getDescription()
     {
@@ -28,16 +40,14 @@ public abstract class AbstractCommand implements CommandCallable, Description
         return true;
     }
 
-    @Override
-    public Optional<String> getShortDescription()
+    public String getShortCommandDescription()
     {
-        return Optional.absent();
+        return null;
     }
 
-    @Override
-    public Optional<String> getHelp()
+    public String getCommandHelp()
     {
-        return getShortDescription();
+        return null;
     }
 
     @Override

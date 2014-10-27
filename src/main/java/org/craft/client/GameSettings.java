@@ -59,6 +59,7 @@ public class GameSettings
         load(backwardsKey, props);
         load(lang, props);
         load(font, props);
+        load(sensitivity, props);
     }
 
     public void saveTo(File file) throws IOException
@@ -73,6 +74,7 @@ public class GameSettings
         props.put(backwardsKey.getID(), backwardsKey.getValue());
         props.put(lang.getID(), lang.getValue());
         props.put(font.getID(), font.getValue());
+        props.put(sensitivity.getID(), sensitivity.getValue());
         FileOutputStream out = new FileOutputStream(file);
         props.store(out, "OurCraft properties");
         out.close();
