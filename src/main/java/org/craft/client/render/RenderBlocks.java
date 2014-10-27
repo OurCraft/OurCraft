@@ -242,16 +242,16 @@ public class RenderBlocks
                                     @Override
                                     public int compare(BlockRenderInfos a, BlockRenderInfos b)
                                     {
-                                        float adx = a.x - renderEngine.getRenderViewEntity().posX;
-                                        float ady = a.y - renderEngine.getRenderViewEntity().posY;
-                                        float adz = a.z - renderEngine.getRenderViewEntity().posZ;
+                                        float adx = a.x + 0.5f - renderEngine.getRenderViewEntity().posX;
+                                        float ady = a.y + 0.5f - renderEngine.getRenderViewEntity().posY;
+                                        float adz = a.z + 0.5f - renderEngine.getRenderViewEntity().posZ;
                                         float adist = (float) Math.sqrt(adx * adx + ady * ady + adz * adz);
 
-                                        float bdx = b.x - renderEngine.getRenderViewEntity().posX;
-                                        float bdy = b.y - renderEngine.getRenderViewEntity().posY;
-                                        float bdz = b.z - renderEngine.getRenderViewEntity().posZ;
+                                        float bdx = b.x + 0.5f - renderEngine.getRenderViewEntity().posX;
+                                        float bdy = b.y + 0.5f - renderEngine.getRenderViewEntity().posY;
+                                        float bdz = b.z + 0.5f - renderEngine.getRenderViewEntity().posZ;
                                         float bdist = (float) Math.sqrt(bdx * bdx + bdy * bdy + bdz * bdz);
-                                        return Float.compare(adist, bdist);
+                                        return Float.compare(bdist, adist);
                                     }
                                 };
                             Collections.sort(infosList, blockComparator);
