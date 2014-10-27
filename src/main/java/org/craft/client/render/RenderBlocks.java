@@ -159,8 +159,10 @@ public class RenderBlocks
                 EnumRenderPass currentPass = EnumRenderPass.fromID(passId);
                 if(currentPass == EnumRenderPass.ALPHA)
                 {
-                    glDepthMask(false);
-                    glDepthFunc(GL_LESS);
+                    renderEngine.enableGLCap(GL_ALPHA_TEST);
+                    renderEngine.setAlphaFunc(GL_GREATER, 0.0001f);
+                    renderEngine.enableGLCap(GL_BLEND);
+                    renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 }
                 for(Chunk c : visiblesChunks)
                 {
@@ -270,8 +272,8 @@ public class RenderBlocks
                 }
                 if(currentPass == EnumRenderPass.ALPHA)
                 {
-                    glDepthFunc(GL_LESS);
-                    glDepthMask(true);
+                    renderEngine.disableGLCap(GL_ALPHA_TEST);
+                    renderEngine.disableGLCap(GL_BLEND);
                 }
             }
         }

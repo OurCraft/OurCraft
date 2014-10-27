@@ -45,7 +45,6 @@ import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.api.*;
-import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
@@ -582,6 +581,7 @@ public class OurCraft implements Runnable, Game
         }
         renderEngine.end();
 
+        renderEngine.enableGLCap(GL_BLEND);
         if(clientWorld != null)
         {
             glClear(GL_DEPTH_BUFFER_BIT);
