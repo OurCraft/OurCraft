@@ -45,3 +45,4 @@ settings.forwardKey=Move forward
 settings.backwardsKey=Move backwards
 settings.leftKey=Move to the left
 settings.rightKey=Move to the right
+settings.sensitivity=Mouse sensitivity

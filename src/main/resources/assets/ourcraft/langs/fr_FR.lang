@@ -45,3 +45,4 @@ settings.forwardKey=Se déplacer vers l'avant
 settings.backwardsKey=Se déplacer vers l'arrière
 settings.leftKey=Se déplacer à gauche
 settings.rightKey=Se déplacer à droite
+settings.sensitivity=Sensibilitée de la souris

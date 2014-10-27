@@ -59,7 +59,6 @@ public class GuiSettings extends Gui
 
         public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button)
         {
-            this.widget.onButtonReleased(mx, my, button);
             if(option.getType() == OptionType.INPUT)
             {
                 if(((GuiButton) this.widget).isPressed() && this.widget.isMouseOver(mx, my) && pending == null)
@@ -67,9 +66,11 @@ public class GuiSettings extends Gui
                     ((GuiButton) this.widget).setText(">> ? <<");
                     pending = this;
                 }
+                this.widget.onButtonReleased(mx, my, button);
             }
             else if(option.getType() == OptionType.RANGE)
             {
+                this.widget.onButtonReleased(mx, my, button);
                 option.setValue("" + ((GuiSlider) widget).getValue());
             }
         }
