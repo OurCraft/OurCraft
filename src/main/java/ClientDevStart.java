@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-import org.craft.client.start.*;
+import org.craft.client.*;
 import org.craft.utils.*;
 
 public class ClientDevStart

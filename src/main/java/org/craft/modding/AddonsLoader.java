@@ -7,7 +7,7 @@ import java.util.*;
 import com.google.gson.*;
 
 import org.apache.logging.log4j.*;
-import org.craft.loader.*;
+import org.craft.*;
 import org.craft.modding.events.*;
 import org.craft.modding.script.lua.*;
 import org.craft.resources.*;

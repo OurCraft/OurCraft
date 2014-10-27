@@ -13,6 +13,7 @@ import javax.imageio.*;
 
 import com.google.common.base.Optional;
 
+import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.client.gui.*;
@@ -25,7 +26,6 @@ import org.craft.client.sound.*;
 import org.craft.entity.*;
 import org.craft.entity.Entity;
 import org.craft.items.*;
-import org.craft.loader.*;
 import org.craft.maths.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;

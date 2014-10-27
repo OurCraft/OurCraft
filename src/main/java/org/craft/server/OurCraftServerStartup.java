@@ -3,7 +3,7 @@ package org.craft.server;
 import java.net.*;
 import java.util.*;
 
-import org.craft.loader.*;
+import org.craft.*;
 
 public class OurCraftServerStartup
 {
