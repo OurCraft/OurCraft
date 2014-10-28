@@ -1,0 +1,7 @@
+{
+	"parent":"buildin/generated",
+	"textures":
+	{
+		"layer0":"test"
+	}
+}

@@ -1,5 +1,7 @@
 package org.craft.client.gui;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -143,7 +145,7 @@ public class GuiSelectWorld extends Gui
                 {
                     try
                     {
-                        textureMap.put(worldFolder.getName(), OpenGLHelper.loadTexture(ImageIO.read(snapshotFile)));
+                        textureMap.put(worldFolder.getName(), OpenGLHelper.loadTexture(ImageIO.read(snapshotFile), GL_LINEAR));
                     }
                     catch(IOException e)
                     {

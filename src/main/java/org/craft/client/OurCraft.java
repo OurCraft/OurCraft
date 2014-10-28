@@ -102,6 +102,7 @@ public class OurCraft implements Runnable, Game
     private OurClassLoader           classLoader;
     private SoundEngine              sndEngine;
     private GameSettings             settings;
+    private ModelLoader              modelLoader;
 
     public OurCraft(OurClassLoader cL)
     {
@@ -190,9 +191,9 @@ public class OurCraft implements Runnable, Game
             I18n.setCurrentLanguage(settings.lang.getValue());
             eventBus.fireEvent(new SpongeInitEvent(this), null, null);
 
-            ModelLoader modelLoader = new ModelLoader();
+            modelLoader = new ModelLoader();
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
-            renderItems = new RenderItems(renderEngine);
+            renderItems = new RenderItems(renderEngine, modelLoader);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(this));
 
@@ -504,6 +505,16 @@ public class OurCraft implements Runnable, Game
                         catch(Exception e)
                         {
                             e.printStackTrace();
+                            try
+                            {
+                                modelLoader.clearModels();
+                                renderEngine.loadShaders();
+                                renderEngine.reloadLocations();
+                            }
+                            catch(Exception e1)
+                            {
+                                ;
+                            }
                         }
                     }
                     currentMenu.keyReleased(id, c);
@@ -587,12 +598,13 @@ public class OurCraft implements Runnable, Game
                     renderEngine.enableGLCap(GL_DEPTH_TEST);
                     renderEngine.enableGLCap(GL_ALPHA_TEST);
                     renderEngine.setProjectFromEntity(false);
-                    Quaternion q = new Quaternion(Vector3.yAxis, (float) Math.toRadians(45));
-                    q = q.mul(new Quaternion(Vector3.xAxis, (float) Math.toRadians(5)));
-                    q = q.mul(new Quaternion(Vector3.zAxis, (float) Math.toRadians(-5)));
+                    boolean isBlock = player.getHeldItem().getItem() instanceof Block;
+                    Quaternion q = new Quaternion(Vector3.yAxis, (float) Math.toRadians(75));
+                    q = q.mul(new Quaternion(Vector3.xAxis, (float) Math.toRadians(10)));
+                    q = q.mul(new Quaternion(Vector3.zAxis, (float) Math.toRadians(5)));
                     float ratio = (float) displayWidth / (float) displayHeight;
                     float d = ratio / (16.f / 9.f);
-                    Matrix4 m = player.getHeldItem().getItem() instanceof Block ? Matrix4.get().initTranslation(d * 1.75f, -1.85f, 1) : Matrix4.get().initTranslation(d * 1.75f, -1.45f, 1);
+                    Matrix4 m = isBlock ? Matrix4.get().initTranslation(d * 1.05f, -1.65f, 0.5f) : Matrix4.get().initTranslation(d * 1.05f, -1.05f, 0.5f);
                     m = m.mul(Matrix4.get().initRotation(q.getForward(), q.getUp()));
                     renderEngine.setModelviewMatrix(m);
                     renderItems.renderItem(renderEngine, player.getHeldItem(), clientWorld, 0, 0, 0);
@@ -716,6 +728,7 @@ public class OurCraft implements Runnable, Game
         ResourceLocation location = new ResourceLocation("resourcepacks", fileName);
         ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(gameFolderLoader.getResource(location), "assets");
         this.assetsLoader.setResourcePackLoader(loader);
+        modelLoader.clearModels();
         renderEngine.loadShaders();
         renderEngine.reloadLocations();
     }
@@ -1191,5 +1204,10 @@ public class OurCraft implements Runnable, Game
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public RenderItems getRenderItems()
+    {
+        return renderItems;
     }
 }

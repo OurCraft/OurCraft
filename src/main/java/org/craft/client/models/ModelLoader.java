@@ -11,6 +11,7 @@ import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
+import org.craft.client.render.items.*;
 import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
@@ -19,7 +20,7 @@ import org.craft.utils.*;
 public class ModelLoader
 {
 
-    private Gson                                  gson;
+    private Gson                             gson;
     private HashMap<ResourceLocation, Model> models;
 
     public ModelLoader()
@@ -113,7 +114,44 @@ public class ModelLoader
             JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
             if(model.has("parent"))
             {
-                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json")), iconGenerator, type));
+                String parentPath = model.get("parent").getAsString();
+                if(parentPath.startsWith("buildin/"))
+                {
+                    String[] split = parentPath.split("/");
+                    String name = split[split.length - 1];
+                    if(name.equals("generated"))
+                    {
+                        loadedModel = new GeneratedModel(modelFile.getResourceLocation().getName());
+                        GeneratedModel generated = (GeneratedModel) loadedModel; // Convenience variable to avoid multiple casts
+                        if(!model.has("textures"))
+                        {
+                            throw new IllegalArgumentException("Cannot generate model if no textures are specified!");
+                        }
+                        else
+                        {
+                            JsonObject textures = model.get("textures").getAsJsonObject();
+                            Iterator<Entry<String, JsonElement>> textureEntries = textures.entrySet().iterator();
+                            while(textureEntries.hasNext())
+                            {
+                                Entry<String, JsonElement> textureData = textureEntries.next();
+                                String path = textureData.getValue().getAsString();
+                                if(!path.startsWith("#"))
+                                {
+                                    if(textureData.getKey().startsWith("layer"))
+                                    {
+                                        int layerId = Integer.parseInt(textureData.getKey().replaceFirst("layer", ""));
+                                        generated.addLayer(path, layerId);
+                                        iconGenerator.generateIcon(path);
+                                    }
+                                }
+                            }
+                        }
+                        generated.generateElements();
+                        return generated;
+                    }
+                }
+                else
+                    loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + parentPath + ".json")), iconGenerator, type));
             }
 
             if(model.has("textures"))
@@ -161,7 +199,16 @@ public class ModelLoader
                             if(faceData.has("texture"))
                                 face.setTexture(faceData.get("texture").getAsString());
                             if(faceData.has("cullface"))
-                                face.setCullface(faceData.get("cullface").getAsString());
+                            {
+                                if(type == Block.class)
+                                {
+                                    face.setCullface(faceData.get("cullface").getAsString());
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Item model cannot specify a cullface argument for a face");
+                                }
+                            }
                             if(faceData.has("uv"))
                             {
                                 JsonArray uvArray = faceData.get("uv").getAsJsonArray();
@@ -169,7 +216,16 @@ public class ModelLoader
                                 face.setMaxUV(Vector2.get(uvArray.get(2).getAsFloat() / 16f, uvArray.get(3).getAsFloat() / 16f));
                             }
                             if(faceData.has("hideIfSameAdjacent"))
-                                face.hideIfSameAdjacent(faceData.get("hideIfSameAdjacent").getAsBoolean());
+                            {
+                                if(type == Block.class)
+                                {
+                                    face.hideIfSameAdjacent(faceData.get("hideIfSameAdjacent").getAsBoolean());
+                                }
+                                else
+                                {
+                                    throw new IllegalArgumentException("Item model cannot specify to hide a face");
+                                }
+                            }
                             loadedElement.setFace(faceEntry.getKey(), face);
                         }
                     }
@@ -190,5 +246,26 @@ public class ModelLoader
             models.put(modelFile.getResourceLocation(), loadedModel);
         }
         return models.get(modelFile.getResourceLocation());
+    }
+
+    /**
+     * Generates a new item renderer from given ResourceLocation
+     */
+    public ItemRenderer createItemRenderer(ResourceLocation modelFile, IconGenerator blockMap) throws Exception
+    {
+        return createItemRenderer(OurCraft.getOurCraft().getAssetsLoader().getResource(modelFile), blockMap);
+    }
+
+    /**
+     * Generates a new item renderer from given Resource
+     */
+    public ItemRenderer createItemRenderer(AbstractResource modelFile, IconGenerator blockMap) throws Exception
+    {
+        return new ItemModelRenderer(loadModel(modelFile, blockMap, Item.class));
+    }
+
+    public void clearModels()
+    {
+        models.clear();
     }
 }

@@ -367,7 +367,7 @@ public class RenderEngine implements IDisposable
             }
         }
         OurCraft.getOurCraft().getRenderBlocks().createBlockMap(this);
-        RenderItems.createItemMap(this);
+        OurCraft.getOurCraft().getRenderItems().createItemMap(this);
     }
 
     /**

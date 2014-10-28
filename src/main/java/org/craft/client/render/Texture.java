@@ -21,13 +21,18 @@ public class Texture implements ITextureObject, IDisposable
      */
     public Texture(int w, int h, ByteBuffer p)
     {
+        this(w, h, p, GL_NEAREST);
+    }
+
+    public Texture(int w, int h, ByteBuffer pixels, int filter)
+    {
         this.width = w;
         this.height = h;
-        this.pixels = p;
+        this.pixels = pixels;
         texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
         glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         glTexParameteri(GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
         glTexParameteri(GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 0);

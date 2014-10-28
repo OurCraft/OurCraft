@@ -22,6 +22,11 @@ public class OpenGLHelper
      */
     public static Texture loadTexture(BufferedImage img)
     {
+        return loadTexture(img, GL_NEAREST);
+    }
+
+    public static Texture loadTexture(BufferedImage img, int filter)
+    {
         int w = img.getWidth();
         int h = img.getHeight();
         int[] pixels = img.getRGB(0, 0, w, h, null, 0, w);
@@ -42,7 +47,7 @@ public class OpenGLHelper
             }
         }
         pixelBuf.flip();
-        return new Texture(w, h, pixelBuf);
+        return new Texture(w, h, pixelBuf, filter);
     }
 
     /**
@@ -131,4 +136,5 @@ public class OpenGLHelper
             return "" + cap;
         return capNamesMap.get(cap);
     }
+
 }
