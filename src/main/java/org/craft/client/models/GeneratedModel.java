@@ -53,6 +53,7 @@ public class GeneratedModel extends Model
                         ModelFace northFace = new ModelFace();
                         northFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
                         northFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
+                        northFace.setTexture(entry.getValue());
                         element.setFrom(Vector3.get((float) elemX / (float) img.getWidth(), (float) elemY / (float) img.getHeight(), 0));
                         element.setTo(Vector3.get((float) (elemX + 1) / (float) img.getWidth(), (float) (elemY + 1) / (float) img.getHeight(), 1f / 16f));
                         element.setFace("north", northFace);
@@ -60,27 +61,41 @@ public class GeneratedModel extends Model
                         ModelFace southFace = new ModelFace();
                         southFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
                         southFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
+                        southFace.setTexture(entry.getValue());
                         element.setFace("south", southFace);
 
-                        ModelFace westFace = new ModelFace();
-                        westFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
-                        westFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
-                        element.setFace("west", westFace);
-
-                        ModelFace eastFace = new ModelFace();
-                        eastFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
-                        eastFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
-                        element.setFace("east", eastFace);
-
-                        ModelFace topFace = new ModelFace();
-                        topFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
-                        topFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
-                        element.setFace("up", topFace);
-
-                        ModelFace downFace = new ModelFace();
-                        downFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
-                        downFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
-                        element.setFace("down", downFace);
+                        if(isTransparent(x - 1, y, pixels, img.getWidth()))
+                        {
+                            ModelFace westFace = new ModelFace();
+                            westFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
+                            westFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
+                            westFace.setTexture(entry.getValue());
+                            element.setFace("west", westFace);
+                        }
+                        if(isTransparent(x + 1, y, pixels, img.getWidth()))
+                        {
+                            ModelFace eastFace = new ModelFace();
+                            eastFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
+                            eastFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
+                            eastFace.setTexture(entry.getValue());
+                            element.setFace("east", eastFace);
+                        }
+                        if(isTransparent(x, y + 1, pixels, img.getWidth()))
+                        {
+                            ModelFace topFace = new ModelFace();
+                            topFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
+                            topFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
+                            topFace.setTexture(entry.getValue());
+                            element.setFace("up", topFace);
+                        }
+                        if(isTransparent(x, y - 1, pixels, img.getWidth()))
+                        {
+                            ModelFace downFace = new ModelFace();
+                            downFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
+                            downFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
+                            downFace.setTexture(entry.getValue());
+                            element.setFace("down", downFace);
+                        }
                         addElement(element);
                     }
                 }
@@ -94,6 +109,14 @@ public class GeneratedModel extends Model
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean isTransparent(int x, int y, int[] pixels, int width)
+    {
+        if(x < 0 || y < 0 || x >= width || y * width >= pixels.length)
+            return true;
+        int alpha = pixels[x + y * width];
+        return alpha < 0xFF;
     }
 
 }

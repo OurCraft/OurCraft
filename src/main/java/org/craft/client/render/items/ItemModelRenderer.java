@@ -3,6 +3,8 @@ package org.craft.client.render.items;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.google.common.collect.*;
+
 import org.craft.client.*;
 import org.craft.client.models.*;
 import org.craft.client.render.*;
@@ -22,6 +24,7 @@ public class ItemModelRenderer extends ItemRenderer
      */
     public ItemModelRenderer(Model itemModel)
     {
+        icons = Maps.newHashMap();
         this.itemModel = itemModel;
         if(rotationQuaternion == null)
             rotationQuaternion = new Quaternion();
@@ -50,7 +53,8 @@ public class ItemModelRenderer extends ItemRenderer
             Vector3 size = element.getTo().sub(startPos);
             for(Entry<String, ModelFace> entry : entries)
             {
-                float shininess = 0.90f;
+                //float shininess = 0.90f;
+                float shininess = 1.00f;
                 Vector3 faceStart = Vector3.NULL;
                 Vector3 faceSize = Vector3.NULL;
                 TextureIcon icon = getTexture(blockModel, entry.getValue().getTexture());
@@ -83,13 +87,13 @@ public class ItemModelRenderer extends ItemRenderer
                 {
                     faceStart = Vector3.get(startPos.getX(), startPos.getY(), startPos.getZ());
                     faceSize = Vector3.get(size.getX(), size.getY(), 0);
-                    shininess = 1f;
+                    shininess = 0.75f;
                 }
                 else if(entry.getKey().equals("south"))
                 {
                     faceStart = Vector3.get(startPos.getX(), startPos.getY(), startPos.getZ() + size.getZ());
                     faceSize = Vector3.get(size.getX(), size.getY(), 0);
-                    shininess = 1f;
+                    shininess = 0.75f;
                 }
 
                 else
@@ -107,21 +111,23 @@ public class ItemModelRenderer extends ItemRenderer
     /**
      * Gets TextureIcon from texture variable found in json model file
      */
-    private TextureIcon getTexture(Model blockModel, String texture)
+    private TextureIcon getTexture(Model itemModel, String texture)
     {
         if(texture == null)
+        {
             return null;
+        }
         if(!icons.containsKey(texture))
         {
             if(texture.startsWith("#"))
             {
-                TextureIcon icon = getTexture(blockModel, blockModel.getTexturePath(texture.substring(1)));
+                TextureIcon icon = getTexture(itemModel, itemModel.getTexturePath(texture.substring(1)));
                 icons.put(texture, icon);
             }
             else
             {
-                TextureMap blockMap = (TextureMap) OurCraft.getOurCraft().getRenderEngine().getByLocation(RenderItems.itemMapLoc);
-                icons.put(texture, blockMap.get(texture + ".png"));
+                TextureMap itemMap = (TextureMap) OurCraft.getOurCraft().getRenderEngine().getByLocation(RenderItems.itemMapLoc);
+                icons.put(texture, itemMap.get(texture + ".png"));
             }
         }
         return icons.get(texture);

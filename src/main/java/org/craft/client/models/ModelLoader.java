@@ -137,11 +137,11 @@ public class ModelLoader
                                 String path = textureData.getValue().getAsString();
                                 if(!path.startsWith("#"))
                                 {
+                                    iconGenerator.generateIcon(path);
                                     if(textureData.getKey().startsWith("layer"))
                                     {
                                         int layerId = Integer.parseInt(textureData.getKey().replaceFirst("layer", ""));
                                         generated.addLayer(path, layerId);
-                                        iconGenerator.generateIcon(path);
                                     }
                                 }
                             }
