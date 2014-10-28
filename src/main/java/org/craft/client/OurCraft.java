@@ -587,14 +587,18 @@ public class OurCraft implements Runnable, Game
                     renderEngine.enableGLCap(GL_DEPTH_TEST);
                     renderEngine.enableGLCap(GL_ALPHA_TEST);
                     renderEngine.setProjectFromEntity(false);
-                    Quaternion q = new Quaternion(Vector3.yAxis, (float) Math.toRadians(75));
-                    //Matrix4 m = Matrix4.get().initTranslation(1.0f, -1.25f, 1);
-                    Matrix4 m = Matrix4.get().initTranslation(0.75f, -1.75f, 1);
+                    Quaternion q = new Quaternion(Vector3.yAxis, (float) Math.toRadians(45));
+                    q = q.mul(new Quaternion(Vector3.xAxis, (float) Math.toRadians(5)));
+                    q = q.mul(new Quaternion(Vector3.zAxis, (float) Math.toRadians(-5)));
+                    float ratio = (float) displayWidth / (float) displayHeight;
+                    float d = ratio / (16.f / 9.f);
+                    Matrix4 m = player.getHeldItem().getItem() instanceof Block ? Matrix4.get().initTranslation(d * 1.75f, -1.85f, 1) : Matrix4.get().initTranslation(d * 1.75f, -1.45f, 1);
                     m = m.mul(Matrix4.get().initRotation(q.getForward(), q.getUp()));
                     renderEngine.setModelviewMatrix(m);
                     renderItems.renderItem(renderEngine, player.getHeldItem(), clientWorld, 0, 0, 0);
                     renderEngine.setModelviewMatrix(Matrix4.get().initIdentity());
                     renderEngine.setProjectFromEntity(true);
+                    m.dispose();
                 }
             }
         }

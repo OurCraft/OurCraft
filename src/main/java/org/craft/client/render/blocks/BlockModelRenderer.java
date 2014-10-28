@@ -52,10 +52,10 @@ public class BlockModelRenderer extends AbstractBlockRenderer
 
         if(variant == null)
             return;
-        BlockModel blockModel = variant.getModels().get(w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
+        Model blockModel = variant.getModels().get(w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {
-            BlockElement element = blockModel.getElement(i);
+            ModelElement element = blockModel.getElement(i);
             if(element.hasRotation())
             {
                 Vector3 axis = Vector3.xAxis;
@@ -67,10 +67,10 @@ public class BlockModelRenderer extends AbstractBlockRenderer
                     axis = Vector3.zAxis;
                 rotationQuaternion.init(axis, (float) Math.toRadians(element.getRotationAngle()));
             }
-            Set<Entry<String, BlockFace>> entries = element.getFaces().entrySet();
+            Set<Entry<String, ModelFace>> entries = element.getFaces().entrySet();
             Vector3 startPos = element.getFrom();
             Vector3 size = element.getTo().sub(startPos);
-            for(Entry<String, BlockFace> entry : entries)
+            for(Entry<String, ModelFace> entry : entries)
             {
                 Vector3 faceStart = Vector3.NULL;
                 Vector3 faceSize = Vector3.NULL;
@@ -188,7 +188,7 @@ public class BlockModelRenderer extends AbstractBlockRenderer
     /**
      * Gets TextureIcon from texture variable found in json model file
      */
-    private TextureIcon getTexture(BlockModel blockModel, BlockVariant variant, String texture)
+    private TextureIcon getTexture(Model blockModel, BlockVariant variant, String texture)
     {
         if(texture == null)
             return null;

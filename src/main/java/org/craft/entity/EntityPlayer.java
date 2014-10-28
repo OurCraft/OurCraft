@@ -5,6 +5,7 @@ import java.util.*;
 import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.inventory.Stack;
+import org.craft.items.*;
 import org.craft.nbt.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -34,7 +35,7 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
         inventory.setInventorySlotContents(2, new Stack(Blocks.grass));
         inventory.setInventorySlotContents(3, new Stack(Blocks.stone));
         inventory.setInventorySlotContents(4, new Stack(Blocks.powerSource));
-        inventory.setInventorySlotContents(5, new Stack(Blocks.dirtSlab));
+        inventory.setInventorySlotContents(5, new Stack(Items.test));
         inventory.setInventorySlotContents(6, new Stack(Blocks.glass));
         inventory.setInventorySlotContents(7, new Stack(Blocks.leaves));
         inventory.setInventorySlotContents(8, new Stack(Blocks.rose));

@@ -6,10 +6,12 @@ import java.util.Map.Entry;
 import com.google.common.collect.*;
 import com.google.gson.*;
 
+import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.client.render.blocks.*;
+import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
@@ -18,34 +20,34 @@ public class ModelLoader
 {
 
     private Gson                                  gson;
-    private HashMap<ResourceLocation, BlockModel> models;
+    private HashMap<ResourceLocation, Model> models;
 
     public ModelLoader()
     {
         gson = new Gson();
-        models = new HashMap<ResourceLocation, BlockModel>();
+        models = new HashMap<ResourceLocation, Model>();
     }
 
     /**
      * Generates a new block renderer from given ResourceLocation. Actual resource will be get from the assets loader
      */
-    public AbstractBlockRenderer createRenderer(ResourceLocation modelFile, IconGenerator blockMap) throws Exception
+    public AbstractBlockRenderer createBlockRenderer(ResourceLocation modelFile, IconGenerator blockMap) throws Exception
     {
-        return createRenderer(OurCraft.getOurCraft().getAssetsLoader().getResource(modelFile), blockMap);
+        return createBlockRenderer(OurCraft.getOurCraft().getAssetsLoader().getResource(modelFile), blockMap);
     }
 
     /**
      * Generates a new block renderer from given Resource
      */
-    public AbstractBlockRenderer createRenderer(AbstractResource modelFile, IconGenerator blockMap) throws Exception
+    public AbstractBlockRenderer createBlockRenderer(AbstractResource modelFile, IconGenerator blockMap) throws Exception
     {
-        return new BlockModelRenderer(loadVariants(modelFile, blockMap));
+        return new BlockModelRenderer(loadBlockVariants(modelFile, blockMap));
     }
 
     /**
      * Load a list of block variant from given resource
      */
-    public List<BlockVariant> loadVariants(AbstractResource variantFile, IconGenerator blockMap) throws Exception
+    public List<BlockVariant> loadBlockVariants(AbstractResource variantFile, IconGenerator blockMap) throws Exception
     {
         ArrayList<BlockVariant> variants = Lists.newArrayList();
         String rawJsonData = new String(variantFile.getData(), "UTF-8");
@@ -86,7 +88,7 @@ public class ModelLoader
             for(int i = 0; i < array.size(); i++ )
             {
                 JsonObject model = array.get(0).getAsJsonObject();
-                variant.addBlockModel(loadModel(variantFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + model.get("model").getAsString() + ".json")), blockMap));
+                variant.addBlockModel(loadModel(variantFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + model.get("model").getAsString() + ".json")), blockMap, Block.class));
 
                 if(model.has("renderPass"))
                     variant.setPass(EnumRenderPass.valueOf(model.get("renderPass").getAsString().toUpperCase()));
@@ -101,17 +103,17 @@ public class ModelLoader
     /**
      * Loads model from given resource.<br/>Loaded models are then cached
      */
-    public BlockModel loadModel(AbstractResource modelFile, IconGenerator blockMap) throws Exception
+    public Model loadModel(AbstractResource modelFile, IconGenerator iconGenerator, Class<? extends IStackable> type) throws Exception
     {
         if(!models.containsKey(modelFile.getResourceLocation()))
         {
             Log.message("Loading model " + modelFile.getResourceLocation().getFullPath());
-            BlockModel loadedModel = new BlockModel(modelFile.getResourceLocation().getName());
+            Model loadedModel = new Model(modelFile.getResourceLocation().getName());
             String rawJsonData = new String(modelFile.getData(), "UTF-8");
             JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
             if(model.has("parent"))
             {
-                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json")), blockMap));
+                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + model.get("parent").getAsString() + ".json")), iconGenerator, type));
             }
 
             if(model.has("textures"))
@@ -124,7 +126,7 @@ public class ModelLoader
                     String path = textureData.getValue().getAsString();
                     if(!path.startsWith("#"))
                     {
-                        blockMap.generateIcon(path);
+                        iconGenerator.generateIcon(path);
                     }
                     loadedModel.setTexturePath(textureData.getKey(), path);
                 }
@@ -136,7 +138,7 @@ public class ModelLoader
                 for(int i = 0; i < elements.size(); i++ )
                 {
                     JsonObject element = elements.get(i).getAsJsonObject();
-                    BlockElement loadedElement = new BlockElement();
+                    ModelElement loadedElement = new ModelElement();
                     if(element.has("from"))
                     {
                         JsonArray fromData = element.get("from").getAsJsonArray();
@@ -155,7 +157,7 @@ public class ModelLoader
                         {
                             Entry<String, JsonElement> faceEntry = it.next();
                             JsonObject faceData = faceEntry.getValue().getAsJsonObject();
-                            BlockFace face = new BlockFace();
+                            ModelFace face = new ModelFace();
                             if(faceData.has("texture"))
                                 face.setTexture(faceData.get("texture").getAsString());
                             if(faceData.has("cullface"))

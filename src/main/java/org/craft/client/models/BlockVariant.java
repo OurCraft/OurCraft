@@ -12,7 +12,7 @@ public class BlockVariant
 
     private ArrayList<BlockState>       states;
     private ArrayList<IBlockStateValue> values;
-    private ArrayList<BlockModel>       models;
+    private ArrayList<Model>       models;
     private EnumRenderPass              pass;
 
     public BlockVariant()
@@ -58,7 +58,7 @@ public class BlockVariant
     /**
      * Add model to this block variant
      */
-    public void addBlockModel(BlockModel model)
+    public void addBlockModel(Model model)
     {
         this.models.add(model);
     }
@@ -66,7 +66,7 @@ public class BlockVariant
     /**
      * Returns a mutable list of models used in this variant
      */
-    public List<BlockModel> getModels()
+    public List<Model> getModels()
     {
         return models;
     }

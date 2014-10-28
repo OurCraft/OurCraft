@@ -187,11 +187,15 @@ public class Entity implements org.spongepowered.api.entity.Entity
                         continue;
                     if(boundingBox.intersectAABB(blockBB))
                     {
+                        boundingBox.dispose();
+                        blockBB.dispose();
                         return false;
                     }
+                    blockBB.dispose();
                 }
             }
         }
+        boundingBox.dispose();
         return true;
     }
 

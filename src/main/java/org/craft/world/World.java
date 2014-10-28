@@ -418,6 +418,8 @@ public class World implements org.spongepowered.api.world.World
         int maxPower = 0;
         for(EnumSide side : EnumSide.values())
         {
+            if(side == EnumSide.UNDEFINED)
+                continue;
             IBlockStateValue value = getBlockState(x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), BlockStates.electricPower);
             if(value != null && value instanceof EnumPowerStates)
             {
