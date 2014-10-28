@@ -580,29 +580,28 @@ public class OurCraft implements Runnable, Game
         if(clientWorld != null)
         {
             renderWorld(visiblesChunks, delta, drawGui);
-            renderEngine.switchToOrtho();
-        }
-        else
-        {
-            renderEngine.switchToOrtho();
-        }
-        renderEngine.end();
-
-        renderEngine.enableGLCap(GL_BLEND);
-        if(clientWorld != null)
-        {
-            glClear(GL_DEPTH_BUFFER_BIT);
-            renderEngine.switchToPerspective();
-            renderEngine.setProjectFromEntity(false);
             if(player != null)
             {
                 if(player.getHeldItem() != null)
                 {
-                    renderItems.renderItem(renderEngine, player.getHeldItem(), 0, 0, 0);
+                    renderEngine.enableGLCap(GL_DEPTH_TEST);
+                    renderEngine.enableGLCap(GL_ALPHA_TEST);
+                    renderEngine.setProjectFromEntity(false);
+                    Quaternion q = new Quaternion(Vector3.yAxis, (float) Math.toRadians(75));
+                    //Matrix4 m = Matrix4.get().initTranslation(1.0f, -1.25f, 1);
+                    Matrix4 m = Matrix4.get().initTranslation(0.75f, -1.75f, 1);
+                    m = m.mul(Matrix4.get().initRotation(q.getForward(), q.getUp()));
+                    renderEngine.setModelviewMatrix(m);
+                    renderItems.renderItem(renderEngine, player.getHeldItem(), clientWorld, 0, 0, 0);
+                    renderEngine.setModelviewMatrix(Matrix4.get().initIdentity());
+                    renderEngine.setProjectFromEntity(true);
                 }
             }
-            renderEngine.setProjectFromEntity(true);
         }
+
+        renderEngine.end();
+        renderEngine.switchToOrtho();
+        renderEngine.enableGLCap(GL_BLEND);
         glClear(GL_DEPTH_BUFFER_BIT);
         renderEngine.switchToOrtho();
         renderEngine.disableGLCap(GL_DEPTH_TEST);

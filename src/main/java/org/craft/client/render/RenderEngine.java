@@ -100,7 +100,7 @@ public class RenderEngine implements IDisposable
     }
 
     /**
-     * Returns projected view (from entity if {@link #shouldProjectFromEntity()} returns true
+     * Returns projected view (from entity if {@link #shouldProjectFromEntity()} returns true)
      */
     public Matrix4 getProjectedViewMatrix()
     {
@@ -545,8 +545,8 @@ public class RenderEngine implements IDisposable
         modelMatrix = Matrix4.get().initIdentity();
         fov = (float) Math.toRadians(90);
         ratio = (float) displayWidth / (float) displayHeight;
-        nearDist = 0.01f;
-        farDist = 100f;
+        nearDist = 0.1f;
+        farDist = 10000f;
         projection3dMatrix = Matrix4.get().initPerspective(fov, ratio, nearDist, farDist);
         projection = projection3dMatrix;
         projectionHud = Matrix4.get().initOrthographic(0, displayWidth, displayHeight, 0, -1, 1);

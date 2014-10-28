@@ -4,11 +4,14 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
+import org.craft.blocks.*;
 import org.craft.client.*;
+import org.craft.client.render.blocks.*;
 import org.craft.client.render.items.*;
 import org.craft.inventory.Stack;
 import org.craft.items.*;
 import org.craft.resources.*;
+import org.craft.world.*;
 
 public class RenderItems
 {
@@ -61,13 +64,23 @@ public class RenderItems
     /**
      * Renders given item
      */
-    public void renderItem(RenderEngine engine, Stack item, float x, float y, float z)
+    public void renderItem(RenderEngine engine, Stack item, World w, float x, float y, float z)
     {
+        buffer.setOffset(0);
         buffer.clear();
         ItemRenderer renderer = getRenderer(item);
-        renderer.renderItem(engine, buffer, item.getItem(), item, x, y, z);
+        if(item.getItem() instanceof Block)
+        {
+            engine.bindLocation(RenderBlocks.blockMapLoc);
+            AbstractBlockRenderer blockRender = OurCraft.getOurCraft().getRenderBlocks().getRenderer((Block) item.getItem());
+            blockRender.render(engine, buffer, w, (Block) item.getItem(), (int) x, (int) y, (int) z);
+        }
+        else
+        {
+            engine.bindLocation(itemMapLoc);
+            renderer.renderItem(engine, buffer, item.getItem(), item, x, y, z);
+        }
         buffer.upload();
-        engine.bindLocation(itemMapLoc);
         engine.renderBuffer(buffer);
     }
 }

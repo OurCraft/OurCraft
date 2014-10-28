@@ -40,14 +40,19 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         if(!b.shouldRender())
             return;
         Chunk chunk = w.getChunk(x, y, z);
+        BlockVariant variant = null;
+        float lightValue = 1f;
         if(chunk == null)
-            return;
-        BlockVariant variant = getVariant(w, b, x, y, z);
+            variant = blockVariants.get(0);
+        else
+        {
+            variant = getVariant(w, b, x, y, z);
+            lightValue = chunk.getLightValue(w, x, y, z);
+        }
 
         if(variant == null)
             return;
         BlockModel blockModel = variant.getModels().get(w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
-        float lightValue = chunk.getLightValue(w, x, y, z);
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {
             BlockElement element = blockModel.getElement(i);
