@@ -10,9 +10,10 @@ import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
+import org.craft.spongeimpl.util.*;
+import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
-import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
@@ -29,6 +30,7 @@ public class SpoongeMod implements Game
     private OurCraftInstance    gameInstance;
     private SpoongeEventManager eventManager;
     private GameRegistry        gameRegistry;
+    private SpoongeScheduler    scheduler;
 
     public SpoongeMod()
     {
@@ -38,13 +40,14 @@ public class SpoongeMod implements Game
     @OurModEventHandler
     public void onPreInit(ModPreInitEvent event)
     {
-        OurCraftInstance instance = event.getOurCraftInstance();// TMP
-        this.gameInstance = instance;
+        scheduler = new SpoongeScheduler();
+        gameRegistry = new SpoongeGameRegistry();
+        this.gameInstance = event.getOurCraftInstance();
         pluginManager = new SpongePluginManager();
-        instance.getEventBus().addEventClass(Event.class);
-        instance.getEventBus().addAnnotationClass(SpongeEventHandler.class);
-        eventManager = new SpoongeEventManager(instance.getEventBus());
-        AddonsLoader addonsLoader = instance.getAddonsLoader();
+        gameInstance.getEventBus().addEventClass(Event.class);
+        gameInstance.getEventBus().addAnnotationClass(SpongeEventHandler.class);
+        eventManager = new SpoongeEventManager(gameInstance.getEventBus());
+        AddonsLoader addonsLoader = gameInstance.getAddonsLoader();
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
         if(!pluginsFolder.exists())
@@ -91,8 +94,7 @@ public class SpoongeMod implements Game
     @Override
     public Scheduler getScheduler()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return scheduler;
     }
 
     @Override
