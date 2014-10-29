@@ -7,7 +7,6 @@ import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
-import org.spongepowered.api.event.*;
 
 public class LuaEventBusListener implements IEventBusListener
 {
@@ -20,7 +19,7 @@ public class LuaEventBusListener implements IEventBusListener
     }
 
     @Override
-    public void onEvent(Event event, Object instance, Class<? extends Annotation> annotClass)
+    public void onEvent(Object event, Object instance, Class<? extends Annotation> annotClass)
     {
         if(annotClass == Mod.class || annotClass == null)
         {

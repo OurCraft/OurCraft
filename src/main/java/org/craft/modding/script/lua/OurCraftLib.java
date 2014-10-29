@@ -1,19 +1,19 @@
 package org.craft.modding.script.lua;
 
+import org.craft.*;
 import org.craft.utils.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.*;
 import org.luaj.vm2.lib.jse.*;
-import org.spongepowered.api.*;
 
 public class OurCraftLib extends TwoArgFunction
 {
 
     private LuaEventBusListener eventBus;
     private LuaAddonContainer   container;
-    private Game                game;
+    private OurCraftInstance    game;
 
-    public OurCraftLib(LuaEventBusListener eventBus, LuaAddonContainer container, Game game)
+    public OurCraftLib(LuaEventBusListener eventBus, LuaAddonContainer container, OurCraftInstance game)
     {
         this.game = game;
         this.eventBus = eventBus;

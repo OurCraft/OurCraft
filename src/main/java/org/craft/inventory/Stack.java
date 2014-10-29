@@ -3,7 +3,7 @@ package org.craft.inventory;
 import org.craft.items.*;
 import org.spongepowered.api.item.inventory.*;
 
-public class Stack implements ItemStack
+public class Stack
 {
     private static final long serialVersionUID = 441709013588165740L;
 
@@ -41,37 +41,31 @@ public class Stack implements ItemStack
         return stackable;
     }
 
-    @Override
     public int compareTo(ItemStack o)
     {
         return Integer.compare(stackSize, o.getQuantity());
     }
 
-    @Override
     public short getDamage()
     {
         return damage;
     }
 
-    @Override
     public void setDamage(short damage)
     {
         this.damage = damage;
     }
 
-    @Override
     public int getQuantity()
     {
         return stackSize;
     }
 
-    @Override
     public void setQuantity(int quantity) throws IllegalArgumentException
     {
         this.stackSize = quantity;
     }
 
-    @Override
     public int getMaxStackQuantity()
     {
         if(hasCustomMaxStackSize)
@@ -79,7 +73,6 @@ public class Stack implements ItemStack
         return stackable.getMaxStackQuantity();
     }
 
-    @Override
     public void setMaxStackQuantity(int quantity)
     {
         hasCustomMaxStackSize = true;

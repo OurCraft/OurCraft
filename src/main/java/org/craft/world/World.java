@@ -2,19 +2,14 @@ package org.craft.world;
 
 import java.util.*;
 
-import com.google.common.base.Optional;
-
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
-import org.craft.spongeimpl.block.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
-import org.spongepowered.api.math.*;
-import org.spongepowered.api.world.biome.*;
 
-public class World implements org.spongepowered.api.world.World
+public class World
 {
 
     private LinkedList<Entity> entities;
@@ -433,85 +428,9 @@ public class World implements org.spongepowered.api.world.World
         return maxPower;
     }
 
-    // -------------------------------------------------
-    // START OF SPONGE IMPLEMENTATION
-    // -------------------------------------------------
-
-    @Override
-    public Collection<org.spongepowered.api.entity.Entity> getEntities()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public UUID getUniqueID()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public String getName()
     {
         return name;
-    }
-
-    @Override
-    public Optional<org.spongepowered.api.world.Chunk> getChunk(Vector2i position)
-    {
-        //return getChunk(position.getX(), 0, position.getY());
-        return Optional.absent();
-    }
-
-    @Override
-    public Optional<org.spongepowered.api.world.Chunk> loadChunk(Vector2i position, boolean shouldGenerate)
-    {
-        /*  if(shouldGenerate)
-              return chunkProvider.getOrCreate(this, position.getX(), 0, position.getY());
-          else
-              return getChunk(position);*/
-        return Optional.absent();
-    }
-
-    @Override
-    public org.spongepowered.api.world.Chunk loadChunk(Vector2i position)
-    {
-        //return loadChunk(position, false);
-        return null;
-    }
-
-    @Override
-    public org.spongepowered.api.block.Block getBlock(Vector3d position)
-    {
-        return new SpongeBlock(getBlockAt((int) position.getX(), (int) position.getY(), (int) position.getZ()), (int) position.getX(), (int) position.getY(), (int) position.getZ(), this);
-    }
-
-    @Override
-    public Optional<org.spongepowered.api.entity.Entity> createEntity(org.spongepowered.api.entity.EntityType type, Vector3d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<org.spongepowered.api.entity.Entity> createEntity(org.spongepowered.api.entity.EntitySnapshot snapshot, Vector3d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Biome getBiome(Vector3d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public org.spongepowered.api.block.Block getBlock(int x, int y, int z)
-    {
-        return new SpongeBlock(getBlockAt(x, y, z), x, y, z, this);
     }
 
     public void setSeed(long seed)

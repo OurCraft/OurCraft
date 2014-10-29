@@ -21,8 +21,8 @@ public class ServerNetHandler implements INetworkHandler
         {
             C0PlayerInfos playerInfos = (C0PlayerInfos) packet;
             SessionManager.getInstance().registerSession(playerInfos.getSession());
-            EntityPlayerMP playerEntity = new EntityPlayerMP(OurCraftServer.getServer().getWorld(""), playerInfos.getSession().getUUID());
-            OurCraftServer.getServer().getWorld("").spawn(playerEntity);
+            EntityPlayerMP playerEntity = new EntityPlayerMP(OurCraftServer.getServer().getServerWorld(), playerInfos.getSession().getUUID());
+            OurCraftServer.getServer().getServerWorld().spawn(playerEntity);
             OurCraftServer.getServer().getNettyWrapper().registerChannel(playerInfos.getSession().getId(), ctx.channel(), playerEntity);
             OurCraftServer.getServer().broadcastMessage(TextFormatting.generateFromColor(200, 200, 50) + I18n.format("players.joined", playerInfos.getSession().getDisplayName()));
         }

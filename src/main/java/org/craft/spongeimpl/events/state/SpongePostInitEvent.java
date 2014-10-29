@@ -1,12 +1,12 @@
 package org.craft.spongeimpl.events.state;
 
-import org.spongepowered.api.*;
+import org.craft.*;
 import org.spongepowered.api.event.state.*;
 
 public class SpongePostInitEvent extends SpongeStateEvent implements PostInitializationEvent
 {
 
-    public SpongePostInitEvent(Game game)
+    public SpongePostInitEvent(OurCraftInstance game)
     {
         super(game);
     }

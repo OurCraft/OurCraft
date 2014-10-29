@@ -1,12 +1,12 @@
 package org.craft.spongeimpl.events.state;
 
-import org.spongepowered.api.*;
+import org.craft.*;
 import org.spongepowered.api.event.state.*;
 
 public class SpongeInitEvent extends SpongeStateEvent implements InitializationEvent
 {
 
-    public SpongeInitEvent(Game game)
+    public SpongeInitEvent(OurCraftInstance game)
     {
         super(game);
     }

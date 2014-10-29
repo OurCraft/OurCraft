@@ -1,22 +1,21 @@
 package org.craft.spongeimpl.events;
 
+import org.craft.*;
+import org.craft.spongeimpl.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.event.*;
 
 public abstract class SpongeGameEvent extends SpongeEvent implements GameEvent
 {
 
-    private Game game;
-
-    public SpongeGameEvent(Game game)
+    public SpongeGameEvent(OurCraftInstance instance)
     {
-        this.game = game;
+        super(instance);
     }
 
-    @Override
     public Game getGame()
     {
-        return game;
+        return SpoongeMod.instance;
     }
 
 }

@@ -7,7 +7,6 @@ import java.util.logging.*;
 import javax.swing.*;
 
 import org.craft.commands.*;
-import org.spongepowered.api.*;
 import org.spongepowered.api.util.command.*;
 
 public class ServerGui extends JFrame
@@ -42,11 +41,11 @@ public class ServerGui extends JFrame
     private JTextArea           console;
     private JTextField          userInput;
     private ServerGuiLogHandler logHandler;
-    private Game                game;
+    private OurCraftServer      game;
 
-    public ServerGui(Game gameInstance, String title)
+    public ServerGui(OurCraftServer serverInstance, String title)
     {
-        game = gameInstance;
+        game = serverInstance;
         setTitle(title);
         console = new JTextArea();
         console.setFont(new Font("Arial", Font.PLAIN, 13));

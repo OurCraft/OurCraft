@@ -11,8 +11,6 @@ import java.util.*;
 
 import javax.imageio.*;
 
-import com.google.common.base.Optional;
-
 import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
@@ -24,17 +22,13 @@ import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
 import org.craft.client.sound.*;
 import org.craft.entity.*;
-import org.craft.entity.Entity;
 import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
-import org.craft.spongeimpl.events.state.*;
-import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.game.*;
-import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.crash.*;
@@ -45,13 +39,8 @@ import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.api.*;
-import org.spongepowered.api.Platform;
-import org.spongepowered.api.entity.*;
-import org.spongepowered.api.event.*;
-import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.util.scheduler.*;
 
-public class OurCraft implements Runnable, Game
+public class OurCraft implements Runnable, OurCraftInstance
 {
 
     private int                      displayWidth                = 960;
@@ -79,7 +68,6 @@ public class OurCraft implements Runnable, Game
     private PlayerController         playerController;
     private SpongeGameRegistry       gameRegistry;
     private EventBus                 eventBus;
-    private SpongePluginManager      pluginManager;
     private Session                  session;
     private RenderItems              renderItems;
     private AddonsLoader             addonsLoader;
@@ -189,7 +177,7 @@ public class OurCraft implements Runnable, Game
             PacketRegistry.init();
             I18n.init(assetsLoader);
             I18n.setCurrentLanguage(settings.lang.getValue());
-            eventBus.fireEvent(new SpongeInitEvent(this), null, null);
+            eventBus.fireEvent(new ModInitEvent(this), null, null);
 
             modelLoader = new ModelLoader();
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
@@ -240,7 +228,7 @@ public class OurCraft implements Runnable, Game
             selectionBoxBuffer.upload();
             selectionBoxBuffer.clearAndDisposeVertices();
 
-            eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
+            eventBus.fireEvent(new ModPostInitEvent(this), null, null);
 
             running = true;
             while(running)
@@ -288,19 +276,17 @@ public class OurCraft implements Runnable, Game
     {
         Log.message("Loading SpongeAPI implementation...");
         gameRegistry = new SpongeGameRegistry();
-        eventBus = new EventBus(SpongeEventHandler.class, OurModEventHandler.class);
-        pluginManager = new SpongePluginManager();
+        eventBus = new EventBus(new Class<?>[]
+        {
+            ModEvent.class
+        }, OurModEventHandler.class);
         addonsLoader = new AddonsLoader(this, eventBus);
-        addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
         try
         {
             File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
             if(!modsFolder.exists())
                 modsFolder.mkdirs();
-            File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
-            if(!pluginsFolder.exists())
-                pluginsFolder.mkdirs();
-            addonsLoader.loadAll(modsFolder, pluginsFolder);
+            addonsLoader.loadAll(modsFolder);
         }
         catch(Exception e)
         {
@@ -874,7 +860,7 @@ public class OurCraft implements Runnable, Game
         if(world == null)
         {
             if(clientWorld != null)
-                eventBus.fireEvent(new SpongeWorldUnloadEvent(this, clientWorld), null, null);
+                eventBus.fireEvent(new WorldUnloadEvent(this, clientWorld), null, null);
         }
         else
         {
@@ -886,7 +872,7 @@ public class OurCraft implements Runnable, Game
             {
                 e.printStackTrace();
             }
-            eventBus.fireEvent(new SpongeWorldLoadEvent(this, world), null, null);
+            eventBus.fireEvent(new WorldLoadEvent(this, world), null, null);
         }
         this.clientWorld = world;
     }
@@ -1046,82 +1032,24 @@ public class OurCraft implements Runnable, Game
         return currentMenu;
     }
 
-    @Override
-    public Platform getPlatform()
-    {
-        return Platform.CLIENT;
-    }
-
-    @Override
-    public PluginManager getPluginManager()
-    {
-        return pluginManager;
-    }
-
-    @Override
-    public EventManager getEventManager()
+    public EventBus getEventBus()
     {
         return eventBus;
     }
 
-    @Override
     public GameRegistry getRegistry()
     {
         return gameRegistry;
     }
 
-    @Override
-    public Collection<Player> getOnlinePlayers()
+    public EntityPlayer getClientPlayer()
     {
-        return null;
+        return player;
     }
 
-    @Override
-    public int getMaxPlayers()
-    {
-        return 0;
-    }
-
-    @Override
-    public Optional<Player> getPlayer(UUID uniqueId)
-    {
-        return Optional.of((Player) player);
-    }
-
-    @Override
-    public Collection<org.spongepowered.api.world.World> getWorlds()
-    {
-        return null;
-    }
-
-    @Override
-    public org.spongepowered.api.world.World getWorld(UUID uniqueId)
-    {
-        return clientWorld;
-    }
-
-    @Override
-    public org.spongepowered.api.world.World getWorld(String worldName)
-    {
-        return clientWorld;
-    }
-
-    @Override
     public void broadcastMessage(String message)
     {
         Log.message(message);
-    }
-
-    @Override
-    public String getAPIVersion()
-    {
-        return "1.0";
-    }
-
-    @Override
-    public String getImplementationVersion()
-    {
-        return "OurCraft's Unofficial Sponge Implementation - 1.0";
     }
 
     /**
@@ -1175,13 +1103,6 @@ public class OurCraft implements Runnable, Game
         return sndEngine;
     }
 
-    @Override
-    public Scheduler getScheduler()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public GameSettings getGameSettings()
     {
         return settings;
@@ -1200,15 +1121,26 @@ public class OurCraft implements Runnable, Game
         }
     }
 
-    @Override
-    public Optional<Player> getPlayer(String name)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public RenderItems getRenderItems()
     {
         return renderItems;
+    }
+
+    @Override
+    public AddonsLoader getAddonsLoader()
+    {
+        return addonsLoader;
+    }
+
+    @Override
+    public boolean isClient()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isServer()
+    {
+        return false;
     }
 }

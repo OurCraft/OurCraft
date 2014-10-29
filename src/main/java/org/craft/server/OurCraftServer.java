@@ -5,8 +5,7 @@ import java.util.*;
 
 import javax.swing.*;
 
-import com.google.common.base.Optional;
-
+import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.client.*;
@@ -19,7 +18,6 @@ import org.craft.network.packets.*;
 import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
-import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
@@ -27,14 +25,10 @@ import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
 import org.spongepowered.api.*;
-import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
-import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.util.command.*;
-import org.spongepowered.api.util.scheduler.*;
 
-public class OurCraftServer implements Game, CommandSource
+public class OurCraftServer implements OurCraftInstance
 {
 
     private static OurCraftServer instance;
@@ -123,14 +117,14 @@ public class OurCraftServer implements Game, CommandSource
 
         Log.message("Starting server");
 
-        eventBus.fireEvent(new SpongeInitEvent(this), null, null);
+        // TODO:  eventBus.fireEvent(new SpongeInitEvent(this), null, null);
         serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
-        eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
+        // TODO:    eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
         new Thread(serverWrapper).start();
 
-        eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
+        // TODO:   eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
         running = true;
 
         expectedFrameRate = 60;
@@ -148,7 +142,10 @@ public class OurCraftServer implements Game, CommandSource
     private void initSponge()
     {
         gameRegistry = new SpongeGameRegistry();
-        eventBus = new EventBus(SpongeEventHandler.class, OurModEventHandler.class);
+        eventBus = new EventBus(new Class<?>[]
+        {
+            ModEvent.class
+        }, OurModEventHandler.class);
         pluginManager = new SpongePluginManager();
         addonsLoader = new AddonsLoader(this, eventBus);
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
@@ -168,20 +165,7 @@ public class OurCraftServer implements Game, CommandSource
         }
     }
 
-    @Override
-    public Platform getPlatform()
-    {
-        return Platform.SERVER;
-    }
-
-    @Override
-    public PluginManager getPluginManager()
-    {
-        return pluginManager;
-    }
-
-    @Override
-    public EventManager getEventManager()
+    public EventBus getEventBus()
     {
         return eventBus;
     }
@@ -193,65 +177,10 @@ public class OurCraftServer implements Game, CommandSource
     }
 
     @Override
-    public Collection<Player> getOnlinePlayers()
-    {
-        return onlinePlayers;
-    }
-
-    @Override
-    public int getMaxPlayers()
-    {
-        return maxPlayers;
-    }
-
-    @Override
-    public com.google.common.base.Optional<Player> getPlayer(UUID uniqueId)
-    {
-        for(Player player : onlinePlayers)
-        {
-            if(player.getDisplayName().equals(SessionManager.getInstance().getDisplayName(uniqueId)))
-                return com.google.common.base.Optional.of(player);
-        }
-        return com.google.common.base.Optional.absent();
-    }
-
-    @Override
-    public Collection<org.spongepowered.api.world.World> getWorlds()
-    {
-        ArrayList<org.spongepowered.api.world.World> worlds = new ArrayList<org.spongepowered.api.world.World>();
-        worlds.add(serverWorld);
-        return worlds;
-    }
-
-    @Override
-    public World getWorld(UUID uniqueId)
-    {
-        return serverWorld;
-    }
-
-    @Override
-    public World getWorld(String worldName)
-    {
-        return serverWorld;
-    }
-
-    @Override
     public void broadcastMessage(String message)
     {
         Log.message("[CHAT] " + message);
         serverWrapper.sendPacketToAll(new S1ChatMessage(message));
-    }
-
-    @Override
-    public String getAPIVersion()
-    {
-        return "UNKNOWN";
-    }
-
-    @Override
-    public String getImplementationVersion()
-    {
-        return "UNKNOWN";
     }
 
     public static String getVersion()
@@ -329,28 +258,27 @@ public class OurCraftServer implements Game, CommandSource
         return worldLoader;
     }
 
-    @Override
-    public void sendMessage(String message)
-    {
-        Log.message("[Command] " + message);
-    }
-
     public void shutdown()
     {
         running = false;
     }
 
     @Override
-    public Scheduler getScheduler()
+    public AddonsLoader getAddonsLoader()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return addonsLoader;
     }
 
     @Override
-    public Optional<Player> getPlayer(String name)
+    public boolean isClient()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return false;
     }
+
+    @Override
+    public boolean isServer()
+    {
+        return true;
+    }
+
 }

@@ -2,20 +2,14 @@ package org.craft.entity;
 
 import java.util.*;
 
-import com.google.common.base.Optional;
-
 import org.craft.blocks.*;
 import org.craft.maths.*;
 import org.craft.nbt.*;
-import org.craft.spongeimpl.math.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
-import org.spongepowered.api.entity.*;
-import org.spongepowered.api.item.inventory.*;
-import org.spongepowered.api.math.*;
 
-public class Entity implements org.spongepowered.api.entity.Entity
+public class Entity
 {
 
     public float              posX;
@@ -401,88 +395,6 @@ public class Entity implements org.spongepowered.api.entity.Entity
         compound.putFloat("stepHeight", stepHeight);
 
         compound.putBoolean("dead", isDead);
-    }
-
-    @Override
-    public Vector3d getPosition()
-    {
-        return new Vec3d(posX, posY, posZ);
-    }
-
-    @Override
-    public void setPosition(Vector3d position)
-    {
-        posX = (float) position.getX();
-        posY = (float) position.getY();
-        posZ = (float) position.getZ();
-    }
-
-    @Override
-    public Vector3f getVectorRotation()
-    {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public void setVectorRotation(Vector3f rotation)
-    {
-        // TODO
-    }
-
-    @Override
-    public EulerDirection getRotation()
-    {
-        return new SpongeEulerDirection(yaw, pitch, roll);
-    }
-
-    @Override
-    public void setRotation(EulerDirection rotation)
-    {
-        this.yaw = rotation.getYaw();
-        this.pitch = rotation.getPitch();
-        this.roll = rotation.getRoll();
-    }
-
-    @Override
-    public EntityType getType()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public EntitySnapshot getSnapshot()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public <T> Optional<T> getComponent(Class<T> clazz)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void remove()
-    {
-        setDead();
-    }
-
-    @Override
-    public void interact()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void interactWith(ItemStack itemStack)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

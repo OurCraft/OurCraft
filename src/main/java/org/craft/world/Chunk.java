@@ -2,17 +2,11 @@ package org.craft.world;
 
 import java.util.*;
 
-import com.google.common.base.Optional;
-
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.maths.*;
-import org.craft.spongeimpl.math.*;
-import org.spongepowered.api.entity.*;
-import org.spongepowered.api.math.*;
-import org.spongepowered.api.world.biome.*;
 
-public class Chunk implements org.spongepowered.api.world.Chunk
+public class Chunk
 {
 
     public short[][][]                         blocks;
@@ -412,52 +406,6 @@ public class Chunk implements org.spongepowered.api.world.Chunk
             object = blockStatesObjects.get(v);
         }
         return object;
-    }
-
-    @Override
-    public Collection<Entity> getEntities()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Vector3i getPosition()
-    {
-        return new Vec3i(coords.x, coords.y, coords.z);
-    }
-
-    @Override
-    public Optional<Entity> createEntity(EntityType type, Vector3d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<Entity> createEntity(EntitySnapshot snapshot, Vector3d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Biome getBiome(Vector3d position)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public org.spongepowered.api.block.Block getBlock(Vector3d position)
-    {
-        return getBlock((int) position.getX(), (int) position.getY(), (int) position.getZ());
-    }
-
-    @Override
-    public org.spongepowered.api.block.Block getBlock(int x, int y, int z)
-    {
-        return getBlock(x, y, z);
     }
 
     public void cleanDirtiness(int worldX, int worldY, int worldZ)

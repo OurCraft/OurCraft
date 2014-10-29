@@ -3,7 +3,7 @@ package org.craft.spongeimpl.events.state;
 import java.io.*;
 
 import org.apache.logging.log4j.*;
-import org.spongepowered.api.*;
+import org.craft.*;
 import org.spongepowered.api.event.state.*;
 
 public class SpongePreInitEvent extends SpongeStateEvent implements PreInitializationEvent
@@ -14,7 +14,7 @@ public class SpongePreInitEvent extends SpongeStateEvent implements PreInitializ
     private File   suggestedConfigDir;
     private File   configDir;
 
-    public SpongePreInitEvent(Game game, Logger pluginLogger, File configFile, File suggestedConfigDir, File configDir)
+    public SpongePreInitEvent(OurCraftInstance game, Logger pluginLogger, File configFile, File suggestedConfigDir, File configDir)
     {
         super(game);
         this.pluginLogger = pluginLogger;

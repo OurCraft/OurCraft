@@ -9,9 +9,8 @@ import org.craft.maths.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
 import org.craft.world.*;
-import org.spongepowered.api.block.*;
 
-public class Block implements IStackable, BlockType
+public class Block implements IStackable
 {
 
     static
@@ -195,12 +194,6 @@ public class Block implements IStackable, BlockType
     public boolean isSolid()
     {
         return true;
-    }
-
-    @Override
-    public BlockType getBlock()
-    {
-        return this;
     }
 
 }

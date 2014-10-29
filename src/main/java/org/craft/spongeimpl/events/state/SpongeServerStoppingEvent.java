@@ -1,12 +1,12 @@
 package org.craft.spongeimpl.events.state;
 
-import org.spongepowered.api.*;
+import org.craft.*;
 import org.spongepowered.api.event.state.*;
 
 public class SpongeServerStoppingEvent extends SpongeStateEvent implements ServerStoppingEvent
 {
 
-    public SpongeServerStoppingEvent(Game game)
+    public SpongeServerStoppingEvent(OurCraftInstance game)
     {
         super(game);
     }

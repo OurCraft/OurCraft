@@ -58,7 +58,7 @@ public class GuiIngame extends Gui
             }
         }
 
-        EntityPlayer player = (EntityPlayer) oc.getPlayer((UUID) null).get();
+        EntityPlayer player = oc.getClientPlayer();
         org.craft.inventory.Stack stack = player.getHeldItem();
         if(stack != null)
         {

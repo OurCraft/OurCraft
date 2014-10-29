@@ -9,10 +9,8 @@ import org.craft.items.*;
 import org.craft.nbt.*;
 import org.craft.utils.*;
 import org.craft.world.*;
-import org.spongepowered.api.component.attribute.*;
-import org.spongepowered.api.entity.*;
 
-public class EntityPlayer extends EntityLiving implements Player, LevelProgressable, Feedable
+public class EntityPlayer extends EntityLiving
 {
     private UUID   uuid;
     private String name;
@@ -48,13 +46,11 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
         return 1.7f;
     }
 
-    @Override
     public String getName()
     {
         return name;
     }
 
-    @Override
     public String getDisplayName()
     {
         return displayName;
@@ -71,58 +67,49 @@ public class EntityPlayer extends EntityLiving implements Player, LevelProgressa
         return inventory.getStackInSlot(((PlayerInventory) inventory).getSelectedIndex());
     }
 
-    @Override
     public double getExperience()
     {
         return experience;
     }
 
-    @Override
     public int getLevel()
     {
         return xpLevel;
     }
 
-    @Override
     public void setExperience(double experience)
     {
         this.experience = experience;
     }
 
-    @Override
     public void setLevel(int level)
     {
         this.xpLevel = level;
     }
 
-    @Override
     public double getHunger()
     {
         return hunger;
     }
 
-    @Override
     public double getSaturation()
     {
         return saturation;
     }
 
-    @Override
     public void setHunger(double hunger)
     {
         this.hunger = hunger;
     }
 
-    @Override
     public void setSaturation(double saturation)
     {
         this.saturation = saturation;
     }
 
-    @Override
     public void sendMessage(String message)
     {
-
+        // TODO: Implementation
     }
 
     public void readFromNBT(NBTCompoundTag compound)

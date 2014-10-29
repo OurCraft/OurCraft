@@ -3,10 +3,28 @@ package org.craft.items;
 import org.craft.entity.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
-import org.spongepowered.api.item.*;
+import org.spongepowered.api.item.inventory.*;
 
-public interface IStackable extends org.spongepowered.api.item.ItemType, ItemBlock
+public interface IStackable
 {
+
+    /**
+     * Gets the id of this item.
+     *
+     * <p>Ex. Minecraft registers a golden carrot as
+     * "minecraft:golden_carrot".</p>
+     *
+     * @return The id
+     */
+    String getId();
+
+    /**
+     * Get the default maximum quantity for {@link ItemStack}s
+     * of this item.
+     *
+     * @return Max stack quantity
+     */
+    int getMaxStackQuantity();
 
     /**
      * Defines the behavior of this stackable instance when used

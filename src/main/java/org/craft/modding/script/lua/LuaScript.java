@@ -2,20 +2,20 @@ package org.craft.modding.script.lua;
 
 import java.io.*;
 
+import org.craft.*;
 import org.craft.modding.script.*;
 import org.craft.resources.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
-import org.spongepowered.api.*;
 
 public class LuaScript extends Script
 {
     private Globals             globals;
     private LuaEventBusListener eventBus;
     private LuaAddonContainer   container;
-    private Game                game;
+    private OurCraftInstance    game;
 
-    public LuaScript(AbstractResource scriptRes, LuaEventBusListener eventBus, LuaAddonContainer container, Game game) throws UnsupportedEncodingException
+    public LuaScript(AbstractResource scriptRes, LuaEventBusListener eventBus, LuaAddonContainer container, OurCraftInstance game) throws UnsupportedEncodingException
     {
         super();
         this.game = game;
@@ -24,7 +24,7 @@ public class LuaScript extends Script
         init(scriptRes);
     }
 
-    public LuaScript(AbstractResource newRes, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container, Game game) throws UnsupportedEncodingException
+    public LuaScript(AbstractResource newRes, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container, OurCraftInstance game) throws UnsupportedEncodingException
     {
         super();
         this.game = game;

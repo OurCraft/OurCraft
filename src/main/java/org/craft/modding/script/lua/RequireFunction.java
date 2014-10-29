@@ -2,9 +2,9 @@ package org.craft.modding.script.lua;
 
 import java.io.*;
 
+import org.craft.*;
 import org.craft.resources.*;
 import org.luaj.vm2.*;
-import org.spongepowered.api.*;
 
 public class RequireFunction extends LuaFunction
 {
@@ -13,9 +13,9 @@ public class RequireFunction extends LuaFunction
     private Globals             globals;
     private LuaEventBusListener eventBus;
     private LuaAddonContainer   container;
-    private Game                game;
+    private OurCraftInstance    game;
 
-    public RequireFunction(AbstractResource scriptResource, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container, Game game)
+    public RequireFunction(AbstractResource scriptResource, Globals globals, LuaEventBusListener eventBus, LuaAddonContainer container, OurCraftInstance game)
     {
         this.game = game;
         this.container = container;

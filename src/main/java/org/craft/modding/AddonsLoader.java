@@ -2,8 +2,10 @@ package org.craft.modding;
 
 import java.io.*;
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
+import com.google.common.collect.*;
 import com.google.gson.*;
 
 import org.apache.logging.log4j.*;
@@ -11,23 +13,25 @@ import org.craft.*;
 import org.craft.modding.events.*;
 import org.craft.modding.script.lua.*;
 import org.craft.resources.*;
-import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 import org.reflections.*;
-import org.spongepowered.api.*;
 
 public class AddonsLoader
 {
 
     private HashMap<Class<? extends Annotation>, IAddonManager<?>> handlers;
     private EventBus                                               eventBus;
-    private Game                                                   game;
+    private OurCraftInstance                                       game;
     private LuaEventBusListener                                    luaListener;
     private OurClassLoader                                         classLoader;
+    private ArrayList<AddonContainer>                              containers;
+    private ArrayList<Class<?>>                                    loaded;
 
-    public AddonsLoader(Game gameInstance, EventBus eventBus)
+    public AddonsLoader(OurCraftInstance gameInstance, EventBus eventBus)
     {
+        containers = Lists.newArrayList();
+        loaded = Lists.newArrayList();
         this.classLoader = (OurClassLoader) Thread.currentThread().getContextClassLoader();
         luaListener = new LuaEventBusListener();
         eventBus.addListener(luaListener);
@@ -36,6 +40,7 @@ public class AddonsLoader
         this.eventBus = eventBus;
         handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
         registerAddonAnnotation(Mod.class, new ModManager());
+
     }
 
     @SuppressWarnings("rawtypes")
@@ -51,27 +56,40 @@ public class AddonsLoader
     public void loadAddon(Class<?> clazz) throws InstantiationException, IllegalAccessException
     {
         boolean added = false;
-        for(Class<? extends Annotation> c : handlers.keySet())
+        if(loaded.contains(clazz))
+            return;
+        annotLoop: for(Class<? extends Annotation> c : handlers.keySet())
         {
+            for(AddonContainer container : containers)
+            {
+                if(container.getAddonAnnotation().annotationType() == c && container.getInstance().getClass() == clazz)
+                {
+                    added = true;
+                    continue annotLoop;
+                }
+            }
             if(clazz.isAnnotationPresent(c))
             {
+                loaded.add(clazz);
                 IAddonManager manager = handlers.get(c);
                 IAddonHandler handler = manager.getHandler();
                 Object instance = clazz.newInstance();
+                for(Field f : clazz.getDeclaredFields())
+                {
+                    if(f.isAnnotationPresent(Instance.class))
+                    {
+                        f.setAccessible(true);
+                        f.set(null, instance);
+                    }
+                }
                 AddonContainer container = handler.createContainer(clazz.getAnnotation(c), instance);
                 manager.loadAddon(container);
                 eventBus.register(instance);
 
-                File configFolder = new File(SystemUtils.getGameFolder(), "configs/");
-                if(!configFolder.exists())
-                {
-                    configFolder.mkdirs();
-                }
-                Logger logger = new AddonLogger(container);
-                SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
-                eventBus.fireEvent(preInitEvent, instance, null);
                 added = true;
                 Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
+                containers.add(container);
+                handler.onCreation(game, container);
             }
         }
         if(!added)
@@ -82,7 +100,6 @@ public class AddonsLoader
 
     public void loadAll(File... folders)
     {
-
         for(File folder : folders)
         {
             File[] files = folder.listFiles();
@@ -123,8 +140,9 @@ public class AddonsLoader
                                     configFolder.mkdirs();
                                 }
                                 Logger logger = new AddonLogger(container);
-                                SpongePreInitEvent preInitEvent = new SpongePreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
+                                ModPreInitEvent preInitEvent = new ModPreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder);
                                 eventBus.fireEvent(preInitEvent, container, null);
+                                containers.add(container);
                             }
                             else
                             {

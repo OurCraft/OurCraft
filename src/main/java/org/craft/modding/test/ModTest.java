@@ -2,8 +2,7 @@ package org.craft.modding.test;
 
 import org.apache.logging.log4j.*;
 import org.craft.modding.*;
-import org.spongepowered.api.event.state.*;
-import org.spongepowered.api.event.world.*;
+import org.craft.modding.events.*;
 
 @Mod(id = "modtest", name = "Test mod", version = "1.0")
 public class ModTest
@@ -16,14 +15,14 @@ public class ModTest
     }
 
     @OurModEventHandler
-    public void onPreInit(PreInitializationEvent evt)
+    public void onPreInit(ModPreInitEvent evt)
     {
-        logger = evt.getPluginLog();
-        evt.getPluginLog().debug("PreInit!!!");
+        logger = evt.getLogger();
+        logger.debug("PreInit!!!");
     }
 
     @OurModEventHandler
-    public void onPostInit(PostInitializationEvent evt)
+    public void onPostInit(ModPostInitEvent evt)
     {
         logger.debug("PostInit!!!");
     }
@@ -41,7 +40,7 @@ public class ModTest
     }
 
     @OurModEventHandler
-    public void onInit(InitializationEvent evt)
+    public void onInit(ModInitEvent evt)
     {
         logger.debug("Init!!!");
     }
