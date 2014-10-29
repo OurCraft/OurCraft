@@ -9,16 +9,6 @@ public class ObjectPool<T> implements Collection<T>
     private ObjectFactory<T> fact;
     private Class<T>         typeClass;
 
-    public static <T> ObjectPool<T> of(Class<T> clazz)
-    {
-        return new ObjectPool<T>(clazz);
-    }
-
-    public static <T> ObjectPool<T> of(Class<T> clazz, ObjectFactory<T> fact)
-    {
-        return new ObjectPool<T>(clazz, fact);
-    }
-
     public ObjectPool(Class<T> clazz)
     {
         this(clazz, new DefaultObjectFactory<T>());

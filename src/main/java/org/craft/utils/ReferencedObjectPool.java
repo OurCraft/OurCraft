@@ -3,14 +3,14 @@ package org.craft.utils;
 public class ReferencedObjectPool<T extends AbstractReference> extends ObjectPool<T>
 {
 
-    public static <T extends AbstractReference> ReferencedObjectPool<T> of(Class<T> clazz)
+    public static <K extends AbstractReference> ReferencedObjectPool<K> of(Class<K> clazz)
     {
-        return new ReferencedObjectPool<T>(clazz);
+        return new ReferencedObjectPool<K>(clazz);
     }
 
-    public static <T extends AbstractReference> ReferencedObjectPool<T> of(Class<T> clazz, ObjectFactory<T> fact)
+    public static <K extends AbstractReference> ReferencedObjectPool<K> of(Class<K> clazz, ObjectFactory<K> fact)
     {
-        return new ReferencedObjectPool<T>(clazz, fact);
+        return new ReferencedObjectPool<K>(clazz, fact);
     }
 
     public ReferencedObjectPool(Class<T> clazz)
