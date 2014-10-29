@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 def filteredSourceDir = file("${buildDir}/filtered") 
 def versionValue = 'InDev-0.1'
-def mainClass = "org.craft.client.start.OurCraftStartup"
+def mainClass = "org.craft.client.OurCraftStartup"
 
 apply plugin: 'java'
 sourceCompatibility = 1.6
