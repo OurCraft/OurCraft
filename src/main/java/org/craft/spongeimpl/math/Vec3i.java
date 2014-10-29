@@ -155,19 +155,19 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int dot(Vector3i v)
+    public double dot(Vector3i v)
     {
         return x * v.getX() + y * v.getY() + z * v.getY();
     }
 
     @Override
-    public int dot(double x, double y, double z)
+    public double dot(double x, double y, double z)
     {
         return (int) (this.x * x + this.y * y + this.z * z);
     }
 
     @Override
-    public int dot(int x, int y, int z)
+    public double dot(int x, int y, int z)
     {
         return (int) (this.x * x + this.y * y + this.z * z);
     }
@@ -260,7 +260,7 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int distanceSquared(Vector3i v)
+    public double distanceSquared(Vector3i v)
     {
         int dx = this.x - v.getX();
         int dy = this.y - v.getY();
@@ -269,7 +269,7 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int distanceSquared(double x, double y, double z)
+    public double distanceSquared(double x, double y, double z)
     {
         int dx = (int) (this.x - x);
         int dy = (int) (this.y - y);
@@ -278,7 +278,7 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int distanceSquared(int x, int y, int z)
+    public double distanceSquared(int x, int y, int z)
     {
         int dx = this.x - x;
         int dy = this.y - y;
@@ -287,7 +287,7 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int distance(Vector3i v)
+    public double distance(Vector3i v)
     {
         int dx = this.x - v.getX();
         int dy = this.y - v.getY();
@@ -296,7 +296,7 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int distance(double x, double y, double z)
+    public double distance(double x, double y, double z)
     {
         int dx = (int) (this.x - x);
         int dy = (int) (this.y - y);
@@ -305,7 +305,7 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int distance(int x, int y, int z)
+    public double distance(int x, int y, int z)
     {
         int dx = this.x - x;
         int dy = this.y - y;
@@ -314,13 +314,13 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public int lengthSquared()
+    public double lengthSquared()
     {
         return x * x + y * y + z * z;
     }
 
     @Override
-    public int length()
+    public double length()
     {
         return (int) Math.sqrt(x * x + y * y + z * z);
     }
