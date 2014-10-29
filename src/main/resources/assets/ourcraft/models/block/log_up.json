@@ -2,11 +2,11 @@
     "parent": "block/cube",
     "textures": 
     {
-        "up": "log_bottom_and_top",
-        "down": "log_bottom_and_top",
-        "east": "log_side",
-        "west": "log_side",
-        "north": "log_side",
-        "south": "log_side"
+        "up": "blocks/log_bottom_and_top",
+        "down": "blocks/log_bottom_and_top",
+        "east": "blocks/log_side",
+        "west": "blocks/log_side",
+        "north": "blocks/log_side",
+        "south": "blocks/log_side"
     }
 }

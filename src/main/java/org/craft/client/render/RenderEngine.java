@@ -8,8 +8,10 @@ import static org.lwjgl.opengl.GL30.*;
 import java.nio.*;
 import java.util.*;
 
+import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.entity.*;
+import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
@@ -44,6 +46,8 @@ public class RenderEngine implements IDisposable
     private float                                     farDist;
     private int                                       displayWidth;
     private int                                       displayHeight;
+    public TextureMap                                 blocksAndItemsMap;
+    public ResourceLocation                           blocksAndItemsMapLocation;
 
     public RenderEngine(ResourceLoader loader) throws Exception
     {
@@ -366,8 +370,31 @@ public class RenderEngine implements IDisposable
                 Log.error("Could not reload texture at /" + key.getFullPath() + " because of: " + e.getClass().getCanonicalName() + " " + e.getLocalizedMessage());
             }
         }
-        OurCraft.getOurCraft().getRenderBlocks().createBlockMap(this);
-        OurCraft.getOurCraft().getRenderItems().createItemMap(this);
+        createBlockAndItemMap(OurCraft.getOurCraft().getRenderBlocks(), OurCraft.getOurCraft().getRenderItems());
+    }
+
+    public void createBlockAndItemMap(RenderBlocks renderBlocks, RenderItems renderItems)
+    {
+        blocksAndItemsMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft", "textures"), true, true);
+        blocksAndItemsMapLocation = new ResourceLocation("ourcraft", "textures/atlases/texture0.png");
+        for(Block b : Blocks.BLOCK_REGISTRY.values())
+        {
+            renderBlocks.getRenderer(b);
+            renderItems.getRenderer(b);
+        }
+        for(Item b : Items.ITEM_REGISTRY.values())
+        {
+            renderItems.getRenderer(b);
+        }
+        try
+        {
+            blocksAndItemsMap.compile();
+            registerLocation(blocksAndItemsMapLocation, blocksAndItemsMap);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**

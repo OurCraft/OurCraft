@@ -2,6 +2,6 @@
 	"parent":"block/plant",
 	"textures":
 	{
-		"cross":"../blocks/rose"
+		"cross":"blocks/rose"
 	}
 }

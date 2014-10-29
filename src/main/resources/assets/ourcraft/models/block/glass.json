@@ -2,6 +2,6 @@
     "parent": "block/transparent_cube_all",
     "textures": 
     {
-        "all": "glass"
+        "all": "blocks/glass"
     }
 }

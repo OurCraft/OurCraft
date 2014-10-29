@@ -194,6 +194,7 @@ public class OurCraft implements Runnable, Game
             modelLoader = new ModelLoader();
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
             renderItems = new RenderItems(renderEngine, modelLoader);
+            renderEngine.createBlockAndItemMap(renderBlocks, renderItems);
             fallbackRenderer = new FallbackRender<Entity>();
             openMenu(new GuiMainMenu(this));
 

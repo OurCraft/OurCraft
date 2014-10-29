@@ -102,150 +102,140 @@ public class ModelLoader
     }
 
     /**
-     * Loads model from given resource.<br/>Loaded models are then cached
+     * Loads model from given resource.
      */
     public Model loadModel(AbstractResource modelFile, IconGenerator iconGenerator, Class<? extends IStackable> type) throws Exception
     {
-        if(!models.containsKey(modelFile.getResourceLocation()))
+        Log.message("Loading model " + modelFile.getResourceLocation().getFullPath());
+        Model loadedModel = new Model(modelFile.getResourceLocation().getName());
+        String rawJsonData = new String(modelFile.getData(), "UTF-8");
+        JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
+        if(model.has("parent"))
         {
-            Log.message("Loading model " + modelFile.getResourceLocation().getFullPath());
-            Model loadedModel = new Model(modelFile.getResourceLocation().getName());
-            String rawJsonData = new String(modelFile.getData(), "UTF-8");
-            JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);
-            if(model.has("parent"))
+            String parentPath = model.get("parent").getAsString();
+            if(parentPath.startsWith("buildin/"))
             {
-                String parentPath = model.get("parent").getAsString();
-                if(parentPath.startsWith("buildin/"))
+                String[] split = parentPath.split("/");
+                String name = split[split.length - 1];
+                if(name.equals("generated"))
                 {
-                    String[] split = parentPath.split("/");
-                    String name = split[split.length - 1];
-                    if(name.equals("generated"))
+                    loadedModel = new GeneratedModel(modelFile.getResourceLocation().getName());
+                    GeneratedModel generated = (GeneratedModel) loadedModel; // Convenience variable to avoid multiple casts
+                    if(!model.has("textures"))
                     {
-                        loadedModel = new GeneratedModel(modelFile.getResourceLocation().getName());
-                        GeneratedModel generated = (GeneratedModel) loadedModel; // Convenience variable to avoid multiple casts
-                        if(!model.has("textures"))
+                        throw new IllegalArgumentException("Cannot generate model if no textures are specified!");
+                    }
+                    else
+                    {
+                        JsonObject textures = model.get("textures").getAsJsonObject();
+                        Iterator<Entry<String, JsonElement>> textureEntries = textures.entrySet().iterator();
+                        while(textureEntries.hasNext())
                         {
-                            throw new IllegalArgumentException("Cannot generate model if no textures are specified!");
-                        }
-                        else
-                        {
-                            JsonObject textures = model.get("textures").getAsJsonObject();
-                            Iterator<Entry<String, JsonElement>> textureEntries = textures.entrySet().iterator();
-                            while(textureEntries.hasNext())
+                            Entry<String, JsonElement> textureData = textureEntries.next();
+                            String path = textureData.getValue().getAsString();
+                            if(!path.startsWith("#"))
                             {
-                                Entry<String, JsonElement> textureData = textureEntries.next();
-                                String path = textureData.getValue().getAsString();
-                                if(!path.startsWith("#"))
+                                iconGenerator.generateIcon(path);
+                                if(textureData.getKey().startsWith("layer"))
                                 {
-                                    iconGenerator.generateIcon(path);
-                                    if(textureData.getKey().startsWith("layer"))
-                                    {
-                                        int layerId = Integer.parseInt(textureData.getKey().replaceFirst("layer", ""));
-                                        generated.addLayer(path, layerId);
-                                    }
+                                    int layerId = Integer.parseInt(textureData.getKey().replaceFirst("layer", ""));
+                                    generated.addLayer(path, layerId);
                                 }
                             }
                         }
-                        generated.generateElements();
-                        return generated;
                     }
-                }
-                else
-                    loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + parentPath + ".json")), iconGenerator, type));
-            }
-
-            if(model.has("textures"))
-            {
-                JsonObject textures = model.get("textures").getAsJsonObject();
-                Iterator<Entry<String, JsonElement>> textureEntries = textures.entrySet().iterator();
-                while(textureEntries.hasNext())
-                {
-                    Entry<String, JsonElement> textureData = textureEntries.next();
-                    String path = textureData.getValue().getAsString();
-                    if(!path.startsWith("#"))
-                    {
-                        iconGenerator.generateIcon(path);
-                    }
-                    loadedModel.setTexturePath(textureData.getKey(), path);
+                    generated.generateElements();
+                    return generated;
                 }
             }
-
-            if(model.has("elements"))
-            {
-                JsonArray elements = model.get("elements").getAsJsonArray();
-                for(int i = 0; i < elements.size(); i++ )
-                {
-                    JsonObject element = elements.get(i).getAsJsonObject();
-                    ModelElement loadedElement = new ModelElement();
-                    if(element.has("from"))
-                    {
-                        JsonArray fromData = element.get("from").getAsJsonArray();
-                        loadedElement.setFrom(Vector3.get(fromData.get(0).getAsFloat() / 16f, fromData.get(1).getAsFloat() / 16f, fromData.get(2).getAsFloat() / 16f));
-                    }
-                    if(element.has("to"))
-                    {
-                        JsonArray toData = element.get("to").getAsJsonArray();
-                        loadedElement.setTo(Vector3.get(toData.get(0).getAsFloat() / 16f, toData.get(1).getAsFloat() / 16f, toData.get(2).getAsFloat() / 16f));
-                    }
-                    if(element.has("faces"))
-                    {
-                        JsonObject facesObject = element.get("faces").getAsJsonObject();
-                        Iterator<Entry<String, JsonElement>> it = facesObject.entrySet().iterator();
-                        while(it.hasNext())
-                        {
-                            Entry<String, JsonElement> faceEntry = it.next();
-                            JsonObject faceData = faceEntry.getValue().getAsJsonObject();
-                            ModelFace face = new ModelFace();
-                            if(faceData.has("texture"))
-                                face.setTexture(faceData.get("texture").getAsString());
-                            if(faceData.has("cullface"))
-                            {
-                                if(type == Block.class)
-                                {
-                                    face.setCullface(faceData.get("cullface").getAsString());
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Item model cannot specify a cullface argument for a face");
-                                }
-                            }
-                            if(faceData.has("uv"))
-                            {
-                                JsonArray uvArray = faceData.get("uv").getAsJsonArray();
-                                face.setMinUV(Vector2.get(uvArray.get(0).getAsFloat() / 16f, uvArray.get(1).getAsFloat() / 16f));
-                                face.setMaxUV(Vector2.get(uvArray.get(2).getAsFloat() / 16f, uvArray.get(3).getAsFloat() / 16f));
-                            }
-                            if(faceData.has("hideIfSameAdjacent"))
-                            {
-                                if(type == Block.class)
-                                {
-                                    face.hideIfSameAdjacent(faceData.get("hideIfSameAdjacent").getAsBoolean());
-                                }
-                                else
-                                {
-                                    throw new IllegalArgumentException("Item model cannot specify to hide a face");
-                                }
-                            }
-                            loadedElement.setFace(faceEntry.getKey(), face);
-                        }
-                    }
-                    if(element.has("rotation"))
-                    {
-                        loadedElement.setHasRotation(true);
-                        JsonObject rotationData = element.get("rotation").getAsJsonObject();
-                        JsonArray originArray = rotationData.get("origin").getAsJsonArray();
-                        loadedElement.setRotationOrigin(Vector3.get(originArray.get(0).getAsFloat() / 16f, originArray.get(1).getAsFloat() / 16f, originArray.get(2).getAsFloat() / 16f));
-                        loadedElement.setRotationAngle(rotationData.get("angle").getAsFloat());
-                        loadedElement.setRotationAxis(rotationData.get("axis").getAsString());
-                        if(rotationData.has("rescale"))
-                            loadedElement.shouldRescale(rotationData.get("rescale").getAsBoolean());
-                    }
-                    loadedModel.addElement(loadedElement);
-                }
-            }
-            models.put(modelFile.getResourceLocation(), loadedModel);
+            else
+                loadedModel.copyFrom(loadModel(modelFile.getLoader().getResource(new ResourceLocation("ourcraft", "models/" + parentPath + ".json")), iconGenerator, type));
         }
-        return models.get(modelFile.getResourceLocation());
+
+        if(type == Item.class)
+        {
+            if(model.has("display"))
+            {
+                // TODO: Get infos from json file
+            }
+        }
+
+        if(model.has("textures"))
+        {
+            JsonObject textures = model.get("textures").getAsJsonObject();
+            Iterator<Entry<String, JsonElement>> textureEntries = textures.entrySet().iterator();
+            while(textureEntries.hasNext())
+            {
+                Entry<String, JsonElement> textureData = textureEntries.next();
+                String path = textureData.getValue().getAsString();
+                if(!path.startsWith("#"))
+                {
+                    iconGenerator.generateIcon(path);
+                }
+                loadedModel.setTexturePath(textureData.getKey(), path);
+            }
+        }
+
+        if(model.has("elements"))
+        {
+            JsonArray elements = model.get("elements").getAsJsonArray();
+            for(int i = 0; i < elements.size(); i++ )
+            {
+                JsonObject element = elements.get(i).getAsJsonObject();
+                ModelElement loadedElement = new ModelElement();
+                if(element.has("from"))
+                {
+                    JsonArray fromData = element.get("from").getAsJsonArray();
+                    loadedElement.setFrom(Vector3.get(fromData.get(0).getAsFloat() / 16f, fromData.get(1).getAsFloat() / 16f, fromData.get(2).getAsFloat() / 16f));
+                }
+                if(element.has("to"))
+                {
+                    JsonArray toData = element.get("to").getAsJsonArray();
+                    loadedElement.setTo(Vector3.get(toData.get(0).getAsFloat() / 16f, toData.get(1).getAsFloat() / 16f, toData.get(2).getAsFloat() / 16f));
+                }
+                if(element.has("faces"))
+                {
+                    JsonObject facesObject = element.get("faces").getAsJsonObject();
+                    Iterator<Entry<String, JsonElement>> it = facesObject.entrySet().iterator();
+                    while(it.hasNext())
+                    {
+                        Entry<String, JsonElement> faceEntry = it.next();
+                        JsonObject faceData = faceEntry.getValue().getAsJsonObject();
+                        ModelFace face = new ModelFace();
+                        if(faceData.has("texture"))
+                            face.setTexture(faceData.get("texture").getAsString());
+                        if(faceData.has("cullface"))
+                        {
+                            face.setCullface(faceData.get("cullface").getAsString());
+                        }
+                        if(faceData.has("uv"))
+                        {
+                            JsonArray uvArray = faceData.get("uv").getAsJsonArray();
+                            face.setMinUV(Vector2.get(uvArray.get(0).getAsFloat() / 16f, uvArray.get(1).getAsFloat() / 16f));
+                            face.setMaxUV(Vector2.get(uvArray.get(2).getAsFloat() / 16f, uvArray.get(3).getAsFloat() / 16f));
+                        }
+                        if(faceData.has("hideIfSameAdjacent"))
+                        {
+                            face.hideIfSameAdjacent(faceData.get("hideIfSameAdjacent").getAsBoolean());
+                        }
+                        loadedElement.setFace(faceEntry.getKey(), face);
+                    }
+                }
+                if(element.has("rotation"))
+                {
+                    loadedElement.setHasRotation(true);
+                    JsonObject rotationData = element.get("rotation").getAsJsonObject();
+                    JsonArray originArray = rotationData.get("origin").getAsJsonArray();
+                    loadedElement.setRotationOrigin(Vector3.get(originArray.get(0).getAsFloat() / 16f, originArray.get(1).getAsFloat() / 16f, originArray.get(2).getAsFloat() / 16f));
+                    loadedElement.setRotationAngle(rotationData.get("angle").getAsFloat());
+                    loadedElement.setRotationAxis(rotationData.get("axis").getAsString());
+                    if(rotationData.has("rescale"))
+                        loadedElement.shouldRescale(rotationData.get("rescale").getAsBoolean());
+                }
+                loadedModel.addElement(loadedElement);
+            }
+        }
+        return loadedModel;
     }
 
     /**

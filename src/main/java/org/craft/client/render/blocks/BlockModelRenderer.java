@@ -201,7 +201,7 @@ public class BlockModelRenderer extends AbstractBlockRenderer
             }
             else
             {
-                TextureMap blockMap = (TextureMap) OurCraft.getOurCraft().getRenderEngine().getByLocation(RenderBlocks.blockMapLoc);
+                TextureMap blockMap = OurCraft.getOurCraft().getRenderEngine().blocksAndItemsMap;
                 icons.get(variant).put(texture, blockMap.get(texture + ".png"));
             }
         }

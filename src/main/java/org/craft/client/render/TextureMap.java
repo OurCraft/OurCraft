@@ -206,7 +206,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
             icon.setHeight(stitcher.getHeight(index));
         }
 
-        if(true) // TODO: needs to know if we are in a debug mode
+        if(false) // TODO: needs to know if we are in a debug mode
         {
             if(stitchedImage != null)
             {

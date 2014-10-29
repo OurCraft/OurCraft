@@ -2,11 +2,11 @@
     "parent": "block/cube",
     "textures": 
     {
-        "up": "grass_top",
-        "down": "dirt",
-        "east": "grass_side",
-        "west": "grass_side",
-        "north": "grass_side",
-        "south": "grass_side"
+        "up": "blocks/grass_top",
+        "down": "blocks/dirt",
+        "east": "blocks/grass_side",
+        "west": "blocks/grass_side",
+        "north": "blocks/grass_side",
+        "south": "blocks/grass_side"
     }
 }

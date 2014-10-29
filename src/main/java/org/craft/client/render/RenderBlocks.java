@@ -33,31 +33,6 @@ public class RenderBlocks
     private Comparator<BlockRenderInfos>               blockComparator;
     private ModelLoader                                modelLoader;
     private FullCubeBlockRenderer                      fallbackRenderer;
-    private TextureMap                                 blockMap;
-    public static ResourceLocation                     blockMapLoc;
-
-    /**
-     * Creates a new block map
-     */
-    public void createBlockMap(RenderEngine engine)
-    {
-        blockMap = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft/textures", "blocks"), true);
-        renderers.clear();
-        for(Block b : Blocks.BLOCK_REGISTRY.values())
-        {
-            getRenderer(b);
-        }
-        try
-        {
-            blockMap.compile();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        blockMapLoc = new ResourceLocation("ourcraft", "textures/atlases/blocks.png");
-        engine.registerLocation(blockMapLoc, blockMap);
-    }
 
     public RenderBlocks(RenderEngine engine, ModelLoader modelLoader, ResourceLocation resourceLocation)
     {
@@ -67,7 +42,6 @@ public class RenderBlocks
         this.modelLoader = modelLoader;
         this.fallbackRenderer = new FullCubeBlockRenderer();
         renderers = Maps.newHashMap();
-        createBlockMap(engine);
     }
 
     /**
@@ -93,7 +67,7 @@ public class RenderBlocks
             ResourceLocation res = new ResourceLocation("ourcraft", "models/blockstates/" + block.getID() + ".json");
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
-                renderers.put(block, modelLoader.createBlockRenderer(res, blockMap));
+                renderers.put(block, modelLoader.createBlockRenderer(res, renderEngine.blocksAndItemsMap));
                 Log.message(res.getFullPath() + " loaded.");
             }
             else
@@ -267,8 +241,7 @@ public class RenderBlocks
                         if(currentPass == EnumRenderPass.ALPHA)
                             c.cleanUpDirtiness();
                     }
-                    renderEngine.bindLocation(blockMapLoc);
-                    renderEngine.renderBuffer(buffer);
+                    renderEngine.renderBuffer(buffer, renderEngine.blocksAndItemsMap);
                 }
                 if(currentPass == EnumRenderPass.ALPHA)
                 {

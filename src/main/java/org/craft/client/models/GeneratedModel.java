@@ -34,7 +34,7 @@ public class GeneratedModel extends Model
         {
             try
             {
-                BufferedImage img = ImageUtils.loadImage(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/items/" + entry.getValue() + ".png")));
+                BufferedImage img = ImageUtils.loadImage(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/" + entry.getValue() + ".png")));
                 int pixels[] = img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth());
                 for(int x = 0; x < img.getWidth(); x++ )
                 {
@@ -42,10 +42,7 @@ public class GeneratedModel extends Model
                     {
                         int color = pixels[x + y * img.getWidth()];
                         int alpha = color >> 24 & 0xFF;
-                        int red = color >> 16 & 0xFF;
-                        int green = color >> 8 & 0xFF;
-                        int blue = color >> 0 & 0xFF;
-                        if(alpha < 0xFF)
+                        if(alpha == 0x00)
                             continue;
                         int elemY = img.getHeight() - y - 1;
                         int elemX = img.getWidth() - x - 1;

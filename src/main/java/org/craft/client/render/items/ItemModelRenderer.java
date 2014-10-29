@@ -126,7 +126,7 @@ public class ItemModelRenderer extends ItemRenderer
             }
             else
             {
-                TextureMap itemMap = (TextureMap) OurCraft.getOurCraft().getRenderEngine().getByLocation(RenderItems.itemMapLoc);
+                TextureMap itemMap = OurCraft.getOurCraft().getRenderEngine().blocksAndItemsMap;
                 icons.put(texture, itemMap.get(texture + ".png"));
             }
         }

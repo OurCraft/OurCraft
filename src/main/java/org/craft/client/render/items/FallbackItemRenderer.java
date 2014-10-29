@@ -11,7 +11,7 @@ public class FallbackItemRenderer extends ItemRenderer
     @Override
     public void renderItem(RenderEngine engine, OffsettedOpenGLBuffer buffer, IStackable item, Stack stack, float x, float y, float z)
     {
-        TextureIcon icon = ((TextureMap) engine.getByLocation(RenderItems.itemMapLoc)).get("test.png");
+        TextureIcon icon = engine.blocksAndItemsMap.get("test.png");
         Vector3 a = Vector3.get(0, 0, 0);
         Vector3 b = Vector3.get(1, 0, 0);
         Vector3 c = Vector3.get(1, 1, 0);

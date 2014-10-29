@@ -2,11 +2,11 @@
 	"parent": "block/half_slab",
 	"textures":
 	{
-		"up":"dirt",
-		"down":"dirt",
-		"north":"dirt",
-		"south":"dirt",
-		"east":"dirt",
-		"west":"dirt"
+		"up":"blocks/dirt",
+		"down":"blocks/dirt",
+		"north":"blocks/dirt",
+		"south":"blocks/dirt",
+		"east":"blocks/dirt",
+		"west":"blocks/dirt"
 	}
 }

@@ -58,10 +58,6 @@ public class BlockCable extends Block implements IPowerableBlock
 
     public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
     {
-        world.setBlockState(x, y, z, BlockStates.cableConnexions, EnumConnexionStates.NONE, false);
-        world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.POWER_0, false);
-        world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, "false"), false);
-
         Block northBlock = world.getBlockNextTo(x, y, z, EnumSide.NORTH);
         Block southBlock = world.getBlockNextTo(x, y, z, EnumSide.SOUTH);
         Block eastBlock = world.getBlockNextTo(x, y, z, EnumSide.EAST);
@@ -80,6 +76,13 @@ public class BlockCable extends Block implements IPowerableBlock
         world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, powerValue > 0 ? "true" : "false"), false);
 
         world.updateBlockNeighbors(x, y, z, false, visited);
+
+        int newPowerValue = world.getDirectElectricPowerAt(x, y, z) - 1;
+        if(powerValue > newPowerValue)
+        {
+            world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.POWER_0, false);
+            world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, "false"), true);
+        }
     }
 
 }

@@ -22,7 +22,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
         if(chunk == null)
             return;
         float lightValue = chunk.getLightValue(world, x, y, z);
-        TextureIcon icon = ((TextureMap) engine.getByLocation(RenderBlocks.blockMapLoc)).get("bedrock.png");
+        TextureIcon icon = engine.blocksAndItemsMap.get("bedrock.png");
         if(!world.getBlockNextTo(x, y, z, side).isSideOpaque(world, x + side.getTranslationX(), y + side.getTranslationY(), z + side.getTranslationZ(), side) && block.shouldSideBeRendered(world, x, y, z, side))
         {
             drawNorthFace(buffer, world, block, lightValue, icon, x, y, z);
