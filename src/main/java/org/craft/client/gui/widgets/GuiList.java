@@ -101,14 +101,14 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             }
 
             engine.bindLocation(Gui.widgetsTexture);
-            Gui.drawTexturedRect(engine, getX() + getWidth(), getY(), 10, getHeight() - slotHeight, 0, 60f / 256f, 10f / 256f, 70f / 256f);
+            float maxHeight = getHeight() - slotHeight;
+            Gui.drawTexturedRect(engine, getX() + getWidth(), getY(), 10, (int) maxHeight, 0, 60f / 256f, 10f / 256f, 70f / 256f);
             float startf = (float) scroll / (float) slotHeight;
             float endf = ((float) scroll + (float) getHeight()) / (float) slotHeight;
             if(startf < 0.f)
                 startf = 0f;
             if(endf > getSize())
                 endf = getSize();
-            float maxHeight = getHeight() - slotHeight;
             Gui.drawTexturedRect(engine, getX() + getWidth(),
                     getY() + (int) (startf / (float) getSize() * maxHeight), 10,
                     (int) ((endf - startf) / (float) getSize() * maxHeight), 10f / 256f, 60f / 256f, 20f / 256f, 70f / 256f);

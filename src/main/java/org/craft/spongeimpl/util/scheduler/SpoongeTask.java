@@ -1,7 +1,7 @@
 package org.craft.spongeimpl.util.scheduler;
 
 import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.util.scheduler.*;
+import org.spongepowered.api.service.scheduler.*;
 
 public class SpoongeTask implements Task
 {

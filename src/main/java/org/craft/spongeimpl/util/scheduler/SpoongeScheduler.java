@@ -6,7 +6,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.*;
 
 import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.util.scheduler.*;
+import org.spongepowered.api.service.scheduler.*;
 
 public class SpoongeScheduler implements Scheduler
 {

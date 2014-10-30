@@ -10,14 +10,14 @@ import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
-import org.craft.spongeimpl.util.*;
 import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
-import org.spongepowered.api.util.scheduler.*;
+import org.spongepowered.api.service.scheduler.*;
 import org.spongepowered.api.world.*;
 
 @Mod(id = "spongeimpl", version = "1.0", name = "Sponge implementation")
