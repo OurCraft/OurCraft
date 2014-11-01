@@ -1,6 +1,7 @@
 package org.craft.modding;
 
 import java.io.*;
+import java.lang.annotation.*;
 
 import org.apache.logging.log4j.*;
 import org.craft.*;
@@ -8,11 +9,11 @@ import org.craft.modding.events.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 
-public class ModHandler implements IAddonHandler<Mod>
+public class ModHandler implements IAddonHandler
 {
 
     @Override
-    public AddonContainer createContainer(Mod annot, Object object)
+    public AddonContainer createContainer(Annotation annot, Object object)
     {
         return new ModContainer(object, annot);
     }

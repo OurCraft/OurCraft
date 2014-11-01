@@ -21,30 +21,30 @@ public class SpongeTestPlugin
     public void onPreInit(PreInitializationEvent evt)
     {
         logger = evt.getPluginLog();
-        evt.getPluginLog().debug("PreInit!!!");
+        evt.getPluginLog().debug("SpoongePreInit!!!");
     }
 
     @SpongeEventHandler
     public void onPostInit(PostInitializationEvent evt)
     {
-        logger.debug("PostInit!!!");
+        logger.debug("SpoongePostInit!!!");
     }
 
     @SpongeEventHandler
     public void onWorldLoad(WorldLoadEvent evt)
     {
-        logger.debug("Loading world " + evt.getWorld().getName());
+        logger.debug("SpoongeLoading world " + evt.getWorld().getName());
     }
 
     @SpongeEventHandler
     public void onWorldUnload(WorldUnloadEvent evt)
     {
-        logger.debug("Unloading world " + evt.getWorld().getName());
+        logger.debug("SpoongeUnloading world " + evt.getWorld().getName());
     }
 
     @SpongeEventHandler
     public void onInit(InitializationEvent evt)
     {
-        logger.debug("Init!!!");
+        logger.debug("SpoongeInit!!!");
     }
 }

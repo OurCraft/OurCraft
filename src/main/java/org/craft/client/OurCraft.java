@@ -106,13 +106,14 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         username = properties.get("username");
         I18n.setCurrentLanguage(properties.get("lang"));
-        new Thread(this).start();
+        run();
     }
 
     public void run()
     {
         try
         {
+            //            Thread.currentThread().setContextClassLoader(classLoader);
             AL.create();
             objectInFront = new CollisionInfos();
             objectInFront.type = CollisionType.NONE;
@@ -278,7 +279,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus(new Class<?>[]
         {
-            ModEvent.class
+                ModEvent.class
         }, OurModEventHandler.class);
         addonsLoader = new AddonsLoader(this, eventBus);
         try

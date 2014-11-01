@@ -2,7 +2,7 @@ package org.craft.modding.events;
 
 import java.lang.annotation.*;
 
-public class EventListener
+public class EventListener implements IEventListener
 {
     private Object                      listener;
     private String                      methodName;
@@ -51,5 +51,10 @@ public class EventListener
     public Class<?> getEventClass()
     {
         return eventClass;
+    }
+
+    public void invoke(Object e)
+    {
+        ;
     }
 }

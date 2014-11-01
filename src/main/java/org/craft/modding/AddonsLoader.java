@@ -3,6 +3,7 @@ package org.craft.modding;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.net.*;
 import java.util.*;
 
 import com.google.common.collect.*;
@@ -20,39 +21,34 @@ import org.reflections.*;
 public class AddonsLoader
 {
 
-    private HashMap<Class<? extends Annotation>, IAddonManager<?>> handlers;
-    private EventBus                                               eventBus;
-    private OurCraftInstance                                       game;
-    private LuaEventBusListener                                    luaListener;
-    private OurClassLoader                                         classLoader;
-    private ArrayList<AddonContainer>                              containers;
-    private ArrayList<Class<?>>                                    loaded;
+    private HashMap<Class<? extends Annotation>, IAddonManager> handlers;
+    private EventBus                                            eventBus;
+    private OurCraftInstance                                    game;
+    private LuaEventBusListener                                 luaListener;
+    private ClassLoader                                         classLoader;
+    private ArrayList<AddonContainer>                           containers;
+    private ArrayList<Class<?>>                                 loaded;
 
     public AddonsLoader(OurCraftInstance gameInstance, EventBus eventBus)
     {
         containers = Lists.newArrayList();
         loaded = Lists.newArrayList();
-        this.classLoader = (OurClassLoader) Thread.currentThread().getContextClassLoader();
+        this.classLoader = ClassLoader.getSystemClassLoader();
         luaListener = new LuaEventBusListener();
         eventBus.addListener(luaListener);
 
         this.game = gameInstance;
         this.eventBus = eventBus;
-        handlers = new HashMap<Class<? extends Annotation>, IAddonManager<?>>();
+        handlers = new HashMap<Class<? extends Annotation>, IAddonManager>();
         registerAddonAnnotation(Mod.class, new ModManager());
 
     }
 
-    @SuppressWarnings("rawtypes")
     public void registerAddonAnnotation(Class<? extends Annotation> annot, IAddonManager handler)
     {
         handlers.put(annot, handler);
     }
 
-    @SuppressWarnings(
-    {
-            "rawtypes", "unchecked"
-    })
     public void loadAddon(Class<?> clazz) throws InstantiationException, IllegalAccessException
     {
         boolean added = false;
@@ -68,28 +64,33 @@ public class AddonsLoader
                     continue annotLoop;
                 }
             }
-            if(clazz.isAnnotationPresent(c))
+            for(Annotation annot : clazz.getAnnotations())
             {
-                loaded.add(clazz);
-                IAddonManager manager = handlers.get(c);
-                IAddonHandler handler = manager.getHandler();
-                Object instance = clazz.newInstance();
-                for(Field f : clazz.getDeclaredFields())
+                if(annot.annotationType().getCanonicalName().equals(c.getCanonicalName()))
                 {
-                    if(f.isAnnotationPresent(Instance.class))
+                    loaded.add(clazz);
+                    IAddonManager manager = handlers.get(c);
+                    IAddonHandler handler = manager.getHandler();
+                    Object instance = clazz.newInstance();
+                    for(Field f : clazz.getDeclaredFields())
                     {
-                        f.setAccessible(true);
-                        f.set(null, instance);
+                        if(f.isAnnotationPresent(Instance.class))
+                        {
+                            f.setAccessible(true);
+                            f.set(null, instance);
+                        }
                     }
-                }
-                AddonContainer container = handler.createContainer(clazz.getAnnotation(c), instance);
-                manager.loadAddon(container);
-                eventBus.register(instance);
+                    Log.message(annot.toString());
+                    AddonContainer container = handler.createContainer(annot, instance);
+                    manager.loadAddon(container);
+                    eventBus.register(instance);
 
-                added = true;
-                Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
-                containers.add(container);
-                handler.onCreation(game, container);
+                    added = true;
+                    Log.message("Loaded addon \"" + container.getName() + "\" as " + c.getSimpleName());
+                    containers.add(container);
+                    handler.onCreation(game, container);
+                    break;
+                }
             }
         }
         if(!added)
@@ -149,7 +150,16 @@ public class AddonsLoader
                                 Log.error("Missing data when loading lua addon: luaAddon.json must contain fields \"id\", \"name\", \"version\" and \"mainClass\"");
                             }
 
-                            this.classLoader.addFile(file);
+                            try
+                            {
+                                Method m = classLoader.getClass().getDeclaredMethod("addURL", URL.class);
+                                m.setAccessible(true);
+                                m.invoke(classLoader, file.toURI().toURL());
+                            }
+                            catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
 
                     }
@@ -161,7 +171,7 @@ public class AddonsLoader
             }
         }
 
-        Reflections reflection = new Reflections();
+        Reflections reflection = new Reflections(classLoader);
         for(Class<? extends Annotation> c : handlers.keySet())
         {
             Set<Class<?>> list = reflection.getTypesAnnotatedWith(c);
@@ -180,5 +190,4 @@ public class AddonsLoader
             }
         }
     }
-
 }

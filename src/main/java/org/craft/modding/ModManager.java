@@ -2,7 +2,7 @@ package org.craft.modding;
 
 import java.util.*;
 
-public class ModManager implements IAddonManager<Mod>
+public class ModManager implements IAddonManager
 {
 
     private HashMap<String, ModContainer> mods;
@@ -31,7 +31,7 @@ public class ModManager implements IAddonManager<Mod>
         return containers;
     }
 
-    public IAddonHandler<Mod> getHandler()
+    public IAddonHandler getHandler()
     {
         return handler;
     }

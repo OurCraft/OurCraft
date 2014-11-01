@@ -4,10 +4,10 @@ import java.lang.annotation.*;
 
 import org.craft.*;
 
-public interface IAddonHandler<T extends Annotation>
+public interface IAddonHandler
 {
 
-    AddonContainer createContainer(T annot, Object object);
+    AddonContainer createContainer(Annotation annot, Object object);
 
     void onCreation(OurCraftInstance instance, AddonContainer container);
 }
