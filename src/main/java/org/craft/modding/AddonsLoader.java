@@ -81,7 +81,7 @@ public class AddonsLoader
                         }
                     }
                     Log.message(annot.toString());
-                    AddonContainer container = handler.createContainer(clazz.getAnnotation(annot.annotationType()), instance);
+                    AddonContainer container = handler.createContainer(annot, instance);
                     manager.loadAddon(container);
                     eventBus.register(instance);
 

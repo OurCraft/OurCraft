@@ -40,9 +40,12 @@ public class OurClassLoader extends URLClassLoader
             "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
                                                              };
 
+    public static OurClassLoader       instance;
+
     public OurClassLoader(URL[] sources)
     {
-        super(sources, null);
+        super(sources, ClassLoader.getSystemClassLoader());
+        instance = this;
         resourceCache = Maps.newConcurrentMap();
         cached = Maps.newHashMap();
         packageManifests = Maps.newHashMap();
@@ -199,6 +202,15 @@ public class OurClassLoader extends URLClassLoader
             invalidNames.add(name);
             throw new ClassNotFoundException(name, e);
         }
+    }
+
+    public Class<?> define(String name, byte[] bytes, int start, int len)
+    {
+        final byte[] transformedClass = runTransformers(name, name, bytes);
+        final CodeSource codeSource = null;
+        Class<?> clazz = defineClass(name, transformedClass, 0, transformedClass.length, codeSource);
+        cached.put(name, clazz);
+        return clazz;
     }
 
     private boolean isSealed(final String path, final Manifest manifest)

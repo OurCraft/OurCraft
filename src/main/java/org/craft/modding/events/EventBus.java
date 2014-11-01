@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import com.google.common.collect.*;
+import com.google.common.reflect.*;
 
 import org.craft.utils.*;
 import org.spongepowered.api.event.*;
@@ -12,17 +13,17 @@ import org.spongepowered.api.event.*;
 public class EventBus
 {
 
-    private HashMap<Class<?>, ArrayList<EventListener>> listeners;
-    private ArrayList<Class<? extends Annotation>>      annotations;
-    private ArrayList<IEventBusListener>                eventBusListeners;
-    private ArrayList<Class<?>>                         eventClasses;
+    private HashMap<Class<?>, ArrayList<IEventListener>> listeners;
+    private ArrayList<Class<? extends Annotation>>       annotations;
+    private ArrayList<IEventBusListener>                 eventBusListeners;
+    private ArrayList<Class<?>>                          eventClasses;
 
     public EventBus(Class<?>[] eventClasses, Class<? extends Annotation>... annots)
     {
         this.eventClasses = Lists.newArrayList(eventClasses);
         this.eventBusListeners = new ArrayList<IEventBusListener>();
         this.annotations = Lists.newArrayList(annots);
-        listeners = new HashMap<Class<?>, ArrayList<EventListener>>();
+        listeners = new HashMap<Class<?>, ArrayList<IEventListener>>();
     }
 
     public void addAnnotationClass(Class<? extends Annotation> annotClass)
@@ -35,7 +36,7 @@ public class EventBus
         eventClasses.add(eventClass);
     }
 
-    public HashMap<Class<?>, ArrayList<EventListener>> getListeners()
+    public HashMap<Class<?>, ArrayList<IEventListener>> getListeners()
     {
         return listeners;
     }
@@ -44,7 +45,7 @@ public class EventBus
     {
         if(!hasListener(object))
         {
-            List<Method> methods = asList(object.getClass().getDeclaredMethods());
+            List<Method> methods = Lists.newArrayList(object.getClass().getDeclaredMethods());
             Class<?> clazz = object.getClass().getSuperclass();
             while(clazz != null)
             {
@@ -55,39 +56,62 @@ public class EventBus
                 }
                 clazz = clazz.getSuperclass();
             }
+            Set<? extends Class<?>> classes = TypeToken.of(object.getClass()).getTypes().rawTypes();
             for(Method method : methods)
             {
-                for(Class<? extends Annotation> annotation : annotations)
+                for(Class<?> cls : classes)
                 {
-                    if(methodHasAnnot(annotation, method))
+                    for(Class<? extends Annotation> annotation : annotations)
                     {
-                        if(method.getParameterTypes().length > 1)
+                        Method realMethod;
+                        try
                         {
-                            Log.error("Method " + method.getName() + " is declared as event listener but has more than one parameter");
-                            return;
+                            realMethod = cls.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                            if(methodHasAnnot(annotation, realMethod))
+                            {
+                                if(realMethod.getParameterTypes().length > 1)
+                                {
+                                    Log.error("Method " + method.getName() + " is declared as event listener but has more than one parameter");
+                                    return;
+                                }
+                                else if(realMethod.getParameterTypes() == null || method.getParameterTypes().length == 0)
+                                {
+                                    Log.error("Method " + method.getName() + " is declared as event listener but has no parameter");
+                                    return;
+                                }
+                                Class<?> eventClass = (Class<?>) method.getParameterTypes()[0];
+                                register(object, realMethod, eventClass);
+                            }
+                            else
+                            {
+                                Log.error("No annotation for you! " + method.getName());
+                            }
                         }
-                        else if(method.getParameterTypes() == null || method.getParameterTypes().length == 0)
+                        catch(NoSuchMethodException e1)
                         {
-                            Log.error("Method " + method.getName() + " is declared as event listener but has no parameter");
-                            return;
+                            // e1.printStackTrace();
                         }
-                        for(Class<?> eventTypeClass : eventClasses)
-                        {
-                            Class<?> eventClass = (Class<?>) method.getParameterTypes()[0];
-                            EventListener listener = new EventListener(object, method.getName(), eventClass, annotation);
-                            ArrayList<EventListener> list = listeners.get(eventClass);
-                            if(list == null)
-                                list = new ArrayList<EventListener>();
-                            list.add(listener);
-                            listeners.put(eventClass, list);
-                        }
-                    }
-                    else
-                    {
-                        Log.error("No annotation for you! " + method.getName());
                     }
                 }
             }
+        }
+    }
+
+    private void register(Object object, Method m, Class<?> eventClass)
+    {
+        IEventListener listener;
+        try
+        {
+            listener = new ASMEventListener(object, m);
+            ArrayList<IEventListener> list = listeners.get(eventClass);
+            if(list == null)
+                list = new ArrayList<IEventListener>();
+            list.add(listener);
+            listeners.put(eventClass, list);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -101,20 +125,12 @@ public class EventBus
         return false;
     }
 
-    private ArrayList<Method> asList(Method[] declaredMethods)
-    {
-        ArrayList<Method> methods = new ArrayList<Method>();
-        for(Method declared : declaredMethods)
-            methods.add(declared);
-        return methods;
-    }
-
     public boolean hasListener(Object object)
     {
-        Iterator<ArrayList<EventListener>> it = getListeners().values().iterator();
+        Iterator<ArrayList<IEventListener>> it = getListeners().values().iterator();
         while(it.hasNext())
         {
-            ArrayList<EventListener> list = it.next();
+            ArrayList<IEventListener> list = it.next();
             if(list.contains(object))
                 return true;
         }
@@ -130,62 +146,84 @@ public class EventBus
     {
         for(IEventBusListener listener : eventBusListeners)
             listener.onEvent(e, instance, annotClass);
-        try
+        for(ArrayList<IEventListener> list : listeners.values())
         {
-            for(ArrayList<EventListener> list : listeners.values())
+            for(IEventListener listener : list)
             {
-                if(!list.isEmpty())
-                {
-                    for(int i = 0; i < list.size(); i++ )
-                    {
-                        EventListener listener = list.get(i);
-                        if(listener.isEnabled() && (instance == null || listener.getListener() == instance))
-                        {
-                            if(listener.getEventClass().isAssignableFrom(e.getClass()))
-                            {
-                                if(listener.getAnnotClass() == annotClass || annotClass == null)
-                                {
-                                    try
-                                    {
-                                        Method m = listener.getListener().getClass().getMethod(listener.getMethodName(), new Class<?>[]
-                                        {
-                                                listener.getEventClass()
-                                        });
-                                        m.setAccessible(true);
-                                        m.invoke(listener.getListener(), new Object[]
-                                        {
-                                                e
-                                        });
-                                        listener.disable();
-                                    }
-                                    catch(Exception e1)
-                                    {
-                                        e1.printStackTrace();
-                                    }
-                                }
-                                else
-                                {
-                                    Log.error(listener.getAnnotClass() + " != " + annotClass);
-                                }
-                            }
-                            else
-                            {
-                                Log.error(listener.getEventClass() + " not assignable from " + e.getClass());
-                            }
-                        }
-                    }
-                    for(EventListener listener : list)
-                    {
-                        listener.enable();
-                    }
-                }
+                listener.invoke(e);
             }
         }
-        catch(ConcurrentModificationException ex)
-        {
-            ; // Shhhh, be quiet
-              // Yes, this way of handling exceptions is bad, but do a better implementation of EventBus if you think you can't do better
-        }
+        /*     try
+             {
+                 for(ArrayList<EventListener> list : listeners.values())
+                 {
+                     if(!list.isEmpty())
+                     {
+                         for(int i = 0; i < list.size(); i++ )
+                         {
+                             EventListener listener = list.get(i);
+                             if(listener.isEnabled() && (instance == null || listener.getListener() == instance))
+                             {
+                                 if(TypeToken.of(listener.getEventClass()).getType().getTypeName().equals(TypeToken.of(e.getClass()).getType().getTypeName()))
+                                 {
+                                     if(listener.getAnnotClass() == annotClass || annotClass == null)
+                                     {
+                                         try
+                                         {
+                                             Set<? extends Class<?>> classes = TypeToken.of(listener.getListener().getClass()).getTypes().rawTypes();
+                                             Set<? extends Class<?>> eventSubclasses = TypeToken.of(listener.getEventClass()).getTypes().rawTypes();
+                                             for(Class<?> cls : classes)
+                                             {
+                                                 for(Class<?> evtCls : eventSubclasses)
+                                                 {
+                                                     try
+                                                     {
+                                                         Method m = cls.getMethod(listener.getMethodName(), new Class<?>[]
+                                                         {
+                                                                 evtCls
+                                                         });
+                                                         m.setAccessible(true);
+                                                         m.invoke(listener.getListener(), new Object[]
+                                                         {
+                                                                 e
+                                                         });
+                                                         listener.disable();
+                                                     }
+                                                     catch(Exception ex)
+                                                     {
+                                                         ;
+                                                     }
+                                                 }
+                                             }
+                                         }
+                                         catch(Exception e1)
+                                         {
+                                             e1.printStackTrace();
+                                         }
+                                     }
+                                     else
+                                     {
+                                         Log.error(listener.getAnnotClass() + " != " + annotClass);
+                                     }
+                                 }
+                                 else
+                                 {
+                                     Log.error(listener.getEventClass() + " not assignable from " + e.getClass());
+                                 }
+                             }
+                         }
+                         for(EventListener listener : list)
+                         {
+                             listener.enable();
+                         }
+                     }
+                 }
+             }
+             catch(ConcurrentModificationException ex)
+             {
+                 ; // Shhhh, be quiet
+                   // Yes, this way of handling exceptions is bad, but do a better implementation of EventBus if you think you can't do better
+             }*/
         boolean cancelled = false;
         if(e instanceof Cancellable)
         {
