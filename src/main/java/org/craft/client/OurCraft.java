@@ -113,7 +113,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         try
         {
-            //            Thread.currentThread().setContextClassLoader(classLoader);
+            Thread.currentThread().setContextClassLoader(classLoader);
             AL.create();
             objectInFront = new CollisionInfos();
             objectInFront.type = CollisionType.NONE;

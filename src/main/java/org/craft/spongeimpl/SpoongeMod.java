@@ -8,7 +8,9 @@ import com.google.common.base.Optional;
 import org.craft.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.modding.modifiers.*;
 import org.craft.spongeimpl.events.state.*;
+import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
@@ -34,7 +36,8 @@ public class SpoongeMod implements Game
 
     public SpoongeMod()
     {
-
+        ModifierClassTransformer trans = new ModifierClassTransformer();
+        OurClassLoader.instance.addTransformer(trans);
     }
 
     @OurModEventHandler
@@ -65,6 +68,12 @@ public class SpoongeMod implements Game
     public void onPostInit(ModPostInitEvent event)
     {
         eventManager.call(new SpongePostInitEvent(event.getOurCraftInstance()));
+    }
+
+    @OurModEventHandler
+    public void onWorldLoad(WorldLoadEvent event)
+    {
+        eventManager.call(new SpongeWorldLoadEvent(event.getOurCraftInstance(), (World) event.getWorld()));
     }
 
     @Override

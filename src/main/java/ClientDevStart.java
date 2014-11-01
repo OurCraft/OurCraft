@@ -12,7 +12,7 @@ public class ClientDevStart
     {
         final URLClassLoader ucl = (URLClassLoader) ClientDevStart.class.getClassLoader();
         OurClassLoader classLoader = new OurClassLoader(ucl.getURLs());
-        //        Thread.currentThread().setContextClassLoader(classLoader);
+        Thread.currentThread().setContextClassLoader(classLoader);
         HashMap<String, String> properties = new HashMap<String, String>();
         String current = null;
         properties.put("username", "Player_" + (int) (Math.random() * 100000L));

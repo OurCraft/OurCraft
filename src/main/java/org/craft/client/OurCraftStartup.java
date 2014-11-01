@@ -13,7 +13,7 @@ public class OurCraftStartup
     public static void main(String[] args)
     {
         OurClassLoader classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
-        //        Thread.currentThread().setContextClassLoader(classLoader);
+        Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
             HashMap<String, String> properties = new HashMap<String, String>();

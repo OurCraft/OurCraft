@@ -44,7 +44,7 @@ public class OurClassLoader extends URLClassLoader
 
     public OurClassLoader(URL[] sources)
     {
-        super(sources, ClassLoader.getSystemClassLoader());
+        super(sources, null);
         instance = this;
         resourceCache = Maps.newConcurrentMap();
         cached = Maps.newHashMap();
