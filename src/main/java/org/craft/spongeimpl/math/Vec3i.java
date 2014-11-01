@@ -155,19 +155,19 @@ public class Vec3i implements Vector3i
     }
 
     @Override
-    public double dot(Vector3i v)
+    public int dot(Vector3i v)
     {
         return x * v.getX() + y * v.getY() + z * v.getY();
     }
 
     @Override
-    public double dot(double x, double y, double z)
+    public int dot(double x, double y, double z)
     {
         return (int) (this.x * x + this.y * y + this.z * z);
     }
 
     @Override
-    public double dot(int x, int y, int z)
+    public int dot(int x, int y, int z)
     {
         return (int) (this.x * x + this.y * y + this.z * z);
     }

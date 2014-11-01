@@ -1,7 +1,5 @@
 package org.craft.spongeimpl.block;
 
-import com.google.common.base.*;
-
 import org.craft.blocks.*;
 import org.craft.blocks.Block;
 import org.craft.spongeimpl.math.*;
@@ -47,13 +45,6 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
 
     @Override
     public BlockSnapshot getSnapshot()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public <T> Optional<T> getComponent(Class<T> clazz)
     {
         // TODO Auto-generated method stub
         return null;

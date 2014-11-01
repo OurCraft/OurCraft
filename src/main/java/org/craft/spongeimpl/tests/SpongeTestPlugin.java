@@ -6,7 +6,7 @@ import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 import org.spongepowered.api.plugin.*;
 
-@Plugin(id = "plugtest", name = "Test plugin")
+@Plugin(id = "plugtest", name = "Test plugin", version = "1.0")
 public class SpongeTestPlugin
 {
 
@@ -21,30 +21,30 @@ public class SpongeTestPlugin
     public void onPreInit(PreInitializationEvent evt)
     {
         logger = evt.getPluginLog();
-        evt.getPluginLog().debug("SpoongePreInit!!!");
+        evt.getPluginLog().debug("SpongePreInit!!!");
     }
 
     @SpongeEventHandler
     public void onPostInit(PostInitializationEvent evt)
     {
-        logger.debug("SpoongePostInit!!!");
+        logger.debug("SpongePostInit!!!");
     }
 
     @SpongeEventHandler
     public void onWorldLoad(WorldLoadEvent evt)
     {
-        logger.debug("SpoongeLoading world " + evt.getWorld().getName());
+        logger.debug("SpongeLoading world " + evt.getWorld().getName());
     }
 
     @SpongeEventHandler
     public void onWorldUnload(WorldUnloadEvent evt)
     {
-        logger.debug("SpoongeUnloading world " + evt.getWorld().getName());
+        logger.debug("SpongeUnloading world " + evt.getWorld().getName());
     }
 
     @SpongeEventHandler
     public void onInit(InitializationEvent evt)
     {
-        logger.debug("SpoongeInit!!!");
+        logger.debug("SpongeInit!!!");
     }
 }
