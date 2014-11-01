@@ -9,7 +9,7 @@ import org.craft.modding.*;
 import org.craft.spongeimpl.*;
 import org.spongepowered.api.plugin.*;
 
-public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
+public class SpongePluginManager implements IAddonManager, PluginManager
 {
 
     private HashMap<String, PluginContainer> plugins;
@@ -67,7 +67,7 @@ public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
     }
 
     @Override
-    public IAddonHandler<Plugin> getHandler()
+    public IAddonHandler getHandler()
     {
         return handler;
     }

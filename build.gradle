@@ -72,6 +72,8 @@ dependencies {
 
     compile 'trove:trove:1.0.2'
 
+    compile 'asm:asm-all:3.3.1'
+
     compile project(':SpongeAPI')
 }
 

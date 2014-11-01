@@ -1,6 +1,7 @@
 package org.craft.spongeimpl;
 
 import java.io.*;
+import java.lang.annotation.*;
 
 import org.apache.logging.log4j.*;
 import org.craft.*;
@@ -8,13 +9,12 @@ import org.craft.modding.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
-import org.spongepowered.api.plugin.*;
 
-public class SpongeAddonHandler implements IAddonHandler<Plugin>
+public class SpongeAddonHandler implements IAddonHandler
 {
 
     @Override
-    public AddonContainer createContainer(Plugin annot, Object object)
+    public AddonContainer createContainer(Annotation annot, Object object)
     {
         return new SpongePluginContainer(object, annot);
     }

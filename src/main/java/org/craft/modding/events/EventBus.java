@@ -59,7 +59,7 @@ public class EventBus
             {
                 for(Class<? extends Annotation> annotation : annotations)
                 {
-                    if(method.isAnnotationPresent(annotation))
+                    if(methodHasAnnot(annotation, method))
                     {
                         if(method.getParameterTypes().length > 1)
                         {
@@ -73,25 +73,32 @@ public class EventBus
                         }
                         for(Class<?> eventTypeClass : eventClasses)
                         {
-                            if(eventTypeClass.isAssignableFrom(method.getParameterTypes()[0]))
-                            {
-                                Class<?> eventClass = (Class<?>) method.getParameterTypes()[0];
-                                EventListener listener = new EventListener(object, method.getName(), eventClass, annotation);
-                                ArrayList<EventListener> list = listeners.get(eventClass);
-                                if(list == null)
-                                    list = new ArrayList<EventListener>();
-                                list.add(listener);
-                                listeners.put(eventClass, list);
-                            }
-                            else
-                            {
-                                //    Log.error("Method " + method.getName() + " is declared as event listener but the parameter of type " + method.getParameterTypes()[0].getName() + " can't be cast to an Event instance");
-                            }
+                            Class<?> eventClass = (Class<?>) method.getParameterTypes()[0];
+                            EventListener listener = new EventListener(object, method.getName(), eventClass, annotation);
+                            ArrayList<EventListener> list = listeners.get(eventClass);
+                            if(list == null)
+                                list = new ArrayList<EventListener>();
+                            list.add(listener);
+                            listeners.put(eventClass, list);
                         }
+                    }
+                    else
+                    {
+                        Log.error("No annotation for you! " + method.getName());
                     }
                 }
             }
         }
+    }
+
+    private boolean methodHasAnnot(Class<? extends Annotation> annotation, Method method)
+    {
+        for(Annotation annot : method.getAnnotations())
+        {
+            if(annot.annotationType().getCanonicalName().equals(annotation.getCanonicalName()))
+                return true;
+        }
+        return false;
     }
 
     private ArrayList<Method> asList(Method[] declaredMethods)
@@ -132,19 +139,40 @@ public class EventBus
                     for(int i = 0; i < list.size(); i++ )
                     {
                         EventListener listener = list.get(i);
-                        if(listener.isEnabled() && (instance == null || listener.getListener() == instance) && listener.getEventClass().isAssignableFrom(e.getClass()))
-                            if(listener.getAnnotClass() == annotClass || annotClass == null)
-                                try
+                        if(listener.isEnabled() && (instance == null || listener.getListener() == instance))
+                        {
+                            if(listener.getEventClass().isAssignableFrom(e.getClass()))
+                            {
+                                if(listener.getAnnotClass() == annotClass || annotClass == null)
                                 {
-                                    Method m = listener.getListener().getClass().getMethod(listener.getMethodName(), listener.getEventClass());
-                                    m.setAccessible(true);
-                                    m.invoke(listener.getListener(), e);
-                                    listener.disable();
+                                    try
+                                    {
+                                        Method m = listener.getListener().getClass().getMethod(listener.getMethodName(), new Class<?>[]
+                                        {
+                                                listener.getEventClass()
+                                        });
+                                        m.setAccessible(true);
+                                        m.invoke(listener.getListener(), new Object[]
+                                        {
+                                                e
+                                        });
+                                        listener.disable();
+                                    }
+                                    catch(Exception e1)
+                                    {
+                                        e1.printStackTrace();
+                                    }
                                 }
-                                catch(Exception e1)
+                                else
                                 {
-                                    e1.printStackTrace();
+                                    Log.error(listener.getAnnotClass() + " != " + annotClass);
                                 }
+                            }
+                            else
+                            {
+                                Log.error(listener.getEventClass() + " not assignable from " + e.getClass());
+                            }
+                        }
                     }
                     for(EventListener listener : list)
                     {
