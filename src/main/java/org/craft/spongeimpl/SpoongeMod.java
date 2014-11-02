@@ -14,7 +14,6 @@ import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
-import org.craft.utils.asm.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
@@ -40,8 +39,7 @@ public class SpoongeMod implements Game
         ModifierClassTransformer trans = new ModifierClassTransformer();
         try
         {
-            ClassLoader.getSystemClassLoader().getClass().getMethod("addTransformer", IClassTransformer.class).invoke(ClassLoader.getSystemClassLoader(),
-                    trans);
+            OurClassLoader.instance.addTransformer(trans);
         }
         catch(Exception e)
         {

@@ -40,17 +40,17 @@ public class OurClassLoader extends URLClassLoader
             "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
                                                              };
 
-    public static OurClassLoader       instance;
+    public static OurClassLoader       instance              = null;
 
     public OurClassLoader(ClassLoader loader)
     {
-        this(((URLClassLoader) loader).getURLs());
+        this(((URLClassLoader) loader).getURLs(), loader);
     }
 
-    private OurClassLoader(URL[] sources)
+    private OurClassLoader(URL[] sources, ClassLoader parent)
     {
         super(sources, null);
-        instance = this;
+        OurClassLoader.instance = this;
         resourceCache = Maps.newConcurrentMap();
         cached = Maps.newHashMap();
         packageManifests = Maps.newHashMap();
@@ -69,7 +69,6 @@ public class OurClassLoader extends URLClassLoader
         addClassLoaderExclusion("org.reflections.");
         addClassLoaderExclusion("javassist.");
         addClassLoaderExclusion("com.google.");
-        addClassLoaderExclusion("net.minecraft.launchwrapper.");
 
         // transformer exclusions
         addTransformerExclusion("javax.");
@@ -77,7 +76,8 @@ public class OurClassLoader extends URLClassLoader
         addTransformerExclusion("org.objectweb.asm.");
         addTransformerExclusion("com.google.common.");
         addTransformerExclusion("org.bouncycastle.");
-        addTransformerExclusion("net.minecraft.launchwrapper.injector.");
+
+        cached.put(getClass().getCanonicalName(), getClass());
     }
 
     public void addClassLoaderExclusion(String packageStart)
