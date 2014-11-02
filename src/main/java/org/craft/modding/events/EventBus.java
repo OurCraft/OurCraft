@@ -142,11 +142,13 @@ public class EventBus
         listeners.remove(obj.getClass());
     }
 
+    @SuppressWarnings("unchecked")
     public boolean fireEvent(Object e, Object instance, Class<? extends Annotation> annotClass)
     {
         for(IEventBusListener listener : eventBusListeners)
             listener.onEvent(e, instance, annotClass);
-        for(ArrayList<IEventListener> list : listeners.values())
+        ArrayList<IEventListener>[] values = listeners.values().toArray(new ArrayList[0]);
+        for(ArrayList<IEventListener> list : values)
         {
             for(IEventListener listener : list)
             {

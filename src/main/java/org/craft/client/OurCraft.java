@@ -87,15 +87,13 @@ public class OurCraft implements Runnable, OurCraftInstance
     private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private ClientNetHandler         netHandler;
     private WorldLoader              worldLoader;
-    private OurClassLoader           classLoader;
     private SoundEngine              sndEngine;
     private GameSettings             settings;
     private ModelLoader              modelLoader;
 
-    public OurCraft(OurClassLoader cL)
+    public OurCraft()
     {
         instance = this;
-        this.classLoader = cL;
         this.assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
         this.gameFolderLoader = new DiskSimpleResourceLoader(SystemUtils.getGameFolder().getAbsolutePath());
         runtime = Runtime.getRuntime();
@@ -113,7 +111,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         try
         {
-            Thread.currentThread().setContextClassLoader(classLoader);
             AL.create();
             objectInFront = new CollisionInfos();
             objectInFront.type = CollisionType.NONE;
@@ -1087,11 +1084,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     public void setWorldLoader(WorldLoader loader)
     {
         this.worldLoader = loader;
-    }
-
-    public OurClassLoader getClassLoader()
-    {
-        return classLoader;
     }
 
     public RenderBlocks getRenderBlocks()

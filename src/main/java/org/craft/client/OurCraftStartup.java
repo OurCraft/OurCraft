@@ -1,10 +1,8 @@
 package org.craft.client;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
-import org.craft.*;
 import org.craft.utils.*;
 
 public class OurCraftStartup
@@ -12,8 +10,6 @@ public class OurCraftStartup
 
     public static void main(String[] args)
     {
-        OurClassLoader classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
-        Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
             HashMap<String, String> properties = new HashMap<String, String>();
@@ -37,7 +33,7 @@ public class OurCraftStartup
             SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
             System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
             System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));
-            OurCraft instance = new OurCraft(classLoader);
+            OurCraft instance = new OurCraft();
             instance.start(properties);
         }
         catch(Exception e)

@@ -5,29 +5,24 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
-import org.craft.*;
-import org.craft.modding.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.*;
 import org.spongepowered.api.event.*;
 
 public class ASMEventListener implements IEventListener, Opcodes
 {
 
     private static int                             IDs               = 0;
-    private static final String                    HANDLER_DESC      = Type.getInternalName(IEventListener.class);
-    private static final String                    HANDLER_FUNC_DESC = Type.getMethodDescriptor(IEventListener.class.getDeclaredMethods()[0]);
-    private static final ASMClassLoader            LOADER            = new ASMClassLoader();
     private static final HashMap<Method, Class<?>> cache             = Maps.newHashMap();
-    private static final boolean                   GETCONTEXT        = Boolean.parseBoolean(System.getProperty("fml.LogContext", "false"));
+    private static final String                    HANDLER_FUNC_DESC = Type.getMethodDescriptor(IEventListener.class.getDeclaredMethods()[0]);
 
-    private final IEventListener                   handler;
-    private ModContainer                           owner;
+    private final Object                           handler;
     private String                                 readable;
 
     public ASMEventListener(Object target, Method method) throws Exception
     {
-        handler = (IEventListener) createWrapper(method).getConstructor(Object.class).newInstance(target);
+        handler = createWrapper(method).getConstructor(Object.class).newInstance(target);
         readable = "ASM: " + target + " " + method.getName() + Type.getMethodDescriptor(method);
     }
 
@@ -54,11 +49,11 @@ public class ASMEventListener implements IEventListener, Opcodes
             {
                 try
                 {
-                    handler.invoke(event);
+                    handler.getClass().getDeclaredMethod("invoke", Object.class).invoke(handler, event);
                 }
                 catch(Exception e)
                 {
-                    ;
+                    ;//e.printStackTrace();
                 }
             }
         }
@@ -71,61 +66,73 @@ public class ASMEventListener implements IEventListener, Opcodes
             return cache.get(callback);
         }
 
-        ClassWriter cw = new ClassWriter(0);
-        MethodVisitor mv;
-
-        String name = getUniqueName(callback);
-        String desc = name.replace('.', '/');
-        String instType = Type.getInternalName(callback.getDeclaringClass());
-        String eventType = Type.getInternalName(callback.getParameterTypes()[0]);
-
-        /*
-        System.out.println("Name:     " + name);
-        System.out.println("Desc:     " + desc);
-        System.out.println("InstType: " + instType);
-        System.out.println("Callback: " + callback.getName() + Type.getMethodDescriptor(callback));
-        System.out.println("Event:    " + eventType);
-        */
-
-        cw.visit(V1_6, ACC_PUBLIC | ACC_SUPER, desc, null, "java/lang/Object", new String[]
+        try
         {
-                Type.getInternalName(IEventListener.class)
-        });
+            ClassReader cr = new ClassReader("org.craft.modding.events.ListenerModel");
+            ClassWriter cw = new ClassWriter(0);
+            MethodVisitor mv;
+            ClassNode node = new ClassNode();
+            cr.accept(node, 0);
+            String name = getUniqueName(callback);
+            String desc = name.replace('.', '/');
+            String instType = Type.getInternalName(callback.getDeclaringClass());
+            String eventType = Type.getInternalName(callback.getParameterTypes()[0]);
 
-        cw.visitSource(".dynamic", null);
-        {
-            cw.visitField(ACC_PUBLIC, "instance", "Ljava/lang/Object;", null, null).visitEnd();
+            /*System.out.println("Name:     " + name);
+            System.out.println("Desc:     " + desc);
+            System.out.println("InstType: " + instType);
+            System.out.println("Callback: " + callback.getName() + Type.getMethodDescriptor(callback));
+            System.out.println("Event:    " + eventType);*/
+
+            cw.visit(V1_6, ACC_PUBLIC | ACC_SUPER, desc, null, "java/lang/Object", new String[]
+            {
+                    IEventListener.class.getName().replace(".", "/")
+            });
+
+            cw.visitSource(".dynamic", null);
+            {
+                cw.visitField(ACC_PUBLIC, "instance", "Ljava/lang/Object;", null, null).visitEnd();
+            }
+            {
+                mv = cw.visitMethod(ACC_PUBLIC, "<init>", "(Ljava/lang/Object;)V", null, null);
+                mv.visitCode();
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitVarInsn(ALOAD, 1);
+                mv.visitFieldInsn(PUTFIELD, desc, "instance", "Ljava/lang/Object;");
+                mv.visitInsn(RETURN);
+                mv.visitMaxs(2, 2);
+                mv.visitEnd();
+            }
+            {
+                mv = cw.visitMethod(ACC_PUBLIC, "invoke", HANDLER_FUNC_DESC, null, null);
+                mv.visitCode();
+
+                mv.visitVarInsn(ALOAD, 0);
+                mv.visitFieldInsn(GETFIELD, desc, "instance", "Ljava/lang/Object;");
+                mv.visitTypeInsn(CHECKCAST, instType);
+                mv.visitVarInsn(ALOAD, 1);
+                mv.visitTypeInsn(CHECKCAST, eventType);
+                mv.visitMethodInsn(INVOKEVIRTUAL, instType, callback.getName(), Type.getMethodDescriptor(callback));
+                mv.visitInsn(RETURN);
+                mv.visitMaxs(2, 2);
+
+                mv.visitEnd();
+            }
+            cw.visitEnd();
+            byte[] bytes = cw.toByteArray();
+            Object o = ClassLoader.getSystemClassLoader().getClass().getMethod("define", String.class, byte[].class, Integer.TYPE, Integer.TYPE).invoke(ClassLoader.getSystemClassLoader(),
+                    name, bytes, 0, bytes.length);
+            Class<?> ret = (Class<?>) o;
+            cache.put(callback, ret);
+            return ret;
         }
+        catch(Exception e)
         {
-            mv = cw.visitMethod(ACC_PUBLIC, "<init>", "(Ljava/lang/Object;)V", null, null);
-            mv.visitCode();
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitFieldInsn(PUTFIELD, desc, "instance", "Ljava/lang/Object;");
-            mv.visitInsn(RETURN);
-            mv.visitMaxs(2, 2);
-            mv.visitEnd();
+            e.printStackTrace();
         }
-        {
-            mv = cw.visitMethod(ACC_PUBLIC, "invoke", HANDLER_FUNC_DESC, null, null);
-            mv.visitCode();
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, desc, "instance", "Ljava/lang/Object;");
-            mv.visitTypeInsn(CHECKCAST, instType);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitTypeInsn(CHECKCAST, eventType);
-            mv.visitMethodInsn(INVOKEVIRTUAL, instType, callback.getName(), Type.getMethodDescriptor(callback));
-            mv.visitInsn(RETURN);
-            mv.visitMaxs(2, 2);
-            mv.visitEnd();
-        }
-        cw.visitEnd();
-        byte[] bytes = cw.toByteArray();
-        Class<?> ret = OurClassLoader.instance.define(name, bytes, 0, bytes.length);
-        cache.put(callback, ret);
-        return ret;
+        return null;
     }
 
     private String getUniqueName(Method callback)
@@ -134,19 +141,6 @@ public class ASMEventListener implements IEventListener, Opcodes
                 callback.getDeclaringClass().getSimpleName(),
                 callback.getName(),
                 callback.getParameterTypes()[0].getSimpleName());
-    }
-
-    private static class ASMClassLoader extends ClassLoader
-    {
-        private ASMClassLoader()
-        {
-            super(ASMClassLoader.class.getClassLoader());
-        }
-
-        public Class<?> define(String name, byte[] data)
-        {
-            return defineClass(name, data, 0, data.length);
-        }
     }
 
     public String toString()

@@ -1,19 +1,12 @@
 package org.craft.server;
 
-import java.net.*;
 import java.util.*;
-
-import org.craft.*;
 
 public class OurCraftServerStartup
 {
 
-    private static OurClassLoader classLoader;
-
     public static void main(String[] args)
     {
-        classLoader = new OurClassLoader(((URLClassLoader) Thread.currentThread().getContextClassLoader()).getURLs());
-        Thread.currentThread().setContextClassLoader(classLoader);
         try
         {
             HashMap<String, String> properties = new HashMap<String, String>();

@@ -42,7 +42,12 @@ public class OurClassLoader extends URLClassLoader
 
     public static OurClassLoader       instance;
 
-    public OurClassLoader(URL[] sources)
+    public OurClassLoader(ClassLoader loader)
+    {
+        this(((URLClassLoader) loader).getURLs());
+    }
+
+    private OurClassLoader(URL[] sources)
     {
         super(sources, null);
         instance = this;
@@ -58,7 +63,12 @@ public class OurClassLoader extends URLClassLoader
         addClassLoaderExclusion("java.");
         addClassLoaderExclusion("sun.");
         addClassLoaderExclusion("org.lwjgl.");
+        addClassLoaderExclusion("org.craft.modding.");
         addClassLoaderExclusion("org.apache.logging.");
+        addClassLoaderExclusion("org.objectweb.asm.");
+        addClassLoaderExclusion("org.reflections.");
+        addClassLoaderExclusion("javassist.");
+        addClassLoaderExclusion("com.google.");
         addClassLoaderExclusion("net.minecraft.launchwrapper.");
 
         // transformer exclusions

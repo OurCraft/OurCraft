@@ -1,8 +1,6 @@
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
-import org.craft.*;
 import org.craft.utils.*;
 
 public class ClientDevStart
@@ -10,9 +8,6 @@ public class ClientDevStart
 
     public static void main(String[] args) throws Exception
     {
-        final URLClassLoader ucl = (URLClassLoader) ClientDevStart.class.getClassLoader();
-        OurClassLoader classLoader = new OurClassLoader(ucl.getURLs());
-        Thread.currentThread().setContextClassLoader(classLoader);
         HashMap<String, String> properties = new HashMap<String, String>();
         String current = null;
         properties.put("username", "Player_" + (int) (Math.random() * 100000L));
@@ -33,7 +28,7 @@ public class ClientDevStart
         final File gameFolder = new File(properties.get("gamefolder"));
         SystemUtils.setGameFolder(gameFolder);
         LWJGLSetup.load(new File(gameFolder, "natives"));
-        Class<?> clazz = Class.forName("org.craft.client.OurCraftStartup", false, classLoader);
+        Class<?> clazz = Class.forName("org.craft.client.OurCraftStartup");
         clazz.getMethod("main", String[].class).invoke(null, new Object[]
         {
                 args
