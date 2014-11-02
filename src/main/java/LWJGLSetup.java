@@ -11,7 +11,7 @@ public class LWJGLSetup
     /**
      * Load LWJGL in given folder
      */
-    public static void load(File folder) throws Exception
+    public static void load(File folder) throws IOException
     {
         if(!loaded)
         {
@@ -95,18 +95,11 @@ public class LWJGLSetup
     /**
      * Extract given file from classpath into given folder
      */
-    private static void extractFromClasspath(String fileName, File folder)
+    private static void extractFromClasspath(String fileName, File folder) throws IOException
     {
-        try
-        {
-            FileOutputStream out = new FileOutputStream(new File(folder, fileName));
-            IOUtils.copy(LWJGLSetup.class.getResourceAsStream("/" + fileName), out);
-            out.flush();
-            out.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        FileOutputStream out = new FileOutputStream(new File(folder, fileName));
+        IOUtils.copy(LWJGLSetup.class.getResourceAsStream("/" + fileName), out);
+        out.flush();
+        out.close();
     }
 }

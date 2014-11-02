@@ -1,7 +1,5 @@
 package org.craft.spongeimpl;
 
-import java.util.*;
-
 import org.craft.blocks.*;
 import org.craft.items.*;
 import org.spongepowered.api.*;
@@ -10,9 +8,6 @@ import org.spongepowered.api.item.*;
 
 public class SpoongeGameRegistry implements GameRegistry
 {
-
-    private HashMap<String, BlockType> blockTypes;
-    private HashMap<String, ItemType>  itemTypes;
 
     public SpoongeGameRegistry()
     {
@@ -24,6 +19,10 @@ public class SpoongeGameRegistry implements GameRegistry
         if(!id.contains(":"))
         {
             id = "ourcraft:" + id;
+        }
+        else if(id.startsWith("minecraft:"))
+        {
+            id = id.replace("minecraft:", "ourcraft:");
         }
         return com.google.common.base.Optional.of((BlockType) Blocks.get(id));
     }

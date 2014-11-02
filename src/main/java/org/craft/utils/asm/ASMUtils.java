@@ -27,9 +27,6 @@ public final class ASMUtils
             {
                 return true;
             }
-            else
-            {
-            }
         }
         return false;
     }
@@ -45,9 +42,6 @@ public final class ASMUtils
             {
                 return true;
             }
-            else
-            {
-            }
         }
         return false;
     }
@@ -62,9 +56,6 @@ public final class ASMUtils
             if(annotNode.desc.contains(annot.getCanonicalName().replace(".", "/")))
             {
                 return true;
-            }
-            else
-            {
             }
         }
         return false;

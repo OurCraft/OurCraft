@@ -7,7 +7,6 @@ import com.google.common.collect.*;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.*;
 import org.spongepowered.api.event.*;
 
 public class ASMEventListener implements IEventListener, Opcodes
@@ -68,11 +67,8 @@ public class ASMEventListener implements IEventListener, Opcodes
 
         try
         {
-            ClassReader cr = new ClassReader("org.craft.modding.events.ListenerModel");
             ClassWriter cw = new ClassWriter(0);
             MethodVisitor mv;
-            ClassNode node = new ClassNode();
-            cr.accept(node, 0);
             String name = getUniqueName(callback);
             String desc = name.replace('.', '/');
             String instType = Type.getInternalName(callback.getDeclaringClass());

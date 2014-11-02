@@ -1,5 +1,6 @@
 package org.craft.client;
 
+import java.io.*;
 import java.util.*;
 
 import org.craft.resources.*;
@@ -29,7 +30,7 @@ public final class I18n
     /**
      * Init langs from given loader
      */
-    public static void init(ResourceLoader loader) throws Exception
+    public static void init(ResourceLoader loader) throws IOException
     {
         load(loader, "en_US");
         load(loader, "fr_FR");
@@ -38,7 +39,7 @@ public final class I18n
     /**
      * Loads a language with given id.<br/>Makes the game crash if the language doesn't not contain a 'lang.name' field
      */
-    private static void load(ResourceLoader loader, String id) throws Exception
+    private static void load(ResourceLoader loader, String id) throws IOException
     {
         AbstractResource res = loader.getResource(new ResourceLocation("ourcraft", "langs/" + id + ".lang"));
         String content = new String(res.getData(), "UTF-8");

@@ -1,5 +1,6 @@
 package org.craft.utils.asm;
 
+
 public interface IClassTransformer
 {
 

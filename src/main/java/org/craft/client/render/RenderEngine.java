@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
+import java.io.*;
 import java.nio.*;
 import java.util.*;
 
@@ -49,7 +50,7 @@ public class RenderEngine implements IDisposable
     public TextureMap                                 blocksAndItemsMap;
     public ResourceLocation                           blocksAndItemsMapLocation;
 
-    public RenderEngine(ResourceLoader loader) throws Exception
+    public RenderEngine(ResourceLoader loader) throws IOException
     {
         renderState = new RenderState();
         this.loader = loader;
@@ -354,7 +355,7 @@ public class RenderEngine implements IDisposable
      * Reload all textures bound to a ResourceLocation.<br/>
      * If a texture can't be found, it will be discarded
      */
-    public void reloadLocations() throws Exception
+    public void reloadLocations() throws IOException
     {
         Iterator<ResourceLocation> it = texturesLocs.keySet().iterator();
         while(it.hasNext())
@@ -400,7 +401,7 @@ public class RenderEngine implements IDisposable
     /**
      * Loads all required shaders
      */
-    public void loadShaders() throws Exception
+    public void loadShaders() throws IOException
     {
         glUseProgram(0);
         if(basicShader != null)

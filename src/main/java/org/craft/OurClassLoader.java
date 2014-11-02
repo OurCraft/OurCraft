@@ -145,6 +145,7 @@ public class OurClassLoader extends URLClassLoader
             {
                 return cached.get(transformedName);
             }
+            Log.message("Loading " + transformedName);
 
             final String untransformedName = untransformName(name);
 
@@ -397,5 +398,13 @@ public class OurClassLoader extends URLClassLoader
     {
         // Do we need a rename transformer?
         return name;
+    }
+
+    public void unload(String toModifyClass)
+    {
+        if(cached.containsKey(toModifyClass))
+        {
+            cached.remove(toModifyClass);
+        }
     }
 }

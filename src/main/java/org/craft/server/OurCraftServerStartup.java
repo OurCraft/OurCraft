@@ -7,31 +7,24 @@ public class OurCraftServerStartup
 
     public static void main(String[] args)
     {
-        try
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("port", "35565");
+        properties.put("nogui", "false");
+        String current = null;
+        for(int i = 0; i < args.length; i++ )
         {
-            HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put("port", "35565");
-            properties.put("nogui", "false");
-            String current = null;
-            for(int i = 0; i < args.length; i++ )
+            String arg = args[i];
+            if(arg.startsWith("--"))
             {
-                String arg = args[i];
-                if(arg.startsWith("--"))
-                {
-                    current = arg.substring(2);
-                }
-                else
-                {
-                    properties.put(current, arg);
-                }
+                current = arg.substring(2);
             }
-            OurCraftServer instance = new OurCraftServer();
-            instance.start(properties);
+            else
+            {
+                properties.put(current, arg);
+            }
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        OurCraftServer instance = new OurCraftServer();
+        instance.start(properties);
     }
 
 }

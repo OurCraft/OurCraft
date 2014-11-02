@@ -107,6 +107,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         run();
     }
 
+    @SuppressWarnings("unchecked")
     public void run()
     {
         try
@@ -156,7 +157,16 @@ public class OurCraft implements Runnable, OurCraftInstance
 
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
-            this.initSponge();
+            Log.message("Loading SpongeAPI implementation...");
+            EventBus eventBus = new EventBus(new Class<?>[]
+            {
+                    ModEvent.class
+            }, OurModEventHandler.class);
+            AddonsLoader addonsLoader = new AddonsLoader(this, eventBus);
+            File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
+            if(!modsFolder.exists())
+                modsFolder.mkdirs();
+            addonsLoader.loadAll(modsFolder);
 
             sndEngine = new SoundEngine();
             settings = new GameSettings();
@@ -264,32 +274,6 @@ public class OurCraft implements Runnable, OurCraftInstance
         crosshairBuffer.addIndex(0);
         crosshairBuffer.upload();
         crosshairBuffer.clearAndDisposeVertices();
-    }
-
-    @SuppressWarnings("unchecked")
-    /**
-     * Init sponge plugins and other mods
-     */
-    private void initSponge()
-    {
-        Log.message("Loading SpongeAPI implementation...");
-        gameRegistry = new SpongeGameRegistry();
-        eventBus = new EventBus(new Class<?>[]
-        {
-                ModEvent.class
-        }, OurModEventHandler.class);
-        addonsLoader = new AddonsLoader(this, eventBus);
-        try
-        {
-            File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
-            if(!modsFolder.exists())
-                modsFolder.mkdirs();
-            addonsLoader.loadAll(modsFolder);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -708,7 +692,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     /**
      * Loads and sets current resources pack. Throws an exception if given pack does not exist or is invalid
      */
-    public void setResourcesPack(String fileName) throws Exception
+    public void setResourcesPack(String fileName) throws IOException
     {
         ResourceLocation location = new ResourceLocation("resourcepacks", fileName);
         ZipSimpleResourceLoader loader = new ZipSimpleResourceLoader(gameFolderLoader.getResource(location), "assets");

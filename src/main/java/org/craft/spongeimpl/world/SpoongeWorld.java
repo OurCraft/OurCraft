@@ -4,26 +4,34 @@ import java.util.*;
 
 import com.google.common.base.Optional;
 
+import org.craft.modding.modifiers.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.math.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.biome.*;
 
+@BytecodeModifier("org.craft.world.World")
 public class SpoongeWorld implements World
 {
 
-    private org.craft.world.World realWorld;
-
-    public SpoongeWorld(org.craft.world.World ocWorld)
+    //===========================================================
+    //               START OF SHADOW METHODS
+    //===========================================================
+    @Shadow
+    public org.craft.blocks.Block getBlockAt(int x, int y, int z)
     {
-        this.realWorld = ocWorld;
+        return null;
     }
+
+    //===========================================================
+    //               END OF SHADOW METHODS
+    //===========================================================
 
     @Override
     public Block getBlock(Vector3d position)
     {
-        return (Block) realWorld.getBlockAt((int) Math.floor(position.getX()), (int) Math.floor(position.getY()), (int) Math.floor(position.getZ()));
+        return (Block) getBlockAt((int) Math.floor(position.getX()), (int) Math.floor(position.getY()), (int) Math.floor(position.getZ()));
     }
 
     @Override
@@ -68,10 +76,10 @@ public class SpoongeWorld implements World
         return null;
     }
 
+    @Shadow
     @Override
     public String getName()
     {
-        // TODO Auto-generated method stub
         return null;
     }
 

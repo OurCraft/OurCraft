@@ -1,9 +1,7 @@
 package org.craft.resources;
 
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class VirtualResourceLoader extends ResourceLoader
 {
@@ -12,7 +10,7 @@ public class VirtualResourceLoader extends ResourceLoader
     private HashMap<String, AbstractResource> resources = new HashMap<String, AbstractResource>();
 
     @Override
-    public AbstractResource getResource(ResourceLocation location) throws Exception
+    public AbstractResource getResource(ResourceLocation location) throws IOException
     {
         if(!resources.containsKey(location.getFullPath()))
         {
@@ -27,7 +25,7 @@ public class VirtualResourceLoader extends ResourceLoader
     }
 
     @Override
-    public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
+    public List<AbstractResource> getAllResources(ResourceLocation location) throws IOException
     {
         return Arrays.asList(getResource(location));
     }
@@ -52,7 +50,7 @@ public class VirtualResourceLoader extends ResourceLoader
         resources.put(type, new VirtualResource(type, bytes, this));
     }
 
-    public static AbstractResource quickCreateResource(byte[] bytes) throws Exception
+    public static AbstractResource quickCreateResource(byte[] bytes) throws IOException
     {
         if(quickLoader == null)
             quickLoader = new VirtualResourceLoader();

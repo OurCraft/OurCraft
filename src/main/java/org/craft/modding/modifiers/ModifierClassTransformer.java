@@ -146,4 +146,5 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
         }
         return method;
     }
+
 }

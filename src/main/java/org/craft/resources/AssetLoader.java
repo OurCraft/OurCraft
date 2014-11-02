@@ -1,5 +1,6 @@
 package org.craft.resources;
 
+import java.io.*;
 import java.util.*;
 
 public class AssetLoader extends ResourceLoader
@@ -20,7 +21,7 @@ public class AssetLoader extends ResourceLoader
     }
 
     @Override
-    public AbstractResource getResource(ResourceLocation location) throws Exception
+    public AbstractResource getResource(ResourceLocation location) throws IOException
     {
         if(resourcePackLoader != null)
             if(resourcePackLoader.doesResourceExists(location))
@@ -31,7 +32,7 @@ public class AssetLoader extends ResourceLoader
     }
 
     @Override
-    public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
+    public List<AbstractResource> getAllResources(ResourceLocation location) throws IOException
     {
         if(resourcePackLoader != null)
             if(resourcePackLoader.doesResourceExists(location))

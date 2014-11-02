@@ -20,7 +20,7 @@ public class DiskSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public AbstractResource getResourceOrCreate(ResourceLocation location) throws Exception
+    public AbstractResource getResourceOrCreate(ResourceLocation location) throws IOException
     {
         location = complete(location);
         if(!doesResourceExists(location))
@@ -40,7 +40,7 @@ public class DiskSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public AbstractResource getResource(ResourceLocation location) throws Exception
+    public AbstractResource getResource(ResourceLocation location) throws IOException
     {
         location = complete(location);
         if(!isLoaded(location))
@@ -62,7 +62,7 @@ public class DiskSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
+    public List<AbstractResource> getAllResources(ResourceLocation location) throws IOException
     {
         location = complete(location);
         return Arrays.asList(getResource(location));

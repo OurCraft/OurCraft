@@ -6,7 +6,7 @@ import org.craft.utils.*;
 public class ClientDevStart
 {
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws IOException, SecurityException, ReflectiveOperationException
     {
         HashMap<String, String> properties = new HashMap<String, String>();
         String current = null;

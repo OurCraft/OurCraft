@@ -56,7 +56,7 @@ public class ZipSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public AbstractResource getResource(ResourceLocation location) throws Exception
+    public AbstractResource getResource(ResourceLocation location) throws IOException
     {
         ResourceLocation l = complete(location);
         if(!isLoaded(location))
@@ -78,7 +78,7 @@ public class ZipSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
+    public List<AbstractResource> getAllResources(ResourceLocation location) throws IOException
     {
         location = complete(location);
         return Arrays.asList(getResource(location));

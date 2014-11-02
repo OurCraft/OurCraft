@@ -1,5 +1,7 @@
 package org.craft.client.render.fonts;
 
+import java.io.*;
+
 import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.resources.*;
@@ -7,7 +9,7 @@ import org.craft.resources.*;
 public class BaseFontRenderer extends FontRenderer
 {
 
-    public BaseFontRenderer() throws Exception
+    public BaseFontRenderer() throws IOException
     {
         super(new TextureAtlas(OpenGLHelper.loadTexture(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/font.png"))), 16, 16), null);
     }

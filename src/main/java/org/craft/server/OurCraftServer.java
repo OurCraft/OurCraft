@@ -19,14 +19,12 @@ import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
 import org.craft.spongeimpl.game.*;
-import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
-import org.spongepowered.api.plugin.*;
 
 public class OurCraftServer implements OurCraftInstance
 {
@@ -35,7 +33,6 @@ public class OurCraftServer implements OurCraftInstance
     private NettyServerWrapper    serverWrapper;
     private SpongeGameRegistry    gameRegistry;
     private EventBus              eventBus;
-    private SpongePluginManager   pluginManager;
     private int                   maxPlayers;
 
     private ArrayList<Player>     onlinePlayers;
@@ -117,14 +114,14 @@ public class OurCraftServer implements OurCraftInstance
 
         Log.message("Starting server");
 
-        // TODO:  eventBus.fireEvent(new SpongeInitEvent(this), null, null);
+        eventBus.fireEvent(new ModInitEvent(this), null, null);
         serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
         // TODO:    eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
         new Thread(serverWrapper).start();
 
-        // TODO:   eventBus.fireEvent(new SpongePostInitEvent(this), null, null);
+        eventBus.fireEvent(new ModPostInitEvent(this), null, null);
         running = true;
 
         expectedFrameRate = 60;
@@ -144,25 +141,13 @@ public class OurCraftServer implements OurCraftInstance
         gameRegistry = new SpongeGameRegistry();
         eventBus = new EventBus(new Class<?>[]
         {
-            ModEvent.class
+                ModEvent.class
         }, OurModEventHandler.class);
-        pluginManager = new SpongePluginManager();
         addonsLoader = new AddonsLoader(this, eventBus);
-        addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);
-        try
-        {
-            File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
-            if(!modsFolder.exists())
-                modsFolder.mkdirs();
-            File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
-            if(!pluginsFolder.exists())
-                pluginsFolder.mkdirs();
-            addonsLoader.loadAll(modsFolder, pluginsFolder);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
+        if(!modsFolder.exists())
+            modsFolder.mkdirs();
+        addonsLoader.loadAll(modsFolder);
     }
 
     public EventBus getEventBus()

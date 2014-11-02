@@ -4,7 +4,7 @@ import java.io.*;
 
 /**
  * VERY VERY OLD, NEEDS TO BE UPDATED
- * but I put it there because it's shorter
+ * but I put it there because it's easier
  */
 public final class IOUtils
 {

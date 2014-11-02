@@ -22,7 +22,7 @@ public class ClasspathSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public AbstractResource getResource(ResourceLocation location) throws Exception
+    public AbstractResource getResource(ResourceLocation location) throws IOException
     {
         if(!isLoaded(location))
         {
@@ -43,7 +43,7 @@ public class ClasspathSimpleResourceLoader extends ResourceLoader
     }
 
     @Override
-    public List<AbstractResource> getAllResources(ResourceLocation location) throws Exception
+    public List<AbstractResource> getAllResources(ResourceLocation location) throws IOException
     {
         return Arrays.asList(getResource(location));
     }

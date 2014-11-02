@@ -10,35 +10,29 @@ public class OurCraftStartup
 
     public static void main(String[] args)
     {
-        try
+        HashMap<String, String> properties = new HashMap<String, String>();
+        properties.put("username", "Player_" + System.currentTimeMillis());
+        properties.put("lang", "en_US");
+        properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
+        properties.put("nativesFolder", SystemUtils.getGameFolder().getAbsolutePath() + "/natives");
+        String current = null;
+        for(int i = 0; i < args.length; i++ )
         {
-            HashMap<String, String> properties = new HashMap<String, String>();
-            properties.put("username", "Player_" + System.currentTimeMillis());
-            properties.put("lang", "en_US");
-            properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
-            properties.put("nativesFolder", SystemUtils.getGameFolder().getAbsolutePath() + "/natives");
-            String current = null;
-            for(int i = 0; i < args.length; i++ )
+            String arg = args[i];
+            if(arg.startsWith("--"))
             {
-                String arg = args[i];
-                if(arg.startsWith("--"))
-                {
-                    current = arg.substring(2);
-                }
-                else
-                {
-                    properties.put(current, arg);
-                }
+                current = arg.substring(2);
             }
-            SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
-            System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
-            System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));
-            OurCraft instance = new OurCraft();
-            instance.start(properties);
+            else
+            {
+                properties.put(current, arg);
+            }
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
+        System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
+        System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));
+
+        OurCraft instance = new OurCraft();
+        instance.start(properties);
     }
 }
