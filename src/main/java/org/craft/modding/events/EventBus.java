@@ -57,6 +57,7 @@ public class EventBus
                 clazz = clazz.getSuperclass();
             }
             Set<? extends Class<?>> classes = TypeToken.of(object.getClass()).getTypes().rawTypes();
+            ArrayList<String> checked = new ArrayList<String>();
             for(Method method : methods)
             {
                 for(Class<?> cls : classes)
@@ -66,24 +67,25 @@ public class EventBus
                         Method realMethod;
                         try
                         {
-                            realMethod = cls.getDeclaredMethod(method.getName(), method.getParameterTypes());
-                            if(methodHasAnnot(annotation, realMethod))
+                            if(!checked.contains(method.getName()))
                             {
-                                if(realMethod.getParameterTypes().length > 1)
+                                realMethod = cls.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                                if(methodHasAnnot(annotation, realMethod))
                                 {
-                                    Log.error("Method " + method.getName() + " is declared as event listener but has more than one parameter");
-                                    return;
+                                    if(realMethod.getParameterTypes().length > 1)
+                                    {
+                                        Log.error("Method " + method.getName() + " is declared as event listener but has more than one parameter");
+                                        return;
+                                    }
+                                    else if(realMethod.getParameterTypes() == null || method.getParameterTypes().length == 0)
+                                    {
+                                        Log.error("Method " + method.getName() + " is declared as event listener but has no parameter");
+                                        return;
+                                    }
+                                    checked.add(method.getName());
+                                    Class<?> eventClass = (Class<?>) method.getParameterTypes()[0];
+                                    register(object, realMethod, eventClass);
                                 }
-                                else if(realMethod.getParameterTypes() == null || method.getParameterTypes().length == 0)
-                                {
-                                    Log.error("Method " + method.getName() + " is declared as event listener but has no parameter");
-                                    return;
-                                }
-                                Class<?> eventClass = (Class<?>) method.getParameterTypes()[0];
-                                register(object, realMethod, eventClass);
-                            }
-                            else
-                            {
                             }
                         }
                         catch(NoSuchMethodException e1)
@@ -106,6 +108,7 @@ public class EventBus
             if(list == null)
                 list = new ArrayList<IEventListener>();
             list.add(listener);
+            Log.message("Registred " + m.getDeclaringClass().getName() + ":" + m.getName() + " >> " + eventClass);
             listeners.put(eventClass, list);
         }
         catch(Exception e)

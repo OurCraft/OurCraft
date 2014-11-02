@@ -2,6 +2,7 @@ package org.craft.spongeimpl;
 
 import org.craft.modding.events.*;
 import org.spongepowered.api.event.*;
+import org.spongepowered.api.plugin.*;
 
 public class SpoongeEventManager implements EventManager
 {
@@ -28,7 +29,7 @@ public class SpoongeEventManager implements EventManager
     @Override
     public boolean call(Event event)
     {
-        return eventBus.fireEvent(event, null, null);
+        return eventBus.fireEvent(event, null, Plugin.class);
     }
 
 }

@@ -78,20 +78,33 @@ public class CrashReport
         buffer.append(CrashInfos.SECTION_START + " Game " + CrashInfos.SECTION_END + "\n\tName: OurCraft\n");
         add(buffer, new DateInfos());
         add(buffer, new OSInfos());
-        add(buffer, new OpenALInfos());
-        add(buffer, new OpenGLInfos());
-        add(buffer, new RenderStateInfos(OurCraft.getOurCraft().getRenderEngine()));
+        if(OurCraft.getOurCraft() != null)
+        {
+            add(buffer, new OpenALInfos());
+            add(buffer, new OpenGLInfos());
+            add(buffer, new RenderStateInfos(OurCraft.getOurCraft().getRenderEngine()));
+        }
         System.out.println(buffer.toString());
     }
 
     private void add(StringBuffer buffer, CrashInfos infos)
     {
-        buffer.append(infos.getInfos() + "\n");
+        try
+        {
+            buffer.append(infos.getInfos() + "\n");
+        }
+        catch(Exception e)
+        {
+            ;
+        }
     }
 
     private String generateRandomComment()
     {
-        return comments[(int) Math.floor(Math.random() * comments.length)];
+        int index = (int) Math.floor(Math.random() * comments.length);
+        while(comments[index] == null)
+            index = (int) Math.floor(Math.random() * comments.length);
+        return comments[index];
     }
 
 }

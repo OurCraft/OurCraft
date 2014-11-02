@@ -248,7 +248,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            crash(new CrashReport(e));
         }
     }
 
