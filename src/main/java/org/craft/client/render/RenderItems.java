@@ -68,8 +68,8 @@ public class RenderItems
         buffer.setOffset(0);
         buffer.clear();
         engine.bindLocation(engine.blocksAndItemsMapLocation);
-        ItemRenderer renderer = getRenderer(item.getItem());
-        renderer.renderItem(engine, buffer, item.getItem(), item, x, y, z);
+        ItemRenderer renderer = getRenderer(item.getStackable());
+        renderer.renderItem(engine, buffer, item.getStackable(), item, x, y, z);
         buffer.upload();
         engine.renderBuffer(buffer);
     }

@@ -33,7 +33,7 @@ public class Stack
     /**
      * Returns the object corresponding to the stack.
      */
-    public IStackable getItem()
+    public IStackable getStackable()
     {
         return stackable;
     }

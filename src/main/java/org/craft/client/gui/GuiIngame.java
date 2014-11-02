@@ -62,7 +62,7 @@ public class GuiIngame extends Gui
         org.craft.inventory.Stack stack = player.getHeldItem();
         if(stack != null)
         {
-            String s = I18n.format(stack.getItem().getUnlocalizedID());
+            String s = I18n.format(stack.getStackable().getUnlocalizedID());
             Matrix4 m = renderEngine.getModelviewMatrix().copy();
             renderEngine.setModelviewMatrix(m.mul(scaleMatrix));
             getFontRenderer().drawShadowedString(s, 0xFFFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextWidth(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);

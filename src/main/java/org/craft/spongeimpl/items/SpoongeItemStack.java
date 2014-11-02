@@ -1,6 +1,7 @@
 package org.craft.spongeimpl.items;
 
 import org.craft.inventory.*;
+import org.craft.items.*;
 import org.craft.modding.modifiers.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.item.*;
@@ -12,11 +13,66 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
 
     private static final long serialVersionUID = -747859447420118785L;
 
+    //===========================================================
+    //               START OF SHADOW METHODS
+    //===========================================================
     @Shadow
     public int compareTo(Stack s)
     {
         return 0;
     }
+
+    @Shadow
+    public IStackable getStackable()
+    {
+        return null;
+    }
+
+    @Shadow
+    @Override
+    public short getDamage()
+    {
+        return 0;
+    }
+
+    @Shadow
+    @Override
+    public void setDamage(short damage)
+    {
+        ;
+    }
+
+    @Shadow
+    @Override
+    public int getQuantity()
+    {
+        return 0;
+    }
+
+    @Shadow
+    @Override
+    public void setQuantity(int quantity) throws IllegalArgumentException
+    {
+        ;
+    }
+
+    @Shadow
+    @Override
+    public int getMaxStackQuantity()
+    {
+        return 0;
+    }
+
+    @Shadow
+    @Override
+    public void setMaxStackQuantity(int quantity)
+    {
+        ;
+    }
+
+    //===========================================================
+    //               END OF SHADOW METHODS
+    //===========================================================
 
     @Override
     public int compareTo(ItemStack o)
@@ -27,63 +83,26 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
     @Override
     public ItemType getItem()
     {
-        // TODO Auto-generated method stub
+        if(getStackable() instanceof Item)
+        {
+            return (ItemType) getStackable();
+        }
         return null;
-    }
-
-    @Override
-    public short getDamage()
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setDamage(short damage)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public int getQuantity()
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setQuantity(int quantity) throws IllegalArgumentException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public int getMaxStackQuantity()
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setMaxStackQuantity(int quantity)
-    {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public String getId()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getStackable().getId();
     }
 
     @Override
     public BlockType getBlock()
     {
-        // TODO Auto-generated method stub
+        if(getStackable() instanceof Block)
+        {
+            return (BlockType) getStackable();
+        }
         return null;
     }
 

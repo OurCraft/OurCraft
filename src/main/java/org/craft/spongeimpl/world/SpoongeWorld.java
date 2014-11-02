@@ -24,6 +24,13 @@ public class SpoongeWorld implements World
         return null;
     }
 
+    @Shadow
+    @Override
+    public String getName()
+    {
+        return null;
+    }
+
     //===========================================================
     //               END OF SHADOW METHODS
     //===========================================================
@@ -37,8 +44,7 @@ public class SpoongeWorld implements World
     @Override
     public Block getBlock(int x, int y, int z)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return (Block) getBlockAt(x, y, z);
     }
 
     @Override
@@ -73,13 +79,6 @@ public class SpoongeWorld implements World
     public UUID getUniqueID()
     {
         // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Shadow
-    @Override
-    public String getName()
-    {
         return null;
     }
 

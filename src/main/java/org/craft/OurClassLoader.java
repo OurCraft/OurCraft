@@ -78,6 +78,7 @@ public class OurClassLoader extends URLClassLoader
 
         cached.put(getClass().getCanonicalName(), getClass());
         cached.put(IClassTransformer.class.getCanonicalName(), IClassTransformer.class);
+
     }
 
     public void addClassLoaderExclusion(String packageStart)

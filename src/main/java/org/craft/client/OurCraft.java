@@ -158,11 +158,11 @@ public class OurCraft implements Runnable, OurCraftInstance
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             Log.message("Loading SpongeAPI implementation...");
-            EventBus eventBus = new EventBus(new Class<?>[]
+            eventBus = new EventBus(new Class<?>[]
             {
                     ModEvent.class
             }, OurModEventHandler.class);
-            AddonsLoader addonsLoader = new AddonsLoader(this, eventBus);
+            addonsLoader = new AddonsLoader(this, eventBus);
             File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
             if(!modsFolder.exists())
                 modsFolder.mkdirs();
@@ -567,7 +567,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                     renderEngine.enableGLCap(GL_DEPTH_TEST);
                     renderEngine.enableGLCap(GL_ALPHA_TEST);
                     renderEngine.setProjectFromEntity(false);
-                    boolean isBlock = player.getHeldItem().getItem() instanceof Block;
+                    boolean isBlock = player.getHeldItem().getStackable() instanceof Block;
                     Quaternion q = new Quaternion(Vector3.yAxis, (float) Math.toRadians(75));
                     q = q.mul(new Quaternion(Vector3.xAxis, (float) Math.toRadians(10)));
                     q = q.mul(new Quaternion(Vector3.zAxis, (float) Math.toRadians(5)));

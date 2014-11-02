@@ -86,7 +86,7 @@ public class LocalPlayerController extends PlayerController
         org.craft.inventory.Stack s = player.getHeldItem();
         if(s != null)
         {
-            s.getItem().onUse(player, infos.x, infos.y, infos.z, infos.side, infos.type);
+            s.getStackable().onUse(player, infos.x, infos.y, infos.z, infos.side, infos.type);
         }
     }
 

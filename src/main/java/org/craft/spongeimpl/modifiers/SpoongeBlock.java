@@ -7,11 +7,17 @@ import org.spongepowered.api.block.*;
 public class SpoongeBlock implements BlockType
 {
 
+    //===========================================================
+    //               START OF SHADOW METHODS
+    //===========================================================
     @Shadow
     @Override
     public String getId()
     {
         return null;
     }
+    //===========================================================
+    //               END OF SHADOW METHODS
+    //===========================================================
 
 }

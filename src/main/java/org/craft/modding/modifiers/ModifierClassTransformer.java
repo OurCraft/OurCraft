@@ -98,6 +98,23 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 }
                 originalNode.fields.add(node);
             }
+            else
+            {
+                boolean found = false;
+                List<FieldNode> originalFields = originalNode.fields;
+                for(FieldNode fieldNode : originalFields)
+                {
+                    if(fieldNode.name.equals(node.name) && fieldNode.desc.equals(node.desc) && fieldNode.access == node.access)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found)
+                {
+                    Log.fatal("From modifier " + modifierNode.name + ": Tried to use field " + node.name + " of type " + node.desc + " as @Shadow while original class (" + originalNode.name + ") does not have this field.");
+                }
+            }
         }
     }
 
@@ -122,6 +139,23 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                     }
                 }
                 originalNode.methods.add(convertMethod(node, originalNode.name, modifierNode.name));
+            }
+            else if(ASMUtils.hasAnnotation(node, Shadow.class))
+            {
+                boolean found = false;
+                List<MethodNode> originalMethods = originalNode.methods;
+                for(MethodNode methodNode : originalMethods)
+                {
+                    if(methodNode.name.equals(node.name) && methodNode.desc.equals(node.desc) && methodNode.access == node.access)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found)
+                {
+                    Log.fatal("From modifier " + modifierNode.name + ": Tried to use method " + node.name + " of type " + node.desc + " as @Shadow while original class (" + originalNode.name + ") does not have this method.");
+                }
             }
         }
     }

@@ -8,13 +8,10 @@ import com.google.common.base.Optional;
 import org.craft.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
-import org.craft.modding.modifiers.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.events.world.*;
-import org.craft.spongeimpl.modifiers.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.util.scheduler.*;
-import org.craft.spongeimpl.world.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.Platform;
@@ -38,11 +35,6 @@ public class SpoongeMod implements Game
 
     public SpoongeMod()
     {
-        ModifierClassTransformer trans = new ModifierClassTransformer();
-        OurClassLoader.instance.addTransformer(trans);
-        trans.addModifier(SpoongeBlock.class);
-        trans.addModifier(SpoongeItem.class);
-        trans.addModifier(SpoongeWorld.class); // TODO: Find a way to modify this class
     }
 
     @OurModEventHandler

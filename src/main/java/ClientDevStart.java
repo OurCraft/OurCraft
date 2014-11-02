@@ -1,7 +1,11 @@
 import java.io.*;
 import java.util.*;
 
+import org.craft.*;
+import org.craft.modding.modifiers.*;
+import org.craft.spongeimpl.modifiers.*;
 import org.craft.utils.*;
+import org.reflections.*;
 
 public class ClientDevStart
 {
@@ -25,6 +29,25 @@ public class ClientDevStart
                 properties.put(current, arg);
             }
         }
+        ModifierClassTransformer modTrans = new ModifierClassTransformer();
+        Reflections reflections = new Reflections(OurClassLoader.instance);
+        for(Class<?> c : reflections.getSubTypesOf(ASMTransformerPlugin.class))
+        {
+            try
+            {
+                ASMTransformerPlugin transformers = (ASMTransformerPlugin) c.newInstance();
+                transformers.registerModifiers(modTrans);
+            }
+            catch(InstantiationException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        OurClassLoader.instance.addTransformer(modTrans);
         final File gameFolder = new File(properties.get("gamefolder"));
         SystemUtils.setGameFolder(gameFolder);
         LWJGLSetup.load(new File(gameFolder, "natives"));
