@@ -84,12 +84,11 @@ public class EventBus
                             }
                             else
                             {
-                                Log.error("No annotation for you! " + method.getName());
                             }
                         }
                         catch(NoSuchMethodException e1)
                         {
-                            // e1.printStackTrace();
+                            ;// e1.printStackTrace();
                         }
                     }
                 }

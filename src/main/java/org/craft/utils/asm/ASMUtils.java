@@ -23,9 +23,12 @@ public final class ASMUtils
         for(Object o : methodNode.visibleAnnotations)
         {
             AnnotationNode annotNode = (AnnotationNode) o;
-            if(annotNode.desc.contains(annot.getCanonicalName()))
+            if(annotNode.desc.contains(annot.getCanonicalName().replace(".", "/")))
             {
                 return true;
+            }
+            else
+            {
             }
         }
         return false;
@@ -38,9 +41,12 @@ public final class ASMUtils
         for(Object o : fieldNode.visibleAnnotations)
         {
             AnnotationNode annotNode = (AnnotationNode) o;
-            if(annotNode.desc.contains(annot.getCanonicalName()))
+            if(annotNode.desc.contains(annot.getCanonicalName().replace(".", "/")))
             {
                 return true;
+            }
+            else
+            {
             }
         }
         return false;
@@ -53,9 +59,12 @@ public final class ASMUtils
         for(Object o : classNode.visibleAnnotations)
         {
             AnnotationNode annotNode = (AnnotationNode) o;
-            if(annotNode.desc.contains(annot.getCanonicalName()))
+            if(annotNode.desc.contains(annot.getCanonicalName().replace(".", "/")))
             {
                 return true;
+            }
+            else
+            {
             }
         }
         return false;

@@ -28,6 +28,7 @@ public class SpongeTestPlugin
     public void onPostInit(PostInitializationEvent evt)
     {
         logger.debug("SpongePostInit!!!");
+        logger.debug("Dirt is " + evt.getGame().getRegistry().getBlock("ourcraft:dirt").get().getId());
     }
 
     @SpongeEventHandler

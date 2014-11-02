@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface BytecodeModifier
 {
-    Class<?> value();
+    String value();
 }

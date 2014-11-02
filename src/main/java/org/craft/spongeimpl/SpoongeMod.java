@@ -11,6 +11,7 @@ import org.craft.modding.events.*;
 import org.craft.modding.modifiers.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.events.world.*;
+import org.craft.spongeimpl.modifiers.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
@@ -39,6 +40,8 @@ public class SpoongeMod implements Game
         ModifierClassTransformer trans = new ModifierClassTransformer();
         try
         {
+            trans.addModifier(SpoongeBlock.class);
+            trans.addModifier(SpoongeItem.class);
             OurClassLoader.instance.addTransformer(trans);
         }
         catch(Exception e)

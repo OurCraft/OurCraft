@@ -62,7 +62,7 @@ public class OurClassLoader extends URLClassLoader
         addClassLoaderExclusion("java.");
         addClassLoaderExclusion("sun.");
         addClassLoaderExclusion("org.lwjgl.");
-        addClassLoaderExclusion("org.craft.modding.");
+        //        addClassLoaderExclusion("org.craft.modding.");
         addClassLoaderExclusion("org.apache.logging.");
         addClassLoaderExclusion("org.objectweb.asm.");
         addClassLoaderExclusion("org.reflections.");
@@ -145,7 +145,6 @@ public class OurClassLoader extends URLClassLoader
             {
                 return cached.get(transformedName);
             }
-            Log.message("INIT " + name);
 
             final String untransformedName = untransformName(name);
 
