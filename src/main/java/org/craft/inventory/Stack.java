@@ -1,17 +1,14 @@
 package org.craft.inventory;
 
 import org.craft.items.*;
-import org.spongepowered.api.item.inventory.*;
 
 public class Stack
 {
-    private static final long serialVersionUID = 441709013588165740L;
-
-    private int               stackSize;
-    private short             damage;
-    private IStackable        stackable;
-    private boolean           hasCustomMaxStackSize;
-    private int               customMaxStackSize;
+    private int        stackSize;
+    private short      damage;
+    private IStackable stackable;
+    private boolean    hasCustomMaxStackSize;
+    private int        customMaxStackSize;
 
     public Stack(IStackable stackable)
     {
@@ -41,7 +38,7 @@ public class Stack
         return stackable;
     }
 
-    public int compareTo(ItemStack o)
+    public int compareTo(Stack o)
     {
         return Integer.compare(stackSize, o.getQuantity());
     }

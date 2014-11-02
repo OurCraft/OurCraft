@@ -52,7 +52,7 @@ public class ASMEventListener implements IEventListener, Opcodes
                 }
                 catch(Exception e)
                 {
-                    ;//e.printStackTrace();
+                    ;
                 }
             }
         }
@@ -73,12 +73,6 @@ public class ASMEventListener implements IEventListener, Opcodes
             String desc = name.replace('.', '/');
             String instType = Type.getInternalName(callback.getDeclaringClass());
             String eventType = Type.getInternalName(callback.getParameterTypes()[0]);
-
-            /*System.out.println("Name:     " + name);
-            System.out.println("Desc:     " + desc);
-            System.out.println("InstType: " + instType);
-            System.out.println("Callback: " + callback.getName() + Type.getMethodDescriptor(callback));
-            System.out.println("Event:    " + eventType);*/
 
             cw.visit(V1_6, ACC_PUBLIC | ACC_SUPER, desc, null, "java/lang/Object", new String[]
             {

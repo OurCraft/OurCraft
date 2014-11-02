@@ -83,7 +83,21 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
         for(FieldNode node : fieldNodes)
         {
             if(!ASMUtils.hasAnnotation(node, Shadow.class))
+            {
+                if(ASMUtils.hasAnnotation(node, Overwrite.class))
+                {
+                    List<FieldNode> originalFields = originalNode.fields;
+                    for(FieldNode fieldNode : originalFields)
+                    {
+                        if(fieldNode.name.equals(node.name) && fieldNode.desc.equals(node.desc) && fieldNode.access == node.access)
+                        {
+                            originalNode.fields.remove(fieldNode);
+                            break;
+                        }
+                    }
+                }
                 originalNode.fields.add(node);
+            }
         }
     }
 
