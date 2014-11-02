@@ -55,7 +55,6 @@ public class OurClassLoader extends URLClassLoader
         cached = Maps.newHashMap();
         packageManifests = Maps.newHashMap();
         invalidNames = Lists.newArrayList();
-        transformers = Lists.newArrayList();
         classloaderExclusions = Lists.newArrayList();
         transformerExclusions = Lists.newArrayList();
         this.sources = Lists.newArrayList(sources);
@@ -78,6 +77,7 @@ public class OurClassLoader extends URLClassLoader
         addTransformerExclusion("org.bouncycastle.");
 
         cached.put(getClass().getCanonicalName(), getClass());
+        cached.put(IClassTransformer.class.getCanonicalName(), IClassTransformer.class);
     }
 
     public void addClassLoaderExclusion(String packageStart)
@@ -92,6 +92,8 @@ public class OurClassLoader extends URLClassLoader
 
     public void addTransformer(IClassTransformer transformer)
     {
+        if(transformers == null)
+            transformers = Lists.newArrayList();
         transformers.add(transformer);
     }
 
@@ -245,10 +247,11 @@ public class OurClassLoader extends URLClassLoader
 
     private byte[] runTransformers(String untransformedName, String transformedName, byte[] classBytes)
     {
-        for(IClassTransformer transformer : transformers)
-        {
-            classBytes = transformer.apply(untransformedName, transformedName, classBytes);
-        }
+        if(transformers != null)
+            for(IClassTransformer transformer : transformers)
+            {
+                classBytes = transformer.apply(untransformedName, transformedName, classBytes);
+            }
         return classBytes;
     }
 

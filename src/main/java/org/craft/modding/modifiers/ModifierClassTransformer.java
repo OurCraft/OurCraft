@@ -4,28 +4,29 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
+import org.craft.utils.*;
 import org.craft.utils.asm.*;
 import org.objectweb.asm.*;
 
 public class ModifierClassTransformer implements IClassTransformer
 {
 
-    private List<String> toModifiers;
+    private List<String> toModify;
 
     public ModifierClassTransformer()
     {
-        toModifiers = Lists.newArrayList();
+        toModify = Lists.newArrayList();
     }
 
     public void addClassToModify(Class<?> cls)
     {
-        toModifiers.add(Type.getInternalName(cls));
+        toModify.add(Type.getInternalName(cls));
     }
 
     @Override
     public byte[] apply(String untransformedName, String transformedName, byte[] classBytes)
     {
-        //        Log.message(">>> " + transformedName);
+        Log.message(">>> " + transformedName);
         ClassReader reader = new ClassReader(classBytes);
         ClassWriter cw = new ClassWriter(0);
         reader.accept(cw, 0);

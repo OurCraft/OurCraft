@@ -171,7 +171,7 @@ public class AddonsLoader
             }
         }
 
-        Reflections reflection = new Reflections(classLoader);
+        Reflections reflection = new Reflections(OurClassLoader.instance);
         for(Class<? extends Annotation> c : handlers.keySet())
         {
             Set<Class<?>> list = reflection.getTypesAnnotatedWith(c);
