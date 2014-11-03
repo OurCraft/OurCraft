@@ -1,7 +1,5 @@
 package org.craft.commands;
 
-import org.spongepowered.api.service.command.*;
-
 public final class Commands
 {
 
@@ -18,7 +16,7 @@ public final class Commands
         commandDispatcher.registerCommand(command, aliases);
     }
 
-    public static CommandDispatcher getDispatcher()
+    public static CommandsDispatcher getDispatcher()
     {
         return commandDispatcher;
     }

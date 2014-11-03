@@ -7,7 +7,6 @@ import java.util.logging.*;
 import javax.swing.*;
 
 import org.craft.commands.*;
-import org.spongepowered.api.util.command.*;
 
 public class ServerGui extends JFrame
 {
@@ -78,12 +77,12 @@ public class ServerGui extends JFrame
                     if(txt.startsWith("/"))
                     {
                         String command = txt.substring(1);
-                        CommandMapping callable = Commands.getDispatcher().get(command).get();
+                        OCommandMapping callable = Commands.getDispatcher().get(command);
                         if(callable != null)
                         {
                             try
                             {
-                                callable.getCallable().call((CommandSource) OurCraftServer.getServer(), "", null);
+                                callable.getCommand().invoke((ICommandSender) OurCraftServer.getServer(), "", null);
                             }
                             catch(CommandException e1)
                             {

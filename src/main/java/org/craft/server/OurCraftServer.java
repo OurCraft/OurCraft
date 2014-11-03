@@ -26,7 +26,7 @@ import org.craft.world.populators.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.*;
 
-public class OurCraftServer implements OurCraftInstance
+public class OurCraftServer implements OurCraftInstance, ICommandSender
 {
 
     private static OurCraftServer instance;
@@ -264,6 +264,12 @@ public class OurCraftServer implements OurCraftInstance
     public boolean isServer()
     {
         return true;
+    }
+
+    @Override
+    public void sendMessage(String text)
+    {
+        Log.message("[COMMAND] " + text);
     }
 
 }

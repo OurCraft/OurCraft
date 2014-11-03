@@ -4,42 +4,36 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
-import org.spongepowered.api.util.command.*;
-
-public class OCommandMapping implements CommandMapping
+public class OCommandMapping
 {
 
-    private CommandCallable command;
-    private String[]        aliases;
+    private AbstractCommand command;
+    private List<String>    aliases;
 
-    public OCommandMapping(CommandCallable callable, String[] alias)
+    public OCommandMapping(AbstractCommand command, String[] aliases)
     {
-        this.command = callable;
-        this.aliases = alias;
+        this(command, Lists.newArrayList(aliases));
     }
 
-    @Override
+    public OCommandMapping(AbstractCommand command, List<String> aliases)
+    {
+        this.command = command;
+        this.aliases = aliases;
+    }
+
     public String getPrimaryAlias()
     {
-        return aliases[0];
+        return aliases.get(0);
     }
 
-    @Override
-    public Set<String> getAllAliases()
+    public List<String> getAllAliases()
     {
-        return Sets.newHashSet(aliases);
+        return aliases;
     }
 
-    @Override
-    public CommandCallable getCallable()
+    public AbstractCommand getCommand()
     {
         return command;
-    }
-
-    @Override
-    public Description getDescription()
-    {
-        return command.getDescription();
     }
 
 }

@@ -2,15 +2,13 @@ package org.craft.commands;
 
 import java.util.*;
 
-import org.spongepowered.api.util.command.*;
-
 public class HelpCommand extends AbstractCommand
 {
 
     @Override
-    public boolean call(CommandSource source, String arguments, List<String> parents) throws CommandException
+    public boolean invoke(ICommandSender source, String arguments, List<String> parents) throws CommandException
     {
-        for(CommandMapping mapping : Commands.getDispatcher().getCommands())
+        for(OCommandMapping mapping : Commands.getDispatcher().getCommands())
         {
             String helpText = "";
             Iterator<String> it = mapping.getAllAliases().iterator();
@@ -24,17 +22,11 @@ public class HelpCommand extends AbstractCommand
                 helpText += "'" + alias + "'";
             }
             helpText += ": ";
-            if(mapping.getDescription() != null)
-            {
-                String desc = "";
-                if(mapping.getDescription().getShortDescription() != null)
-                    desc += " - " + mapping.getDescription().getShortDescription();
-                helpText += mapping.getDescription().getUsage() + desc;
-            }
-            else
-            {
-                helpText += "No description available";
-            }
+            String desc = "";
+            desc = "No description available";
+            if(mapping.getCommand().getShortCommandDescription() != null)
+                desc = " - " + mapping.getCommand().getShortCommandDescription();
+            helpText += mapping.getCommand().getUsage() + desc;
             source.sendMessage(helpText);
         }
         return true;

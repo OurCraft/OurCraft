@@ -4,63 +4,54 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
-import org.spongepowered.api.service.command.*;
-import org.spongepowered.api.util.command.*;
-
-public class CommandsDispatcher implements CommandDispatcher
+public class CommandsDispatcher
 {
 
-    private ArrayList<CommandMapping> commandMappings = new ArrayList<CommandMapping>();
+    private ArrayList<OCommandMapping> commandMappings = new ArrayList<OCommandMapping>();
 
-    @Override
-    public void registerCommand(CommandCallable callable, String... alias)
+    public void registerCommand(AbstractCommand command, String... alias)
     {
-        commandMappings.add(new OCommandMapping(callable, alias));
+        commandMappings.add(new OCommandMapping(command, alias));
     }
 
-    @Override
-    public Set<CommandMapping> getCommands()
+    public List<OCommandMapping> getCommands()
     {
-        return Sets.newHashSet(commandMappings);
+        return commandMappings;
     }
 
-    @Override
-    public Collection<String> getPrimaryAliases()
+    public List<String> getPrimaryAliases()
     {
         ArrayList<String> list = Lists.newArrayList();
-        for(CommandMapping mapping : commandMappings)
+        for(OCommandMapping mapping : commandMappings)
         {
             list.add(mapping.getPrimaryAlias());
         }
         return list;
     }
 
-    @Override
-    public Collection<String> getAliases()
+    public List<String> getAliases()
     {
         ArrayList<String> list = Lists.newArrayList();
-        for(CommandMapping mapping : commandMappings)
+        for(OCommandMapping mapping : commandMappings)
         {
             list.addAll(mapping.getAllAliases());
         }
         return list;
     }
 
-    @Override
-    public com.google.common.base.Optional<CommandMapping> get(String alias)
+    public OCommandMapping get(String alias)
     {
-        for(CommandMapping mapping : commandMappings)
+        for(OCommandMapping mapping : commandMappings)
         {
             if(mapping.getAllAliases().contains(alias))
-                return com.google.common.base.Optional.of(mapping);
+                return mapping;
         }
-        return com.google.common.base.Optional.absent();
+        return null;
     }
 
-    @Override
     public boolean contains(String alias)
     {
-        for(CommandMapping mapping : commandMappings)
+        for(OCommandMapping mapping : commandMappings)
         {
             if(mapping.getAllAliases().contains(alias))
                 return true;
@@ -68,28 +59,9 @@ public class CommandsDispatcher implements CommandDispatcher
         return false;
     }
 
-    @Override
-    public boolean call(CommandSource source, String arguments, List<String> parents) throws CommandException
+    public boolean call(AbstractCommand command, String arguments, List<String> parents) throws CommandException
     {
-        return false;
-    }
-
-    @Override
-    public Description getDescription()
-    {
-        return null;
-    }
-
-    @Override
-    public boolean testPermission(CommandSource source)
-    {
-        return true;
-    }
-
-    @Override
-    public List<String> getSuggestions(CommandSource source, String arguments) throws CommandException
-    {
-        return null;
+        return command.invoke(null, arguments, parents);
     }
 
 }

@@ -2,40 +2,19 @@ package org.craft.commands;
 
 import java.util.*;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.*;
 
-import org.spongepowered.api.util.command.*;
-
-public abstract class AbstractCommand implements CommandCallable, Description
+public abstract class AbstractCommand
 {
 
-    @Override
-    public List<String> getSuggestions(CommandSource source, String arguments) throws CommandException
+    public abstract boolean invoke(ICommandSender source, String argument, List<String> parents) throws CommandException;
+
+    public List<String> getSuggestions(ICommandSender source, String arguments)
     {
         return Lists.newArrayList();
     }
 
-    @Deprecated
-    public final Optional<String> getShortDescription()
-    {
-        return Optional.of(getShortCommandDescription());
-    }
-
-    @Deprecated
-    public final Optional<String> getHelp()
-    {
-        return Optional.of(getCommandHelp());
-    }
-
-    @Override
-    public Description getDescription()
-    {
-        return this;
-    }
-
-    @Override
-    public boolean testPermission(CommandSource source)
+    public boolean testPermission(ICommandSender source)
     {
         return true;
     }
@@ -50,7 +29,6 @@ public abstract class AbstractCommand implements CommandCallable, Description
         return null;
     }
 
-    @Override
     public String getUsage()
     {
         return getName();
@@ -58,7 +36,6 @@ public abstract class AbstractCommand implements CommandCallable, Description
 
     public abstract String getName();
 
-    @Override
     public List<String> getPermissions()
     {
         return Lists.newArrayList();
