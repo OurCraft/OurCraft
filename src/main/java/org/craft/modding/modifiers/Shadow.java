@@ -8,9 +8,10 @@ import java.lang.annotation.*;
  */
 @Target(
 {
-        ElementType.METHOD, ElementType.FIELD
+        ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Shadow
 {
+    String prefix() default "shadow$";
 }

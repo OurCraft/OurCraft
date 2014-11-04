@@ -13,19 +13,6 @@ public class CrashReport
             null, null, "Well, this was a disappointment.", "I'm sorry Dave. I think I can't let you do that", "Here, have a gift http://xkcd.com/953/ ", "This computer is on fiiiiiiiiiiiiiiiiiiiire!"
                                      };
 
-    static
-    {
-        try
-        {
-            comments[0] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
-            comments[1] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     public static class UndefinedException extends Exception
     {
 
@@ -47,6 +34,19 @@ public class CrashReport
     public CrashReport(Throwable throwable)
     {
         this.exception = throwable;
+        try
+        {
+            if(OurCraft.getOurCraft() != null && comments[0] == null)
+            {
+                comments[0] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+                comments[1] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     public void printStack()

@@ -13,6 +13,7 @@ public class SpoongeTransformers implements ASMTransformerPlugin
         trans.addModifier(SpoongeBlock.class);
         trans.addModifier(SpoongeItem.class);
         trans.addModifier(SpoongeItemStack.class);
+        trans.addModifier(SpoongeCommandMapping.class);
         trans.addModifier(SpoongeCommandsDispatcher.class);
         trans.addModifier(SpoongeWorld.class); // TODO: Find a way to modify this class
     }

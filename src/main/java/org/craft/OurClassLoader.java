@@ -12,6 +12,7 @@ import com.google.common.collect.*;
 
 import org.craft.utils.*;
 import org.craft.utils.asm.*;
+import org.craft.utils.crash.*;
 
 /**
  * Adapted from Mojang AB's Legacy Launcher code:<br/>
@@ -68,6 +69,7 @@ public class OurClassLoader extends URLClassLoader
         addClassLoaderExclusion("org.reflections.");
         addClassLoaderExclusion("javassist.");
         addClassLoaderExclusion("com.google.");
+        addClassLoaderExclusion("org.slf4j.");
 
         // transformer exclusions
         addTransformerExclusion("javax.");
@@ -95,6 +97,7 @@ public class OurClassLoader extends URLClassLoader
     {
         if(transformers == null)
             transformers = Lists.newArrayList();
+        transformer.init(this);
         transformers.add(transformer);
     }
 
@@ -114,6 +117,10 @@ public class OurClassLoader extends URLClassLoader
     @Override
     public Class<?> findClass(final String name) throws ClassNotFoundException
     {
+        if(cached.containsKey(name))
+        {
+            return cached.get(name);
+        }
         if(invalidNames.contains(name))
         {
             throw new ClassNotFoundException(name);
@@ -134,10 +141,6 @@ public class OurClassLoader extends URLClassLoader
                     throw e;
                 }
             }
-        }
-        if(cached.containsKey(name))
-        {
-            return cached.get(name);
         }
         try
         {
@@ -213,6 +216,7 @@ public class OurClassLoader extends URLClassLoader
         catch(Throwable e)
         {
             invalidNames.add(name);
+            new CrashReport(e).printStack();
             throw new ClassNotFoundException(name, e);
         }
     }

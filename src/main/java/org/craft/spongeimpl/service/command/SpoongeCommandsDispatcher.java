@@ -19,9 +19,47 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     //               START OF SHADOW METHODS
     //===========================================================
     @Shadow
+    public SpoongeCommandsDispatcher()
+    {
+        ;
+    }
+
+    @Shadow
     public void registerCommand(AbstractCommand command, String... alias)
     {
         ;
+    }
+
+    @Shadow
+    @Override
+    public Collection<String> getPrimaryAliases()
+    {
+        return null;
+    }
+
+    @Shadow
+    @Override
+    public Collection<String> getAliases()
+    {
+        return null;
+    }
+
+    @Shadow
+    public Set<OCommandMapping> getCommandSet()
+    {
+        return null;
+    }
+
+    @Shadow
+    public OCommandMapping getFromAlias(String alias)
+    {
+        return null;
+    }
+
+    @Shadow
+    public boolean containsAlias(String alias)
+    {
+        return false;
     }
 
     //===========================================================
@@ -36,36 +74,24 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     @Override
     public Set<CommandMapping> getCommands()
     {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Collection<String> getPrimaryAliases()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Collection<String> getAliases()
-    {
-        // TODO Auto-generated method stub
-        return null;
+        List<CommandMapping> mappings = Lists.newArrayList();
+        for(OCommandMapping command : getCommandSet())
+        {
+            mappings.add((CommandMapping) command);
+        }
+        return Sets.newHashSet(mappings);
     }
 
     @Override
     public Optional<CommandMapping> get(String alias)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.of((CommandMapping) getFromAlias(alias));
     }
 
     @Override
     public boolean contains(String alias)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return containsAlias(alias);
     }
 
     @Override

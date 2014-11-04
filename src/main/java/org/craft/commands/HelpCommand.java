@@ -8,7 +8,7 @@ public class HelpCommand extends AbstractCommand
     @Override
     public boolean invoke(ICommandSender source, String arguments, List<String> parents) throws CommandException
     {
-        for(OCommandMapping mapping : Commands.getDispatcher().getCommands())
+        for(OCommandMapping mapping : Commands.getDispatcher().getCommandSet())
         {
             String helpText = "";
             Iterator<String> it = mapping.getAllAliases().iterator();

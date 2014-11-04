@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
+import org.craft.*;
 import org.craft.utils.*;
 import org.craft.utils.asm.*;
 import org.objectweb.asm.*;
@@ -18,6 +19,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
 {
 
     private HashMap<String, String> toModify;
+    private OurClassLoader          classloader;
 
     public ModifierClassTransformer()
     {
@@ -33,6 +35,14 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             String toModifyClass = modifier.getAnnotation(BytecodeModifier.class).value();
             Log.message("Added modifier " + modifier + " to " + toModifyClass);
             toModify.put(toModifyClass, Type.getInternalName(modifier));
+            try
+            {
+                classloader.findClass(toModifyClass);
+            }
+            catch(ClassNotFoundException e)
+            {
+                ;
+            }
         }
     }
 
@@ -50,6 +60,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 ClassNode originalNode = new ClassNode();
                 modifierReader.accept(modifierNode, 0);
                 originalReader.accept(originalNode, 0);
+                Log.message("Started to modify " + originalNode.name + " using " + modifierNode.name);
 
                 if(!modifierNode.superName.equals(originalNode.superName))
                 {
@@ -64,6 +75,12 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 ClassReader debugReader = new ClassReader(bytes);
                 ClassNode debugNode = new ClassNode();
                 debugReader.accept(debugNode, 0);
+
+                List<MethodNode> debugMethods = debugNode.methods;
+                for(MethodNode mNode : debugMethods)
+                {
+                    Log.message(">> Method at end: " + mNode.access + " " + mNode.desc + " " + mNode.name + " signature: " + mNode.signature);
+                }
 
                 Log.message("Succesfully modified " + originalNode.name + " using " + modifierNode.name);
                 return bytes;
@@ -102,9 +119,21 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             {
                 boolean found = false;
                 List<FieldNode> originalFields = originalNode.fields;
-                for(FieldNode fieldNode : originalFields)
+                AnnotationNode shadowAnnot = ASMUtils.getAnnotation(node, Shadow.class);
+                String prefix = (String) ASMUtils.toMap(shadowAnnot.values).get("prefix");
+                if(prefix == null)
+                    prefix = "shadow$";
+                for(FieldNode originalField : originalFields)
                 {
-                    if(fieldNode.name.equals(node.name) && fieldNode.desc.equals(node.desc) && fieldNode.access == node.access)
+                    String mName = originalField.name;
+                    if(node.name.startsWith(prefix))
+                    {
+                        node.name = node.name.substring(prefix.length(), node.name.length());
+                        found = true;
+                        Log.message(">>> REPLACED NAME " + mName + " TO " + originalField.name);
+                        break;
+                    }
+                    if(node.name.equals(mName) && originalField.desc.equals(node.desc) && originalField.access == node.access)
                     {
                         found = true;
                         break;
@@ -143,10 +172,24 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             else if(ASMUtils.hasAnnotation(node, Shadow.class))
             {
                 boolean found = false;
+                AnnotationNode shadowAnnot = ASMUtils.getAnnotation(node, Shadow.class);
                 List<MethodNode> originalMethods = originalNode.methods;
-                for(MethodNode methodNode : originalMethods)
+                String prefix = (String) ASMUtils.toMap(shadowAnnot.values).get("prefix");
+                if(prefix == null)
+                    prefix = "shadow$";
+                for(MethodNode originalMethod : originalMethods)
                 {
-                    if(methodNode.name.equals(node.name) && methodNode.desc.equals(node.desc) && methodNode.access == node.access)
+                    String mName = originalMethod.name;
+                    if(node.name.startsWith(prefix))
+                    {
+                        node.name = node.name.substring(prefix.length(), node.name.length());
+                        found = true;
+                        Log.message(">>> REPLACED NAME " + mName + " TO " + originalMethod.name);
+                        originalNode.methods.remove(originalMethod);
+                        originalNode.methods.add(convertMethod(node, originalNode.name, modifierNode.name));
+                        break;
+                    }
+                    if(node.name.equals(mName) && originalMethod.desc.equals(node.desc))
                     {
                         found = true;
                         break;
@@ -178,6 +221,32 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             if(insn instanceof MethodInsnNode)
             {
                 MethodInsnNode methodInsn = (MethodInsnNode) insn;
+
+                MethodNode node;
+                try
+                {
+                    node = getNodeFromInsn(methodInsn);
+                    if(node != null)
+                    {
+                        AnnotationNode shadowAnnot = ASMUtils.getAnnotation(node, Shadow.class);
+                        if(shadowAnnot != null)
+                        {
+                            String prefix = (String) ASMUtils.toMap(shadowAnnot.values).get("prefix");
+                            if(prefix == null)
+                                prefix = "shadow$";
+                            if(methodInsn.name.startsWith(prefix))
+                            {
+                                String oldName = methodInsn.name;
+                                methodInsn.name = methodInsn.name.substring(prefix.length(), methodInsn.name.length());
+                                Log.message(">>>>> CHANGED " + oldName + " to " + methodInsn.name);
+                            }
+                        }
+                    }
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
                 if(methodInsn.owner.equals(modified))
                 {
                     methodInsn.owner = original;
@@ -186,6 +255,27 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             else if(insn instanceof FieldInsnNode)
             {
                 FieldInsnNode fieldInsn = (FieldInsnNode) insn;
+                try
+                {
+                    FieldNode node = getNodeFromInsn(fieldInsn);
+                    AnnotationNode shadowAnnot = ASMUtils.getAnnotation(node, Shadow.class);
+                    if(shadowAnnot != null)
+                    {
+                        String prefix = (String) ASMUtils.toMap(shadowAnnot.values).get("prefix");
+                        if(prefix == null)
+                            prefix = "shadow$";
+                        if(fieldInsn.name.startsWith(prefix))
+                        {
+                            String oldName = fieldInsn.name;
+                            fieldInsn.name = fieldInsn.name.substring(prefix.length(), fieldInsn.name.length());
+                            Log.message(">>>>> CHANGED " + oldName + " to " + fieldInsn.name);
+                        }
+                    }
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
                 if(fieldInsn.owner.equals(modified))
                 {
                     fieldInsn.owner = original;
@@ -193,6 +283,54 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             }
         }
         return method;
+    }
+
+    @SuppressWarnings("unchecked")
+    private FieldNode getNodeFromInsn(FieldInsnNode insn) throws IOException
+    {
+        ClassReader reader = new ClassReader(insn.owner);
+        ClassNode node = new ClassNode();
+        reader.accept(node, 0);
+        List<FieldNode> fields = node.fields;
+        for(FieldNode field : fields)
+        {
+            if(field.name.equals(insn.name) && field.desc.equals(insn.desc))
+                return field;
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private MethodNode getNodeFromInsn(MethodInsnNode insn) throws IOException
+    {
+        ClassReader reader = new ClassReader(insn.owner);
+        ClassNode node = new ClassNode();
+        reader.accept(node, 0);
+        List<MethodNode> methods = node.methods;
+        for(MethodNode method : methods)
+        {
+            if(method.name.equals(insn.name) && method.desc.equals(insn.desc))
+            {
+                AnnotationNode shadowNode = ASMUtils.getAnnotation(method, Shadow.class);
+                if(shadowNode != null)
+                {
+                    String prefix = (String) ASMUtils.toMap(shadowNode.values).get("prefix");
+                    if(prefix == null)
+                        prefix = "shadow$";
+                    Log.message(">>> PREFIX: " + prefix);
+                    if(insn.name.equals(prefix + method.name))
+                        return method;
+                }
+                return method;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void init(OurClassLoader cl)
+    {
+        this.classloader = cl;
     }
 
 }

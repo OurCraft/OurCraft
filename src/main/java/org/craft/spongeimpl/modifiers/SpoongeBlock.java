@@ -16,6 +16,10 @@ public class SpoongeBlock implements BlockType
     {
         return null;
     }
+
+    @Shadow
+    public String shadow$id;
+
     //===========================================================
     //               END OF SHADOW METHODS
     //===========================================================

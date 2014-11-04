@@ -77,7 +77,7 @@ public class ServerGui extends JFrame
                     if(txt.startsWith("/"))
                     {
                         String command = txt.substring(1);
-                        OCommandMapping callable = Commands.getDispatcher().get(command);
+                        OCommandMapping callable = Commands.getDispatcher().getFromAlias(command);
                         if(callable != null)
                         {
                             try

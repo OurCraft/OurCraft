@@ -14,12 +14,12 @@ public class CommandsDispatcher
         commandMappings.add(new OCommandMapping(command, alias));
     }
 
-    public List<OCommandMapping> getCommands()
+    public Set<OCommandMapping> getCommandSet()
     {
-        return commandMappings;
+        return Sets.newHashSet(commandMappings);
     }
 
-    public List<String> getPrimaryAliases()
+    public Collection<String> getPrimaryAliases()
     {
         ArrayList<String> list = Lists.newArrayList();
         for(OCommandMapping mapping : commandMappings)
@@ -29,7 +29,7 @@ public class CommandsDispatcher
         return list;
     }
 
-    public List<String> getAliases()
+    public Collection<String> getAliases()
     {
         ArrayList<String> list = Lists.newArrayList();
         for(OCommandMapping mapping : commandMappings)
@@ -39,7 +39,7 @@ public class CommandsDispatcher
         return list;
     }
 
-    public OCommandMapping get(String alias)
+    public OCommandMapping getFromAlias(String alias)
     {
         for(OCommandMapping mapping : commandMappings)
         {
@@ -49,7 +49,7 @@ public class CommandsDispatcher
         return null;
     }
 
-    public boolean contains(String alias)
+    public boolean containsAlias(String alias)
     {
         for(OCommandMapping mapping : commandMappings)
         {
@@ -57,11 +57,6 @@ public class CommandsDispatcher
                 return true;
         }
         return false;
-    }
-
-    public boolean call(AbstractCommand command, String arguments, List<String> parents) throws CommandException
-    {
-        return command.invoke(null, arguments, parents);
     }
 
 }

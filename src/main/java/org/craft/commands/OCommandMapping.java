@@ -8,25 +8,27 @@ public class OCommandMapping
 {
 
     private AbstractCommand command;
-    private List<String>    aliases;
+    private Set<String>     aliases;
+    private String          primary;
 
     public OCommandMapping(AbstractCommand command, String[] aliases)
     {
-        this(command, Lists.newArrayList(aliases));
+        this(command, aliases[0], Sets.newHashSet(aliases));
     }
 
-    public OCommandMapping(AbstractCommand command, List<String> aliases)
+    public OCommandMapping(AbstractCommand command, String primary, Set<String> aliases)
     {
         this.command = command;
+        this.primary = primary;
         this.aliases = aliases;
     }
 
     public String getPrimaryAlias()
     {
-        return aliases.get(0);
+        return primary;
     }
 
-    public List<String> getAllAliases()
+    public Set<String> getAllAliases()
     {
         return aliases;
     }

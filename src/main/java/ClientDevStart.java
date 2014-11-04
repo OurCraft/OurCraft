@@ -35,6 +35,7 @@ public class ClientDevStart
             }
         }
         ModifierClassTransformer modTrans = new ModifierClassTransformer();
+        OurClassLoader.instance.addTransformer(modTrans);
         Reflections reflections = new Reflections(OurClassLoader.instance);
         for(Class<?> c : reflections.getSubTypesOf(ASMTransformerPlugin.class))
         {
@@ -52,7 +53,6 @@ public class ClientDevStart
                 e.printStackTrace();
             }
         }
-        OurClassLoader.instance.addTransformer(modTrans);
         final File gameFolder = new File(properties.get("gamefolder"));
         SystemUtils.setGameFolder(gameFolder);
         LWJGLSetup.load(new File(gameFolder, "natives"));

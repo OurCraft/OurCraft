@@ -118,7 +118,13 @@ public class Log
     @NonLoggable
     public static void fatal(String string)
     {
-        OurCraft.getOurCraft().crash(new CrashReport(string));
+        if(OurCraft.getOurCraft() != null)
+            OurCraft.getOurCraft().crash(new CrashReport(string));
+        else
+        {
+            new CrashReport(string).printStack();
+            System.exit(-2);
+        }
     }
 
     @NonLoggable
