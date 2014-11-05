@@ -15,6 +15,7 @@ public abstract class FontRenderer implements IDisposable
         public int    color;
         public int    posX;
         public int    posY;
+        public float  scale;
 
         public TextInfos()
         {
@@ -30,6 +31,7 @@ public abstract class FontRenderer implements IDisposable
             result = MULTIPLIER * result + posX;
             result = MULTIPLIER * result + posY;
             result = MULTIPLIER * result + color;
+            result = MULTIPLIER * result + Float.floatToIntBits(scale);
             result = MULTIPLIER * result + text.hashCode();
 
             return result;
@@ -40,7 +42,7 @@ public abstract class FontRenderer implements IDisposable
             if(o instanceof TextInfos)
             {
                 TextInfos infos = (TextInfos) o;
-                return infos.text.equals(text) && infos.color == color && infos.posX == posX && infos.posY == posY;
+                return infos.text.equals(text) && infos.color == color && infos.posX == posX && infos.posY == posY && infos.scale == scale;
             }
             return false;
         }
@@ -52,12 +54,14 @@ public abstract class FontRenderer implements IDisposable
     protected OpenGLBuffer                   buffer;
     private HashMap<TextInfos, OpenGLBuffer> cache;
     private TextInfos                        textInfos;
+    private float                            scale;
 
     /**
      * Creates font renderer for given supportedChars and given texture atlas
      */
     public FontRenderer(TextureAtlas atlas, String supportedChars)
     {
+        this.scale = 1f;
         textInfos = new TextInfos();
         cache = new HashMap<TextInfos, OpenGLBuffer>();
         this.atlas = atlas;
@@ -70,7 +74,7 @@ public abstract class FontRenderer implements IDisposable
      */
     public void drawShadowedString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
-        drawString(text, 0xFF000000, xo + 1, yo + 1, renderEngine);
+        drawString(text, 0xFF000000, (int) (xo + scale), (int) (yo + scale), renderEngine);
         drawString(text, color, xo, yo, renderEngine);
     }
 
@@ -89,6 +93,7 @@ public abstract class FontRenderer implements IDisposable
         textInfos.color = color;
         textInfos.posX = xo;
         textInfos.posY = yo;
+        textInfos.scale = scale;
         if(!text.contains(TextFormatting.OBFUSCATED.toString()))
         {
             if(cache.containsKey(textInfos))
@@ -190,10 +195,10 @@ public abstract class FontRenderer implements IDisposable
                 }
                 TextureRegion region = atlas.getTiles()[xPos][yPos];
 
-                buffer.addVertex(Vertex.get(Vector3.get(x - 2, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
-                buffer.addVertex(Vertex.get(Vector3.get(x + 2 + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
-                buffer.addVertex(Vertex.get(Vector3.get(x + 2 + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
-                buffer.addVertex(Vertex.get(Vector3.get(x - 2, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
+                buffer.addVertex(Vertex.get(Vector3.get(x - 2 * scale, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                buffer.addVertex(Vertex.get(Vector3.get(x + (2 + getCharWidth(c)) * scale, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                buffer.addVertex(Vertex.get(Vector3.get(x + (2 + getCharWidth(c)) * scale, y + getCharHeight(c) * scale, 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                buffer.addVertex(Vertex.get(Vector3.get(x - 2 * scale, y + (getCharHeight(c)) * scale, 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
 
                 buffer.addIndex(currentIndex + 0);
                 buffer.addIndex(currentIndex + 2);
@@ -207,7 +212,7 @@ public abstract class FontRenderer implements IDisposable
             }
             if(c == ' ')
             {
-                x += getCharSpacing(c, next) + getCharWidth(c);
+                x += getCharSpacing(c, next) * scale + getCharWidth(c) * scale;
                 continue;
             }
             int index = getIndex(c);
@@ -225,17 +230,17 @@ public abstract class FontRenderer implements IDisposable
                 if(!italic)
                 {
                     buffer.addVertex(Vertex.get(Vector3.get(x, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
-                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c), y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
-                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
-                    buffer.addVertex(Vertex.get(Vector3.get(x, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c) * scale, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c) * scale, y + getCharHeight(c) * scale, 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x, y + getCharHeight(c) * scale, 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
                 }
                 else
                 {
                     float italicFactor = -2.5f;
-                    buffer.addVertex(Vertex.get(Vector3.get(x - italicFactor, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
-                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c) - italicFactor, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
-                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c), y + getCharHeight(c), 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
-                    buffer.addVertex(Vertex.get(Vector3.get(x + italicFactor, y + getCharHeight(c), 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x - italicFactor * scale, y, 0), Vector2.get(region.getMinU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x + (getCharWidth(c) - italicFactor) * scale, y, 0), Vector2.get(region.getMaxU(), region.getMaxV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x + getCharWidth(c) * scale, y + getCharHeight(c) * scale, 0), Vector2.get(region.getMaxU(), region.getMinV()), colorVec));
+                    buffer.addVertex(Vertex.get(Vector3.get(x + italicFactor * scale, y + getCharHeight(c) * scale, 0), Vector2.get(region.getMinU(), region.getMinV()), colorVec));
                 }
 
                 buffer.addIndex(currentIndex + 0);
@@ -248,7 +253,7 @@ public abstract class FontRenderer implements IDisposable
 
                 currentIndex += 4;
 
-                x += Math.floor(getCharWidth(c) + getCharSpacing(c, next));
+                x += Math.floor(getCharWidth(c) * scale + getCharSpacing(c, next) * scale);
             }
         }
         buffer.upload();
@@ -261,9 +266,20 @@ public abstract class FontRenderer implements IDisposable
             textInfos1.color = color;
             textInfos1.posX = xo;
             textInfos1.posY = yo;
+            textInfos.scale = scale;
             cache.put(textInfos1, buffer);
             buffer = new OpenGLBuffer();
         }
+    }
+
+    public void setScale(float scale)
+    {
+        this.scale = scale;
+    }
+
+    public float getScale()
+    {
+        return scale;
     }
 
     protected int getIndex(char c)
@@ -337,7 +353,7 @@ public abstract class FontRenderer implements IDisposable
                     continue;
                 }
             }
-            l += getCharWidth(c) + getCharSpacing(c, next);
+            l += getCharWidth(c) * scale + getCharSpacing(c, next) * scale;
         }
         return l;
     }

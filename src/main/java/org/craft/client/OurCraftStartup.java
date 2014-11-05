@@ -3,13 +3,20 @@ package org.craft.client;
 import java.io.*;
 import java.util.*;
 
+import org.craft.*;
 import org.craft.utils.*;
+import org.craft.utils.crash.*;
 
 public class OurCraftStartup
 {
 
     public static void main(String[] args)
     {
+        if(!(ClassLoader.getSystemClassLoader() instanceof OurClassLoader))
+        {
+            new CrashReport("Wrong classloader at launch. Please add -Djava.system.class.loader=org.craft.OurClassLoader in VM arguments").printStack();
+            System.exit(-2);
+        }
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("username", "Player_" + System.currentTimeMillis());
         properties.put("lang", "en_US");

@@ -69,6 +69,20 @@ public class GuiIngame extends Gui
             renderEngine.setModelviewMatrix(m);
         }
 
+        String mainTitle = "<Insert main title here>";
+        String subTitle = "<Insert sub title here>";
+        getFontRenderer().setScale(1.15f);
+        float titleX = oc.getDisplayWidth() / 2;
+        float titleY = oc.getDisplayHeight() / 2;
+        float f = (float) oc.getDisplayWidth() / getFontRenderer().getTextWidth(mainTitle);
+        getFontRenderer().setScale(f);
+
+        getFontRenderer().drawShadowedString(mainTitle, 0xFFFFFFFF, (int) (titleX - (int) getFontRenderer().getTextWidth(mainTitle) / 2), (int) (titleY - getFontRenderer().getCharHeight('A') * getFontRenderer().getScale()), renderEngine);
+        getFontRenderer().setScale(1.85f);
+        float f2 = (float) oc.getDisplayWidth() / getFontRenderer().getTextWidth(mainTitle);
+        getFontRenderer().setScale(f2);
+        getFontRenderer().drawShadowedString(subTitle, 0xFFFFFFFF, (int) (titleX - (int) getFontRenderer().getTextWidth(subTitle) / 2), (int) (titleY), renderEngine);
+        getFontRenderer().setScale(1);
     }
 
     @Override

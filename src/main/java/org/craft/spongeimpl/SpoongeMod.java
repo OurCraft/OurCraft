@@ -174,15 +174,15 @@ public class SpoongeMod implements Game
     @Override
     public Title createTitle()
     {
-        // TODO Implement Minecraft 1.8 Tile
-        throw new UnsupportedOperationException("OurCraft don't support Minecraft Title");
+        // TODO Implement Minecraft 1.8 Titles
+        throw new UnsupportedOperationException("OurCraft doesn't support Minecraft Title");
     }
 
     @Override
     public Title updateTitle()
     {
-        // TODO Implement Minecraft 1.8 Tile
-        throw new UnsupportedOperationException("OurCraft don't support Minecraft Title");
+        // TODO Implement Minecraft 1.8 Titles
+        throw new UnsupportedOperationException("OurCraft doesn't support Minecraft Title");
     }
 
 }
