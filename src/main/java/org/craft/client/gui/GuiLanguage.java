@@ -122,7 +122,7 @@ public class GuiLanguage extends Gui
         TextureRegion icon = atlas.getTiles()[(int) Math.floor(animCounter)][0];
         Gui.drawTexturedRect(renderEngine, 0, 0, 80, 80, icon.getMinU(), 0, icon.getMaxU(), 1);
 
-        float speed = 0.25f;
+        float speed = 0.075f;
         animCounter += speed;
         if(animCounter >= 17f)
             animCounter = 0.f;

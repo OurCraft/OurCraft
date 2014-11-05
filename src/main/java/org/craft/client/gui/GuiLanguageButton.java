@@ -43,7 +43,7 @@ public class GuiLanguageButton extends GuiButton
             engine.bindLocation(earthLoc);
             TextureRegion icon = atlas.getTiles()[(int) Math.floor(animCounter)][0];
             Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), icon.getMinU(), 0, icon.getMaxU(), 1);
-            float speed = 0.25f;
+            float speed = 0.075f;
             animCounter += speed;
             if(animCounter >= 17f)
                 animCounter = 0.f;
