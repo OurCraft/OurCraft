@@ -19,6 +19,7 @@ import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.scheduler.*;
+import org.spongepowered.api.title.*;
 import org.spongepowered.api.world.*;
 
 @Mod(id = "spongeimpl", version = "1.0", name = "Sponge implementation")
@@ -168,6 +169,20 @@ public class SpoongeMod implements Game
     public String getImplementationVersion()
     {
         return "Spoonge v0.1";
+    }
+
+    @Override
+    public Title createTitle()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Title updateTitle()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

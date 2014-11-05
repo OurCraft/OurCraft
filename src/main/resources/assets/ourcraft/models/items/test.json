@@ -2,6 +2,7 @@
 	"parent":"buildin/generated",
 	"textures":
 	{
-		"layer0":"items/test"
+		"layer0":"blocks/rose",
+		"layer1":"items/test"
 	}
 }

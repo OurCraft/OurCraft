@@ -32,6 +32,7 @@ public class GeneratedModel extends Model
     {
         for(Entry<Integer, String> entry : layers.entrySet())
         {
+            float layerf = (float) entry.getKey();
             try
             {
                 BufferedImage img = ImageUtils.loadImage(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/" + entry.getValue() + ".png")));
@@ -51,8 +52,8 @@ public class GeneratedModel extends Model
                         northFace.setMinUV(Vector2.get((float) x / (float) img.getWidth(), (float) y / (float) img.getHeight()));
                         northFace.setMaxUV(Vector2.get((float) (x + 1) / (float) img.getWidth(), (float) (y + 1) / (float) img.getHeight()));
                         northFace.setTexture(entry.getValue());
-                        element.setFrom(Vector3.get((float) elemX / (float) img.getWidth(), (float) elemY / (float) img.getHeight(), 0));
-                        element.setTo(Vector3.get((float) (elemX + 1) / (float) img.getWidth(), (float) (elemY + 1) / (float) img.getHeight(), 1f / 16f));
+                        element.setFrom(Vector3.get((float) elemX / (float) img.getWidth(), (float) elemY / (float) img.getHeight(), layerf / 16f));
+                        element.setTo(Vector3.get((float) (elemX + 1) / (float) img.getWidth(), (float) (elemY + 1) / (float) img.getHeight(), (layerf + 1) / 16f));
                         element.setFace("north", northFace);
 
                         ModelFace southFace = new ModelFace();
