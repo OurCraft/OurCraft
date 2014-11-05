@@ -16,7 +16,7 @@ public class SpoongeBlock implements BlockType
     {
         return null;
     }
-    
+
     @Shadow
     @Override
     public BlockState getDefaultState()
@@ -33,20 +33,6 @@ public class SpoongeBlock implements BlockType
 
     @Shadow
     public String shadow$id;
-
-    @Override
-    public BlockState getDefaultState()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public BlockState getStateFromDataValue(byte data)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     //===========================================================
     //               END OF SHADOW METHODS
