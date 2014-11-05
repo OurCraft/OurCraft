@@ -14,11 +14,11 @@ import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
-import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.scheduler.*;
+import org.spongepowered.api.title.Title;
 import org.spongepowered.api.world.*;
 
 @Mod(id = "spongeimpl", version = "1.0", name = "Sponge implementation")
@@ -168,6 +168,20 @@ public class SpoongeMod implements Game
     public String getImplementationVersion()
     {
         return "Spoonge v0.1";
+    }
+
+    @Override
+    public Title createTitle()
+    {
+        // TODO Implement Minecraft 1.8 Tile
+        throw new UnsupportedOperationException("OurCraft don't support Minecraft Title");
+    }
+
+    @Override
+    public Title updateTitle()
+    {
+        // TODO Implement Minecraft 1.8 Tile
+        throw new UnsupportedOperationException("OurCraft don't support Minecraft Title");
     }
 
 }

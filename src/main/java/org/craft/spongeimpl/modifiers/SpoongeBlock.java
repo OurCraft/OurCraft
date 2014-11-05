@@ -16,6 +16,20 @@ public class SpoongeBlock implements BlockType
     {
         return null;
     }
+    
+    @Shadow
+    @Override
+    public BlockState getDefaultState()
+    {
+        return null;
+    }
+
+    @Shadow
+    @Override
+    public BlockState getStateFromDataValue(byte data)
+    {
+        return null;
+    }
 
     @Shadow
     public String shadow$id;
