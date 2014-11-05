@@ -9,7 +9,6 @@ import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
-import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 
@@ -17,7 +16,6 @@ public class GuiIngame extends Gui
 {
 
     private float       scale;
-    private Matrix4     scaleMatrix;
     private ScreenTitle title;
 
     public GuiIngame(OurCraft game)
@@ -32,7 +30,6 @@ public class GuiIngame extends Gui
     public void init()
     {
         scale = 1.85f;
-        scaleMatrix = Matrix4.get().initScale(scale, scale, 1);
     }
 
     @Override
@@ -67,10 +64,9 @@ public class GuiIngame extends Gui
         if(stack != null)
         {
             String s = I18n.format(stack.getStackable().getUnlocalizedID());
-            Matrix4 m = renderEngine.getModelviewMatrix().copy();
-            renderEngine.setModelviewMatrix(m.mul(scaleMatrix));
-            getFontRenderer().drawShadowedString(s, 0xFFFFFFFF, (int) (oc.getDisplayWidth() / (2 * scale) - (int) getFontRenderer().getTextWidth(s) / (2 * scale)), (int) (oc.getDisplayHeight() / scale) - 40, renderEngine);
-            renderEngine.setModelviewMatrix(m);
+            getFontRenderer().setScale(scale);
+            getFontRenderer().drawShadowedString(s, 0xFFFFFFFF, (int) (oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextWidth(s) / 2), (int) oc.getDisplayHeight() - 40, renderEngine);
+            getFontRenderer().setScale(1);
         }
 
         if(title != null)
