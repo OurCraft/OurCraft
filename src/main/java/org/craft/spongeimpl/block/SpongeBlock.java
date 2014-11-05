@@ -1,9 +1,13 @@
 package org.craft.spongeimpl.block;
 
+<<<<<<< HEAD
 import java.util.*;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.*;
+=======
+import java.util.Collection;
+>>>>>>> origin/master
 
 import org.craft.blocks.*;
 import org.craft.blocks.Block;
@@ -15,6 +19,9 @@ import org.spongepowered.api.math.*;
 import org.spongepowered.api.util.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.extent.*;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
 public class SpongeBlock implements org.spongepowered.api.block.Block
 {
@@ -185,6 +192,51 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
 
     @Override
     public ImmutableMap<BlockProperty<?>, ? extends Comparable<?>> getProperties()
+<<<<<<< HEAD
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collection<String> getPropertyNames()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<BlockProperty<?>> getPropertyByName(String name)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<? extends Comparable<?>> getPropertyValue(String name)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlockState withProperty(BlockProperty<?> property, Comparable<?> value)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlockState cycleProperty(BlockProperty<?> property)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void replaceWith(BlockState state)
+=======
+>>>>>>> origin/master
     {
         // TODO Auto-generated method stub
         return null;
@@ -229,7 +281,7 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
     public void replaceWith(BlockState state)
     {
         // TODO Auto-generated method stub
-
+        
     }
 
 }
