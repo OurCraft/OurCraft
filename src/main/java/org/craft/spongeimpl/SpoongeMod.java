@@ -14,15 +14,12 @@ import org.craft.spongeimpl.plugin.*;
 import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.scheduler.*;
-<<<<<<< HEAD
 import org.spongepowered.api.title.*;
-=======
-import org.spongepowered.api.title.Title;
->>>>>>> origin/master
 import org.spongepowered.api.world.*;
 
 @Mod(id = "spongeimpl", version = "1.0", name = "Sponge implementation")
@@ -177,25 +174,15 @@ public class SpoongeMod implements Game
     @Override
     public Title createTitle()
     {
-<<<<<<< HEAD
-        // TODO Auto-generated method stub
-        return null;
-=======
         // TODO Implement Minecraft 1.8 Tile
         throw new UnsupportedOperationException("OurCraft don't support Minecraft Title");
->>>>>>> origin/master
     }
 
     @Override
     public Title updateTitle()
     {
-<<<<<<< HEAD
-        // TODO Auto-generated method stub
-        return null;
-=======
         // TODO Implement Minecraft 1.8 Tile
         throw new UnsupportedOperationException("OurCraft don't support Minecraft Title");
->>>>>>> origin/master
     }
 
 }
