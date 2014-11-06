@@ -3,7 +3,7 @@
 uniform sampler2D diffuse;
 
 varying vec2 texCoord0;
-varying vec3 baseColor;
+varying vec4 baseColor;
 
 // RADIUS of our vignette, where 0.5 results in a circle fitting the screen
 const float RADIUS = 0.75;
@@ -27,5 +27,5 @@ void main()
     // apply the vignette with 50% opacity
     color.rgb = mix(color.rgb, color.rgb * vignette, 0.5);
 
-    gl_FragColor = color * vec4(baseColor, 1);
+    gl_FragColor = color * baseColor;
 }

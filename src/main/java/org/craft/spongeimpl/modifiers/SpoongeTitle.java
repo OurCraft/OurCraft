@@ -11,6 +11,12 @@ public class SpoongeTitle implements Title
     //               START OF SHADOW METHODS
     //===========================================================
     @Shadow
+    public void show()
+    {
+        ;
+    }
+
+    @Shadow
     public String getMainTitle()
     {
         return null;
@@ -126,6 +132,7 @@ public class SpoongeTitle implements Title
     public Title send(Player player)
     {
         setVisible(true);
+        show();
         return this;
     }
 

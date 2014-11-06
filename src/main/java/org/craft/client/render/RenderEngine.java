@@ -428,7 +428,7 @@ public class RenderEngine implements IDisposable
         currentShader.bind();
         glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
         glViewport(0, 0, displayWidth, displayHeight);
-        glClearColor(0, 1, 0, 1);
+        glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
@@ -439,6 +439,7 @@ public class RenderEngine implements IDisposable
     public void end()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glClearColor(0, 0, 0, 0);
         glViewport(0, 0, displayWidth, displayHeight);
         postRenderShader.bind();
         bindTexture(colorBuffer, 0);

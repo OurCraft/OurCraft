@@ -2,10 +2,10 @@
 
 attribute vec3 pos;
 attribute vec2 texCoords;
-attribute vec3 vertexColor;
+attribute vec4 vertexColor;
 
 varying vec2 texCoord0;
-varying vec3 baseColor;
+varying vec4 baseColor;
 
 uniform mat4 modelview;
 uniform mat4 projection;

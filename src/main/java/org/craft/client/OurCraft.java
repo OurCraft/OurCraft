@@ -157,7 +157,7 @@ public class OurCraft implements Runnable, OurCraftInstance
 
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
-            Log.message("Loading SpongeAPI implementation...");
+            Log.message("Loading Mods...");
             eventBus = new EventBus(new Class<?>[]
             {
                     ModEvent.class
@@ -553,7 +553,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         renderEngine.begin();
         ArrayList<Chunk> visiblesChunks = getVisibleChunks();
         glViewport(0, 0, displayWidth, displayHeight);
-        glClearColor(0, 0.6666667f, 1, 0);
+        glClearColor(0, 0.6666667f, 1, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         renderEngine.enableGLCap(GL_DEPTH_TEST);
         renderEngine.switchToPerspective();
@@ -605,7 +605,9 @@ public class OurCraft implements Runnable, OurCraftInstance
             int mx = Mouse.getX();
             int my = Mouse.getY();
             if(currentMenu != null)
+            {
                 currentMenu.draw(mx, displayHeight - my, renderEngine);
+            }
         }
         printIfGLError();
     }

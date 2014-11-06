@@ -13,15 +13,16 @@ public class Vertex extends AbstractReference implements IDisposable
      * <ul>
      * <li>3 floats for the position</li>
      * <li>2 floats for the texture coordinates</li>
+     * <li>1 float for the alpha composite of color</li>
      * <li>1 float for the red composite of color</li>
      * <li>1 float for the green composite of color</li>
      * <li>1 float for the blue composite of color</li>
      * </ul>
      */
-    public static final int SIZE_IN_FLOATS = 3 + 2 + 3;
+    public static final int SIZE_IN_FLOATS = 3 + 2 + 4;
     private Vector3         pos;
     private Vector2         texCoords;
-    private Vector3         color;
+    private Quaternion      color;
 
     /**
      * Creates a Vertex with given position and texCoords and color set as 0,0,0
@@ -43,6 +44,11 @@ public class Vertex extends AbstractReference implements IDisposable
      * Creates a Vertex with given position, texCoords and color
      */
     private Vertex(Vector3 pos, Vector2 texCoords, Vector3 color)
+    {
+        this(pos, texCoords, Quaternion.get(color.getX(), color.getY(), color.getZ(), 1));
+    }
+
+    private Vertex(Vector3 pos, Vector2 texCoords, Quaternion color)
     {
         this.pos = pos;
         this.texCoords = texCoords;
@@ -68,7 +74,7 @@ public class Vertex extends AbstractReference implements IDisposable
     /**
      * Returns the color vector of this vertex (RGB color model)
      */
-    public Vector3 getColor()
+    public Quaternion getColor()
     {
         return color;
     }
@@ -108,6 +114,11 @@ public class Vertex extends AbstractReference implements IDisposable
      * Returns a vertex with given position, texture coordinates and color
      */
     public static Vertex get(Vector3 pos, Vector2 texCoords, Vector3 color)
+    {
+        return get(pos, texCoords, Quaternion.get(color.getX(), color.getY(), color.getZ(), 1));
+    }
+
+    public static Vertex get(Vector3 pos, Vector2 texCoords, Quaternion color)
     {
         Vertex v = null;
         if(unused.isEmpty())

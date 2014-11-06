@@ -85,10 +85,6 @@ public abstract class FontRenderer implements IDisposable
     {
         if(text.replace(" ", "").trim().isEmpty())
             return;
-        String colorAsHex = Integer.toHexString(color);
-        for(int i = 8; i > colorAsHex.length(); i-- )
-            colorAsHex = '0' + colorAsHex;
-        text = TextFormatting.COLOR.toString() + colorAsHex + text;
         textInfos.text = text;
         textInfos.color = color;
         textInfos.posX = xo;
@@ -115,10 +111,11 @@ public abstract class FontRenderer implements IDisposable
 
         int toSkip = 0;
         int currentColor = color;
+        float a = (currentColor >> 24 & 0xFF) / 255f;
         float r = (currentColor >> 16 & 0xFF) / 255f;
         float g = (currentColor >> 8 & 0xFF) / 255f;
         float b = (currentColor >> 0 & 0xFF) / 255f;
-        Vector3 colorVec = Vector3.get(r, g, b);
+        Quaternion colorVec = Quaternion.get(r, g, b, a);
 
         for(int i = 0; i < text.length(); i++ )
         {
@@ -150,10 +147,11 @@ public abstract class FontRenderer implements IDisposable
                         italic = false;
                         underlined = false;
                         currentColor = color;
+                        a = (currentColor >> 24 & 0xFF) / 255f;
                         r = (currentColor >> 16 & 0xFF) / 255f;
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
-                        colorVec = Vector3.get(r, g, b);
+                        colorVec = Quaternion.get(r, g, b, a);
                     }
                     else if(format == TextFormatting.OBFUSCATED)
                     {
@@ -162,10 +160,11 @@ public abstract class FontRenderer implements IDisposable
                     else if(format == TextFormatting.COLOR)
                     {
                         currentColor = (int) Long.parseLong(after, 16);
+                        a = (currentColor >> 24 & 0xFF) / 255f;
                         r = (currentColor >> 16 & 0xFF) / 255f;
                         g = (currentColor >> 8 & 0xFF) / 255f;
                         b = (currentColor >> 0 & 0xFF) / 255f;
-                        colorVec = Vector3.get(r, g, b);
+                        colorVec = Quaternion.get(r, g, b, a);
                     }
                     else if(format == TextFormatting.ITALIC)
                     {

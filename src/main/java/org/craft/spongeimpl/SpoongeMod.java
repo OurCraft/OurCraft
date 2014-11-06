@@ -6,6 +6,7 @@ import java.util.*;
 import com.google.common.base.Optional;
 
 import org.craft.*;
+import org.craft.client.gui.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.spongeimpl.events.state.*;
@@ -36,6 +37,7 @@ public class SpoongeMod implements Game
 
     public SpoongeMod()
     {
+        ;
     }
 
     @OurModEventHandler
@@ -174,15 +176,15 @@ public class SpoongeMod implements Game
     @Override
     public Title createTitle()
     {
-        // TODO Implement Minecraft 1.8 Titles
-        throw new UnsupportedOperationException("OurCraft doesn't support Minecraft Title");
+        return (Title) new ScreenTitle();
     }
 
     @Override
     public Title updateTitle()
     {
-        // TODO Implement Minecraft 1.8 Titles
-        throw new UnsupportedOperationException("OurCraft doesn't support Minecraft Title");
+        ScreenTitle title = new ScreenTitle();
+        title.show();
+        return (Title) title;
     }
 
 }

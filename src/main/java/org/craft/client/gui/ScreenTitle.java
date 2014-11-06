@@ -1,6 +1,5 @@
 package org.craft.client.gui;
 
-
 public class ScreenTitle
 {
 
@@ -10,6 +9,7 @@ public class ScreenTitle
     private long    fadeInDuration;
     private long    displayTime;
     private boolean visible;
+    private long    started;
 
     public ScreenTitle()
     {
@@ -70,10 +70,22 @@ public class ScreenTitle
     public void setVisible(boolean visible)
     {
         this.visible = visible;
+        if(visible)
+            started = System.currentTimeMillis();
     }
 
     public boolean getVisible()
     {
         return visible;
+    }
+
+    public void show()
+    {
+        started = System.currentTimeMillis();
+    }
+
+    public long timeSinceStart()
+    {
+        return System.currentTimeMillis() - started;
     }
 }

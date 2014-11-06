@@ -2,7 +2,9 @@ package org.craft.maths;
 
 import java.nio.*;
 
-public class Quaternion
+import org.craft.utils.*;
+
+public class Quaternion implements IDisposable
 {
     public static final Quaternion NULL = new Quaternion(0, 0, 0, 1);
 
@@ -325,6 +327,17 @@ public class Quaternion
     public boolean isNull()
     {
         return x == 0 && y == 0 && z == 0 && w == 0;
+    }
+
+    public static Quaternion get(float x, float y, float z, float w)
+    {
+        return new Quaternion(x, y, z, w);
+    }
+
+    public void dispose()
+    {
+        // TODO Auto-generated method stub
+
     }
 
 }
