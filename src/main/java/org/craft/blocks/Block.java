@@ -40,7 +40,7 @@ public class Block implements IStackable
     /**
      * Returns the String id of this block
      */
-    public String getID()
+    public String getRawID()
     {
         return id;
     }
@@ -143,7 +143,7 @@ public class Block implements IStackable
     @Override
     public String getId()
     {
-        return "ourcraft:" + getID();
+        return "ourcraft:" + getRawID();
     }
 
     @Override
@@ -167,7 +167,7 @@ public class Block implements IStackable
     @Override
     public String getUnlocalizedID()
     {
-        return "block." + getID();
+        return "block." + getRawID();
     }
 
     /**

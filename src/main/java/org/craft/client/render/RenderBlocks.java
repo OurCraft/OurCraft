@@ -64,7 +64,7 @@ public class RenderBlocks
         }
         try
         {
-            ResourceLocation res = new ResourceLocation("ourcraft", "models/blockstates/" + block.getID() + ".json");
+            ResourceLocation res = new ResourceLocation("ourcraft", "models/blockstates/" + block.getRawID() + ".json");
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
                 renderers.put(block, modelLoader.createBlockRenderer(res, renderEngine.blocksAndItemsMap));

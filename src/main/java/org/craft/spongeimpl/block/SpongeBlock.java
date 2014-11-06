@@ -24,6 +24,7 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
     private int   y;
     private int   z;
     private World world;
+    private Vec3i pos;
 
     public SpongeBlock(Block block, int x, int y, int z, World world)
     {
@@ -31,14 +32,14 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
         this.x = x;
         this.y = y;
         this.z = z;
+        this.pos = new Vec3i(x, y, z);
         this.world = world;
     }
 
     @Override
     public BlockType getType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return (BlockType) implBlock;
     }
 
     @Override
@@ -127,7 +128,7 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
     @Override
     public Vector3i getPosition()
     {
-        return new Vec3i(x, y, z);
+        return pos;
     }
 
     @Override
@@ -229,6 +230,20 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
     public void replaceWith(BlockState state)
     {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public Collection<Direction> getPoweredFaces()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collection<Direction> getIndirectlyPoweredFaces()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

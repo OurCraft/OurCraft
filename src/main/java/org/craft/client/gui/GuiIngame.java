@@ -45,7 +45,7 @@ public class GuiIngame extends Gui
         CollisionInfos infos = oc.getObjectInFront();
         if(infos != null && infos.type == CollisionType.BLOCK)
         {
-            getFontRenderer().drawString("Block at " + infos.x + ", " + infos.y + ", " + infos.z + " is " + TextFormatting.generateFromColor(208, 208, 208) + ((Block) infos.value).getID(), 0xFFFFFFFF, 2, 75, renderEngine);
+            getFontRenderer().drawString("Block at " + infos.x + ", " + infos.y + ", " + infos.z + " is " + TextFormatting.generateFromColor(208, 208, 208) + ((Block) infos.value).getRawID(), 0xFFFFFFFF, 2, 75, renderEngine);
 
             BlockStatesObject states = oc.getClientWorld().getBlockStates((int) infos.x, (int) infos.y, (int) infos.z);
             if(states != null)
