@@ -2,13 +2,27 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 
 def filteredSourceDir = file("${buildDir}/filtered") 
-def versionValue = 'InDev-0.1'
-def mainClass = "org.craft.client.OurCraftStartup"
+
+// Read properties file
+ext {
+    configFile = file "build.properties"
+
+    configFile.withReader {
+        // Load config.  It shall from now be referenced as simply config or project.config
+        def prop = new Properties()
+        prop.load(it)
+        config = new ConfigSlurper().parse prop
+    }
+}
 
 apply plugin: 'java'
-sourceCompatibility = 1.6
+
+sourceCompatibility = 1.7
+
+// Maven Artefacts Info
+group = "org.craft"
 archivesBaseName = 'OurCraft'
-version = versionValue
+version = config.version
 
 //IDE
 apply plugin: 'eclipse'
@@ -17,8 +31,6 @@ apply plugin: 'idea'
 repositories {
     mavenCentral()
 }
-
-//Tasks
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'
@@ -30,15 +42,14 @@ task processVersion(type: Copy) {
     // Substitute property references in files
     // Use some of the filters provided by Ant
     filter(FixCrLfFilter)
-    filter(ReplaceTokens, tokens: ['version': versionValue])
+    filter(ReplaceTokens, tokens: ['version': version])
     // Use a closure to filter each line
     filter { String line ->
-        ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+versionValue+'"'))
+        ("$line".replaceAll('"OurCraft:BuildNumber"', '"'+version+'"'))
     }
 }
 
-sourceSets { 
-    // This source set will contain all sources that we filter 
+sourceSets {  
     filtered { 
         java { 
             srcDirs = [filteredSourceDir] 
@@ -56,22 +67,15 @@ compileJava.source = sourceSets.filtered.java
 compileJava.dependsOn processVersion 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
     compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
     compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-    
-    compile 'io.netty:netty-all:4.0.23.Final'
-
+    compile 'io.netty:netty-all:4.0.24.Final'
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.code.gson:gson:2.3'
-
     compile 'org.reflections:reflections:0.9.9'
     compile 'org.javassist:javassist:3.18.2-GA'
-
     compile 'org.luaj:luaj-jse:3.0'
-
     compile 'trove:trove:1.0.2'
-
     compile 'org.ow2.asm:asm-all:5.0.3'
 
     compile project(':SpongeAPI')
@@ -80,13 +84,32 @@ dependencies {
 jar
 {
     manifest {
-        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': mainClass
+        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': config.clientProdMainClass
     }
 }
 
+// ------------------------------- RUN CONFIG ------------------------------- //
+
 task runClient(type: JavaExec, dependsOn: 'classes') {
-    main = mainClass
+    main = config.clientProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
+    jvmArgs(config.jvmArgs)
+    standardInput = System.in
+}
+
+task runClientDev(type: JavaExec, dependsOn: 'classes') {
+    main = config.clientDevMainClass
+    classpath = configurations.runtime
+    classpath += sourceSets.main.runtimeClasspath
+    jvmArgs(config.jvmArgs)
+    standardInput = System.in
+}
+
+task runServer(type: JavaExec, dependsOn: 'classes') {
+    main = config.serverProdMainClass
+    classpath = configurations.runtime
+    classpath += sourceSets.main.runtimeClasspath
+    jvmArgs(config.jvmArgs)
     standardInput = System.in
 }
