@@ -3,7 +3,6 @@ package org.craft.spongeimpl.modifiers;
 import org.craft.modding.modifiers.*;
 import org.craft.spongeimpl.items.*;
 import org.craft.spongeimpl.service.command.*;
-import org.craft.spongeimpl.world.*;
 
 public class SpoongeTransformers implements ASMTransformerPlugin
 {
