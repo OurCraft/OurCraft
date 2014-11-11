@@ -22,6 +22,7 @@ import org.lwjgl.opengl.*;
 public class RenderEngine implements IDisposable
 {
 
+    public static boolean                             debug;
     private HashMap<ResourceLocation, ITextureObject> texturesLocs;
     private Entity                                    renderViewEntity;
     private Matrix4                                   projection3dMatrix;
@@ -314,7 +315,8 @@ public class RenderEngine implements IDisposable
             {
                 texturesLocs.put(loc, OpenGLHelper.loadTexture(loader.getResource(loc)));
                 bindLocation(loc);
-                Log.debug("Unknown texture: /" + loc.getFullPath() + " charging it");
+                if(debug)
+                    Log.debug("Unknown texture: /" + loc.getFullPath() + " charging it");
             }
             catch(Exception e)
             {

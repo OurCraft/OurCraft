@@ -20,6 +20,7 @@ import org.craft.utils.*;
 public class ModelLoader
 {
 
+    public static boolean                    debug;
     private Gson                             gson;
     private HashMap<ResourceLocation, Model> models;
 
@@ -80,7 +81,8 @@ public class ModelLoader
                     states.add(state);
                     values.add(value);
 
-                    Log.message("Found variant: " + state + "=" + value);
+                    if(debug)
+                        Log.message("Found variant: " + state + "=" + value);
                 }
             }
             variant.setBlockStateKeys(states);
@@ -106,7 +108,8 @@ public class ModelLoader
      */
     public Model loadModel(AbstractResource modelFile, IconGenerator iconGenerator, Class<? extends IStackable> type) throws Exception
     {
-        Log.message("Loading model " + modelFile.getResourceLocation().getFullPath());
+        if(debug)
+            Log.message("Loading model " + modelFile.getResourceLocation().getFullPath());
         Model loadedModel = new Model(modelFile.getResourceLocation().getName());
         String rawJsonData = new String(modelFile.getData(), "UTF-8");
         JsonObject model = gson.fromJson(rawJsonData, JsonObject.class);

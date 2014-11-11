@@ -31,13 +31,13 @@ public class C2MovePlayer extends AbstractPacket
     @Override
     public void decodeFrom(ByteBuf buffer)
     {
-        buffer.writeByte(direction);
+        direction = buffer.readByte();
     }
 
     @Override
     public void encodeInto(ByteBuf buffer)
     {
-        direction = buffer.readByte();
+        buffer.writeByte(direction);
     }
 
 }

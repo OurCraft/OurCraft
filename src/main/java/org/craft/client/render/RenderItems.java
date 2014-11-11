@@ -16,6 +16,7 @@ import org.craft.world.*;
 public class RenderItems
 {
 
+    public static boolean                     debug;
     private RenderEngine                      renderEngine;
     private HashMap<IStackable, ItemRenderer> renderers;
     private OffsettedOpenGLBuffer             buffer;
@@ -45,11 +46,12 @@ public class RenderItems
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
                 renderers.put(item, modelLoader.createItemRenderer(res, renderEngine.blocksAndItemsMap));
-                Log.message(res.getFullPath() + " loaded.");
+                if(debug)
+                    Log.message(res.getFullPath() + " loaded.");
             }
             else
             {
-                Log.message(res.getFullPath() + " doesn't exist.");
+                Log.error(res.getFullPath() + " doesn't exist.");
                 renderers.put(item, new FallbackItemRenderer());
             }
         }

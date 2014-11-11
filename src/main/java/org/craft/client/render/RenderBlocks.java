@@ -25,6 +25,7 @@ public class RenderBlocks
         public int   z;
     }
 
+    public static boolean                              debug;
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer> chunkBuffersPass0;
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer> chunkBuffersPass1;
     private RenderEngine                               renderEngine;
@@ -68,11 +69,12 @@ public class RenderBlocks
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
                 renderers.put(block, modelLoader.createBlockRenderer(res, renderEngine.blocksAndItemsMap));
-                Log.message(res.getFullPath() + " loaded.");
+                if(debug)
+                    Log.message(res.getFullPath() + " loaded.");
             }
             else
             {
-                Log.message(res.getFullPath() + " doesn't exist.");
+                Log.error(res.getFullPath() + " doesn't exist.");
                 renderers.put(block, fallbackRenderer);
             }
         }

@@ -28,6 +28,10 @@ public class OurCraftStartup
             String arg = args[i];
             if(arg.startsWith("--"))
             {
+                if(current != null && !properties.containsKey(current))
+                {
+                    properties.put(current, "");
+                }
                 current = arg.substring(2);
             }
             else
@@ -35,6 +39,11 @@ public class OurCraftStartup
                 properties.put(current, arg);
             }
         }
+        if(current != null && !properties.containsKey(current))
+        {
+            properties.put(current, "");
+        }
+        Commons.applyArguments(properties);
         SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
         System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
         System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));

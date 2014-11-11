@@ -282,8 +282,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     public void openMenu(Gui gui)
     {
         this.newMenu = gui;
-        if(currentMenu != newMenu)
-            fontRenderer.disposeCache();
     }
 
     /**
@@ -375,6 +373,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         if(newMenu != currentMenu)
         {
             currentMenu = newMenu;
+            fontRenderer.disposeCache();
             if(currentMenu != null)
             {
                 currentMenu.removeAllWidgets();

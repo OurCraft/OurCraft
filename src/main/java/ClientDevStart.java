@@ -27,6 +27,10 @@ public class ClientDevStart
             String arg = args[i];
             if(arg.startsWith("--"))
             {
+                if(current != null && !properties.containsKey(current))
+                {
+                    properties.put(current, "");
+                }
                 current = arg.substring(2);
             }
             else
@@ -34,6 +38,11 @@ public class ClientDevStart
                 properties.put(current, arg);
             }
         }
+        if(current != null && !properties.containsKey(current))
+        {
+            properties.put(current, "");
+        }
+        Commons.applyArguments(properties);
         ModifierClassTransformer modTrans = new ModifierClassTransformer();
         OurClassLoader.instance.addTransformer(modTrans);
         Reflections reflections = new Reflections(OurClassLoader.instance);

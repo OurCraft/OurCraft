@@ -37,7 +37,8 @@ public class Log
     {
     }
 
-    public static boolean showCaller = true;
+    public static boolean showCaller        = true;
+    public static boolean useFullClassNames = false;
 
     @NonLoggable
     public static void message(String msg)
@@ -73,7 +74,15 @@ public class Log
                             if(method.isAnnotationPresent(NonLoggable.class))
                                 continue elementsIteration;
                     }
-                    String s = c.getSimpleName() + "." + elem.getMethodName() + ":" + elem.getLineNumber();
+
+                    String name = null;
+                    if(useFullClassNames)
+                    {
+                        name = c.getCanonicalName();
+                    }
+                    else
+                        name = c.getSimpleName();
+                    String s = name + "." + elem.getMethodName() + ":" + elem.getLineNumber();
                     return s;
                 }
                 catch(ClassNotFoundException e)

@@ -80,7 +80,6 @@ public class AddonsLoader
                             f.set(null, instance);
                         }
                     }
-                    Log.message(annot.toString());
                     AddonContainer container = handler.createContainer(annot, instance);
                     manager.loadAddon(container);
                     eventBus.register(instance);

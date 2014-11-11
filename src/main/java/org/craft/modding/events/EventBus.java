@@ -74,12 +74,12 @@ public class EventBus
                                 {
                                     if(realMethod.getParameterTypes().length > 1)
                                     {
-                                        Log.error("Method " + method.getName() + " is declared as event listener but has more than one parameter");
+                                        Log.fatal("Method " + method.getName() + " is declared as event listener but has more than one parameter");
                                         return;
                                     }
                                     else if(realMethod.getParameterTypes() == null || method.getParameterTypes().length == 0)
                                     {
-                                        Log.error("Method " + method.getName() + " is declared as event listener but has no parameter");
+                                        Log.fatal("Method " + method.getName() + " is declared as event listener but has no parameter");
                                         return;
                                     }
                                     checked.add(method.getName());
@@ -108,7 +108,6 @@ public class EventBus
             if(list == null)
                 list = new ArrayList<IEventListener>();
             list.add(listener);
-            Log.message("Registred " + m.getDeclaringClass().getName() + ":" + m.getName() + " >> " + eventClass);
             listeners.put(eventClass, list);
         }
         catch(Exception e)
