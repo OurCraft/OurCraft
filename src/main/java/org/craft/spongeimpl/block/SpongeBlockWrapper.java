@@ -16,7 +16,7 @@ import org.spongepowered.api.util.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.extent.*;
 
-public class SpongeBlock implements org.spongepowered.api.block.Block
+public class SpongeBlockWrapper implements org.spongepowered.api.block.Block
 {
 
     private Block implBlock;
@@ -26,7 +26,7 @@ public class SpongeBlock implements org.spongepowered.api.block.Block
     private World world;
     private Vec3i pos;
 
-    public SpongeBlock(Block block, int x, int y, int z, World world)
+    public SpongeBlockWrapper(Block block, int x, int y, int z, World world)
     {
         this.implBlock = block;
         this.x = x;
