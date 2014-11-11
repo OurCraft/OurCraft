@@ -13,6 +13,7 @@ import org.craft.entity.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.server.*;
+import org.craft.spongeimpl.events.state.*;
 
 /**
  */
@@ -56,26 +57,26 @@ public class NettyServerWrapper implements Runnable
                     }).option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            // TODO: eventBus.call(new SpongeServerStartingEvent(game));
+            eventBus.fireEvent(new SpongeServerStartingEvent(game), null, null);
             // Bind and start to accept incoming connections.
             ChannelFuture f = b.bind(port).addListener(new GenericFutureListener<Future<? super Void>>()
             {
                 @Override
                 public void operationComplete(Future<? super Void> future) throws Exception
                 {
-                    // TODO: if(future.isSuccess())
-                    // TODO:  eventBus.call(new SpongeServerStartedEvent(game));
+                    if(future.isSuccess())
+                        eventBus.fireEvent(new SpongeServerStartedEvent(game));
                 }
             }).sync();
 
-            // TODO:  eventBus.call(new SpongeServerStoppingEvent(game));
+            eventBus.fireEvent(new SpongeServerStoppingEvent(game));
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to
             // gracefully
             // shut down your server.
             serverChannel = f.channel();
             serverChannel.closeFuture().sync();
-            // TODO:  eventBus.call(new SpongeServerStoppedEvent(game));
+            eventBus.fireEvent(new SpongeServerStoppedEvent(game));
         }
         catch(Exception e)
         {

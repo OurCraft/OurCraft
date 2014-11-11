@@ -334,4 +334,21 @@ public class Vec2i implements Vector2i
         return new Vec2i(x, y);
     }
 
+    @Override
+    public Vector2i project(Vector2i b)
+    {
+        return b.mul(dot(b) / b.dot(b));
+    }
+
+    @Override
+    public Vector2i project(int x, int y)
+    {
+        return project(new Vec2i(x, y));
+    }
+
+    @Override
+    public Vector2i project(double x, double y)
+    {
+        return project(new Vec2i((int) x, (int) y));
+    }
 }

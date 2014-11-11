@@ -17,33 +17,33 @@ public class SpongeTestPlugin
 
     }
 
-    @SpongeEventHandler
+    @Subscribe
     public void onPreInit(PreInitializationEvent evt)
     {
         logger = evt.getPluginLog();
         evt.getPluginLog().debug("SpongePreInit!!!");
     }
 
-    @SpongeEventHandler
+    @Subscribe
     public void onPostInit(PostInitializationEvent evt)
     {
         logger.debug("SpongePostInit!!!");
         logger.debug("Dirt is " + evt.getGame().getRegistry().getBlock("ourcraft:dirt").get().getId());
     }
 
-    @SpongeEventHandler
+    @Subscribe
     public void onWorldLoad(WorldLoadEvent evt)
     {
         logger.debug("SpongeLoading world " + evt.getWorld().getName());
     }
 
-    @SpongeEventHandler
+    @Subscribe
     public void onWorldUnload(WorldUnloadEvent evt)
     {
         logger.debug("SpongeUnloading world " + evt.getWorld().getName());
     }
 
-    @SpongeEventHandler
+    @Subscribe
     public void onInit(InitializationEvent evt)
     {
         logger.debug("SpongeInit!!!");

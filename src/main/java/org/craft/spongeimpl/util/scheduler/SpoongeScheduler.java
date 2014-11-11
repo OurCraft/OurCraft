@@ -22,7 +22,7 @@ public class SpoongeScheduler implements Scheduler
     public Optional<Task> runTask(PluginContainer plugin, Runnable task)
     {
         Task spoongeTask = new SpoongeTask(plugin, task);
-        spoongeTask.run();
+        //TODO:  spoongeTask.run();
         return Optional.of(spoongeTask);
     }
 
@@ -38,7 +38,7 @@ public class SpoongeScheduler implements Scheduler
     public Optional<RepeatingTask> runRepeatingTask(PluginContainer plugin, Runnable task, long interval)
     {
         RepeatingTask spoongeTask = new SpoongeRepeatingTask(plugin, task, 0L, interval);
-        spoongeTask.run();
+        //TODO:  spoongeTask.run();
         addScheduled(plugin, spoongeTask);
         return Optional.of(spoongeTask);
     }

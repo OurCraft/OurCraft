@@ -430,4 +430,22 @@ public class Vec3f implements Vector3f
         return new Vec3f(x1, y1, z1);
     }
 
+    @Override
+    public Vector3f project(Vector3f b)
+    {
+        return b.mul(dot(b) / b.dot(b));
+    }
+
+    @Override
+    public Vector3f project(float x, float y, float z)
+    {
+        return project(new Vec3f(x, y, z));
+    }
+
+    @Override
+    public Vector3f project(double x, double y, double z)
+    {
+        return project(new Vec3f((float) x, (float) y, (float) z));
+    }
+
 }

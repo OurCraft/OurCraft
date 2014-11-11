@@ -48,7 +48,7 @@ public class SpoongeMod implements Game
         this.gameInstance = event.getOurCraftInstance();
         pluginManager = new SpongePluginManager();
         gameInstance.getEventBus().addEventClass(Event.class);
-        gameInstance.getEventBus().addAnnotationClass(SpongeEventHandler.class);
+        gameInstance.getEventBus().addAnnotationClass(Subscribe.class);
         eventManager = new SpoongeEventManager(gameInstance.getEventBus());
         AddonsLoader addonsLoader = gameInstance.getAddonsLoader();
         addonsLoader.registerAddonAnnotation(Plugin.class, pluginManager);

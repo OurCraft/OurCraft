@@ -1,4 +1,4 @@
-package org.craft.spongeimpl.world;
+package org.craft.spongeimpl.modifiers;
 
 import java.util.*;
 

@@ -295,4 +295,18 @@ public class Vec2d implements Vector2d
         return new Vec2d(x1, y1);
     }
 
+    @Override
+    /** I leave it here, it can help:
+     *  http://en.wikipedia.org/wiki/Vector_projection
+     */
+    public Vector2d project(Vector2d b)
+    {
+        return b.mul(dot(b) / b.dot(b));
+    }
+
+    @Override
+    public Vector2d project(double x, double y)
+    {
+        return project(new Vec2d(x, y));
+    }
 }

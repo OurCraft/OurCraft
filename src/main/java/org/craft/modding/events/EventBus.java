@@ -183,4 +183,9 @@ public class EventBus
     {
         listeners.putAll(other.listeners);
     }
+
+    public boolean fireEvent(Object event)
+    {
+        return fireEvent(event, null, null);
+    }
 }

@@ -373,4 +373,21 @@ public class Vec2f implements Vector2f
         return new Vec2f(x1, y1);
     }
 
+    public Vector2f project(Vector2f b)
+    {
+        return b.mul(dot(b) / b.dot(b));
+    }
+
+    @Override
+    public Vector2f project(float x, float y)
+    {
+        return project(new Vec2f(x, y));
+    }
+
+    @Override
+    public Vector2f project(double x, double y)
+    {
+        return project(new Vec2f((float) x, (float) y));
+    }
+
 }

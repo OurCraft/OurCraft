@@ -18,6 +18,7 @@ import org.craft.network.packets.*;
 import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
+import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -118,7 +119,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
-        // TODO:    eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
+        eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
         new Thread(serverWrapper).start();
 
         eventBus.fireEvent(new ModPostInitEvent(this), null, null);
@@ -150,6 +151,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         addonsLoader.loadAll(modsFolder);
     }
 
+    @Override
     public EventBus getEventBus()
     {
         return eventBus;
@@ -176,7 +178,6 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
     private final void tick()
     {
         double now = System.nanoTime();
-
         {
             double delta = timeBetweenUpdates / 1000000000;
             while(now - lastUpdateTime > timeBetweenUpdates)

@@ -387,4 +387,22 @@ public class Vec3i implements Vector3i
         return new Vec3i(x, y, z);
     }
 
+    @Override
+    public Vector3i project(Vector3i b)
+    {
+        return b.mul(dot(b) / b.dot(b));
+    }
+
+    @Override
+    public Vector3i project(double x, double y, double z)
+    {
+        return project(new Vec3i((int) x, (int) y, (int) z));
+    }
+
+    @Override
+    public Vector3i project(int x, int y, int z)
+    {
+        return project(new Vec3i(x, y, z));
+    }
+
 }

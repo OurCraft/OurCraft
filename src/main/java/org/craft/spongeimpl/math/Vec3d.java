@@ -342,4 +342,15 @@ public class Vec3d implements Vector3d
         return new Vec3d(x1, y1, z1);
     }
 
+    @Override
+    public Vector3d project(Vector3d b)
+    {
+        return b.mul(dot(b) / b.dot(b));
+    }
+
+    @Override
+    public Vector3d project(double x, double y, double z)
+    {
+        return project(new Vec3d(x, y, z));
+    }
 }
