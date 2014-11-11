@@ -1,22 +1,21 @@
 package org.craft.modding;
 
-import java.lang.annotation.*;
 
-public class ModContainer extends AddonContainer
+public class ModContainer extends AddonContainer<Mod>
 {
 
     private String id;
     private String name;
     private String version;
 
-    public ModContainer(Object instance, Annotation addonAnnot)
+    public ModContainer(Object instance, Mod addonAnnot)
     {
         super(addonAnnot, instance);
         try
         {
-            id = (String) addonAnnot.annotationType().getDeclaredMethod("id").invoke(addonAnnot);
-            name = (String) addonAnnot.annotationType().getDeclaredMethod("name").invoke(addonAnnot);
-            version = (String) addonAnnot.annotationType().getDeclaredMethod("version").invoke(addonAnnot);
+            id = addonAnnot.id();
+            name = addonAnnot.name();
+            version = addonAnnot.version();
         }
         catch(Exception e)
         {

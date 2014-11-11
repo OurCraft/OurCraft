@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 import org.craft.modding.*;
 
-public class LuaAddonContainer extends AddonContainer
+public class LuaAddonContainer extends AddonContainer<Mod>
 {
 
     private String id;

@@ -2,13 +2,13 @@ package org.craft.modding;
 
 import java.lang.annotation.*;
 
-public abstract class AddonContainer
+public abstract class AddonContainer<T extends Annotation>
 {
 
-    private Annotation addonAnnot;
-    private Object     addonInstance;
+    private T      addonAnnot;
+    private Object addonInstance;
 
-    public AddonContainer(Annotation addonAnnot, Object instance)
+    public AddonContainer(T addonAnnot, Object instance)
     {
         this.addonAnnot = addonAnnot;
         this.addonInstance = instance;
@@ -20,7 +20,7 @@ public abstract class AddonContainer
 
     public abstract String getVersion();
 
-    public Annotation getAddonAnnotation()
+    public T getAddonAnnotation()
     {
         return addonAnnot;
     }

@@ -1,25 +1,23 @@
 package org.craft.spongeimpl.plugin;
 
-import java.lang.annotation.*;
-
 import org.craft.modding.*;
 import org.spongepowered.api.plugin.*;
 
-public class SpongePluginContainer extends AddonContainer implements PluginContainer
+public class SpongePluginContainer extends AddonContainer<Plugin> implements PluginContainer
 {
 
     private String id;
     private String name;
     private String version;
 
-    public SpongePluginContainer(Object instance, Annotation plugin)
+    public SpongePluginContainer(Object instance, Plugin plugin)
     {
         super(plugin, instance);
         try
         {
-            id = (String) plugin.annotationType().getDeclaredMethod("id").invoke(plugin);
-            name = (String) plugin.annotationType().getDeclaredMethod("name").invoke(plugin);
-            version = (String) plugin.annotationType().getDeclaredMethod("version").invoke(plugin);
+            id = plugin.id();
+            name = plugin.name();
+            version = plugin.version();
         }
         catch(Exception e)
         {

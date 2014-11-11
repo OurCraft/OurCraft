@@ -66,7 +66,7 @@ public class AddonsLoader
             }
             for(Annotation annot : clazz.getAnnotations())
             {
-                if(annot.annotationType().getCanonicalName().equals(c.getCanonicalName()))
+                if(annot.annotationType() == c)
                 {
                     loaded.add(clazz);
                     IAddonManager manager = handlers.get(c);

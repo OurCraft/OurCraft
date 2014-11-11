@@ -11,7 +11,7 @@ public final class ASMUtils
 {
     private ASMUtils()
     {
-
+        throw new IllegalAccessError("No ASMUtils instance for you!");
     }
 
     public static boolean hasFlag(int access, int flag)
