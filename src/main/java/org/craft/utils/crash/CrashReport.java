@@ -77,7 +77,7 @@ public class CrashReport
         }
         buffer.append(CrashInfos.SECTION_START + " Game " + CrashInfos.SECTION_END + "\n\tName: OurCraft\n");
         add(buffer, new DateInfos());
-        add(buffer, new OSInfos());
+        add(buffer, new SystemInfos());
         if(OurCraft.getOurCraft() != null)
         {
             add(buffer, new OpenALInfos());

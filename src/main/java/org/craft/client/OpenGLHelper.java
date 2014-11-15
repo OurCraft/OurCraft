@@ -98,7 +98,12 @@ public class OpenGLHelper
      */
     public static String getOpenGLVersion()
     {
-        return glGetString(GL_VERSION);
+        String version = glGetString(GL_VERSION);
+        
+        // Remove Driver Info
+        if(version.indexOf(' ') != -1)
+            version = version.substring(0, version.indexOf(' '));
+        return version;
     }
 
     /**
@@ -107,6 +112,14 @@ public class OpenGLHelper
     public static String getOpenGLVendor()
     {
         return glGetString(GL_VENDOR);
+    }
+    
+    /**
+     * Returns OpenGL renderer info
+     */
+    public static String getOpenGLRendererInfo()
+    {
+        return glGetString(GL_RENDERER);
     }
 
     /**

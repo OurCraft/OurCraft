@@ -9,7 +9,7 @@ public class OpenGLInfos implements CrashInfos
     public String getInfos()
     {
         String header = SECTION_START + " OpenGL " + SECTION_END;
-        return header + "\n\tVersion: " + OpenGLHelper.getOpenGLVersion() + "\n\tVendor: " + OpenGLHelper.getOpenGLVendor();
+        return header + "\n\tGraphics Card: " + OpenGLHelper.getOpenGLRendererInfo() + "\n\tVersion: " + OpenGLHelper.getOpenGLVersion() + "\n\tVendor: " + OpenGLHelper.getOpenGLVendor();
     }
 
 }
