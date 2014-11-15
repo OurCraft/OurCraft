@@ -561,7 +561,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             renderWorld(visiblesChunks, delta, drawGui);
             if(player != null)
             {
-                if(player.getHeldItem() != null)
+                if(player.getHeldItem() != null && player.getHeldItem().getStackable() != null)
                 {
                     renderEngine.enableGLCap(GL_DEPTH_TEST);
                     renderEngine.enableGLCap(GL_ALPHA_TEST);
@@ -576,13 +576,13 @@ public class OurCraft implements Runnable, OurCraftInstance
                     m = m.mul(Matrix4.get().initRotation(q.getForward(), q.getUp()));
                     renderEngine.setModelviewMatrix(m);
                     renderItems.renderItem(renderEngine, player.getHeldItem(), clientWorld, 0, 0, 0);
-                    renderEngine.setModelviewMatrix(Matrix4.get().initIdentity());
+
                     renderEngine.setProjectFromEntity(true);
                     m.dispose();
                 }
             }
         }
-
+        renderEngine.setModelviewMatrix(Matrix4.get().initIdentity());
         renderEngine.end();
         renderEngine.switchToOrtho();
         renderEngine.enableGLCap(GL_BLEND);

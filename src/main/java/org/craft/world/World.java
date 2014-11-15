@@ -11,7 +11,6 @@ import org.craft.utils.CollisionInfos.CollisionType;
 
 public class World
 {
-
     private LinkedList<Entity> entities;
     private ArrayList<Entity>  spawingQueue;
     private ChunkProvider      chunkProvider;

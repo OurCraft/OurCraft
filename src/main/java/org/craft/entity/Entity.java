@@ -12,36 +12,35 @@ import org.craft.world.*;
 public class Entity
 {
 
-    public float              posX;
-    public float              posY;
-    public float              posZ;
-    public float              velX;
-    public float              velY;
-    public float              velZ;
-    public float              yaw;
-    public float              pitch;
-    public float              roll;
+    public float           posX;
+    public float           posY;
+    public float           posZ;
+    public float           velX;
+    public float           velY;
+    public float           velZ;
+    public float           yaw;
+    public float           pitch;
+    public float           roll;
 
-    public float              headYaw;
-    public float              headPitch;
-    public float              headRoll;
+    public float           headYaw;
+    public float           headPitch;
+    public float           headRoll;
 
-    public float              lastYaw;
-    public float              lastPitch;
+    public float           lastYaw;
+    public float           lastPitch;
 
-    public World              worldObj;
-    private boolean           isDead;
-    private AABB              boundingBox;
-    public boolean            onGround;
-    private Quaternion        rotationQuaternion;
-    private boolean           onFire;
-    private int               fireTicks;
-    private UUID              uuid;
-    protected float           stepHeight;
-    private boolean           wasOnGround;
-    public int                entityID;
-    private CollisionInfos    collInfos;
-
+    public World           worldObj;
+    private boolean        isDead;
+    private AABB           boundingBox;
+    public boolean         onGround;
+    private Quaternion     rotationQuaternion;
+    private boolean        onFire;
+    private int            fireTicks;
+    private UUID           uuid;
+    protected float        stepHeight;
+    private boolean        wasOnGround;
+    public int             entityID;
+    private CollisionInfos collInfos;
 
     /**
      * Instantiates an Entity with given world
@@ -79,7 +78,7 @@ public class Entity
     /**
      * Updates entity (gravity, movements)
      */
-    public void update()
+    public void update(double delta)
     {
         float gravity = worldObj.getGravity();
         wasOnGround = onGround;
