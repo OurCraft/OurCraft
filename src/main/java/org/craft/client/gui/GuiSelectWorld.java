@@ -12,6 +12,7 @@ import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
+import org.craft.nbt.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -139,7 +140,16 @@ public class GuiSelectWorld extends Gui
                     worldFolder.mkdirs();
                 WorldLoader worldLoader = new VanillaWorldLoader(new ResourceLocation(worldFolder.getName()), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
 
-                HashMap<String, String> worldInfos = worldLoader.loadWorldInfos(worldDataFile);
+                NBTCompoundTag worldInfos;
+                try
+                {
+                    worldInfos = worldLoader.loadWorldInfos(worldDataFile);
+                }
+                catch(IOException e1)
+                {
+                    e1.printStackTrace();
+                    continue;
+                }
                 File snapshotFile = new File(worldFolder, "worldSnapshot.png");
                 if(snapshotFile.exists())
                 {
@@ -154,10 +164,8 @@ public class GuiSelectWorld extends Gui
                 }
                 long timestamp = 0L;
                 String name = worldFolder.getName();
-                if(worldInfos.containsKey("timestamp"))
-                    timestamp = Long.parseLong(worldInfos.get("timestamp"));
-                if(worldInfos.containsKey("name"))
-                    name = worldInfos.get("name");
+                timestamp = worldInfos.getLong("timestamp");
+                name = worldInfos.getString("name");
                 worldList.addSlot(new GuiWorldSlot(worldFolder.getName(), name, timestamp));
             }
         }

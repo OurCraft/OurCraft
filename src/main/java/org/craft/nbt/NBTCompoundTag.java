@@ -6,6 +6,8 @@ import java.util.Map.Entry;
 
 import com.google.gson.*;
 
+import org.craft.utils.*;
+
 /**
  * Inspired by NBT classes given by Mojang AB <a href="https://mojang.com/2012/02/new-minecraft-map-format-anvil/">here</a>
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
@@ -40,6 +42,7 @@ public class NBTCompoundTag extends NBTTag
         NBTTag tag;
         while((tag = NBTTag.readNamedTag(dis)).getID() != NBTTypes.END)
         {
+            Log.error(">> FOUND: " + tag.getName() + ":" + tag.toJson().toString());
             tags.put(tag.getName(), tag);
         }
     }

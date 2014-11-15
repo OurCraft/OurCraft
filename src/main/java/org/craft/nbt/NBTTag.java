@@ -3,6 +3,7 @@ package org.craft.nbt;
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.zip.*;
 
 import com.google.gson.*;
 
@@ -99,6 +100,10 @@ public abstract class NBTTag implements Cloneable
     public static NBTTag readNamedTag(DataInput dis) throws IOException
     {
         NBTTypes type = NBTTypes.getFromID(dis.readByte());
+        if(type == NBTTypes.END)
+        {
+            return new NBTEndTag();
+        }
         String name = dis.readUTF();
         NBTTag tag = createTag(name, type);
         tag.read(dis);
@@ -158,6 +163,27 @@ public abstract class NBTTag implements Cloneable
             }
         }
         return compound;
+    }
+
+    public static void writeCompoundToFile(File file, NBTCompoundTag tag) throws IOException
+    {
+        DataOutputStream dos = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+        writeNamedTag(tag, dos);
+        dos.flush();
+        dos.close();
+    }
+
+    public static NBTCompoundTag readCompoundFromFile(File worldDataFile) throws IOException
+    {
+        GZIPInputStream input = new GZIPInputStream(new FileInputStream(worldDataFile));
+        DataInputStream in = new DataInputStream(input);
+        NBTTag tag = readNamedTag(in);
+        in.close();
+        if(!(tag instanceof NBTCompoundTag))
+        {
+            throw new IllegalArgumentException("Given file does not contain a NBT compound tag, found instance of " + tag.getClass());
+        }
+        return (NBTCompoundTag) tag;
     }
 
 }

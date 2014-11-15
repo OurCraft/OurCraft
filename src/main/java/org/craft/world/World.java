@@ -313,6 +313,12 @@ public class World
 
     public boolean updateBlock(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
     {
+        boolean disposeList = false;
+        if(visited == null)
+        {
+            disposeList = true;
+            visited = new ArrayList<Vector3>();
+        }
         Block b = getBlockAt(x, y, z);
         if(b != null)
         {
@@ -324,6 +330,12 @@ public class World
             }
             posVec.dispose();
             return true;
+        }
+        if(disposeList)
+        {
+            for(Vector3 v : visited)
+                v.dispose();
+            visited.clear();
         }
         return false;
     }
