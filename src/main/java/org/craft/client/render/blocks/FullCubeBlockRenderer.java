@@ -63,7 +63,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     public void drawNorthFace(OffsettedOpenGLBuffer buffer, World world, Block block, float lightValue, TextureIcon icon, int x, int y, int z)
     {
         Vector3 sizeVec = Vector3.get(1, 1, 0);
-        renderFace(buffer, world, block, x, y, z, icon, Vector3.NULL, sizeVec);
+        renderFace(lightValue, buffer, x, y, z, icon, Vector3.NULL, sizeVec, false, Vector2.NULL, Vector2.MAX, Vector3.NULL, Quaternion.NULL, false);
         sizeVec.dispose();
     }
 
@@ -71,7 +71,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(0, 0, 1);
         Vector3 sizeVec = Vector3.get(1, 1, 0);
-        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec);
+        renderFace(lightValue, buffer, x, y, z, icon, startPos, sizeVec, false, Vector2.NULL, Vector2.MAX, Vector3.NULL, Quaternion.NULL, false);
         sizeVec.dispose();
         startPos.dispose();
     }
@@ -80,7 +80,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.NULL;
         Vector3 sizeVec = Vector3.get(0, 1, 1);
-        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec);
+        renderFace(lightValue, buffer, x, y, z, icon, startPos, sizeVec, false, Vector2.NULL, Vector2.MAX, Vector3.NULL, Quaternion.NULL, false);
         sizeVec.dispose();
     }
 
@@ -88,7 +88,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(1, 0, 0);
         Vector3 sizeVec = Vector3.get(0, 1, 1);
-        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec);
+        renderFace(lightValue, buffer, x, y, z, icon, startPos, sizeVec, false, Vector2.NULL, Vector2.MAX, Vector3.NULL, Quaternion.NULL, false);
         sizeVec.dispose();
         startPos.dispose();
     }
@@ -97,7 +97,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(0, 1f, 0);
         Vector3 sizeVec = Vector3.get(1, 0, 1);
-        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec, true);
+        renderFace(lightValue, buffer, x, y, z, icon, startPos, sizeVec, false, Vector2.NULL, Vector2.MAX, Vector3.NULL, Quaternion.NULL, false);
         sizeVec.dispose();
         startPos.dispose();
     }
@@ -106,7 +106,7 @@ public class FullCubeBlockRenderer extends AbstractBlockRenderer
     {
         Vector3 startPos = Vector3.get(0, 0, 0);
         Vector3 sizeVec = Vector3.get(1, 0, 1);
-        renderFace(buffer, world, block, x, y, z, icon, startPos, sizeVec, true);
+        renderFace(lightValue, buffer, x, y, z, icon, startPos, sizeVec, false, Vector2.NULL, Vector2.MAX, Vector3.NULL, Quaternion.NULL, false);
         sizeVec.dispose();
         startPos.dispose();
     }

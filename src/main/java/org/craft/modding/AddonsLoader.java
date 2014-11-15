@@ -9,7 +9,6 @@ import java.util.*;
 import com.google.common.collect.*;
 import com.google.gson.*;
 
-import org.apache.logging.log4j.*;
 import org.craft.*;
 import org.craft.modding.events.*;
 import org.craft.modding.script.lua.*;
@@ -17,6 +16,7 @@ import org.craft.resources.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
 import org.reflections.*;
+import org.slf4j.*;
 
 public class AddonsLoader
 {

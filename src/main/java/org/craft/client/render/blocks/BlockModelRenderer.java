@@ -132,7 +132,7 @@ public class BlockModelRenderer extends AbstractBlockRenderer
                 {
                     continue;
                 }
-                renderFace(lightValue, buffer, w, b, x, y, z, icon, faceStart, faceSize, flip, entry.getValue().getMinUV(), entry.getValue().getMaxUV(), element.getRotationOrigin(), rotationQuaternion, element.shouldRescale());
+                renderFace(lightValue, buffer, x, y, z, icon, faceStart, faceSize, flip, entry.getValue().getMinUV(), entry.getValue().getMaxUV(), element.getRotationOrigin(), rotationQuaternion, element.shouldRescale());
                 faceSize.dispose();
                 faceStart.dispose();
             }

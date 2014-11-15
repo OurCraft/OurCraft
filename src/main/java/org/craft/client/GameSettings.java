@@ -19,28 +19,28 @@ public class GameSettings
 
     public GameSettings()
     {
-        jumpKey = new GameOption("jumpKey", OptionType.INPUT);
+        jumpKey = new GameOption("jumpKey", GameOptionType.INPUT);
         jumpKey.setValue(Keyboard.KEY_SPACE + "");
 
-        forwardKey = new GameOption("forwardKey", OptionType.INPUT);
+        forwardKey = new GameOption("forwardKey", GameOptionType.INPUT);
         forwardKey.setValue(Keyboard.KEY_W + "");
 
-        backwardsKey = new GameOption("backwardsKey", OptionType.INPUT);
+        backwardsKey = new GameOption("backwardsKey", GameOptionType.INPUT);
         backwardsKey.setValue(Keyboard.KEY_S + "");
 
-        leftKey = new GameOption("leftKey", OptionType.INPUT);
+        leftKey = new GameOption("leftKey", GameOptionType.INPUT);
         leftKey.setValue(Keyboard.KEY_A + "");
 
-        rightKey = new GameOption("rightKey", OptionType.INPUT);
+        rightKey = new GameOption("rightKey", GameOptionType.INPUT);
         rightKey.setValue(Keyboard.KEY_D + "");
 
-        lang = new GameOption("lang", OptionType.PLAIN_TEXT);
+        lang = new GameOption("lang", GameOptionType.PLAIN_TEXT);
         lang.setValue("en_US");
 
-        font = new GameOption("font", OptionType.PLAIN_TEXT);
+        font = new GameOption("font", GameOptionType.PLAIN_TEXT);
         font.setValue("default");
 
-        sensitivity = new GameOption("sensitivity", OptionType.RANGE);
+        sensitivity = new GameOption("sensitivity", GameOptionType.RANGE);
         sensitivity.setValue("1");
     }
 

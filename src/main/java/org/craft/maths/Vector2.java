@@ -8,6 +8,8 @@ public final class Vector2 extends AbstractReference implements IDisposable
 {
 
     public static final Vector2 NULL = new Vector2(0, 0);
+    public static final Vector2 MAX  = new Vector2(1, 1);
+
     public float                x;
     public float                y;
 

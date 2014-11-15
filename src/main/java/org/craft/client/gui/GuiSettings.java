@@ -18,12 +18,12 @@ public class GuiSettings extends Gui
         public GuiOptionSlot(GameOption option)
         {
             this.option = option;
-            if(option.getType() == OptionType.INPUT)
+            if(option.getType() == GameOptionType.INPUT)
             {
                 String value = Keyboard.getKeyName(Integer.parseInt(option.getValue()));
                 widget = new GuiButton(0, 0, 0, 200, 40, value, oc.getFontRenderer());
             }
-            else if(option.getType() == OptionType.RANGE)
+            else if(option.getType() == GameOptionType.RANGE)
             {
                 widget = new GuiSlider(0, 0, 0, 200, 40, 0, 1, oc.getFontRenderer());
             }
@@ -32,11 +32,11 @@ public class GuiSettings extends Gui
         public void setValue(String v)
         {
             option.setValue(v);
-            if(option.getType() == OptionType.INPUT)
+            if(option.getType() == GameOptionType.INPUT)
             {
                 ((GuiButton) widget).setText(Keyboard.getKeyName(Integer.parseInt(option.getValue())));
             }
-            else if(option.getType() == OptionType.INPUT)
+            else if(option.getType() == GameOptionType.INPUT)
             {
 
             }
@@ -59,7 +59,7 @@ public class GuiSettings extends Gui
 
         public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button)
         {
-            if(option.getType() == OptionType.INPUT)
+            if(option.getType() == GameOptionType.INPUT)
             {
                 if(((GuiButton) this.widget).isPressed() && this.widget.isMouseOver(mx, my) && pending == null)
                 {
@@ -68,7 +68,7 @@ public class GuiSettings extends Gui
                 }
                 this.widget.onButtonReleased(mx, my, button);
             }
-            else if(option.getType() == OptionType.RANGE)
+            else if(option.getType() == GameOptionType.RANGE)
             {
                 this.widget.onButtonReleased(mx, my, button);
                 option.setValue("" + ((GuiSlider) widget).getValue());

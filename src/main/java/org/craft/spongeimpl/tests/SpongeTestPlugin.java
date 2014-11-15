@@ -1,6 +1,6 @@
 package org.craft.spongeimpl.tests;
 
-import org.apache.logging.log4j.*;
+import org.slf4j.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;

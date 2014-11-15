@@ -2,8 +2,8 @@ package org.craft.spongeimpl.events.state;
 
 import java.io.*;
 
-import org.apache.logging.log4j.*;
 import org.craft.*;
+import org.slf4j.*;
 import org.spongepowered.api.event.state.*;
 
 public class SpongePreInitEvent extends SpongeStateEvent implements PreInitializationEvent

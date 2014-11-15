@@ -242,7 +242,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
             if(!sprite.useRawImage && sprite.location.equals(loc))
                 return sprite.icon;
         }
-        return new NullTextureIcon();
+        return TextureIcon.NULL_ICON;
     }
 
     /**

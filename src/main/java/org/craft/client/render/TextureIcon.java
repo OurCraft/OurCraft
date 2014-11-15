@@ -2,6 +2,8 @@ package org.craft.client.render;
 
 public interface TextureIcon
 {
+    public static final TextureIcon NULL_ICON = new NullTextureIcon();
+
     /**
      * Returns the width of this icon
      */

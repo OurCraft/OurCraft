@@ -4,7 +4,7 @@ import org.craft.client.render.*;
 import org.craft.inventory.*;
 import org.craft.items.*;
 
-public abstract class ItemRenderer
+public abstract class ItemRenderer extends Renderer
 {
 
     /**

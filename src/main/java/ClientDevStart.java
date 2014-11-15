@@ -1,75 +1,42 @@
 import java.io.*;
 import java.util.*;
 
-import org.craft.*;
-import org.craft.modding.modifiers.*;
 import org.craft.utils.*;
-import org.craft.utils.crash.*;
-import org.reflections.*;
 
-public class ClientDevStart
+public class ClientDevStart extends DevStart
 {
 
-    public static void main(String[] args) throws IOException, SecurityException, ReflectiveOperationException
+    public static void main(String[] args) throws IOException, ReflectiveOperationException
     {
-        if(!(ClassLoader.getSystemClassLoader() instanceof OurClassLoader))
-        {
-            new CrashReport("Wrong classloader at launch. Please add -Djava.system.class.loader=org.craft.OurClassLoader in VM arguments").printStack();
-            System.exit(-2);
-        }
-        HashMap<String, String> properties = new HashMap<String, String>();
-        String current = null;
-        properties.put("username", "Player_" + (int) (Math.random() * 100000L));
-        properties.put("lang", "en_US");
-        properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
-        for(int i = 0; i < args.length; i++ )
-        {
-            String arg = args[i];
-            if(arg.startsWith("--"))
-            {
-                if(current != null && !properties.containsKey(current))
-                {
-                    properties.put(current, "");
-                }
-                current = arg.substring(2);
-            }
-            else
-            {
-                properties.put(current, arg);
-            }
-        }
-        if(current != null && !properties.containsKey(current))
-        {
-            properties.put(current, "");
-        }
-        Commons.applyArguments(properties);
-        ModifierClassTransformer modTrans = new ModifierClassTransformer();
-        OurClassLoader.instance.addTransformer(modTrans);
-        Reflections reflections = new Reflections(OurClassLoader.instance);
-        for(Class<?> c : reflections.getSubTypesOf(ASMTransformerPlugin.class))
-        {
-            try
-            {
-                ASMTransformerPlugin transformers = (ASMTransformerPlugin) c.newInstance();
-                transformers.registerModifiers(modTrans);
-            }
-            catch(InstantiationException e)
-            {
-                e.printStackTrace();
-            }
-            catch(IllegalAccessException e)
-            {
-                e.printStackTrace();
-            }
-        }
+        new ClientDevStart().start(args);
+    }
+
+    @Override
+    public void applyDefaults(Map<String, String> properties)
+    {
+        applyDefault(properties, "username", "Player_" + (int) (Math.random() * 100000L));
+        applyDefault(properties, "lang", "en_US");
+        applyDefault(properties, "gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
+    }
+
+    @Override
+    public void preInit(Map<String, String> properties)
+    {
         final File gameFolder = new File(properties.get("gamefolder"));
-        SystemUtils.setGameFolder(gameFolder);
-        LWJGLSetup.load(new File(gameFolder, "natives"));
-        Class<?> clazz = Class.forName("org.craft.client.OurCraftStartup");
-        clazz.getMethod("main", String[].class).invoke(null, new Object[]
+        try
         {
-                args
-        });
+            LWJGLSetup.load(new File(gameFolder, "natives"));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getStartupClassName()
+    {
+        return "org.craft.client.OurCraftStartup";
     }
 
 }

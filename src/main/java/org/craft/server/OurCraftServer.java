@@ -75,7 +75,8 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         serverWorld = new ServerWorld("remote-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 
-    public void start(HashMap<String, String> properties)
+    @SuppressWarnings("unchecked")
+    public void start(Map<String, String> properties)
     {
         nogui = Boolean.parseBoolean(properties.get("nogui"));
         if(!nogui)
@@ -110,8 +111,16 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         }
         PacketRegistry.init();
 
-        Log.message("Loading SpongeAPI implementation");
-        initSponge();
+        Log.message("Loading addons...");
+        eventBus = new EventBus(new Class<?>[]
+        {
+                ModEvent.class
+        }, OurModEventHandler.class);
+        addonsLoader = new AddonsLoader(this, eventBus);
+        File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
+        if(!modsFolder.exists())
+            modsFolder.mkdirs();
+        addonsLoader.loadAll(modsFolder);
 
         Log.message("Starting server");
 
@@ -134,21 +143,6 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         if(serverGui != null)
             serverGui.dispose();
         serverWrapper.stop();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void initSponge()
-    {
-        gameRegistry = new SpongeGameRegistry();
-        eventBus = new EventBus(new Class<?>[]
-        {
-                ModEvent.class
-        }, OurModEventHandler.class);
-        addonsLoader = new AddonsLoader(this, eventBus);
-        File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
-        if(!modsFolder.exists())
-            modsFolder.mkdirs();
-        addonsLoader.loadAll(modsFolder);
     }
 
     @Override

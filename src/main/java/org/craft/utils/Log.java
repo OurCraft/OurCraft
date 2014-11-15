@@ -4,7 +4,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.logging.*;
 
-import org.apache.logging.log4j.spi.*;
 import org.craft.client.*;
 import org.craft.utils.crash.*;
 
@@ -57,9 +56,7 @@ public class Log
                 StackTraceElement elem = elems[i];
                 if(elem.getClassName().contains(Log.class.getCanonicalName()))
                     continue;
-                if(elem.getClassName().contains(org.apache.logging.log4j.Logger.class.getCanonicalName()))
-                    continue;
-                if(elem.getClassName().contains(AbstractLogger.class.getCanonicalName()))
+                if(elem.getClassName().contains(org.slf4j.Logger.class.getCanonicalName()))
                     continue;
                 if(elem.getClassName().contains(Logger.class.getCanonicalName()))
                     continue;

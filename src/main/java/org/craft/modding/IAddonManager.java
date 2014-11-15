@@ -1,15 +1,16 @@
 package org.craft.modding;
 
+import java.lang.annotation.*;
 import java.util.*;
 
-public interface IAddonManager
+public interface IAddonManager<T extends Annotation>
 {
 
-    AddonContainer getAddon(String id);
+    AddonContainer<T> getAddon(String id);
 
-    Collection<AddonContainer> getAddons();
+    Collection<AddonContainer<T>> getAddons();
 
-    void loadAddon(AddonContainer container);
+    void loadAddon(AddonContainer<T> container);
 
-    IAddonHandler getHandler();
+    IAddonHandler<T> getHandler();
 }

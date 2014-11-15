@@ -103,6 +103,9 @@ public final class I18n
      *      <tr>
      *          <td>Booleans</td><td>z</td>
      *      </tr>
+     *      <tr>
+     *          <td>Objects' toString()</td><td>o</td>
+     *      </tr>
      * </table>
      */
     public static String format(String message, Object... objects)
@@ -147,6 +150,10 @@ public final class I18n
                     else if(Character.toLowerCase(type) == 'z') // Booleans
                     {
                         newResult = ((Boolean) objects[i]).toString();
+                    }
+                    else if(Character.toLowerCase(type) == 'o') // Objects' toString()
+                    {
+                        newResult = objects[i].toString();
                     }
                     after = after.substring(1);
                     result = before + newResult + after;

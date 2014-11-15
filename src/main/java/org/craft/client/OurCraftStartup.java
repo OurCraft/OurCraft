@@ -17,33 +17,17 @@ public class OurCraftStartup
             new CrashReport("Wrong classloader at launch. Please add -Djava.system.class.loader=org.craft.OurClassLoader in VM arguments").printStack();
             System.exit(-2);
         }
-        HashMap<String, String> properties = new HashMap<String, String>();
-        properties.put("username", "Player_" + System.currentTimeMillis());
-        properties.put("lang", "en_US");
-        properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
-        properties.put("nativesFolder", SystemUtils.getGameFolder().getAbsolutePath() + "/natives");
-        String current = null;
-        for(int i = 0; i < args.length; i++ )
-        {
-            String arg = args[i];
-            if(arg.startsWith("--"))
-            {
-                if(current != null && !properties.containsKey(current))
-                {
-                    properties.put(current, "");
-                }
-                current = arg.substring(2);
-            }
-            else
-            {
-                properties.put(current, arg);
-            }
-        }
-        if(current != null && !properties.containsKey(current))
-        {
-            properties.put(current, "");
-        }
-        Commons.applyArguments(properties);
+        Map<String, String> properties = Startup.argsToMap(args);
+        if(!properties.containsKey("username"))
+            properties.put("username", "Player_" + (int) (Math.random() * 100000L));
+        if(!properties.containsKey("lang"))
+            properties.put("lang", "en_US");
+        if(!properties.containsKey("gamefolder"))
+            properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
+        if(!properties.containsKey("nativesFolder"))
+            properties.put("nativesFolder", new File(SystemUtils.getGameFolder(), "natives").getAbsolutePath());
+
+        Startup.applyArguments(properties);
         SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
         System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
         System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));

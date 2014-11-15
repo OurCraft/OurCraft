@@ -7,17 +7,17 @@ public class GameOption
 
     private String                                   id;
     private String                                   value;
-    private OptionType                               type;
+    private GameOptionType                               type;
     private static final HashMap<String, GameOption> options = new HashMap<String, GameOption>();
 
-    public GameOption(String id, OptionType type)
+    public GameOption(String id, GameOptionType type)
     {
         this.id = id;
         this.type = type;
         options.put(id, this);
     }
 
-    public OptionType getType()
+    public GameOptionType getType()
     {
         return type;
     }

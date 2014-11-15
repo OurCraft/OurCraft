@@ -2,8 +2,8 @@ package org.craft.modding.events;
 
 import java.io.*;
 
-import org.apache.logging.log4j.*;
 import org.craft.*;
+import org.slf4j.*;
 
 public class ModPreInitEvent extends ModEvent
 {

@@ -2,11 +2,11 @@ package org.craft.modding;
 
 import java.io.*;
 
-import org.apache.logging.log4j.*;
 import org.craft.*;
 import org.craft.modding.events.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
+import org.slf4j.*;
 
 public class ModHandler implements IAddonHandler<Mod>
 {

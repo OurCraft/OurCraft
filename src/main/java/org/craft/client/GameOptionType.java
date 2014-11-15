@@ -1,7 +1,6 @@
 package org.craft.client;
 
-public enum OptionType
+public enum GameOptionType
 {
-
     INPUT, RANGE, PLAIN_TEXT
 }

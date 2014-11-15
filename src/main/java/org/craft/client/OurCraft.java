@@ -100,7 +100,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         crosshairLocation = new ResourceLocation("ourcraft", "textures/crosshair.png");
     }
 
-    public void start(HashMap<String, String> properties)
+    public void start(Map<String, String> properties)
     {
         username = properties.get("username");
         I18n.setCurrentLanguage(properties.get("lang"));

@@ -4,12 +4,12 @@ import java.util.*;
 
 import com.google.common.base.Optional;
 
-import org.apache.logging.log4j.*;
 import org.craft.modding.*;
 import org.craft.spongeimpl.*;
+import org.slf4j.*;
 import org.spongepowered.api.plugin.*;
 
-public class SpongePluginManager implements IAddonManager, PluginManager
+public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
 {
 
     private HashMap<String, PluginContainer> plugins;
@@ -41,33 +41,35 @@ public class SpongePluginManager implements IAddonManager, PluginManager
         return plugins.values();
     }
 
-    public void loadAddon(AddonContainer container)
+    public void loadAddon(AddonContainer<Plugin> container)
     {
         plugins.put(container.getId(), (PluginContainer) container);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public AddonContainer getAddon(String id)
+    public AddonContainer<Plugin> getAddon(String id)
     {
-        return (AddonContainer) getPlugin(id).get();
+        return (AddonContainer<Plugin>) getPlugin(id).get();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Collection<AddonContainer> getAddons()
+    public Collection<AddonContainer<Plugin>> getAddons()
     {
-        ArrayList<AddonContainer> containers = new ArrayList<AddonContainer>();
+        ArrayList<AddonContainer<Plugin>> containers = new ArrayList<AddonContainer<Plugin>>();
         for(PluginContainer plugin : getPlugins())
         {
             if(plugin instanceof AddonContainer)
             {
-                containers.add((AddonContainer) plugin);
+                containers.add((AddonContainer<Plugin>) plugin);
             }
         }
         return containers;
     }
 
     @Override
-    public IAddonHandler getHandler()
+    public IAddonHandler<Plugin> getHandler()
     {
         return handler;
     }

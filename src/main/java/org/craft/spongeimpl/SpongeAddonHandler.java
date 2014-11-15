@@ -2,12 +2,12 @@ package org.craft.spongeimpl;
 
 import java.io.*;
 
-import org.apache.logging.log4j.*;
 import org.craft.*;
 import org.craft.modding.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.plugin.*;
 import org.craft.utils.*;
+import org.slf4j.*;
 import org.spongepowered.api.plugin.*;
 
 public class SpongeAddonHandler implements IAddonHandler<Plugin>

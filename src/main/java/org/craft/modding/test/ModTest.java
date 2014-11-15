@@ -1,8 +1,8 @@
 package org.craft.modding.test;
 
-import org.apache.logging.log4j.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.slf4j.*;
 
 @Mod(id = "modtest", name = "Test mod", version = "1.0")
 public class ModTest
