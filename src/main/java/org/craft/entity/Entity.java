@@ -42,7 +42,6 @@ public class Entity
     public int                entityID;
     private CollisionInfos    collInfos;
 
-    public static final float G = 9.81f / 360f;
 
     /**
      * Instantiates an Entity with given world
@@ -82,6 +81,7 @@ public class Entity
      */
     public void update()
     {
+        float gravity = worldObj.getGravity();
         wasOnGround = onGround;
         onGround = true;
 
@@ -142,11 +142,11 @@ public class Entity
         }
 
         onEntityUpdate();
-        velY += -G;
+        velY -= gravity;
 
-        if(velY < -G * 20)
+        if(velY < -gravity * 20)
         {
-            velY = -G * 20;
+            velY = -gravity * 20;
         }
 
     }

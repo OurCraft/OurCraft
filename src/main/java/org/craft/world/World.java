@@ -21,6 +21,7 @@ public class World
     public boolean             isRemote;
     private Random             rng;
     private long               tick;
+    private float              gravity;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
@@ -29,6 +30,7 @@ public class World
         this.name = name;
         this.generator = generator;
         this.chunkProvider = prov;
+        this.gravity = 9.81f / 360f;
         spawingQueue = new ArrayList<Entity>();
         entities = new LinkedList<Entity>();
     }
@@ -43,7 +45,7 @@ public class World
             Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
             if(c != null)
                 c.update();
-            e.update();
+            e.update(delta);
 
             if(e.isDead())
             {
@@ -456,5 +458,10 @@ public class World
     public long getTick()
     {
         return tick;
+    }
+
+    public float getGravity()
+    {
+        return gravity;
     }
 }
