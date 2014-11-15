@@ -28,7 +28,7 @@ public class GuiLanguage extends Gui
         public void render(int index, int x, int y, int w, int h, int mx, int my, boolean selected, RenderEngine engine, GuiList<?> owner)
         {
             if(selected)
-                Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
+                drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
             getFontRenderer().drawShadowedString(langName, 0xFFFFFFFF, x + w / 2 - (int) getFontRenderer().getTextWidth(langName) / 2, y + h / 2 - (int) getFontRenderer().getCharHeight('A') / 2, engine);
         }
 
@@ -120,7 +120,7 @@ public class GuiLanguage extends Gui
 
         renderEngine.bindLocation(earthLoc);
         TextureRegion icon = atlas.getTiles()[(int) Math.floor(animCounter)][0];
-        Gui.drawTexturedRect(renderEngine, 0, 0, 80, 80, icon.getMinU(), 0, icon.getMaxU(), 1);
+        drawTexturedRect(renderEngine, 0, 0, 80, 80, icon.getMinU(), 0, icon.getMaxU(), 1);
 
         float speed = 0.075f;
         animCounter += speed;

@@ -54,7 +54,7 @@ public class GuiSelectWorld extends Gui
         public void render(int index, int x, int y, int w, int h, int mx, int my, boolean selected, RenderEngine engine, GuiList<?> owner)
         {
             if(selected)
-                Gui.drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
+                drawTexturedRect(engine, x, y, w, h, 0, 0, 1, 1);
             FontRenderer font = oc.getFontRenderer();
             font.drawShadowedString(worldName, 0xFFFFFFFF, x + 2, y, engine);
             font.drawShadowedString(worldFolderName, 0xFFC0C0C0, x + 2, y + 20, engine);

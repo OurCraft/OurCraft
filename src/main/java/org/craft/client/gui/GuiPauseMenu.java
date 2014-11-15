@@ -2,6 +2,7 @@ package org.craft.client.gui;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
+import org.craft.client.render.RenderEngine;
 import org.lwjgl.input.*;
 
 public class GuiPauseMenu extends Gui
@@ -22,7 +23,8 @@ public class GuiPauseMenu extends Gui
     public void init()
     {
         addWidget(new GuiButton(0, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2, 300, 40, I18n.format("main.play.return"), getFontRenderer()));
-        addWidget(new GuiButton(1, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.play.quitToMainScreen"), getFontRenderer()));
+        addWidget(new GuiButton(1, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 60, 300, 40, I18n.format("main.settings"), getFontRenderer()));
+        addWidget(new GuiButton(2, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.play.quitToMainScreen"), getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -33,10 +35,14 @@ public class GuiPauseMenu extends Gui
         }
         else if(widget.getID() == 1)
         {
+            oc.openMenu(new GuiSettings(oc, this));
+        }
+        else if(widget.getID() == 2)
+        {
             oc.quitToMainScreen();
         }
     }
-
+    
     @Override
     public void update()
     {
