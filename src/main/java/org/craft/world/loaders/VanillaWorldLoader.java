@@ -3,10 +3,9 @@ package org.craft.world.loaders;
 import java.io.*;
 import java.util.*;
 
-import com.google.common.collect.*;
-
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
+import org.craft.nbt.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -33,11 +32,20 @@ public class VanillaWorldLoader extends WorldLoader
         }
     }
 
-    public void writeWorldConstants(ByteDataBuffer buffer, World world) throws IOException
+    public void writeWorldConstants(File file, World world) throws IOException
     {
-        buffer.writeLong(world.getSeed());
-        buffer.writeLong(System.currentTimeMillis());
-        buffer.writeString(world.getName());
+        try
+        {
+            NBTCompoundTag compoundTag = new NBTCompoundTag("worldData");
+            compoundTag.putLong("seed", world.getSeed());
+            compoundTag.putLong("timestamp", System.currentTimeMillis());
+            compoundTag.putString("name", world.getName());
+            NBTTag.writeCompoundToFile(file, compoundTag);
+        }
+        catch(Exception e1)
+        {
+            e1.printStackTrace();
+        }
     }
 
     @Override
@@ -130,24 +138,8 @@ public class VanillaWorldLoader extends WorldLoader
         }
     }
 
-    public HashMap<String, String> loadWorldInfos(File worldDataFile)
+    public NBTCompoundTag loadWorldInfos(File worldDataFile) throws IOException
     {
-        HashMap<String, String> map = Maps.newHashMap();
-        try
-        {
-            ByteDataBuffer buffer = new ByteDataBuffer(new BufferedInputStream(new FileInputStream(worldDataFile)));
-            map.put("seed", "" + buffer.readLong());
-            if(buffer.readableBytes() >= 8)
-            {
-                map.put("timestamp", buffer.readLong() + "");
-                map.put("name", buffer.readString());
-            }
-            buffer.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        return map;
+        return NBTTag.readCompoundFromFile(worldDataFile);
     }
 }

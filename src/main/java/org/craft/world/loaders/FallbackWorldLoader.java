@@ -17,7 +17,7 @@ public class FallbackWorldLoader extends WorldLoader
     {
     }
 
-    public void writeWorldConstants(ByteDataBuffer buffer, World world) throws IOException
+    public void writeWorldConstants(File file, World world) throws IOException
     {
     }
 

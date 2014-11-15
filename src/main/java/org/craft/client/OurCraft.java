@@ -909,16 +909,11 @@ public class OurCraft implements Runnable, OurCraftInstance
             File chunkFolder = new File(worldFolder, "chunkData");
             if(!chunkFolder.exists())
                 chunkFolder.mkdirs();
-            loader.writeWorldConstants(buffer, clientWorld);
-            buffer.flush();
-            buffer.close();
             File worldData = new File(worldFolder, "world.data");
             if(!worldData.exists())
                 worldData.createNewFile();
-            FileOutputStream worldDataOut = new FileOutputStream(worldData);
-            worldDataOut.write(buffer.toBytes());
-            worldDataOut.flush();
-            worldDataOut.close();
+            loader.writeWorldConstants(worldData, clientWorld);
+
             Iterator<Chunk> chunks = clientWorld.getChunkProvider().iterator();
             while(chunks.hasNext())
             {
