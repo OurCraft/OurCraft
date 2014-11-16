@@ -1,6 +1,10 @@
 {
     "variants": 
     {
+        "normal":
+        [
+            { "model": "log_up" }
+        ],
         "orientation=up":
         [
         	{ "model": "log_up" }

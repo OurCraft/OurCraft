@@ -51,7 +51,7 @@ public class BlockModelRenderer extends AbstractBlockRenderer
         }
 
         if(variant == null)
-            return;
+            variant = blockVariants.get(0);
         Model blockModel = variant.getModels().get(w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {
