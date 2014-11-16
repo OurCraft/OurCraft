@@ -1,4 +1,4 @@
-package org.craft.nbt;
+package com.mojang.nbt;
 
 import java.io.*;
 
@@ -9,17 +9,17 @@ import com.google.gson.*;
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
  * @author Mostly Mojang AB
  */
-public class NBTStringTag extends NBTTag
+public class NBTIntTag extends NBTTag
 {
 
-    private String value;
+    private int value;
 
-    protected NBTStringTag(String name)
+    protected NBTIntTag(String name)
     {
-        super(name);
+        this(name, 0);
     }
 
-    protected NBTStringTag(String name, String value)
+    protected NBTIntTag(String name, int value)
     {
         super(name);
         this.value = value;
@@ -28,34 +28,34 @@ public class NBTStringTag extends NBTTag
     @Override
     public void write(DataOutput dos) throws IOException
     {
-        dos.writeUTF(value);
+        dos.writeInt(value);
     }
 
     @Override
     public void read(DataInput dis) throws IOException
     {
-        value = dis.readUTF();
+        value = dis.readInt();
     }
 
     @Override
     public String toString()
     {
-        return value;
+        return "" + value;
     }
 
     @Override
     public NBTTypes getID()
     {
-        return NBTTypes.STRING;
+        return NBTTypes.INT;
     }
 
     @Override
     public NBTTag clone()
     {
-        return new NBTStringTag(getName(), value);
+        return new NBTIntTag(getName(), value);
     }
 
-    public String getData()
+    public int getData()
     {
         return value;
     }
@@ -65,8 +65,8 @@ public class NBTStringTag extends NBTTag
     {
         if(super.equals(obj))
         {
-            NBTStringTag o = (NBTStringTag) obj;
-            return value.equals(o.value);
+            NBTIntTag o = (NBTIntTag) obj;
+            return o.value == value;
         }
         return false;
     }

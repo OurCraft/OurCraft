@@ -1,4 +1,4 @@
-package org.craft.nbt;
+package com.mojang.nbt;
 
 import java.io.*;
 
@@ -9,53 +9,57 @@ import com.google.gson.*;
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
  * @author Mostly Mojang AB
  */
-public class NBTShortTag extends NBTTag
+public class NBTIntArrayTag extends NBTTag
 {
 
-    private short value;
+    private int[] value;
 
-    protected NBTShortTag(String name)
+    protected NBTIntArrayTag(String name)
     {
-        this(name, (short) 0);
+        this(name, null);
     }
 
-    protected NBTShortTag(String name, short value)
+    protected NBTIntArrayTag(String name, int[] data)
     {
         super(name);
-        this.value = value;
+        this.value = data;
     }
 
     @Override
     public void write(DataOutput dos) throws IOException
     {
-        dos.writeShort(value);
+        dos.writeInt(value.length);
+        for(int i = 0; i < value.length; i++ )
+            dos.writeInt(value[i]);
     }
 
     @Override
     public void read(DataInput dis) throws IOException
     {
-        value = dis.readShort();
+        value = new int[dis.readInt()];
+        for(int i = 0; i < value.length; i++ )
+            value[i] = dis.readInt();
     }
 
     @Override
     public String toString()
     {
-        return "" + value;
+        return "[" + value.length + " integers]";
     }
 
     @Override
     public NBTTypes getID()
     {
-        return NBTTypes.SHORT;
+        return NBTTypes.INT_ARRAY;
     }
 
     @Override
     public NBTTag clone()
     {
-        return new NBTShortTag(getName(), value);
+        return new NBTIntArrayTag(getName(), value);
     }
 
-    public short getData()
+    public int[] getData()
     {
         return value;
     }
@@ -65,8 +69,8 @@ public class NBTShortTag extends NBTTag
     {
         if(super.equals(obj))
         {
-            NBTShortTag o = (NBTShortTag) obj;
-            return o.value == value;
+            NBTIntArrayTag o = (NBTIntArrayTag) obj;
+            return ((value == null && o.value == null) || (value != null && value.equals(o.value)));
         }
         return false;
     }
@@ -74,7 +78,10 @@ public class NBTShortTag extends NBTTag
     @Override
     public JsonElement toJson()
     {
-        return new JsonPrimitive(value);
+        JsonArray array = new JsonArray();
+        for(int i = 0; i < value.length; i++ )
+            array.add(new JsonPrimitive(value[i]));
+        return array;
     }
 
 }

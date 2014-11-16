@@ -1,4 +1,4 @@
-package org.craft.nbt;
+package com.mojang.nbt;
 
 import java.io.*;
 
@@ -9,17 +9,17 @@ import com.google.gson.*;
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
  * @author Mostly Mojang AB
  */
-public class NBTByteTag extends NBTTag
+public class NBTDoubleTag extends NBTTag
 {
 
-    private byte value;
+    private double value;
 
-    protected NBTByteTag(String name)
+    protected NBTDoubleTag(String name)
     {
-        this(name, (byte) 0);
+        this(name, 0);
     }
 
-    protected NBTByteTag(String name, byte value)
+    protected NBTDoubleTag(String name, double value)
     {
         super(name);
         this.value = value;
@@ -28,13 +28,13 @@ public class NBTByteTag extends NBTTag
     @Override
     public void write(DataOutput dos) throws IOException
     {
-        dos.writeByte(value);
+        dos.writeDouble(value);
     }
 
     @Override
     public void read(DataInput dis) throws IOException
     {
-        value = dis.readByte();
+        value = dis.readDouble();
     }
 
     @Override
@@ -46,16 +46,16 @@ public class NBTByteTag extends NBTTag
     @Override
     public NBTTypes getID()
     {
-        return NBTTypes.BYTE;
+        return NBTTypes.DOUBLE;
     }
 
     @Override
     public NBTTag clone()
     {
-        return new NBTByteTag(getName(), value);
+        return new NBTDoubleTag(getName(), value);
     }
 
-    public byte getData()
+    public double getData()
     {
         return value;
     }
@@ -65,7 +65,7 @@ public class NBTByteTag extends NBTTag
     {
         if(super.equals(obj))
         {
-            NBTByteTag o = (NBTByteTag) obj;
+            NBTDoubleTag o = (NBTDoubleTag) obj;
             return o.value == value;
         }
         return false;
@@ -76,5 +76,4 @@ public class NBTByteTag extends NBTTag
     {
         return new JsonPrimitive(value);
     }
-
 }

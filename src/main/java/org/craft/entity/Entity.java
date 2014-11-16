@@ -2,9 +2,10 @@ package org.craft.entity;
 
 import java.util.*;
 
+import com.mojang.nbt.*;
+
 import org.craft.blocks.*;
 import org.craft.maths.*;
-import org.craft.nbt.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;

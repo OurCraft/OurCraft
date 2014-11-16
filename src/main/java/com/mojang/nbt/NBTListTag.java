@@ -1,4 +1,4 @@
-package org.craft.nbt;
+package com.mojang.nbt;
 
 import java.io.*;
 import java.util.*;

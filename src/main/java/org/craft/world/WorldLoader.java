@@ -2,7 +2,8 @@ package org.craft.world;
 
 import java.io.*;
 
-import org.craft.nbt.*;
+import com.mojang.nbt.*;
+
 import org.craft.resources.*;
 
 public abstract class WorldLoader

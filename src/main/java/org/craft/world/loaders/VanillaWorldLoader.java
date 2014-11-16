@@ -4,9 +4,10 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
+import com.mojang.nbt.*;
+
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
-import org.craft.nbt.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;

@@ -1,4 +1,4 @@
-package org.craft.nbt;
+package com.mojang.nbt;
 
 import java.io.*;
 
@@ -9,47 +9,71 @@ import com.google.gson.*;
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
  * @author Mostly Mojang AB
  */
-public class NBTEndTag extends NBTTag
+public class NBTLongTag extends NBTTag
 {
 
-    public NBTEndTag()
+    private long value;
+
+    protected NBTLongTag(String name)
     {
-        super("");
+        this(name, 0);
+    }
+
+    protected NBTLongTag(String name, long value)
+    {
+        super(name);
+        this.value = value;
     }
 
     @Override
     public void write(DataOutput dos) throws IOException
     {
-        ;
+        dos.writeLong(value);
     }
 
     @Override
     public void read(DataInput dis) throws IOException
     {
-        ;
+        value = dis.readLong();
     }
 
     @Override
     public String toString()
     {
-        return "nil";
+        return "" + value;
     }
 
     @Override
     public NBTTypes getID()
     {
-        return NBTTypes.END;
+        return NBTTypes.LONG;
     }
 
     @Override
     public NBTTag clone()
     {
-        return new NBTEndTag();
+        return new NBTLongTag(getName(), value);
+    }
+
+    public long getData()
+    {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(super.equals(obj))
+        {
+            NBTLongTag o = (NBTLongTag) obj;
+            return o.value == value;
+        }
+        return false;
     }
 
     @Override
     public JsonElement toJson()
     {
-        return JsonNull.INSTANCE;
+        return new JsonPrimitive(value);
     }
 }

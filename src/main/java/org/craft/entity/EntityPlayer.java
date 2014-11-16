@@ -2,11 +2,12 @@ package org.craft.entity;
 
 import java.util.*;
 
+import com.mojang.nbt.*;
+
 import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.inventory.Stack;
 import org.craft.items.*;
-import org.craft.nbt.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 

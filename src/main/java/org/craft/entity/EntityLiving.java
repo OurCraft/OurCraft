@@ -1,7 +1,8 @@
 package org.craft.entity;
 
+import com.mojang.nbt.*;
+
 import org.craft.inventory.*;
-import org.craft.nbt.*;
 import org.craft.world.*;
 
 public class EntityLiving extends Entity

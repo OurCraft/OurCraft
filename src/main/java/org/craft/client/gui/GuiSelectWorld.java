@@ -7,12 +7,13 @@ import java.util.*;
 
 import javax.imageio.*;
 
+import com.mojang.nbt.*;
+
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
-import org.craft.nbt.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
