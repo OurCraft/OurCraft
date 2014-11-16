@@ -18,11 +18,11 @@ public class Chunk
     private boolean                            isDirty;
     private World                              owner;
     private boolean                            shouldUpdate;
-    private boolean                            empty;
+    private boolean                            modified;
 
     public Chunk(World owner, ChunkCoord coords)
     {
-        this.empty = true;
+        this.modified = false;
         this.shouldUpdate = true; // TODO: Needs to be based on entities living in this chunk
         this.owner = owner;
         this.coords = coords;
@@ -234,7 +234,11 @@ public class Chunk
         if(block == null)
             block = Blocks.air;
         else
+        {
+            if(block != null && block.getUniqueID() != blocks[x][y][z])
+                modified = true;
             blocks[x][y][z] = block.getUniqueID();
+        }
 
         if(y >= highest[x][z])
         {
@@ -256,8 +260,6 @@ public class Chunk
         }
         markDirty();
         markNeighbors(x, y, z);
-        if(block != Blocks.air)
-            empty = false;
     }
 
     /**
@@ -302,6 +304,7 @@ public class Chunk
     public void setChunkBlockState(int x, int y, int z, BlockState state, IBlockStateValue value)
     {
         getBlockStateObject(x, y, z, true).set(state, value);
+        modified = true;
         markNeighbors(x, y, z);
         markDirty();
     }
@@ -457,8 +460,13 @@ public class Chunk
         dirty[x][y][z] = true;
     }
 
-    public boolean isEmpty()
+    public boolean isModified()
     {
-        return empty;
+        return modified;
+    }
+
+    public void setModifiedState(boolean state)
+    {
+        this.modified = state;
     }
 }

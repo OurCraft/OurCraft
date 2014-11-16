@@ -79,18 +79,21 @@ public class VanillaWorldLoader extends WorldLoader
                             }
                             else
                                 Log.message("Unknown block at " + x + "," + y + "," + z + " = " + blockId);
-                            NBTCompoundTag blockStates = blockData.getCompound("blockStates");
-                            for(NBTTag tag : blockStates.getAllTags())
+                            if(blockData.contains("blockStates"))
                             {
-                                if(tag instanceof NBTStringTag)
+                                NBTCompoundTag blockStates = blockData.getCompound("blockStates");
+                                for(NBTTag tag : blockStates.getAllTags())
                                 {
-                                    NBTStringTag blockStateData = (NBTStringTag) tag;
-                                    BlockState state = BlockStates.getState(blockStateData.getName());
-                                    IBlockStateValue value = BlockStates.getValue(state, blockStateData.getData());
-                                    chunk.setBlockState(x, y, z, state, value);
+                                    if(tag instanceof NBTStringTag)
+                                    {
+                                        NBTStringTag blockStateData = (NBTStringTag) tag;
+                                        BlockState state = BlockStates.getState(blockStateData.getName());
+                                        IBlockStateValue value = BlockStates.getValue(state, blockStateData.getData());
+                                        chunk.setBlockState(x, y, z, state, value);
+                                    }
+                                    else
+                                        throw new IllegalArgumentException("Block state tag is not a NBTStringTag, it's a instance of " + tag.getClass().getCanonicalName());
                                 }
-                                else
-                                    throw new IllegalArgumentException("Block state tag is not a NBTStringTag, it's a instance of " + tag.getClass().getCanonicalName());
                             }
                         }
                     }
@@ -104,6 +107,7 @@ public class VanillaWorldLoader extends WorldLoader
             {
                 throw new IOException("Failed to load chunk (" + chunkX + "," + chunkY + "," + chunkZ + ")", e);
             }
+            chunk.setModifiedState(false);
             return chunk;
         }
         return null;
@@ -125,12 +129,13 @@ public class VanillaWorldLoader extends WorldLoader
                     NBTCompoundTag blockData = new NBTCompoundTag();
                     blockData.putString("id", chunk.getChunkBlock(x, y, z).getId());
                     BlockStatesObject o = chunk.getBlockStates(x, y, z);
-                    NBTCompoundTag blockStates = new NBTCompoundTag();
                     if(o == null)
                     {
+
                     }
                     else
                     {
+                        NBTCompoundTag blockStates = new NBTCompoundTag();
                         Iterator<BlockState> states = o.getMap().keySet().iterator();
                         while(states.hasNext())
                         {
@@ -138,8 +143,8 @@ public class VanillaWorldLoader extends WorldLoader
                             IBlockStateValue value = o.get(state);
                             blockStates.putString(state.toString(), value == null ? "null" : value.toString());
                         }
+                        blockData.putCompound("blockStates", blockStates);
                     }
-                    blockData.putCompound("blockStates", blockStates);
                     tag.putCompound(x + "." + y + "." + z, blockData);
                 }
             }

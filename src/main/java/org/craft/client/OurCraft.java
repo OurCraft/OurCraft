@@ -918,7 +918,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             while(chunks.hasNext())
             {
                 Chunk chunk = chunks.next();
-                if(!chunk.isEmpty())
+                if(chunk.isModified())
                     loader.writeChunk(new File(worldFolder, "chunkData/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data"), chunk, chunk.getCoords().x, chunk.getCoords().y, chunk.getCoords().z);
             }
         }
