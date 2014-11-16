@@ -4,7 +4,6 @@ import java.io.*;
 
 import org.craft.nbt.*;
 import org.craft.resources.*;
-import org.craft.utils.*;
 
 public abstract class WorldLoader
 {
@@ -29,7 +28,7 @@ public abstract class WorldLoader
 
     public abstract Chunk loadChunk(World world, int chunkX, int chunkY, int chunkZ) throws IOException;
 
-    public abstract void writeChunk(ByteDataBuffer buffer, Chunk chunk, int chunkX, int chunkY, int chunkZ) throws IOException;
+    public abstract void writeChunk(File file, Chunk chunk, int chunkX, int chunkY, int chunkZ) throws IOException;
 
     public NBTCompoundTag loadWorldInfos(File worldDataFile) throws IOException
     {

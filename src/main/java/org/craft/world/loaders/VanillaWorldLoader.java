@@ -2,6 +2,7 @@ package org.craft.world.loaders;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
@@ -22,9 +23,8 @@ public class VanillaWorldLoader extends WorldLoader
     {
         try
         {
-            ByteDataBuffer buffer = new ByteDataBuffer(loader.getResource(new ResourceLocation(worldFolder.getName(), "world.data")).getData());
-            world.setSeed(buffer.readLong());
-            buffer.close();
+            NBTCompoundTag worldInfos = NBTTag.readCompoundFromFile(loader.getResource(new ResourceLocation(worldFolder.getName(), "world.data")).asFile());
+            world.setSeed(worldInfos.getLong("seed"));
         }
         catch(Exception e)
         {
@@ -57,10 +57,11 @@ public class VanillaWorldLoader extends WorldLoader
             Chunk chunk = new Chunk(world, ChunkCoord.get(chunkX, chunkY, chunkZ));
             try
             {
-                ByteDataBuffer buffer = new ByteDataBuffer(loader.getResource(res).getData());
-                int readChunkX = buffer.readInt();
-                int readChunkY = buffer.readInt();
-                int readChunkZ = buffer.readInt();
+                DataInputStream input = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(loader.getResource(res).getData()))));
+                NBTCompoundTag chunkData = (NBTCompoundTag) NBTTag.readNamedTag(input);
+                int readChunkX = chunkData.getInt("xCoord");
+                int readChunkY = chunkData.getInt("yCoord");
+                int readChunkZ = chunkData.getInt("zCoord");
 
                 for(int x = 0; x < 16; x++ )
                 {
@@ -68,7 +69,8 @@ public class VanillaWorldLoader extends WorldLoader
                     {
                         for(int z = 0; z < 16; z++ )
                         {
-                            String blockId = buffer.readString();
+                            NBTCompoundTag blockData = chunkData.getCompound(x + "." + y + "." + z);
+                            String blockId = blockData.getString("id");
                             Block b = Blocks.get(blockId);
                             if(b != null)
                             {
@@ -76,17 +78,23 @@ public class VanillaWorldLoader extends WorldLoader
                             }
                             else
                                 Log.message("Unknown block at " + x + "," + y + "," + z + " = " + blockId);
-                            int nBlockStates = buffer.readInt();
-                            for(int i = 0; i < nBlockStates; i++ )
+                            NBTCompoundTag blockStates = blockData.getCompound("blockStates");
+                            for(NBTTag tag : blockStates.getAllTags())
                             {
-                                BlockState state = BlockStates.getState(buffer.readString());
-                                IBlockStateValue value = BlockStates.getValue(state, buffer.readString());
-                                chunk.setChunkBlockState(x, y, z, state, value);
+                                if(tag instanceof NBTStringTag)
+                                {
+                                    NBTStringTag blockStateData = (NBTStringTag) tag;
+                                    BlockState state = BlockStates.getState(blockStateData.getName());
+                                    IBlockStateValue value = BlockStates.getValue(state, blockStateData.getData());
+                                    chunk.setBlockState(x, y, z, state, value);
+                                }
+                                else
+                                    throw new IllegalArgumentException("Block state tag is not a NBTStringTag, it's a instance of " + tag.getClass().getCanonicalName());
                             }
                         }
                     }
                 }
-                buffer.close();
+                input.close();
                 assert readChunkX == chunkX : "Read chunkX is not equal to given chunkX";
                 assert readChunkY == chunkY : "Read chunkY is not equal to given chunkY";
                 assert readChunkZ == chunkZ : "Read chunkZ is not equal to given chunkZ";
@@ -101,41 +109,41 @@ public class VanillaWorldLoader extends WorldLoader
     }
 
     @Override
-    public void writeChunk(ByteDataBuffer buffer, Chunk chunk, int chunkX, int chunkY, int chunkZ) throws IOException
+    public void writeChunk(File file, Chunk chunk, int chunkX, int chunkY, int chunkZ) throws IOException
     {
-        buffer.writeInt(chunkX);
-        buffer.writeInt(chunkY);
-        buffer.writeInt(chunkZ);
+        NBTCompoundTag tag = new NBTCompoundTag("chunkData");
+        tag.putInt("xCoord", chunkX);
+        tag.putInt("yCoord", chunkY);
+        tag.putInt("zCoord", chunkZ);
         for(int x = 0; x < 16; x++ )
         {
             for(int y = 0; y < 16; y++ )
             {
                 for(int z = 0; z < 16; z++ )
                 {
-                    buffer.writeString(chunk.getChunkBlock(x, y, z).getId());
+                    NBTCompoundTag blockData = new NBTCompoundTag();
+                    blockData.putString("id", chunk.getChunkBlock(x, y, z).getId());
                     BlockStatesObject o = chunk.getBlockStates(x, y, z);
+                    NBTCompoundTag blockStates = new NBTCompoundTag();
                     if(o == null)
                     {
-                        buffer.writeInt(0);
                     }
                     else
                     {
-                        buffer.writeInt(o.size());
                         Iterator<BlockState> states = o.getMap().keySet().iterator();
                         while(states.hasNext())
                         {
                             BlockState state = states.next();
                             IBlockStateValue value = o.get(state);
-                            buffer.writeString(state.toString());
-                            if(value == null)
-                                buffer.writeString("null");
-                            else
-                                buffer.writeString(value.toString());
+                            blockStates.putString(state.toString(), value == null ? "null" : value.toString());
                         }
                     }
+                    blockData.putCompound("blockStates", blockStates);
+                    tag.putCompound(x + "." + y + "." + z, blockData);
                 }
             }
         }
+        NBTTag.writeCompoundToFile(file, tag);
     }
 
     public NBTCompoundTag loadWorldInfos(File worldDataFile) throws IOException

@@ -167,7 +167,7 @@ public abstract class NBTTag implements Cloneable
 
     public static void writeCompoundToFile(File file, NBTCompoundTag tag) throws IOException
     {
-        DataOutputStream dos = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file))));
         writeNamedTag(tag, dos);
         dos.flush();
         dos.close();

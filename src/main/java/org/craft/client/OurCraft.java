@@ -917,17 +917,9 @@ public class OurCraft implements Runnable, OurCraftInstance
             Iterator<Chunk> chunks = clientWorld.getChunkProvider().iterator();
             while(chunks.hasNext())
             {
-                ByteDataBuffer regionBuffer = new ByteDataBuffer();
                 Chunk chunk = chunks.next();
-                loader.writeChunk(regionBuffer, chunk, chunk.getCoords().x, chunk.getCoords().y, chunk.getCoords().z);
-                regionBuffer.flush();
-                regionBuffer.close();
-                byte[] regionRawData = regionBuffer.toBytes();
-                File regionFile = new File(worldFolder, "chunkData/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data");
-                FileOutputStream out = new FileOutputStream(regionFile);
-                out.write(regionRawData);
-                out.flush();
-                out.close();
+                if(!chunk.isEmpty())
+                    loader.writeChunk(new File(worldFolder, "chunkData/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data"), chunk, chunk.getCoords().x, chunk.getCoords().y, chunk.getCoords().z);
             }
         }
         catch(Exception e)

@@ -18,9 +18,11 @@ public class Chunk
     private boolean                            isDirty;
     private World                              owner;
     private boolean                            shouldUpdate;
+    private boolean                            empty;
 
     public Chunk(World owner, ChunkCoord coords)
     {
+        this.empty = true;
         this.shouldUpdate = true; // TODO: Needs to be based on entities living in this chunk
         this.owner = owner;
         this.coords = coords;
@@ -254,6 +256,8 @@ public class Chunk
         }
         markDirty();
         markNeighbors(x, y, z);
+        if(block != Blocks.air)
+            empty = false;
     }
 
     /**
@@ -451,5 +455,10 @@ public class Chunk
         if(z < 0)
             z = 16 + z;
         dirty[x][y][z] = true;
+    }
+
+    public boolean isEmpty()
+    {
+        return empty;
     }
 }
