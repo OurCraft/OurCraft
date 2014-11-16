@@ -10,7 +10,7 @@ public class DiskSimpleResource extends AbstractResource
 
     public DiskSimpleResource(ResourceLocation location, File file, ResourceLoader loader) throws FileNotFoundException
     {
-        super(location, new FileInputStream(file), loader);
+        super(location, file.isDirectory() ? null : new FileInputStream(file), loader);
         this.file = file;
     }
 

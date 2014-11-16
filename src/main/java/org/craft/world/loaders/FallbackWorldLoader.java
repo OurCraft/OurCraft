@@ -1,7 +1,9 @@
 package org.craft.world.loaders;
 
 import java.io.*;
+import java.util.*;
 
+import org.craft.entity.*;
 import org.craft.world.*;
 
 public class FallbackWorldLoader extends WorldLoader
@@ -29,5 +31,11 @@ public class FallbackWorldLoader extends WorldLoader
     @Override
     public void writeChunk(File file, Chunk chunk, int chunkX, int chunkY, int chunkZ) throws IOException
     {
+    }
+
+    @Override
+    public void writeEntities(List<Entity> entitiesList)
+    {
+        ;
     }
 }

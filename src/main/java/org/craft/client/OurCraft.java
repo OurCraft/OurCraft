@@ -895,7 +895,6 @@ public class OurCraft implements Runnable, OurCraftInstance
         if(clientWorld.isRemote)
             return;
         WorldLoader loader = clientWorld.getLoader();
-        ByteDataBuffer buffer = new ByteDataBuffer();
         try
         {
             File worldFolder = new File(SystemUtils.getGameFolder(), "worlds/" + clientWorld.getName());
@@ -921,6 +920,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                 if(chunk.isModified())
                     loader.writeChunk(new File(worldFolder, "chunkData/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data"), chunk, chunk.getCoords().x, chunk.getCoords().y, chunk.getCoords().z);
             }
+            loader.writeEntities(clientWorld.getEntitiesList());
         }
         catch(Exception e)
         {

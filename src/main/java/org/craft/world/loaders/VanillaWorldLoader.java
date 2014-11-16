@@ -8,6 +8,7 @@ import com.mojang.nbt.*;
 
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
+import org.craft.entity.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -155,5 +156,34 @@ public class VanillaWorldLoader extends WorldLoader
     public NBTCompoundTag loadWorldInfos(File worldDataFile) throws IOException
     {
         return NBTTag.readCompoundFromFile(worldDataFile);
+    }
+
+    @Override
+    public void writeEntities(List<Entity> entitiesList) throws IOException
+    {
+        File entitiesFile = new File(loader.getResource(worldFolder).asFile(), "entities.data");
+        File playersFile = new File(loader.getResource(worldFolder).asFile(), "players.data");
+
+        NBTCompoundTag entitiesTag = new NBTCompoundTag("entities");
+        NBTCompoundTag playersTag = new NBTCompoundTag("players");
+        NBTListTag<NBTCompoundTag> entitiesListTag = new NBTListTag<NBTCompoundTag>();
+        entitiesTag.put("list", entitiesListTag);
+        NBTListTag<NBTCompoundTag> playersListTag = new NBTListTag<NBTCompoundTag>();
+        playersTag.put("list", playersListTag);
+        for(Entity e : entitiesList)
+        {
+            NBTCompoundTag compound = new NBTCompoundTag(e.generateUUID().toString());
+            e.writeToNBT(compound);
+            if(e instanceof EntityPlayer)
+            {
+                playersListTag.add(compound);
+            }
+            else
+            {
+                entitiesListTag.add(compound);
+            }
+        }
+        NBTTag.writeCompoundToFile(playersFile, playersTag);
+        NBTTag.writeCompoundToFile(entitiesFile, entitiesTag);
     }
 }

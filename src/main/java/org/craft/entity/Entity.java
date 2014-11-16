@@ -348,6 +348,8 @@ public class Entity
      */
     public void readFromNBT(NBTCompoundTag compound)
     {
+        if(compound.contains("uuid"))
+            uuid = UUID.fromString(compound.getString("uuid"));
         posX = compound.getFloat("posX");
         posY = compound.getFloat("posY");
         posZ = compound.getFloat("posZ");
@@ -375,6 +377,8 @@ public class Entity
      */
     public void writeToNBT(NBTCompoundTag compound)
     {
+        if(uuid != null)
+            compound.putString("uuid", uuid.toString());
         compound.putFloat("posX", posX);
         compound.putFloat("posY", posY);
         compound.putFloat("posZ", posZ);

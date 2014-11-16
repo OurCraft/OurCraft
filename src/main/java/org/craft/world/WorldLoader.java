@@ -1,9 +1,11 @@
 package org.craft.world;
 
 import java.io.*;
+import java.util.*;
 
 import com.mojang.nbt.*;
 
+import org.craft.entity.*;
 import org.craft.resources.*;
 
 public abstract class WorldLoader
@@ -35,4 +37,6 @@ public abstract class WorldLoader
     {
         return null;
     }
+
+    public abstract void writeEntities(List<Entity> entitiesList) throws IOException;
 }
