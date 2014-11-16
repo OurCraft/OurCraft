@@ -246,7 +246,7 @@ public class GuiSelectWorld extends Gui
             oc.setPlayerController(new LocalPlayerController(player));
 
             Entity testEntity = new Entity(clientWorld);
-            testEntity.setLocation(player.posX + 10, player.posY + 20, player.posZ);
+            testEntity.setLocation(player.posX, player.posY + 20, player.posZ);
             clientWorld.spawn(testEntity);
 
             new ThreadGetChunksFromCamera(oc).start();
