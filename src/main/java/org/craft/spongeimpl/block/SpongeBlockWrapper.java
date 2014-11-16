@@ -195,4 +195,25 @@ public class SpongeBlockWrapper implements org.spongepowered.api.block.Block
         return null;
     }
 
+    @Override
+    public BlockType getType()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int getDigTime()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getDigTimeWith(ItemStack itemStack)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }
