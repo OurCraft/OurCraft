@@ -292,12 +292,12 @@ public class World
 
     public void createChunk(final int x, final int y, final int z)
     {
-        final World w = this;
+        //Log.message("Generating chunk on " + x + ", " + y + ", " + z);
         if(doesChunkExists(x, y, z))
             Log.error("Cannot generate a chunk on a chunk on " + x + ", " + y + ", " + z);
         else
         {
-            chunkProvider.create(w, x, y, z);
+            chunkProvider.create(this, x, y, z);
         }
     }
 

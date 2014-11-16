@@ -635,8 +635,8 @@ public class OurCraft implements Runnable, OurCraftInstance
                         int fz = z * 16 + oz;
                         if(fy < 0)
                             continue;
-                        synchronized(clientWorld)
-                        {
+                        
+                        if(clientWorld == null) continue;
                             Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
                             if(c != null)
                             {
@@ -647,7 +647,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                                 }
                                 // chunkBox.dispose();
                             }
-                        }
+                        
                     }
                 }
             }
