@@ -22,7 +22,7 @@ public class AddonLogger implements Logger
     @NonLoggable
     public void log(String s, Level level, Throwable t)
     {
-        Log.log("[" + annot.getName() + "] " + s, level, false);
+        Log.log("[" + annot.getName() + " " + annot.getVersion() + "] " + s, level, false);
         if(t != null)
             t.printStackTrace();
     }

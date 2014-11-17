@@ -327,8 +327,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                 {
                     e.printStackTrace();
                 }
-                currentMenu.removeAllWidgets();
-                currentMenu.init();
+                currentMenu.build();
                 loadCrosshairBuffer();
             }
 
@@ -376,8 +375,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             fontRenderer.disposeCache();
             if(currentMenu != null)
             {
-                currentMenu.removeAllWidgets();
-                currentMenu.init();
+                currentMenu.build();
             }
         }
         while(Mouse.next())
@@ -635,19 +633,20 @@ public class OurCraft implements Runnable, OurCraftInstance
                         int fz = z * 16 + oz;
                         if(fy < 0)
                             continue;
-                        
-                        if(clientWorld == null) continue;
-                            Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
-                            if(c != null)
+
+                        if(clientWorld == null)
+                            continue;
+                        Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
+                        if(c != null)
+                        {
+                            //  AABB chunkBox = chunkBB.translate(x, y, z);
+                            //  if(renderEngine.getFrustum().boxIn(chunkBox))
                             {
-                                //  AABB chunkBox = chunkBB.translate(x, y, z);
-                                //  if(renderEngine.getFrustum().boxIn(chunkBox))
-                                {
-                                    visibleChunks.add(c);
-                                }
-                                // chunkBox.dispose();
+                                visibleChunks.add(c);
                             }
-                        
+                            // chunkBox.dispose();
+                        }
+
                     }
                 }
             }

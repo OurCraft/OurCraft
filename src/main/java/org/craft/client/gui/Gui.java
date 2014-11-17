@@ -8,6 +8,7 @@ import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.maths.*;
+import org.craft.modding.events.gui.*;
 import org.craft.resources.*;
 
 public abstract class Gui
@@ -145,14 +146,18 @@ public abstract class Gui
         for(GuiWidget widget : widgets)
         {
             if(widget.enabled)
-                widget.onButtonReleased(x, y, button);
+                if(widget.onButtonReleased(x, y, button))
+                    break;
         }
 
         if(selectedWidget != null)
             if(selectedWidget.enabled && selectedWidget.isMouseOver(x, y))
             {
                 if(button == 0)
-                    actionPerformed(selectedWidget);
+                {
+                    if(!oc.getEventBus().fireEvent(new GuiActionPerformedEvent(oc, this, selectedWidget)))
+                        actionPerformed(selectedWidget);
+                }
             }
     }
 
@@ -235,9 +240,14 @@ public abstract class Gui
     /**
      * Clears widget list
      */
-    public void removeAllWidgets()
+    public void build()
     {
         widgets.clear();
+        if(!OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.Pre(OurCraft.getOurCraft(), this)))
+        {
+            init();
+            OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.Post(OurCraft.getOurCraft(), this));
+        }
     }
 
     /**
@@ -256,5 +266,10 @@ public abstract class Gui
                 break;
             }
         }
+    }
+
+    public List<GuiWidget> getAllWidgets()
+    {
+        return widgets;
     }
 }

@@ -169,6 +169,7 @@ public class EventBus
         if(e instanceof ModEvent)
         {
             cancellable = ((ModEvent) e).isCancellable();
+            cancelled = ((ModEvent) e).isCancelled();
         }
         return cancelled && cancellable;
     }

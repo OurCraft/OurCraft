@@ -94,8 +94,7 @@ public class GuiLanguage extends Gui
                 int index = langsList.getSelectedIndex();
                 String lang = slot.getLanguage();
                 I18n.setCurrentLanguage(lang);
-                removeAllWidgets();
-                init();
+                build();
                 langsList.setSelectedIndex(index);
                 oc.getGameSettings().lang.setValue(lang);
                 oc.saveSettings();

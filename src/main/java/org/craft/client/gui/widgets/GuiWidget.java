@@ -151,4 +151,14 @@ public abstract class GuiWidget
     {
         return false;
     }
+
+    public void setWidth(int w)
+    {
+        this.w = w;
+    }
+
+    public void setHeight(int h)
+    {
+        this.h = h;
+    }
 }
