@@ -1,5 +1,5 @@
 *.class
-/.settings/
+.settings/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -10,11 +10,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/bin/
+bin/
 
 *.classpath
 *.project
-/.gradle/
+.gradle/
 build/*
 
 assets_ourcraft_textures_blocks.png
@@ -24,6 +24,6 @@ ourcraft_textures_blocks.png
 # Intellij IDEA #
 .idea/
 *.iml
-/build/
+build/
 
 ourcraft_textures_items.png

@@ -3,14 +3,12 @@ package org.craft.spongeimpl.plugin;
 import java.util.logging.*;
 
 import org.craft.modding.*;
+import org.craft.utils.*;
 import org.craft.utils.Log.NonLoggable;
 import org.slf4j.*;
 import org.slf4j.Logger;
 
-/**
- * Class to reimplement!
- *
- */
+@SuppressWarnings("rawtypes")
 public class AddonLogger implements Logger
 {
 
@@ -22,464 +20,377 @@ public class AddonLogger implements Logger
     }
 
     @NonLoggable
-    public void log(Marker marker, String fqcn, Level level, String data, Throwable t)
+    public void log(String s, Level level, Throwable t)
     {
-        //        Log.log("[" + annot.getName() + "] " + data.getFormattedMessage(), toLog(level), false);
+        Log.log("[" + annot.getName() + "] " + s, level, false);
         if(t != null)
             t.printStackTrace();
-    }
-
-    private java.util.logging.Level toLog(Level level)
-    {
-        /* switch(level)
-         {
-             case DEBUG:
-                 return java.util.logging.Level.CONFIG;
-             case ERROR:
-                 return java.util.logging.Level.SEVERE;
-             case WARN:
-                 return java.util.logging.Level.WARNING;
-             case FATAL:
-                 return java.util.logging.Level.SEVERE;
-             case ALL:
-                 return java.util.logging.Level.ALL;
-             case INFO:
-                 return java.util.logging.Level.INFO;
-             case TRACE:
-                 return java.util.logging.Level.FINEST;
-             case OFF:
-                 return java.util.logging.Level.OFF;
-             default:
-                 return java.util.logging.Level.INFO;
-         }*/
-        return null;
     }
 
     @Override
     public String getName()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return "AddonLogger for " + annot.getName();
     }
 
     @Override
     public boolean isTraceEnabled()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void trace(String msg)
     {
-        // TODO Auto-generated method stub
-
+        trace(msg, (Throwable) null);
     }
 
     @Override
     public void trace(String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        trace(String.format(format, arg));
     }
 
     @Override
     public void trace(String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        trace(String.format(format, arg1, arg2));
     }
 
     @Override
     public void trace(String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        trace(String.format(format, arguments));
     }
 
     @Override
     public void trace(String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        log(msg, Level.FINER, t);
     }
 
     @Override
     public boolean isTraceEnabled(Marker marker)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void trace(Marker marker, String msg)
     {
-        // TODO Auto-generated method stub
-
+        trace(msg);
     }
 
     @Override
     public void trace(Marker marker, String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        trace(String.format(format, arg));
     }
 
     @Override
     public void trace(Marker marker, String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        trace(String.format(format, arg1, arg2));
     }
 
     @Override
     public void trace(Marker marker, String format, Object... argArray)
     {
-        // TODO Auto-generated method stub
-
+        trace(String.format(format, argArray));
     }
 
     @Override
     public void trace(Marker marker, String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        trace(msg, t);
     }
 
     @Override
     public boolean isDebugEnabled()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void debug(String msg)
     {
-        // TODO Auto-generated method stub
-
+        debug(msg, (Throwable) null);
     }
 
     @Override
     public void debug(String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        debug(String.format(format, arg));
     }
 
     @Override
     public void debug(String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        debug(String.format(format, arg1, arg2));
     }
 
     @Override
     public void debug(String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        debug(String.format(format, arguments));
     }
 
     @Override
     public void debug(String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        log(msg, Level.FINEST, t);
     }
 
     @Override
     public boolean isDebugEnabled(Marker marker)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void debug(Marker marker, String msg)
     {
-        // TODO Auto-generated method stub
-
+        debug(msg);
     }
 
     @Override
     public void debug(Marker marker, String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        debug(String.format(format, arg));
     }
 
     @Override
     public void debug(Marker marker, String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        debug(String.format(format, arg1, arg2));
     }
 
     @Override
     public void debug(Marker marker, String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        debug(String.format(format, arguments));
     }
 
     @Override
     public void debug(Marker marker, String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        debug(msg, t);
     }
 
     @Override
     public boolean isInfoEnabled()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void info(String msg)
     {
-        // TODO Auto-generated method stub
-
+        info(msg, (Throwable) null);
     }
 
     @Override
     public void info(String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        info(String.format(format, arg));
     }
 
     @Override
     public void info(String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        info(String.format(format, arg1, arg2));
     }
 
     @Override
     public void info(String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        info(String.format(format, arguments));
     }
 
     @Override
     public void info(String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        log(msg, Level.INFO, t);
     }
 
     @Override
     public boolean isInfoEnabled(Marker marker)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void info(Marker marker, String msg)
     {
-        // TODO Auto-generated method stub
-
+        info(msg);
     }
 
     @Override
     public void info(Marker marker, String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        info(String.format(format, arg));
     }
 
     @Override
     public void info(Marker marker, String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        info(String.format(format, arg1, arg2));
     }
 
     @Override
     public void info(Marker marker, String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        info(String.format(format, arguments));
     }
 
     @Override
     public void info(Marker marker, String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        info(msg, t);
     }
 
     @Override
     public boolean isWarnEnabled()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void warn(String msg)
     {
-        // TODO Auto-generated method stub
-
+        warn(msg, (Throwable) null);
     }
 
     @Override
     public void warn(String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        warn(String.format(format, arg));
     }
 
     @Override
     public void warn(String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        warn(String.format(format, arguments));
     }
 
     @Override
     public void warn(String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        warn(String.format(format, arg1, arg2));
     }
 
     @Override
     public void warn(String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        warn(msg, t);
     }
 
     @Override
     public boolean isWarnEnabled(Marker marker)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void warn(Marker marker, String msg)
     {
-        // TODO Auto-generated method stub
-
+        warn(msg);
     }
 
     @Override
     public void warn(Marker marker, String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        warn(String.format(format, arg));
     }
 
     @Override
     public void warn(Marker marker, String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        warn(String.format(format, arg1, arg2));
     }
 
     @Override
     public void warn(Marker marker, String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        warn(String.format(format, arguments));
     }
 
     @Override
     public void warn(Marker marker, String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        warn(msg, t);
     }
 
     @Override
     public boolean isErrorEnabled()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void error(String msg)
     {
-        // TODO Auto-generated method stub
-
+        error(msg, (Throwable) null);
     }
 
     @Override
     public void error(String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(format, arg), (Throwable) null);
     }
 
     @Override
     public void error(String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(format, arg1, arg2), (Throwable) null);
     }
 
     @Override
     public void error(String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(format, arguments), (Throwable) null);
     }
 
     @Override
     public void error(String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        log(msg, Level.SEVERE, t);
     }
 
     @Override
     public boolean isErrorEnabled(Marker marker)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void error(Marker marker, String msg)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(msg), (Throwable) null);
     }
 
     @Override
     public void error(Marker marker, String format, Object arg)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(format, arg), (Throwable) null);
     }
 
     @Override
     public void error(Marker marker, String format, Object arg1, Object arg2)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(format, arg1, arg2), (Throwable) null);
     }
 
     @Override
     public void error(Marker marker, String format, Object... arguments)
     {
-        // TODO Auto-generated method stub
-
+        error(String.format(format, arguments), (Throwable) null);
     }
 
     @Override
     public void error(Marker marker, String msg, Throwable t)
     {
-        // TODO Auto-generated method stub
-
+        error(msg, t);
     }
 
 }
