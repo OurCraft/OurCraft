@@ -327,8 +327,8 @@ public class OurCraft implements Runnable, OurCraftInstance
                 {
                     e.printStackTrace();
                 }
-                currentMenu.build();
                 loadCrosshairBuffer();
+                currentMenu.build();
             }
 
             lastRenderTime = now;

@@ -14,7 +14,6 @@ import org.craft.entity.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.lwjgl.input.*;
-import org.lwjgl.opengl.*;
 
 public class GuiIngame extends Gui
 {
@@ -83,7 +82,7 @@ public class GuiIngame extends Gui
             if(t <= title.getFadeIn() && title.getFadeIn() != 0L)
             {
                 float i = (float) t / (float) title.getFadeIn();
-                int alpha = (int) (i * 0f);
+                int alpha = (int) (i * 255f);
                 int red = (int) (i * 255f);
                 int green = (int) (i * 255f);
                 int blue = (int) (i * 255f);
@@ -105,8 +104,7 @@ public class GuiIngame extends Gui
 
             if(t < title.getFadeIn() + title.getDisplayTime() + title.getFadeOut())
             {
-                //            renderEngine.enableGLCap(GL_BLEND);
-                GL14.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+                //                GL14.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
                 renderEngine.enableGLCap(GL_ALPHA_TEST);
                 getFontRenderer().setScale(1.15f);
                 float titleX = oc.getDisplayWidth() / 2;

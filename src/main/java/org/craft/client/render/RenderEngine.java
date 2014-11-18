@@ -95,7 +95,7 @@ public class RenderEngine implements IDisposable
         glBindBuffer(GL_ARRAY_BUFFER, buffer.getVboID());
         glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 0);
         glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 12);
-        glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 20);
+        glVertexAttribPointer(2, 4, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 20);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.getIboID());
         glDrawElements(mode, buffer.getIndicesCount(), GL_UNSIGNED_INT, 0);

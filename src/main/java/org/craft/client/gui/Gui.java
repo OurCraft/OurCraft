@@ -212,7 +212,7 @@ public abstract class Gui
     public void drawBackground(int mx, int my, RenderEngine renderEngine)
     {
         renderEngine.bindTexture(backgroundTexture, 0);
-        drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, oc.getDisplayWidth() / backgroundTexture.getWidth(), oc.getDisplayHeight() / backgroundTexture.getHeight());
+        drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, (float) oc.getDisplayWidth() / (float) backgroundTexture.getWidth(), (float) oc.getDisplayHeight() / (float) backgroundTexture.getHeight());
     }
 
     /**
