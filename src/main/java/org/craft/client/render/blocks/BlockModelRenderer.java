@@ -39,7 +39,9 @@ public class BlockModelRenderer extends AbstractBlockRenderer
     {
         if(!b.shouldRender())
             return;
-        Chunk chunk = w.getChunk(x, y, z);
+        Chunk chunk = null;
+        if(w != null)
+            chunk = w.getChunk(x, y, z);
         BlockVariant variant = null;
         float lightValue = 1f;
         if(chunk == null)
@@ -52,7 +54,7 @@ public class BlockModelRenderer extends AbstractBlockRenderer
 
         if(variant == null)
             variant = blockVariants.get(0);
-        Model blockModel = variant.getModels().get(w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
+        Model blockModel = variant.getModels().get(w == null ? 0 : w.getRNG().nextInt(variant.getModels().size())); // TODO: random model ?
         for(int i = 0; i < blockModel.getElementsCount(); i++ )
         {
             ModelElement element = blockModel.getElement(i);
@@ -87,7 +89,9 @@ public class BlockModelRenderer extends AbstractBlockRenderer
                 }
                 if(cullface != EnumSide.UNDEFINED)
                 {
-                    Block next = w.getBlockNextTo(x, y, z, cullface);
+                    Block next = Blocks.air;
+                    if(w != null)
+                        next = w.getBlockNextTo(x, y, z, cullface);
                     if(next.isSideOpaque(w, x, y, z, cullface.opposite()))
                     {
                         continue;

@@ -31,6 +31,7 @@ import org.craft.resources.*;
 import org.craft.spongeimpl.game.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
+import org.craft.utils.Log.NonLoggable;
 import org.craft.utils.crash.*;
 import org.craft.world.*;
 import org.lwjgl.*;
@@ -705,6 +706,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     /**
      * Print an error log only if OpenGL <code>getError()</code> returns an error
      */
+    @NonLoggable
     public static void printIfGLError()
     {
         int errorFlag = glGetError();
