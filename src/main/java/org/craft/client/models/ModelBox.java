@@ -250,6 +250,7 @@ public class ModelBox
         index += 4;
 
         buffer.upload();
+        buffer.clearAndDisposeVertices();
     }
 
 }

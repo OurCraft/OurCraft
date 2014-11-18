@@ -194,7 +194,6 @@ public class OpenGLBuffer
 
     public void setToCube()
     {
-        // TODO: Finish
         clearAndDisposeVertices();
         indices.clear();
         int index = 0;

@@ -15,7 +15,7 @@ public abstract class Gui
 {
 
     public static ResourceLocation widgetsTexture = new ResourceLocation("ourcraft", "textures/gui/widgets.png");
-    private static OpenGLBuffer    buffer         = new OpenGLBuffer();
+    private static OpenGLBuffer    buffer;
     private static Texture         backgroundTexture;
     private FontRenderer           fontRenderer;
     private ArrayList<GuiWidget>   widgets;
@@ -71,26 +71,26 @@ public abstract class Gui
     private static Vector2 topLeftCornerUV      = Vector2.get(0, 0);
     private static Vector2 topRightCornerUV     = Vector2.get(0, 0);
 
-    static
-    {
-        buffer.addVertex(Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV));
-        buffer.addVertex(Vertex.get(bottomRightCornerPos, bottomRightCornerUV));
-        buffer.addVertex(Vertex.get(topLeftCornerPos, topLeftCornerUV));
-        buffer.addVertex(Vertex.get(topRightCornerPos, topRightCornerUV));
-        buffer.addIndex(0);
-        buffer.addIndex(1);
-        buffer.addIndex(2);
-
-        buffer.addIndex(2);
-        buffer.addIndex(3);
-        buffer.addIndex(0);
-    }
-
     /**
      * Draws textured rect at given coordinates
      */
     public static void drawTexturedRect(RenderEngine engine, int x, int y, int w, int h, float minU, float minV, float maxU, float maxV)
     {
+        if(buffer == null)
+        {
+            buffer = new OpenGLBuffer();
+            buffer.addVertex(Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV));
+            buffer.addVertex(Vertex.get(bottomRightCornerPos, bottomRightCornerUV));
+            buffer.addVertex(Vertex.get(topLeftCornerPos, topLeftCornerUV));
+            buffer.addVertex(Vertex.get(topRightCornerPos, topRightCornerUV));
+            buffer.addIndex(0);
+            buffer.addIndex(1);
+            buffer.addIndex(2);
+
+            buffer.addIndex(2);
+            buffer.addIndex(3);
+            buffer.addIndex(0);
+        }
         bottomLeftCornerPos.set(x, y, 0);
         bottomRightCornerPos.set(x + w, y, 0);
         topLeftCornerPos.set(x + w, y + h, 0);
