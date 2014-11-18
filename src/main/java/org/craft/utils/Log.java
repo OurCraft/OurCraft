@@ -1,5 +1,6 @@
 package org.craft.utils;
 
+import java.io.PrintStream;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.logging.*;
@@ -28,7 +29,16 @@ public class Log
         ch.setFormatter(logformatter);
         log.addHandler(ch);
         ch.setLevel(Level.ALL);
-        log.setLevel(Level.ALL);
+        log.setLevel(Level.ALL);                         
+                                                     
+        LoggingOutputStream los;                                               
+                      
+        los = new LoggingOutputStream(log, Level.INFO);          
+        System.setOut(new PrintStream(los, true));                             
+                               
+        los= new LoggingOutputStream(log, Level.SEVERE);           
+        System.setErr(new PrintStream(los, true));                             
+
     }
 
     @Retention(RetentionPolicy.RUNTIME)
