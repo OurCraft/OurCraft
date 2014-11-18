@@ -19,6 +19,8 @@ import org.spongepowered.api.Platform;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.service.*;
+import org.spongepowered.api.service.command.*;
 import org.spongepowered.api.service.scheduler.*;
 import org.spongepowered.api.title.*;
 import org.spongepowered.api.world.*;
@@ -185,6 +187,20 @@ public class SpoongeMod implements Game
         ScreenTitle title = new ScreenTitle();
         title.show();
         return (Title) title;
+    }
+
+    @Override
+    public ServiceManager getServiceManager()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public CommandDispatcher getCommandDispatcher()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

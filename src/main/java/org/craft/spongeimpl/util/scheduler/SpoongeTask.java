@@ -1,7 +1,5 @@
 package org.craft.spongeimpl.util.scheduler;
 
-import java.util.concurrent.*;
-
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.scheduler.*;
 
@@ -56,41 +54,6 @@ public class SpoongeTask implements Task
     {
         cancelled = true;
         return cancelled && !done;
-    }
-
-    @Override
-    public boolean cancel(boolean mayInterruptIfRunning)
-    {
-        if(done)
-            return false;
-        cancelled = true;
-        return true;
-    }
-
-    @Override
-    public boolean isCancelled()
-    {
-        return cancelled;
-    }
-
-    @Override
-    public boolean isDone()
-    {
-        return done;
-    }
-
-    @Override
-    public Object get() throws InterruptedException, ExecutionException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException
-    {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

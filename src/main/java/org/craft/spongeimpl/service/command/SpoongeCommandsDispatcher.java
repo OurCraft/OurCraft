@@ -8,6 +8,7 @@ import com.google.common.collect.*;
 import org.craft.commands.*;
 import org.craft.modding.modifiers.*;
 import org.spongepowered.api.service.command.*;
+import org.spongepowered.api.util.*;
 import org.spongepowered.api.util.command.*;
 import org.spongepowered.api.util.command.CommandException;
 
@@ -66,12 +67,6 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     //               END OF SHADOW METHODS
     //===========================================================
     @Override
-    public void registerCommand(CommandCallable callable, String... alias)
-    {
-        registerCommand(new SpoongeCommand(callable, alias[0]), alias);
-    }
-
-    @Override
     public Set<CommandMapping> getCommands()
     {
         List<CommandMapping> mappings = Lists.newArrayList();
@@ -116,6 +111,12 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     public List<String> getSuggestions(CommandSource source, String arguments) throws CommandException
     {
         return Lists.newArrayList();
+    }
+
+    @Override
+    public void registerCommand(CommandCallable callable, Owner owner, String... alias)
+    {
+        registerCommand(new SpoongeCommand(callable, alias[0]), alias);
     }
 
 }
