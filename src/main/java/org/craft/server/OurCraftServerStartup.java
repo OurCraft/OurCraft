@@ -10,6 +10,7 @@ public class OurCraftServerStartup
 
     public static void main(String[] args)
     {
+        Thread.currentThread().setName("Server");
         Map<String, String> properties = Startup.argsToMap(args);
         if(!properties.containsKey("port"))
             properties.put("port", "35565");

@@ -12,6 +12,7 @@ public class OurCraftStartup
 
     public static void main(String[] args)
     {
+        Thread.currentThread().setName("Client");
         if(!(ClassLoader.getSystemClassLoader() instanceof OurClassLoader))
         {
             new CrashReport("Wrong classloader at launch. Please add -Djava.system.class.loader=org.craft.OurClassLoader in VM arguments").printStack();
