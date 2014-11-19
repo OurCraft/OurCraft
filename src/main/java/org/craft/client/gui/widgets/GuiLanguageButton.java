@@ -1,22 +1,23 @@
-package org.craft.client.gui;
+package org.craft.client.gui.widgets;
 
 import java.io.*;
 
 import org.craft.client.*;
-import org.craft.client.gui.widgets.*;
+import org.craft.client.gui.*;
 import org.craft.client.render.*;
 import org.craft.resources.*;
 
-public class GuiLanguageButton extends GuiButton
+public class GuiLanguageButton extends GuiSmallButton
 {
-
     private TextureAtlas     atlas;
     private float            animCounter;
     private ResourceLocation earthLoc;
 
     public GuiLanguageButton(int id, int x, int y)
     {
-        super(id, x, y, 40, 40, "", null);
+        super(id, x, y, "", null);
+        setWidth(40);
+        setHeight(40);
         earthLoc = new ResourceLocation("ourcraft:textures/gui/earth_anim.png");
         try
         {
@@ -35,11 +36,9 @@ public class GuiLanguageButton extends GuiButton
     @Override
     public void render(int mx, int my, RenderEngine engine)
     {
+        super.render(mx, my, engine);
         if(visible)
         {
-            engine.bindLocation(Gui.widgetsTexture);
-            float minU = isPressed() ? 120f / 256f : 100f / 256f;
-            Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), minU, 20f / 256f, minU + 20f / 256f, 40f / 256f);
             engine.bindLocation(earthLoc);
             TextureRegion icon = atlas.getTiles()[(int) Math.floor(animCounter)][0];
             Gui.drawTexturedRect(engine, getX(), getY(), getWidth(), getHeight(), icon.getMinU(), 0, icon.getMaxU(), 1);

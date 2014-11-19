@@ -1,11 +1,10 @@
 package org.craft.client;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.craft.maths.Vector3;
-import org.craft.utils.Log;
-import org.craft.world.World;
+import org.craft.maths.*;
+import org.craft.world.*;
 
 public class ChunkGeneratorTask implements Runnable
 {
@@ -34,6 +33,8 @@ public class ChunkGeneratorTask implements Runnable
         while(genQueue.size() != 0)
         {
             Vector3 vec = genQueue.poll();
+            if(world == null)
+                break;
             world.createChunk((int) vec.getX(), (int) vec.getY(), (int) vec.getZ());
             vec.dispose();
         }
@@ -42,7 +43,8 @@ public class ChunkGeneratorTask implements Runnable
     public void addToQueue(int x, int y, int z)
     {
         this.world = theGame.getClientWorld();
-        if(world == null) return;
+        if(world == null)
+            return;
         final Vector3 vec = Vector3.get(x, y, z);
         if(!world.doesChunkExists(x, y, z))
         {
@@ -65,7 +67,7 @@ public class ChunkGeneratorTask implements Runnable
         }
 
     }
-    
+
     public void execute()
     {
         if(!thread.isAlive())
