@@ -61,7 +61,7 @@ public class OpenGLBuffer
             verticesBuffer.put(vertex.getColor().getW());
         }
         verticesBuffer.flip();
-        GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
+        GL15.glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
         IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.size());
@@ -71,10 +71,10 @@ public class OpenGLBuffer
             indicesBuffer.put(indice);
         }
         indicesBuffer.flip();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     /**
@@ -267,6 +267,26 @@ public class OpenGLBuffer
         addIndex(index + 3);
         addIndex(index + 0);
         index += 4;
+
+        upload();
+        clearAndDisposeVertices();
+    }
+
+    public void setToPlane(float x, float y, float z, float width, float height, float depth)
+    {
+        clearAndDisposeVertices();
+        indices.clear();
+        addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(0, 0)));
+        addVertex(Vertex.get(Vector3.get(x + width, y, z), Vector2.get(1, 0)));
+        addVertex(Vertex.get(Vector3.get(x + width, y, z + depth), Vector2.get(1, 1)));
+        addVertex(Vertex.get(Vector3.get(x, y, z + depth), Vector2.get(0, 1)));
+        addIndex(0);
+        addIndex(1);
+        addIndex(2);
+
+        addIndex(3);
+        addIndex(0);
+        addIndex(2);
 
         upload();
         clearAndDisposeVertices();

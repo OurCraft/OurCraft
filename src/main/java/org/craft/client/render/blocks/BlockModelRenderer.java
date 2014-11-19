@@ -131,7 +131,6 @@ public class BlockModelRenderer extends AbstractBlockRenderer
                     faceStart = Vector3.get(startPos.getX(), startPos.getY(), startPos.getZ() + size.getZ());
                     faceSize = Vector3.get(size.getX(), size.getY(), 0);
                 }
-
                 else
                 {
                     continue;

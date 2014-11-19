@@ -22,6 +22,7 @@ public class ModelBox
     private float      ratio;
     private float      uCoord;
     private float      vCoord;
+    private String     name;
 
     public ModelBox(float x, float y, float z, float width, float height, float depth)
     {
@@ -32,6 +33,16 @@ public class ModelBox
         this.width = width;
         this.height = height;
         this.depth = depth;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public void setUVCoords(float u, float v)

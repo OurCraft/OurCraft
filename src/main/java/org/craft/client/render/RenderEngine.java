@@ -92,19 +92,22 @@ public class RenderEngine implements IDisposable
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
 
-        OurCraft.printIfGLError();
         glBindBuffer(GL_ARRAY_BUFFER, buffer.getVboID());
         glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 0);
         glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 12);
         glVertexAttribPointer(2, 4, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 20);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.getIboID());
+        OurCraft.printIfGLError();
         glDrawElements(mode, buffer.getIndicesCount(), GL_UNSIGNED_INT, 0);
         OurCraft.printIfGLError();
 
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     /**

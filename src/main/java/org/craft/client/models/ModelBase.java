@@ -27,4 +27,9 @@ public class ModelBase
         return boxes;
     }
 
+    public void addBox(ModelBox box)
+    {
+        boxes.add(box);
+    }
+
 }

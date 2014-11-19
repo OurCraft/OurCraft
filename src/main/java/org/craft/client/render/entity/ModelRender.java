@@ -57,6 +57,6 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             Shader.getCurrentlyBound().setUniform("modelview", finalMatrix);
             engine.renderBuffer(buffers.get(box), getTexture(e));
         }
-        Shader.getCurrentlyBound().setUniform("modelview", Matrix4.get().initIdentity());
+        engine.setModelviewMatrix(Matrix4.get().initIdentity());
     }
 }
