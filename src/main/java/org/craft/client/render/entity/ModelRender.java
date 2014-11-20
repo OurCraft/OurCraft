@@ -44,7 +44,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             if(!buffers.containsKey(box))
             {
                 OpenGLBuffer buffer = new OpenGLBuffer();
-                box.prepareBuffer(getTexture(e), buffer);
+                box.prepareBuffer(getTexture(e), buffer, 1);
                 buffers.put(box, buffer);
             }
             Matrix4 rot = box.getRotation().toRotationMatrix();

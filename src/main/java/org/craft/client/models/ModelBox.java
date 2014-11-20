@@ -136,7 +136,7 @@ public class ModelBox
         return vCoord;
     }
 
-    public void prepareBuffer(Texture texture, OpenGLBuffer buffer)
+    public void prepareBuffer(Texture texture, OpenGLBuffer buffer, float alpha)
     {
         int index = 0;
         float ratioX = ratio / (float) texture.getWidth() * getWidth();
@@ -170,10 +170,10 @@ public class ModelBox
         float bottomMinV = vCoord;
         float bottomMaxU = ratioX * 2 + uCoord;
         float bottomMaxV = ratioY + vCoord;
-        buffer.addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(frontMinU, frontMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z), Vector2.get(frontMaxU, frontMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z), Vector2.get(frontMaxU, frontMinV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z), Vector2.get(frontMinU, frontMinV)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(frontMinU, frontMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z), Vector2.get(frontMaxU, frontMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z), Vector2.get(frontMaxU, frontMinV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z), Vector2.get(frontMinU, frontMinV), Quaternion.get(1, 1, 1, alpha)));
 
         buffer.addIndex(index + 0);
         buffer.addIndex(index + 1);
@@ -185,10 +185,10 @@ public class ModelBox
 
         index += 4;
 
-        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth()), Vector2.get(backMaxU, backMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth()), Vector2.get(backMinU, backMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth()), Vector2.get(backMinU, frontMinV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth()), Vector2.get(backMaxU, backMinV)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth()), Vector2.get(backMaxU, backMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth()), Vector2.get(backMinU, backMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth()), Vector2.get(backMinU, frontMinV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth()), Vector2.get(backMaxU, backMinV), Quaternion.get(1, 1, 1, alpha)));
 
         buffer.addIndex(index + 0);
         buffer.addIndex(index + 1);
@@ -200,10 +200,10 @@ public class ModelBox
 
         index += 4;
 
-        buffer.addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(leftMaxU, leftMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth()), Vector2.get(leftMinU, leftMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth()), Vector2.get(leftMinU, leftMinV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z), Vector2.get(leftMaxU, leftMinV)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(leftMaxU, leftMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth()), Vector2.get(leftMinU, leftMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth()), Vector2.get(leftMinU, leftMinV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z), Vector2.get(leftMaxU, leftMinV), Quaternion.get(1, 1, 1, alpha)));
 
         buffer.addIndex(index + 0);
         buffer.addIndex(index + 1);
@@ -215,10 +215,10 @@ public class ModelBox
 
         index += 4;
 
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z), Vector2.get(rightMinU, leftMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth()), Vector2.get(rightMaxU, rightMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth()), Vector2.get(rightMaxU, rightMinV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z), Vector2.get(rightMinU, rightMinV)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z), Vector2.get(rightMinU, leftMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth()), Vector2.get(rightMaxU, rightMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth()), Vector2.get(rightMaxU, rightMinV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z), Vector2.get(rightMinU, rightMinV), Quaternion.get(1, 1, 1, alpha)));
 
         buffer.addIndex(index + 0);
         buffer.addIndex(index + 1);
@@ -230,10 +230,10 @@ public class ModelBox
 
         index += 4;
 
-        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z), Vector2.get(topMinU, topMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z), Vector2.get(topMaxU, topMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth()), Vector2.get(topMaxU, topMinV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth()), Vector2.get(topMinU, topMinV)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z), Vector2.get(topMinU, topMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z), Vector2.get(topMaxU, topMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth()), Vector2.get(topMaxU, topMinV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth()), Vector2.get(topMinU, topMinV), Quaternion.get(1, 1, 1, alpha)));
 
         buffer.addIndex(index + 0);
         buffer.addIndex(index + 1);
@@ -245,10 +245,10 @@ public class ModelBox
 
         index += 4;
 
-        buffer.addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(bottomMinU, bottomMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z), Vector2.get(bottomMaxU, bottomMaxV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth()), Vector2.get(bottomMaxU, bottomMinV)));
-        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth()), Vector2.get(bottomMinU, bottomMinV)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z), Vector2.get(bottomMinU, bottomMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z), Vector2.get(bottomMaxU, bottomMaxV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth()), Vector2.get(bottomMaxU, bottomMinV), Quaternion.get(1, 1, 1, alpha)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth()), Vector2.get(bottomMinU, bottomMinV), Quaternion.get(1, 1, 1, alpha)));
 
         buffer.addIndex(index + 0);
         buffer.addIndex(index + 1);
@@ -259,6 +259,83 @@ public class ModelBox
         buffer.addIndex(index + 3);
 
         index += 4;
+        buffer.upload();
+        buffer.clearAndDisposeVertices();
+    }
+
+    public void prepareWireframeBuffer(OpenGLBuffer buffer)
+    {
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z)));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth())));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth())));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth())));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth())));
+
+        buffer.addIndex(0);
+        buffer.addIndex(1);
+
+        buffer.addIndex(2);
+        buffer.addIndex(3);
+
+        buffer.addIndex(4);
+        buffer.addIndex(5);
+
+        buffer.addIndex(6);
+        buffer.addIndex(7);
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z)));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth())));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth())));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth())));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth())));
+
+        buffer.addIndex(8);
+        buffer.addIndex(9);
+
+        buffer.addIndex(10);
+        buffer.addIndex(11);
+
+        buffer.addIndex(12);
+        buffer.addIndex(13);
+
+        buffer.addIndex(14);
+        buffer.addIndex(15);
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z)));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z)));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z)));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x, y, z + getDepth())));
+        buffer.addVertex(Vertex.get(Vector3.get(x, y + getHeight(), z + getDepth())));
+
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y, z + getDepth())));
+        buffer.addVertex(Vertex.get(Vector3.get(x + getWidth(), y + getHeight(), z + getDepth())));
+
+        buffer.addIndex(16);
+        buffer.addIndex(17);
+
+        buffer.addIndex(18);
+        buffer.addIndex(19);
+
+        buffer.addIndex(20);
+        buffer.addIndex(21);
+
+        buffer.addIndex(22);
+        buffer.addIndex(23);
 
         buffer.upload();
         buffer.clearAndDisposeVertices();

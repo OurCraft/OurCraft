@@ -62,7 +62,7 @@ public class GuiButton extends GuiWidget
     public boolean onButtonReleased(int x, int y, int button)
     {
         pressed = false;
-        return true;
+        return false;
     }
 
     public boolean isPressed()

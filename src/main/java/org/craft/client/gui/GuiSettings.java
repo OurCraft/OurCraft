@@ -52,12 +52,12 @@ public class GuiSettings extends Gui
             widget.render(mx, my, engine);
         }
 
-        public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button)
+        public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
         {
             this.widget.onButtonPressed(mx, my, button);
         }
 
-        public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button)
+        public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
         {
             if(option.getType() == GameOptionType.INPUT)
             {

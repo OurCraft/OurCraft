@@ -12,7 +12,7 @@ public abstract class GuiListSlot
     /**
      * Handles an event where a mouse button is pressed
      */
-    public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button)
+    public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
     {
         ;
     }
@@ -20,7 +20,7 @@ public abstract class GuiListSlot
     /**
      * Handles an event where a mouse button is released
      */
-    public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button)
+    public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
     {
         ;
     }
@@ -31,6 +31,11 @@ public abstract class GuiListSlot
     public void handleMouseMovement(int index, int x, int y, int w, int h, int mx, int my, int dx, int dy)
     {
         ;
+    }
+
+    public boolean isMouseOver(int mx, int my, int x, int y, int w, int h)
+    {
+        return mx >= x && mx <= x + w && my >= y && my <= y + h;
     }
 
 }

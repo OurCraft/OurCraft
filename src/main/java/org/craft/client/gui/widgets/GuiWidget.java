@@ -116,7 +116,7 @@ public abstract class GuiWidget
      */
     public boolean onButtonReleased(int x, int y, int button)
     {
-        return true;
+        return false;
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class GuiWidget
      */
     public boolean onButtonPressed(int x, int y, int button)
     {
-        return true;
+        return false;
     }
 
     /**

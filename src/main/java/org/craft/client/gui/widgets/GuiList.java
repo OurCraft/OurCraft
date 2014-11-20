@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
+import org.craft.utils.*;
 
 public class GuiList<T extends GuiListSlot> extends GuiWidget
 {
@@ -12,6 +13,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     private int          scroll;
     private int          selectedIndex;
     private int          slotHeight;
+    private int          ySpacing;
 
     public GuiList(int id, int x, int y, int w, int h, int slotHeight)
     {
@@ -19,6 +21,16 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         this.slotHeight = slotHeight;
         selectedIndex = -1;
         list = new ArrayList<T>();
+    }
+
+    public int getYSpacing()
+    {
+        return ySpacing;
+    }
+
+    public void setYSpacing(int ySpacing)
+    {
+        this.ySpacing = ySpacing;
     }
 
     /**
@@ -41,15 +53,19 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     {
         if(isMouseOver(mx, my))
         {
+            Log.message("dqzdqzd");
             int y = my + scroll - getY();
-            int index = y / slotHeight;
+            int index = y / (slotHeight + ySpacing);
             selectedIndex = index;
             if(selectedIndex < 0 || selectedIndex >= getSize())
                 selectedIndex = -1;
             else
-                getSlot(selectedIndex).onButtonReleased(selectedIndex, getX(), getY() - scroll + selectedIndex * slotHeight, getWidth(), slotHeight, mx, my, button);
+            {
+                getSlot(selectedIndex).onButtonReleased(selectedIndex, getX(), getY() - scroll + selectedIndex * slotHeight + selectedIndex * ySpacing, getWidth(), slotHeight, mx, my, button, this);
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     public boolean onButtonPressed(int mx, int my, int button)
@@ -57,11 +73,11 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         if(isMouseOver(mx, my))
         {
             int y = my + scroll - getY();
-            int index = y / slotHeight;
+            int index = y / (slotHeight + ySpacing);
             if(index < 0 || index >= getSize())
                 index = -1;
             else
-                getSlot(index).onButtonPressed(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, button);
+                getSlot(index).onButtonPressed(index, getX(), getY() - scroll + index * slotHeight + selectedIndex * ySpacing, getWidth(), slotHeight, mx, my, button, this);
         }
         return true;
     }
@@ -75,7 +91,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             if(index < 0 || index >= getSize())
                 index = -1;
             else
-                getSlot(index).handleMouseMovement(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, dx, dy);
+                getSlot(index).handleMouseMovement(index, getX(), getY() - scroll + index * slotHeight + selectedIndex * ySpacing, getWidth(), slotHeight, mx, my, dx, dy);
         }
         return true;
     }
@@ -96,7 +112,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
                 T slot = getSlot(index);
                 if(slot != null)
                 {
-                    slot.render(index, getX(), getY() - scroll + index * slotHeight, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
+                    slot.render(index, getX(), getY() - scroll + index * slotHeight + index * ySpacing, getWidth(), slotHeight, mx, my, selectedIndex == index, engine, this);
                 }
             }
 
@@ -139,14 +155,14 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         {
             scroll += -(Math.signum(deltaWheel) * 15);
 
-            if(-scroll + getSize() * slotHeight + slotHeight <= getHeight())
+            if(-scroll + getSize() * slotHeight + getSize() * ySpacing + slotHeight <= getHeight())
             {
                 /* -scroll + getSize() * slotHeight + slotHeight <= getHeight()
                 * getSize() * slotHeight + slotHeight <= getHeight()+scroll
                 * getSize() * slotHeight + slotHeight - getHeight() <= scroll
                 * scroll >= getSize() * slotHeight + slotHeight - getHeight()
                 */
-                scroll = getSize() * slotHeight + slotHeight - getHeight();
+                scroll = getSize() * slotHeight + getSize() * ySpacing + slotHeight - getHeight();
             }
             if(scroll < 0)
             {
