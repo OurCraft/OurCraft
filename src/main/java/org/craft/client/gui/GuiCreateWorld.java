@@ -107,9 +107,9 @@ public class GuiCreateWorld extends Gui
         }
     }
 
-    public void draw(int mx, int my, RenderEngine engine)
+    public void render(int mx, int my, RenderEngine engine)
     {
         drawBackground(mx, my, engine);
-        super.draw(mx, my, engine);
+        super.render(mx, my, engine);
     }
 }

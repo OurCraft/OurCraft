@@ -393,9 +393,9 @@ public class OurCraft implements Runnable, OurCraftInstance
                 if(mouseButton != -1)
                 {
                     if(state)
-                        currentMenu.handleButtonPressed(x, y, mouseButton);
+                        currentMenu.onButtonPressed(x, y, mouseButton);
                     else
-                        currentMenu.handleButtonReleased(x, y, mouseButton);
+                        currentMenu.onButtonReleased(x, y, mouseButton);
                 }
 
                 if(deltaWheel != 0)
@@ -604,7 +604,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             int my = Mouse.getY();
             if(currentMenu != null)
             {
-                currentMenu.draw(mx, displayHeight - my, renderEngine);
+                currentMenu.render(mx, displayHeight - my, renderEngine);
             }
         }
         printIfGLError();

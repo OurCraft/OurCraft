@@ -2,7 +2,6 @@ package org.craft.client.gui;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
-import org.craft.client.render.RenderEngine;
 import org.lwjgl.input.*;
 
 public class GuiPauseMenu extends Gui
@@ -42,20 +41,21 @@ public class GuiPauseMenu extends Gui
             oc.quitToMainScreen();
         }
     }
-    
+
     @Override
     public void update()
     {
         super.update();
     }
 
-    public void keyReleased(int id, char c)
+    public boolean keyReleased(int id, char c)
     {
         super.keyReleased(id, c);
         if(id == Keyboard.KEY_ESCAPE)
         {
             oc.openMenu(new GuiIngame(oc));
         }
+        return true;
     }
 
     public boolean pausesGame()

@@ -36,9 +36,9 @@ public class GuiIngame extends Gui
     }
 
     @Override
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
         getFontRenderer().drawString("Playing as \"" + oc.getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFFFF, 2, 0, renderEngine);
 
         CollisionInfos infos = oc.getObjectInFront();

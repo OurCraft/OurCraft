@@ -96,12 +96,12 @@ public class GuiSettings extends Gui
         this.parent = parent;
     }
 
-    public void keyPressed(int id, char c)
+    public boolean keyPressed(int id, char c)
     {
-        super.keyPressed(id, c);
+        return super.keyPressed(id, c);
     }
 
-    public void keyReleased(int id, char c)
+    public boolean keyReleased(int id, char c)
     {
         super.keyReleased(id, c);
         if(pending != null)
@@ -109,6 +109,7 @@ public class GuiSettings extends Gui
             pending.setValue("" + id);
             pending = null;
         }
+        return false;
     }
 
     @Override
@@ -138,11 +139,11 @@ public class GuiSettings extends Gui
     }
 
     @Override
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
         if(parent instanceof GuiMainMenu)
             drawBackground(mx, my, renderEngine);
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
 
         String s = I18n.format("main.settings");
         getFontRenderer().drawShadowedString(s, 0xFFFFFFFF, (int) (oc.getDisplayWidth() / 2 - getFontRenderer().getTextWidth(s) / 2), (int) (oc.getDisplayHeight() / 16), renderEngine);

@@ -48,10 +48,10 @@ public class GuiConnecting extends Gui
         updateCounter++ ;
     }
 
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
         getFontRenderer().drawShadowedString(status, 0xFFFFFFFF, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextWidth(status) / 2, oc.getDisplayHeight() / 2 - (int) getFontRenderer().getCharHeight('A') / 2 - 50, renderEngine);
 
         int length = 11;

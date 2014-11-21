@@ -266,7 +266,7 @@ public class GuiSelectWorld extends Gui
         super.update();
     }
 
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);
         if(worldSnapshot != null)
@@ -277,6 +277,6 @@ public class GuiSelectWorld extends Gui
             drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, 1, 1);
             renderEngine.setCurrentShader(oldShader);
         }
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
     }
 }

@@ -54,10 +54,10 @@ public class GuiDeleteWorld extends Gui
         }
     }
 
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
 
         String desc0 = I18n.format("menu.deleteworld.desc0");
         String desc1 = I18n.format("menu.deleteworld.desc1");

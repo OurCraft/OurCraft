@@ -1,31 +1,24 @@
 package org.craft.client.gui;
 
 import java.io.*;
-import java.util.*;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
-import org.craft.client.render.fonts.*;
 import org.craft.maths.*;
 import org.craft.modding.events.gui.*;
 import org.craft.resources.*;
 
-public abstract class Gui
+public abstract class Gui extends GuiPanel
 {
 
     public static ResourceLocation widgetsTexture = new ResourceLocation("ourcraft", "textures/gui/widgets.png");
     private static OpenGLBuffer    buffer;
     private static Texture         backgroundTexture;
-    private FontRenderer           fontRenderer;
-    private ArrayList<GuiWidget>   widgets;
-    private GuiWidget              selectedWidget;
-
-    protected OurCraft             oc;
 
     public Gui(OurCraft game)
     {
-        this.oc = game;
+        super(0, 0, game.getDisplayWidth(), game.getDisplayHeight(), game, game.getFontRenderer());
         if(backgroundTexture == null)
         {
             try
@@ -41,24 +34,6 @@ public abstract class Gui
                 e.printStackTrace();
             }
         }
-        widgets = new ArrayList<GuiWidget>();
-        this.fontRenderer = oc.getFontRenderer();
-    }
-
-    /**
-     * Adds given widget to this gui
-     */
-    public void addWidget(GuiWidget widget)
-    {
-        widgets.add(widget);
-    }
-
-    /**
-     * Returns the font renderer of this gui
-     */
-    public FontRenderer getFontRenderer()
-    {
-        return fontRenderer;
     }
 
     private static Vector3    bottomLeftCornerPos    = Vector3.get(0, 0, 0);
@@ -117,80 +92,6 @@ public abstract class Gui
         engine.renderBuffer(buffer);
     }
 
-    /*
-     * Method called when a widget is clicked
-     */
-    public void actionPerformed(GuiWidget widget)
-    {
-    }
-
-    /**
-     * Method called when a key is pressed
-     */
-    public void keyPressed(int id, char c)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            if(widget.keyPressed(id, c))
-            {
-                break;
-            }
-        }
-    }
-
-    /**
-     * Method called when a key is released
-     */
-    public void keyReleased(int id, char c)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            if(widget.keyReleased(id, c))
-            {
-                break;
-            }
-        }
-    }
-
-    /**
-     * Method called when a button is released
-     */
-    public void handleButtonReleased(int x, int y, int button)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            if(widget.enabled)
-                if(widget.onButtonReleased(x, y, button))
-                    break;
-        }
-
-        if(selectedWidget != null)
-            if(selectedWidget.enabled && selectedWidget.isMouseOver(x, y))
-            {
-                if(button == 0)
-                {
-                    if(!oc.getEventBus().fireEvent(new GuiActionPerformedEvent(oc, this, selectedWidget)))
-                        actionPerformed(selectedWidget);
-                }
-            }
-    }
-
-    /**
-     * Method called when a button is pressed
-     */
-    public void handleButtonPressed(int x, int y, int button)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            if(widget.enabled)
-            {
-                widget.onButtonPressed(x, y, button);
-                if(widget.isMouseOver(x, y))
-                    selectedWidget = widget;
-            }
-        }
-    }
-
     /**
      * Returns true if the updating of the game should be paused when this gui is opened (
      */
@@ -210,17 +111,6 @@ public abstract class Gui
     public abstract void init();
 
     /**
-     * Renders this gui on screen
-     */
-    public void draw(int mx, int my, RenderEngine renderEngine)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            widget.render(mx, my, renderEngine);
-        }
-    }
-
-    /**
      * Draws default background on screen
      */
     public void drawBackground(int mx, int my, RenderEngine renderEngine)
@@ -238,20 +128,6 @@ public abstract class Gui
     }
 
     /**
-     * Handles a 'mouse wheel moved' event
-     */
-    public void handleMouseWheelMovement(int mx, int my, int deltaWheel)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            if(widget.handleMouseWheelMovement(mx, my, deltaWheel))
-            {
-                break;
-            }
-        }
-    }
-
-    /**
      * Clears widget list
      */
     public void build()
@@ -262,29 +138,6 @@ public abstract class Gui
             init();
             OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.Post(OurCraft.getOurCraft(), this));
         }
-    }
-
-    /**
-     * Handles a 'mouse moved event'
-     * @param mx : The new position of mouse on X axis
-     * @param my : The new position of mouse on Y axis
-     * @param dx : The movement of mouse on X axis
-     * @param dy : The movement of mouse on Y axis
-     */
-    public void handleMouseMovement(int mx, int my, int dx, int dy)
-    {
-        for(GuiWidget widget : widgets)
-        {
-            if(widget.handleMouseMovement(mx, my, dx, dy))
-            {
-                break;
-            }
-        }
-    }
-
-    public List<GuiWidget> getAllWidgets()
-    {
-        return widgets;
     }
 
     public static void drawColoredRect(RenderEngine engine, int x, int y, int w, int h, int color)

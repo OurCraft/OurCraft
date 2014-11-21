@@ -83,12 +83,12 @@ public class GuiMainMenu extends Gui
     }
 
     @Override
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);
         renderEngine.bindLocation(logoTexture);
         drawTexturedRect(renderEngine, oc.getDisplayWidth() / 2 - 217, 20, 433, 240, 0, 0, 1, 1);
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
 
         getFontRenderer().drawShadowedString(wittyText, 0xFFC0C000, (int) (oc.getDisplayWidth() - getFontRenderer().getTextWidth(wittyText)), (int) (oc.getDisplayHeight() - getFontRenderer().getCharHeight('A')), renderEngine);
     }

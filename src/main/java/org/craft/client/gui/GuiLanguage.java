@@ -108,11 +108,11 @@ public class GuiLanguage extends Gui
     }
 
     @Override
-    public void draw(int mx, int my, RenderEngine renderEngine)
+    public void render(int mx, int my, RenderEngine renderEngine)
     {
         if(parent instanceof GuiMainMenu)
             drawBackground(mx, my, renderEngine);
-        super.draw(mx, my, renderEngine);
+        super.render(mx, my, renderEngine);
 
         String s = I18n.format("main.lang");
         getFontRenderer().drawShadowedString(s, 0xFFFFFFFF, (int) (oc.getDisplayWidth() / 2 - getFontRenderer().getTextWidth(s) / 2), (int) (oc.getDisplayHeight() / 16), renderEngine);
