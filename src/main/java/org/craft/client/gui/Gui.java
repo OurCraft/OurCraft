@@ -19,6 +19,7 @@ public abstract class Gui extends GuiPanel
     public Gui(OurCraft game)
     {
         super(0, 0, game.getDisplayWidth(), game.getDisplayHeight(), game, game.getFontRenderer());
+        forceDrawAll = true;
         if(backgroundTexture == null)
         {
             try
@@ -117,14 +118,6 @@ public abstract class Gui extends GuiPanel
     {
         renderEngine.bindTexture(backgroundTexture, 0);
         drawTexturedRect(renderEngine, 0, 0, oc.getDisplayWidth(), oc.getDisplayHeight(), 0, 0, (float) oc.getDisplayWidth() / (float) backgroundTexture.getWidth(), (float) oc.getDisplayHeight() / (float) backgroundTexture.getHeight());
-    }
-
-    /**
-     * Updates this gui
-     */
-    public void update()
-    {
-
     }
 
     /**

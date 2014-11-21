@@ -341,4 +341,34 @@ public class ModelBox
         buffer.clearAndDisposeVertices();
     }
 
+    public void setWidth(float value)
+    {
+        this.width = value;
+    }
+
+    public void setHeight(float value)
+    {
+        this.height = value;
+    }
+
+    public void setDepth(float value)
+    {
+        this.depth = value;
+    }
+
+    public void setX(float value)
+    {
+        this.x = value;
+    }
+
+    public void setY(float value)
+    {
+        this.y = value;
+    }
+
+    public void setZ(float value)
+    {
+        this.z = value;
+    }
+
 }

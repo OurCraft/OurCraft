@@ -293,4 +293,21 @@ public class GuiTextField extends GuiWidget
     {
         return txt;
     }
+
+    public void setText(String string)
+    {
+        this.txt = string;
+        incrementCursorPos();
+        incrementSecondCursorPos();
+    }
+
+    public boolean isFocused()
+    {
+        return focused;
+    }
+
+    public static boolean isLetter(char c)
+    {
+        return c >= 'a' && c <= 'z' && c >= 'A' && c <= 'Z';
+    }
 }

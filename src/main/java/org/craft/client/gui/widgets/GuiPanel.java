@@ -13,6 +13,7 @@ public class GuiPanel extends GuiWidget
     protected GuiWidget            selectedWidget;
     protected OurCraft             oc;
     protected FontRenderer         fontRenderer;
+    protected boolean              forceDrawAll;
 
     public GuiPanel(int x, int y, int w, int h, OurCraft oc, FontRenderer fontRenderer)
     {
@@ -39,7 +40,7 @@ public class GuiPanel extends GuiWidget
         for(GuiWidget widget : widgets)
         {
             if(widget.getX() >= getX() && widget.getX() + widget.getWidth() <= getX() + getWidth()
-                    && widget.getY() >= getY() && widget.getY() + widget.getHeight() <= getY() + getHeight())
+                    && widget.getY() >= getY() && widget.getY() + widget.getHeight() <= getY() + getHeight() || forceDrawAll)
                 widget.render(mx, my, engine);
         }
     }
@@ -158,5 +159,16 @@ public class GuiPanel extends GuiWidget
             }
         }
         return false;
+    }
+
+    /**
+     * Updates this panel and its children
+     */
+    public void update()
+    {
+        for(GuiWidget widget : widgets)
+        {
+            widget.update();
+        }
     }
 }

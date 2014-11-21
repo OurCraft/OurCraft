@@ -161,4 +161,9 @@ public abstract class GuiWidget
     {
         this.h = h;
     }
+
+    public void update()
+    {
+
+    }
 }
