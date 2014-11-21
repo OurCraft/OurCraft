@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
-import org.craft.utils.*;
 
 public class GuiList<T extends GuiListSlot> extends GuiWidget
 {
@@ -53,7 +52,6 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     {
         if(isMouseOver(mx, my))
         {
-            Log.message("dqzdqzd");
             int y = my + scroll - getY();
             int index = y / (slotHeight + ySpacing);
             selectedIndex = index;
