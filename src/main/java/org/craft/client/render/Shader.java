@@ -7,6 +7,7 @@ import java.util.*;
 
 import org.craft.maths.*;
 import org.craft.utils.*;
+import org.craft.utils.io.IOUtils;
 
 public class Shader implements IDisposable
 {
@@ -77,7 +78,7 @@ public class Shader implements IDisposable
         int l = getLocation(uniform);
         if(floatBuffer8 == null)
         {
-            floatBuffer8 = Buffers.createFloatBuffer(4 * 2);
+            floatBuffer8 = IOUtils.createFloatBuffer(4 * 2);
         }
         floatBuffer8.clear();
         FloatBuffer buffer = floatBuffer8;
@@ -95,7 +96,7 @@ public class Shader implements IDisposable
         int l = getLocation(uniform);
         if(floatBuffer12 == null)
         {
-            floatBuffer12 = Buffers.createFloatBuffer(4 * 3);
+            floatBuffer12 = IOUtils.createFloatBuffer(4 * 3);
         }
         floatBuffer12.clear();
         FloatBuffer buffer = floatBuffer12;
@@ -113,7 +114,7 @@ public class Shader implements IDisposable
         int l = getLocation(uniform);
         if(floatBuffer16 == null)
         {
-            floatBuffer16 = Buffers.createFloatBuffer(4 * 4);
+            floatBuffer16 = IOUtils.createFloatBuffer(4 * 4);
         }
         floatBuffer16.clear();
         FloatBuffer buffer = floatBuffer16;

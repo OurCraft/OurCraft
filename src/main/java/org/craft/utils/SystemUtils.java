@@ -2,7 +2,7 @@ package org.craft.utils;
 
 import java.io.*;
 
-public class SystemUtils
+public final class SystemUtils
 {
 
     public static enum OperatingSystem

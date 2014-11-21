@@ -1,6 +1,6 @@
 package org.craft.utils;
 
-public class CollisionInfos
+public final class CollisionInfos
 {
 
     public static enum CollisionType

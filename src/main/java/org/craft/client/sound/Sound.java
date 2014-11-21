@@ -6,6 +6,7 @@ import org.craft.client.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
+import org.craft.utils.io.IOUtils;
 import org.lwjgl.openal.*;
 
 public class Sound implements IDisposable
@@ -131,13 +132,13 @@ public class Sound implements IDisposable
 
     public Sound setSourcePosition(int id, Vector3 pos)
     {
-        AL10.alSource(id, AL10.AL_POSITION, Buffers.createFlippedBuffer(pos));
+        AL10.alSource(id, AL10.AL_POSITION, IOUtils.createFlippedBuffer(pos));
         return this;
     }
 
     public Sound setSourceVelocity(int id, Vector3 vel)
     {
-        AL10.alSource(id, AL10.AL_VELOCITY, Buffers.createFlippedBuffer(vel));
+        AL10.alSource(id, AL10.AL_VELOCITY, IOUtils.createFlippedBuffer(vel));
         return this;
     }
 

@@ -3,6 +3,7 @@ package org.craft.client.sound;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
+import org.craft.utils.io.IOUtils;
 import org.lwjgl.openal.*;
 
 public class SoundEngine
@@ -26,7 +27,7 @@ public class SoundEngine
     {
         AL10.alListener3f(AL10.AL_POSITION, pos.getX(), pos.getY(), pos.getZ());
         AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
-        AL10.alListener(AL10.AL_ORIENTATION, Buffers.createFlippedBuffer(rot.getForward().negative().normalize(), rot.getUp().normalize()));
+        AL10.alListener(AL10.AL_ORIENTATION, IOUtils.createFlippedBuffer(rot.getForward().negative().normalize(), rot.getUp().normalize()));
     }
 
     public Vector3 getListenerPos()

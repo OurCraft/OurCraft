@@ -3,6 +3,7 @@ package org.craft.client.sound;
 import java.nio.*;
 
 import org.craft.utils.*;
+import org.craft.utils.io.IOUtils;
 import org.lwjgl.openal.*;
 
 public class SoundResource implements IDisposable
@@ -13,7 +14,7 @@ public class SoundResource implements IDisposable
 
     public SoundResource(byte[] bufferData, int format, int freq)
     {
-        this(Buffers.createFlippedByteBuffer(bufferData), format, freq);
+        this(IOUtils.createFlippedByteBuffer(bufferData), format, freq);
     }
 
     public SoundResource(ByteBuffer bufferData, int format, int freq)

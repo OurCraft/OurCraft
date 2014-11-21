@@ -2,7 +2,7 @@ package org.craft.utils;
 
 import java.util.*;
 
-public class Session
+public final class Session
 {
 
     private UUID   uuid;

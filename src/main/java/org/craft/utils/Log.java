@@ -1,14 +1,19 @@
 package org.craft.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.text.SimpleDateFormat;
 import java.util.logging.*;
 
 import org.craft.client.*;
 import org.craft.utils.crash.*;
 
-public class Log
+public final class Log
 {
     private static final Logger log = Logger.getLogger("OurCraft");
     private static LogFormater  logformatter;
@@ -29,15 +34,15 @@ public class Log
         ch.setFormatter(logformatter);
         log.addHandler(ch);
         ch.setLevel(Level.ALL);
-        log.setLevel(Level.ALL);                         
-                                                     
-        LoggingOutputStream los;                                               
-                      
-        los = new LoggingOutputStream(log, Level.INFO);          
-        System.setOut(new PrintStream(los, true));                             
-                               
-        los= new LoggingOutputStream(log, Level.SEVERE);           
-        System.setErr(new PrintStream(los, true));                             
+        log.setLevel(Level.ALL);
+
+        LoggingOutputStream los;
+
+        los = new LoggingOutputStream(log, Level.INFO);
+        System.setOut(new PrintStream(los, true));
+
+        los = new LoggingOutputStream(log, Level.SEVERE);
+        System.setErr(new PrintStream(los, true));
 
     }
 
@@ -153,5 +158,72 @@ public class Log
     {
         log.addHandler(h);
         h.setFormatter(logformatter);
+    }
+}
+
+final class LogFormater extends Formatter
+{
+    private SimpleDateFormat dataformat;
+
+    protected LogFormater()
+    {
+        this.dataformat = new SimpleDateFormat("[HH:mm:ss]");
+    }
+
+    public String format(LogRecord par1LogRecord)
+    {
+        StringBuilder stringbuilder = new StringBuilder();
+        stringbuilder.append(this.dataformat.format(Long.valueOf(par1LogRecord
+                .getMillis())));
+        stringbuilder.append(" [" + Thread.currentThread().getName() + "/").append(par1LogRecord.getLevel().getName()).append("] ");
+
+        stringbuilder.append(this.formatMessage(par1LogRecord));
+        stringbuilder.append('\n');
+        Throwable throwable = par1LogRecord.getThrown();
+
+        if(throwable != null)
+        {
+            StringWriter stringwriter = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(stringwriter));
+            stringbuilder.append(stringwriter.toString());
+        }
+
+        return stringbuilder.toString();
+    }
+}
+
+final class LoggingOutputStream extends ByteArrayOutputStream
+{
+
+    private String lineSeparator;
+
+    private Logger logger;
+    private Level  level;
+
+    public LoggingOutputStream(Logger logger, Level level)
+    {
+        this.logger = logger;
+        this.level = level;
+        lineSeparator = System.getProperty("line.separator");
+    }
+
+    public void flush() throws IOException
+    {
+
+        String record;
+        synchronized(this)
+        {
+            super.flush();
+            record = this.toString();
+            super.reset();
+
+            if(record.length() == 0 || record.equals(lineSeparator))
+            {
+                // avoid empty records 
+                return;
+            }
+
+            logger.logp(level, "", "", record);
+        }
     }
 }

@@ -2,7 +2,7 @@ package org.craft.utils;
 
 import java.util.ArrayList;
 
-public class ArraysUtils
+public final class ArraysUtils
 {
 
     public static String[] trim(String[] split)

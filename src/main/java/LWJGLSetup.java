@@ -2,6 +2,7 @@ import java.io.*;
 
 import org.craft.utils.*;
 import org.craft.utils.SystemUtils.OperatingSystem;
+import org.craft.utils.io.IOUtils;
 
 public class LWJGLSetup
 {
