@@ -15,10 +15,13 @@ public abstract class Gui extends GuiPanel
     public static ResourceLocation widgetsTexture = new ResourceLocation("ourcraft", "textures/gui/widgets.png");
     private static OpenGLBuffer    buffer;
     private static Texture         backgroundTexture;
+    private GuiPopupMenu           popupMenu;
 
     public Gui(OurCraft game)
     {
         super(0, 0, game.getDisplayWidth(), game.getDisplayHeight(), game, game.getFontRenderer());
+        popupMenu = new GuiPopupMenu(this);
+        popupMenu.visible = false;
         forceDrawAll = true;
         if(backgroundTexture == null)
         {
@@ -129,8 +132,19 @@ public abstract class Gui extends GuiPanel
         if(!OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.Pre(OurCraft.getOurCraft(), this)))
         {
             init();
+            popupMenu.clear();
+            if(!OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.PopupMenu.Pre(OurCraft.getOurCraft(), this, popupMenu)))
+            {
+                buildMenu(popupMenu);
+                OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.PopupMenu.Post(OurCraft.getOurCraft(), this, popupMenu));
+            }
             OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.Post(OurCraft.getOurCraft(), this));
         }
+    }
+
+    public GuiPopupMenu getPopupMenu()
+    {
+        return popupMenu;
     }
 
     public static void drawColoredRect(RenderEngine engine, int x, int y, int w, int h, int color)
@@ -146,5 +160,113 @@ public abstract class Gui extends GuiPanel
         topRightCornerColor.set(r, g, b, a);
         drawRect(engine, x, y, w, h, 0, 0, 1, 1);
         engine.bindLocation(widgetsTexture);
+    }
+
+    public void buildMenu(GuiPopupMenu popupMenu)
+    {
+    }
+
+    public boolean onButtonReleased(int x, int y, int button)
+    {
+        boolean result = super.onButtonReleased(x, y, button);
+        if(!result && button == 1)
+        {
+            showPopupMenu(x, y);
+            return true;
+        }
+        else if(popupMenu.visible)
+        {
+            if(!popupMenu.onButtonReleased(x, y, button))
+            {
+                hidePopupMenu();
+            }
+        }
+        return result;
+    }
+
+    private void hidePopupMenu()
+    {
+        popupMenu.visible = false;
+    }
+
+    private void showPopupMenu(int x, int y)
+    {
+        popupMenu.visible = true;
+        popupMenu.pack();
+        popupMenu.setLocation(x, y);
+    }
+
+    @Override
+    public void render(int mx, int my, RenderEngine engine)
+    {
+        super.render(mx, my, engine);
+        if(popupMenu.visible)
+            popupMenu.render(mx, my, engine);
+    }
+
+    @Override
+    public boolean keyPressed(int id, char c)
+    {
+        boolean result = super.keyPressed(id, c);
+        if(!result && popupMenu.visible)
+        {
+            return popupMenu.keyPressed(id, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean keyReleased(int id, char c)
+    {
+        boolean result = super.keyReleased(id, c);
+        if(!result && popupMenu.visible)
+        {
+            return popupMenu.keyReleased(id, c);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean onButtonPressed(int x, int y, int button)
+    {
+        boolean result = super.onButtonPressed(x, y, button);
+        if(!result && popupMenu.visible)
+        {
+            return popupMenu.onButtonPressed(x, y, button);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean handleMouseMovement(int mx, int my, int dx, int dy)
+    {
+        boolean result = super.handleMouseMovement(mx, my, dx, dy);
+        if(!result && popupMenu.visible)
+        {
+            return popupMenu.handleMouseMovement(mx, my, dx, dy);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
+    {
+        boolean result = super.handleMouseWheelMovement(mx, my, deltaWheel);
+        if(!result && popupMenu.visible)
+        {
+            return popupMenu.handleMouseWheelMovement(mx, my, deltaWheel);
+        }
+        return result;
+    }
+
+    public void update()
+    {
+        popupMenu.update();
+        super.update();
+    }
+
+    public void onPopupMenuCliked(GuiPopupElement clicked)
+    {
+        hidePopupMenu();
     }
 }

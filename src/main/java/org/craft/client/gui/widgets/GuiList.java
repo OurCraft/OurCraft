@@ -13,13 +13,37 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     private int          selectedIndex;
     private int          slotHeight;
     private int          ySpacing;
+    private boolean      scrollable;
+    private boolean      showScrollBar;
 
     public GuiList(int id, int x, int y, int w, int h, int slotHeight)
     {
         super(id, x, y, w, h);
+        this.scrollable = true;
+        this.showScrollBar = true;
         this.slotHeight = slotHeight;
         selectedIndex = -1;
         list = new ArrayList<T>();
+    }
+
+    public void setScrollable(boolean scroll)
+    {
+        scrollable = scroll;
+    }
+
+    public boolean isScrollable()
+    {
+        return scrollable;
+    }
+
+    public void showScrollBar(boolean show)
+    {
+        this.showScrollBar = show;
+    }
+
+    public boolean showsScrollBar()
+    {
+        return showScrollBar;
     }
 
     public int getYSpacing()
@@ -75,9 +99,12 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             if(index < 0 || index >= getSize())
                 index = -1;
             else
+            {
                 getSlot(index).onButtonPressed(index, getX(), getY() - scroll + index * slotHeight + selectedIndex * ySpacing, getWidth(), slotHeight, mx, my, button, this);
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     public boolean handleMouseMovement(int mx, int my, int dx, int dy)
@@ -114,18 +141,21 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
                 }
             }
 
-            engine.bindLocation(Gui.widgetsTexture);
-            float maxHeight = getHeight() - slotHeight;
-            Gui.drawTexturedRect(engine, getX() + getWidth(), getY(), 10, (int) maxHeight, 0, 60f / 256f, 10f / 256f, 70f / 256f);
-            float startf = (float) scroll / (float) slotHeight;
-            float endf = ((float) scroll + (float) getHeight()) / (float) slotHeight;
-            if(startf < 0.f)
-                startf = 0f;
-            if(endf > getSize())
-                endf = getSize();
-            Gui.drawTexturedRect(engine, getX() + getWidth(),
-                    getY() + (int) (startf / (float) getSize() * maxHeight), 10,
-                    (int) ((endf - startf) / (float) getSize() * maxHeight), 10f / 256f, 60f / 256f, 20f / 256f, 70f / 256f);
+            if(showScrollBar)
+            {
+                engine.bindLocation(Gui.widgetsTexture);
+                float maxHeight = getHeight() - slotHeight;
+                Gui.drawTexturedRect(engine, getX() + getWidth(), getY(), 10, (int) maxHeight, 0, 60f / 256f, 10f / 256f, 70f / 256f);
+                float startf = (float) scroll / (float) slotHeight;
+                float endf = ((float) scroll + (float) getHeight()) / (float) slotHeight;
+                if(startf < 0.f)
+                    startf = 0f;
+                if(endf > getSize())
+                    endf = getSize();
+                Gui.drawTexturedRect(engine, getX() + getWidth(),
+                        getY() + (int) (startf / (float) getSize() * maxHeight), 10,
+                        (int) ((endf - startf) / (float) getSize() * maxHeight), 10f / 256f, 60f / 256f, 20f / 256f, 70f / 256f);
+            }
         }
     }
 
@@ -149,7 +179,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
 
     public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
     {
-        if(isMouseOver(mx, my))
+        if(isMouseOver(mx, my) && scrollable)
         {
             scroll += -(Math.signum(deltaWheel) * 15);
 
@@ -179,5 +209,20 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     public void setSelectedIndex(int selectedIndex)
     {
         this.selectedIndex = selectedIndex;
+    }
+
+    public void clear()
+    {
+        list.clear();
+    }
+
+    public boolean isEmpty()
+    {
+        return list.isEmpty();
+    }
+
+    public void setSlotHeight(int slotHeight)
+    {
+        this.slotHeight = slotHeight;
     }
 }
