@@ -1,4 +1,4 @@
-OurCraft
+OurCraft [![Build Status](https://travis-ci.org/OurCraft/OurCraft.svg?branch=master)](https://travis-ci.org/OurCraft/OurCraft)
 ========
 
 A wanna-be-community-run sandbox game written in Java
