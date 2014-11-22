@@ -121,8 +121,11 @@ public class GuiTextField extends GuiWidget
     public boolean onButtonPressed(int x, int y, int button)
     {
         if(isMouseOver(x, y))
+        {
             focused = true;
-        return true;
+            return true;
+        }
+        return false;
     }
 
     public boolean onButtonReleased(int x, int y, int button)
@@ -140,8 +143,9 @@ public class GuiTextField extends GuiWidget
                     break;
             }
             this.cursorPos = index;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**

@@ -56,13 +56,13 @@ public class GuiButton extends GuiWidget
     {
         if(isMouseOver(x, y))
             pressed = true;
-        return true;
+        return pressed;
     }
 
     public boolean onButtonReleased(int x, int y, int button)
     {
         pressed = false;
-        return false;
+        return isMouseOver(x, y);
     }
 
     public boolean isPressed()
