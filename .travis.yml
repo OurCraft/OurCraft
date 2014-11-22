@@ -5,4 +5,4 @@ install: true
 matrix:
   include:
   - jdk: oraclejdk7
-    script: gradle build
+  - script: gradle build
