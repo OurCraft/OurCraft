@@ -265,7 +265,7 @@ public abstract class Gui extends GuiPanel
         super.update();
     }
 
-    public void onPopupMenuCliked(GuiPopupElement clicked)
+    public void onPopupMenuClicked(GuiPopupElement clicked)
     {
         hidePopupMenu();
     }

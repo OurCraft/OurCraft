@@ -40,7 +40,7 @@ public class GuiPopupMenu extends GuiList<GuiPopupElement>
 
     public void onClicked(GuiPopupElement elem)
     {
-        parent.onPopupMenuCliked(elem);
+        parent.onPopupMenuClicked(elem);
     }
 
 }
