@@ -112,6 +112,7 @@ public class Block implements IStackable
     public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
     {
         w.clearStates(x, y, z);
+        w.removeScheduledUpdater(x, y, z);
     }
 
     /**
@@ -195,6 +196,11 @@ public class Block implements IStackable
     public boolean isSolid()
     {
         return true;
+    }
+
+    public void onScheduledUpdate(World world, int x, int y, int z, long interval, long tick)
+    {
+
     }
 
 }

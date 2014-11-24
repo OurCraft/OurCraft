@@ -2,6 +2,8 @@ package org.craft.world;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
@@ -11,19 +13,74 @@ import org.craft.utils.CollisionInfos.CollisionType;
 
 public class World
 {
-    private LinkedList<Entity> entities;
-    private ArrayList<Entity>  spawingQueue;
-    private ChunkProvider      chunkProvider;
-    private WorldGenerator     generator;
-    private String             name;
-    private WorldLoader        worldLoader;
-    public boolean             isRemote;
-    private Random             rng;
-    private long               tick;
-    private float              gravity;
+
+    public class BlockUpdateScheduler
+    {
+        private int  x;
+        private int  y;
+        private int  z;
+        private long interval;
+        private long cooldown;
+
+        public BlockUpdateScheduler(int x, int y, int z, long interval)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.interval = interval;
+        }
+
+        public int getX()
+        {
+            return x;
+        }
+
+        public int getY()
+        {
+            return y;
+        }
+
+        public int getZ()
+        {
+            return z;
+        }
+
+        public long getInterval()
+        {
+            return interval;
+        }
+
+        public long getCooldown()
+        {
+            return cooldown;
+        }
+
+        public void tick()
+        {
+            cooldown-- ;
+            if(cooldown < 0)
+            {
+                cooldown = interval;
+                onScheduledBlockUpdate(x, y, z, interval);
+            }
+        }
+    }
+
+    private LinkedList<Entity>              entities;
+    private ArrayList<Entity>               spawingQueue;
+    private ChunkProvider                   chunkProvider;
+    private WorldGenerator                  generator;
+    private String                          name;
+    private WorldLoader                     worldLoader;
+    public boolean                          isRemote;
+    private Random                          rng;
+    private long                            tick;
+    private float                           gravity;
+    private ArrayList<BlockUpdateScheduler> schedulers;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
+        schedulers = Lists.newArrayList();
         this.rng = new Random(generator.getSeed());
         this.worldLoader = worldLoader;
         this.name = name;
@@ -52,8 +109,13 @@ public class World
             }
         }
         entities.removeAll(deadEntities);
-        tick++ ;
 
+        for(int i = 0; i < schedulers.size(); i++ )
+        {
+            BlockUpdateScheduler scheduler = schedulers.get(i);
+            scheduler.tick();
+        }
+        tick++ ;
     }
 
     /**
@@ -474,5 +536,41 @@ public class World
     public float getGravity()
     {
         return gravity;
+    }
+
+    public void onScheduledBlockUpdate(int x, int y, int z, long interval)
+    {
+        Block b = getBlockAt(x, y, z);
+        if(b != null)
+        {
+            b.onScheduledUpdate(this, x, y, z, interval, tick);
+        }
+    }
+
+    /**
+     * Schedules block updates for every <code>interval</code> tick.<br/>
+     * Throws {@link IllegalArgumentException} if <code>interval <= 0</code>
+     */
+    public void scheduleBlockUpdates(int x, int y, int z, long interval)
+    {
+        if(interval <= 0)
+        {
+            throw new IllegalArgumentException("Block update tick interval can't be null or negative!");
+        }
+        schedulers.add(new BlockUpdateScheduler(x, y, z, interval));
+    }
+
+    public boolean removeScheduledUpdater(int x, int y, int z)
+    {
+        BlockUpdateScheduler toRemove = null;
+        for(BlockUpdateScheduler s : schedulers)
+        {
+            if(s.getX() == x && s.getY() == y && s.getZ() == z)
+            {
+                toRemove = s;
+            }
+        }
+        schedulers.remove(toRemove);
+        return toRemove != null;
     }
 }

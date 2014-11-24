@@ -618,7 +618,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         ArrayList<Chunk> visibleChunks = new ArrayList<Chunk>();
         if(player != null)
         {
-            AABB chunkBB = new AABB(Vector3.NULL, Vector3.get(16, 16, 16));
+            //AABB chunkBB = new AABB(Vector3.NULL, Vector3.get(16, 16, 16));
             int renderDistance = 8;
             int ox = (int) renderEngine.getRenderViewEntity().getX();
             int oy = (int) renderEngine.getRenderViewEntity().getY();
