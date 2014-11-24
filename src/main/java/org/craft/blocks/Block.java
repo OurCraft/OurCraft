@@ -203,4 +203,18 @@ public class Block implements IStackable
 
     }
 
+    /**
+     * Method called when the player performs a right click on this block.<br/>
+     * Returns <code>true</code> if the block performs anything on click, returns <code>false</code> otherwise.
+     * @param world The World in which the event occurred
+     * @param x Coordinate of X axis of the event
+     * @param y Coordinate of Y axis of the event
+     * @param z Coordinate of Z axis of the event
+     * @param player The player who created the event
+     * @return true if the block performs an action when clicking on it and cancels block placement if any scheduled. false otherwise.
+     */
+    public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
+    {
+        return false;
+    }
 }

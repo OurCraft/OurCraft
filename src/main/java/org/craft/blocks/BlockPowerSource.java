@@ -48,4 +48,9 @@ public class BlockPowerSource extends Block implements IPowerableBlock
         world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.fromPowerValue(value));
         world.updateBlockNeighbors(x, y, z, false);
     }
+
+    public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
+    {
+        return true;
+    }
 }

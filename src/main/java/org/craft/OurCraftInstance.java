@@ -7,6 +7,8 @@ import org.spongepowered.api.*;
 public interface OurCraftInstance
 {
 
+    String REGISTRIES_ID = "ourcraft";
+
     GameRegistry getRegistry();
 
     void broadcastMessage(String message);

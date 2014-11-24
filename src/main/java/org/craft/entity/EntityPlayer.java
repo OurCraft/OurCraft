@@ -134,4 +134,5 @@ public class EntityPlayer extends EntityLiving
         compound.putDouble("hunger", hunger);
         compound.putString("displayName", displayName);
     }
+
 }
