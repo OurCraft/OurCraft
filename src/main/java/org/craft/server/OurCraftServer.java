@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.swing.*;
 
+import com.google.common.collect.*;
+
 import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
@@ -30,30 +32,31 @@ import org.spongepowered.api.entity.*;
 public class OurCraftServer implements OurCraftInstance, ICommandSender
 {
 
-    private static OurCraftServer instance;
-    private NettyServerWrapper    serverWrapper;
-    private SpongeGameRegistry    gameRegistry;
-    private EventBus              eventBus;
-    private int                   maxPlayers;
+    private static OurCraftServer          instance;
+    private NettyServerWrapper             serverWrapper;
+    private SpongeGameRegistry             gameRegistry;
+    private EventBus                       eventBus;
+    private int                            maxPlayers;
 
-    private ArrayList<Player>     onlinePlayers;
-    private AddonsLoader          addonsLoader;
-    private boolean               nogui;
-    private ServerGui             serverGui;
-    private org.craft.world.World serverWorld;
+    private ArrayList<Player>              onlinePlayers;
+    private AddonsLoader                   addonsLoader;
+    private boolean                        nogui;
+    private ServerGui                      serverGui;
+    private org.craft.world.World          serverWorld;
 
-    private int                   frame;
-    private int                   ups;
-    private double                expectedFrameRate  = 60.0;
-    private double                timeBetweenUpdates = 1000000000 / expectedFrameRate;
-    private double                lastUpdateTime     = System.nanoTime();
+    private int                            frame;
+    private int                            ups;
+    private double                         expectedFrameRate  = 60.0;
+    private double                         timeBetweenUpdates = 1000000000 / expectedFrameRate;
+    private double                         lastUpdateTime     = System.nanoTime();
 
     // If we are able to get as high as this FPS, don't render again.
 
-    private int                   lastSecondTime     = (int) (lastUpdateTime / 1000000000);
-    private boolean               running;
-    private AssetLoader           assetsLoader;
-    private WorldLoader           worldLoader;
+    private int                            lastSecondTime     = (int) (lastUpdateTime / 1000000000);
+    private boolean                        running;
+    private AssetLoader                    assetsLoader;
+    private WorldLoader                    worldLoader;
+    private HashMap<String, GuiDispatcher> guiMap;
 
     public OurCraftServer()
     {
@@ -62,6 +65,8 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
 
     public OurCraftServer(int maxPlayers)
     {
+        guiMap = Maps.newHashMap();
+        EnumVanillaGuis.register(guiMap, NetworkSide.SERVER);
         instance = this;
         assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
         onlinePlayers = new ArrayList<Player>();
@@ -265,6 +270,18 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
     public void sendMessage(String text)
     {
         Log.message("[COMMAND] " + text);
+    }
+
+    @Override
+    public HashMap<String, GuiDispatcher> getGuiMap()
+    {
+        return guiMap;
+    }
+
+    @Override
+    public void registerGuiHandler(String registry, GuiDispatcher dispatcher)
+    {
+        guiMap.put(registry, dispatcher);
     }
 
 }

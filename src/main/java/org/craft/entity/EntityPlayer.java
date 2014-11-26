@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.mojang.nbt.*;
 
+import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.inventory.Stack;
@@ -133,6 +134,15 @@ public class EntityPlayer extends EntityLiving
         compound.putDouble("saturation", saturation);
         compound.putDouble("hunger", hunger);
         compound.putString("displayName", displayName);
+    }
+
+    public void openMenu(String registryID, int menuID)
+    {
+        GuiDispatcher dispatcher = CommonHandler.getCurrentInstance().getGuiMap().get(registryID);
+        if(dispatcher != null)
+        {
+            dispatcher.openGui(registryID, menuID, this, getObjectInFront(5));
+        }
     }
 
 }

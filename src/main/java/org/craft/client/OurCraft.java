@@ -11,6 +11,8 @@ import java.util.*;
 
 import javax.imageio.*;
 
+import com.google.common.collect.*;
+
 import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
@@ -44,56 +46,59 @@ import org.spongepowered.api.*;
 public class OurCraft implements Runnable, OurCraftInstance
 {
 
-    private int                      displayWidth                = 960;
-    private int                      displayHeight               = 540;
-    private boolean                  running                     = true;
-    private RenderEngine             renderEngine                = null;
-    private AssetLoader              assetsLoader;
-    private RenderBlocks             renderBlocks;
-    private World                    clientWorld;
-    private MouseHandler             mouseHandler;
-    private EntityPlayer             player;
-    private static OurCraft          instance;
-    private CollisionInfos           objectInFront               = null;
-    private OpenGLBuffer             crosshairBuffer;
-    private ResourceLocation         crosshairLocation;
-    private FallbackRender<Entity>   fallbackRenderer;
-    private Runtime                  runtime;
-    private FontRenderer             fontRenderer;
-    private String                   username;
+    private int                            displayWidth                = 960;
+    private int                            displayHeight               = 540;
+    private boolean                        running                     = true;
+    private RenderEngine                   renderEngine                = null;
+    private AssetLoader                    assetsLoader;
+    private RenderBlocks                   renderBlocks;
+    private World                          clientWorld;
+    private MouseHandler                   mouseHandler;
+    private EntityPlayer                   player;
+    private static OurCraft                instance;
+    private CollisionInfos                 objectInFront               = null;
+    private OpenGLBuffer                   crosshairBuffer;
+    private ResourceLocation               crosshairLocation;
+    private FallbackRender<Entity>         fallbackRenderer;
+    private Runtime                        runtime;
+    private FontRenderer                   fontRenderer;
+    private String                         username;
 
-    private Gui                      currentMenu;
-    private Gui                      newMenu;
-    private OpenGLBuffer             selectionBoxBuffer;
-    private DiskSimpleResourceLoader gameFolderLoader;
-    private PlayerController         playerController;
-    private SpongeGameRegistry       gameRegistry;
-    private EventBus                 eventBus;
-    private Session                  session;
-    private RenderItems              renderItems;
-    private AddonsLoader             addonsLoader;
+    private Gui                            currentMenu;
+    private Gui                            newMenu;
+    private OpenGLBuffer                   selectionBoxBuffer;
+    private DiskSimpleResourceLoader       gameFolderLoader;
+    private PlayerController               playerController;
+    private SpongeGameRegistry             gameRegistry;
+    private EventBus                       eventBus;
+    private Session                        session;
+    private RenderItems                    renderItems;
+    private AddonsLoader                   addonsLoader;
 
-    private int                      frame;
-    private int                      fps;
-    private double                   expectedFrameRate           = 60.0;
-    private double                   timeBetweenUpdates          = 1000000000 / expectedFrameRate;
-    private final int                maxUpdatesBeforeRender      = 3;
-    private double                   lastUpdateTime              = System.nanoTime();
-    private double                   lastRenderTime              = System.nanoTime();
+    private int                            frame;
+    private int                            fps;
+    private double                         expectedFrameRate           = 60.0;
+    private double                         timeBetweenUpdates          = 1000000000 / expectedFrameRate;
+    private final int                      maxUpdatesBeforeRender      = 3;
+    private double                         lastUpdateTime              = System.nanoTime();
+    private double                         lastRenderTime              = System.nanoTime();
 
     // If we are able to get as high as this FPS, don't render again.
-    private final double             TARGET_FPS                  = 60;
-    private final double             TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
+    private final double                   TARGET_FPS                  = 60;
+    private final double                   TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
-    private int                      lastSecondTime              = (int) (lastUpdateTime / 1000000000);
-    private ClientNetHandler         netHandler;
-    private WorldLoader              worldLoader;
-    private SoundEngine              sndEngine;
-    private GameSettings             settings;
-    private ModelLoader              modelLoader;
+    private int                            lastSecondTime              = (int) (lastUpdateTime / 1000000000);
+    private ClientNetHandler               netHandler;
+    private WorldLoader                    worldLoader;
+    private SoundEngine                    sndEngine;
+    private GameSettings                   settings;
+    private ModelLoader                    modelLoader;
+    private HashMap<String, GuiDispatcher> guiMap;
 
     public OurCraft()
     {
+        guiMap = Maps.newHashMap();
+        EnumVanillaGuis.register(guiMap, NetworkSide.CLIENT);
         instance = this;
         this.assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
         this.gameFolderLoader = new DiskSimpleResourceLoader(SystemUtils.getGameFolder().getAbsolutePath());
@@ -1108,6 +1113,18 @@ public class OurCraft implements Runnable, OurCraftInstance
     public boolean isServer()
     {
         return false;
+    }
+
+    @Override
+    public HashMap<String, GuiDispatcher> getGuiMap()
+    {
+        return guiMap;
+    }
+
+    @Override
+    public void registerGuiHandler(String registry, GuiDispatcher dispatcher)
+    {
+        guiMap.put(registry, dispatcher);
     }
 
 }

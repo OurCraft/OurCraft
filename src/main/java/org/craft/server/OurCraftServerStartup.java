@@ -20,6 +20,7 @@ public class OurCraftServerStartup
             properties.put("gamefolder", SystemUtils.getGameFolder().getAbsolutePath());
         Startup.applyArguments(properties);
         OurCraftServer instance = new OurCraftServer();
+        CommonHandler.setInstance(instance);
         instance.start(properties);
     }
 

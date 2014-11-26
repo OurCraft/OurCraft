@@ -10,10 +10,15 @@ import org.lwjgl.opengl.*;
 public class Texture implements ITextureObject, IDisposable
 {
 
-    private int        texID;
-    private int        width;
-    private int        height;
-    private ByteBuffer pixels;
+    static
+    {
+        empty = new Texture(1, 1, (ByteBuffer) ByteBuffer.allocateDirect(4).put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255).flip());
+    }
+    public static final Texture empty;
+    private int                 texID;
+    private int                 width;
+    private int                 height;
+    private ByteBuffer          pixels;
 
     /**
      * Creates a texture with given width, height and pixel data

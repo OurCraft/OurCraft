@@ -1,5 +1,7 @@
 package org.craft.client.gui;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.io.*;
 
 import org.craft.client.*;
@@ -96,6 +98,34 @@ public abstract class Gui extends GuiPanel
         engine.renderBuffer(buffer);
     }
 
+    public static void drawBezierCurve(RenderEngine engine, int color, int segments, float lineWidth, Vector2... points)
+    {
+        double[] x = new double[points.length];
+        double[] y = new double[points.length];
+        double[] z = new double[points.length];
+        for(int i = 0; i < x.length; i++ )
+        {
+            Vector2 point = points[i];
+            x[i] = point.getX();
+            y[i] = point.getY();
+            z[i] = 0;
+        }
+        CasteljauAlgorithm algo = new CasteljauAlgorithm(x, y, z, x.length);
+        double step = 1.0 / segments;
+        Vector2 previous = null;
+        for(double t = 0; t <= 1.0; t += step)
+        {
+            double[] values = algo.getXYZvalues(t);
+            Vector2 current = Vector2.get((float) values[0], (float) values[1]);
+            if(previous != null)
+            {
+                drawLine(engine, (int) current.getX(), (int) current.getY(), (int) previous.getX(), (int) previous.getY(), 0, 0, 1, 1, lineWidth);
+                //                previous.dispose();
+            }
+            previous = current;
+        }
+    }
+
     /**
      * Returns true if the updating of the game should be paused when this gui is opened (
      */
@@ -129,6 +159,8 @@ public abstract class Gui extends GuiPanel
     public void build()
     {
         widgets.clear();
+        setWidth(oc.getDisplayWidth());
+        setHeight(oc.getDisplayHeight());
         if(!OurCraft.getOurCraft().getEventBus().fireEvent(new GuiBuildingEvent.Pre(OurCraft.getOurCraft(), this)))
         {
             init();
@@ -147,9 +179,57 @@ public abstract class Gui extends GuiPanel
         return popupMenu;
     }
 
+    public static void drawColoredLine(RenderEngine engine, int x, int y, int x2, int y2, int color, float lineWidth)
+    {
+        engine.bindTexture(Texture.empty);
+        float a = (float) (color >> 24 & 0xFF) / 255f;
+        float r = (float) (color >> 16 & 0xFF) / 255f;
+        float g = (float) (color >> 8 & 0xFF) / 255f;
+        float b = (float) (color & 0xFF) / 255f;
+        bottomLeftCornerColor.set(r, g, b, a);
+        bottomRightCornerColor.set(r, g, b, a);
+        topLeftCornerColor.set(r, g, b, a);
+        topRightCornerColor.set(r, g, b, a);
+        glColor4f(r, g, b, a);
+        drawLine(engine, x, y, x2, y2, 0, 0, 1, 1, lineWidth);
+        engine.bindLocation(widgetsTexture);
+    }
+
+    public static void drawLine(RenderEngine engine, int x, int y, int x2, int y2, float minU, float minV, float maxU, float maxV, float lineWidth)
+    {
+        if(buffer == null)
+        {
+            buffer = new OpenGLBuffer();
+            buffer.addVertex(Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV, bottomLeftCornerColor));
+            buffer.addVertex(Vertex.get(bottomRightCornerPos, bottomRightCornerUV, bottomRightCornerColor));
+            buffer.addVertex(Vertex.get(topLeftCornerPos, topLeftCornerUV, topLeftCornerColor));
+            buffer.addVertex(Vertex.get(topRightCornerPos, topRightCornerUV, topRightCornerColor));
+            buffer.addIndex(0);
+            buffer.addIndex(1);
+            buffer.addIndex(2);
+
+            buffer.addIndex(2);
+            buffer.addIndex(3);
+            buffer.addIndex(0);
+        }
+        bottomLeftCornerPos.set(x, y, 0);
+        bottomRightCornerPos.set(x2, y2, 0);
+        topLeftCornerPos.set(x2, y2, 0);
+        topRightCornerPos.set(x2, y2, 0);
+        bottomLeftCornerUV.set(minU, minV);
+        bottomRightCornerUV.set(maxU, minV);
+        topLeftCornerUV.set(maxU, maxV);
+        topRightCornerUV.set(minU, maxV);
+        buffer.upload();
+        glLineWidth(lineWidth);
+        engine.renderBuffer(buffer, GL_LINES);
+        glLineWidth(1);
+
+    }
+
     public static void drawColoredRect(RenderEngine engine, int x, int y, int w, int h, int color)
     {
-        engine.bindTexture(5, 0);
+        engine.bindTexture(Texture.empty);
         float a = (float) (color >> 24 & 0xFF) / 255f;
         float r = (float) (color >> 16 & 0xFF) / 255f;
         float g = (float) (color >> 8 & 0xFF) / 255f;

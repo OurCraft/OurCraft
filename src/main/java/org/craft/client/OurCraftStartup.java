@@ -34,6 +34,7 @@ public class OurCraftStartup
         System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));
 
         OurCraft instance = new OurCraft();
+        CommonHandler.setInstance(instance);
         instance.start(properties);
     }
 }

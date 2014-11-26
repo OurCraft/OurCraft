@@ -22,6 +22,8 @@ public final class BlockStates
 
     public static BlockState                                                   powered;
 
+    public static BlockState                                                   powerSourceMode;
+
     /**
      * Maps String representations of block states to their respective BlockState object
      */
@@ -53,6 +55,12 @@ public final class BlockStates
         for(EnumPowerStates state : EnumPowerStates.values())
         {
             registerValue(electricPower, state);
+        }
+
+        registerState(powerSourceMode = new BaseBlockState("powerSourceMode"));
+        for(EnumPowerSourceMode state : EnumPowerSourceMode.values())
+        {
+            registerValue(powerSourceMode, state);
         }
 
         registerState(powered = new BaseBlockState("powered"));

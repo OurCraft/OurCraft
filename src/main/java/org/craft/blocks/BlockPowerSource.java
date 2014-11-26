@@ -1,5 +1,6 @@
 package org.craft.blocks;
 
+import org.craft.*;
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
@@ -25,7 +26,8 @@ public class BlockPowerSource extends Block implements IPowerableBlock
     {
         super.onBlockAdded(w, x, y, z, side, placer);
         w.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.POWER_15);
-        w.scheduleBlockUpdates(x, y, z, 1);
+        w.setBlockState(x, y, z, BlockStates.powerSourceMode, EnumPowerSourceMode.CONSTANT);
+        w.scheduleBlockUpdates(x, y, z, 3);
     }
 
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
@@ -43,14 +45,14 @@ public class BlockPowerSource extends Block implements IPowerableBlock
 
     public void onScheduledUpdate(World world, int x, int y, int z, long interval, long tick)
     {
-        double valued = Math.sin(Math.toRadians((float) tick * 2f)) / 2f + 0.5f;
-        int value = (int) (valued * 16f);
-        world.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.fromPowerValue(value));
+        EnumPowerSourceMode power = (EnumPowerSourceMode) world.getBlockState(x, y, z, BlockStates.powerSourceMode);
+        world.setBlockState(x, y, z, BlockStates.electricPower, power.function().apply(tick));
         world.updateBlockNeighbors(x, y, z, false);
     }
 
     public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
     {
+        player.openMenu(OurCraftInstance.REGISTRIES_ID, EnumVanillaGuis.POWER_SOURCE_MODIFIER.id());
         return true;
     }
 }
