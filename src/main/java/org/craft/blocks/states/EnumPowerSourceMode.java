@@ -66,7 +66,6 @@ public enum EnumPowerSourceMode implements IBlockStateValue
         public EnumPowerStates apply(Long tick)
         {
             float t = 1f / (tick * 2f % 60);
-            //            Log.message("T: " + t * 100);
             return EnumPowerStates.fromPowerValue((int) Math.floor(t * 100));
         }
     }
