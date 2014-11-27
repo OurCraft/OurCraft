@@ -1,10 +1,11 @@
-package org.craft.client;
+package org.craft.client.gui;
 
 import java.util.*;
 
 import com.google.common.collect.*;
 
 import org.craft.blocks.states.*;
+import org.craft.client.*;
 import org.craft.client.gui.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;

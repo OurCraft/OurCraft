@@ -3,8 +3,6 @@ package org.craft;
 import java.io.*;
 import java.util.*;
 
-import org.craft.client.models.*;
-import org.craft.client.render.*;
 import org.craft.modding.modifiers.*;
 import org.craft.utils.*;
 import org.reflections.*;
@@ -72,10 +70,7 @@ public final class Startup
         boolean debug = properties.get("debug") != null && !properties.get("debug").equalsIgnoreCase("false");
         Log.useFullClassNames = debug;
         Log.showCaller = debug;
-        ModifierClassTransformer.debug = debug;
-        RenderEngine.debug = debug;
-        RenderItems.debug = debug;
-        ModelLoader.debug = debug;
         SystemUtils.setGameFolder(new File(properties.get("gamefolder")));
+        Dev.debug(debug);
     }
 }

@@ -284,4 +284,23 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         guiMap.put(registry, dispatcher);
     }
 
+    @Override
+    public void registerBlock(Block block)
+    {
+        AddonContainer<?> container = CommonHandler.getCurrentContainer();
+        if(container != null)
+            container.registerBlock(block);
+        block.setContainer(container);
+        Blocks.register(block);
+    }
+
+    @Override
+    public void registerItem(Item item)
+    {
+        AddonContainer<?> container = CommonHandler.getCurrentContainer();
+        if(container != null)
+            container.registerItem(item);
+        item.setContainer(container);
+        Items.register(item);
+    }
 }

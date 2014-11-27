@@ -21,8 +21,6 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
     private HashMap<String, String> toModify;
     private OurClassLoader          classloader;
 
-    public static boolean           debug;
-
     public ModifierClassTransformer()
     {
         toModify = Maps.newHashMap();
@@ -73,7 +71,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 applyMethods(originalReader, modifierReader, originalNode, modifierNode);
 
                 byte[] bytes = writeClass(originalNode);
-                if(debug)
+                if(Dev.debug())
                 {
                     ClassReader debugReader = new ClassReader(bytes);
                     ClassNode debugNode = new ClassNode();
@@ -134,7 +132,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                     {
                         node.name = node.name.substring(prefix.length(), node.name.length());
                         found = true;
-                        if(debug)
+                        if(Dev.debug())
                             Log.message(">>> REPLACED NAME " + mName + " TO " + originalField.name);
                         break;
                     }
@@ -189,7 +187,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                     {
                         node.name = node.name.substring(prefix.length(), node.name.length());
                         found = true;
-                        if(debug)
+                        if(Dev.debug())
                             Log.message(">>> REPLACED NAME " + mName + " TO " + originalMethod.name);
                         originalNode.methods.remove(originalMethod);
                         originalNode.methods.add(convertMethod(node, originalNode.name, modifierNode.name));
@@ -244,7 +242,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                             {
                                 String oldName = methodInsn.name;
                                 methodInsn.name = methodInsn.name.substring(prefix.length(), methodInsn.name.length());
-                                if(debug)
+                                if(Dev.debug())
                                     Log.message(">>>>> CHANGED " + oldName + " to " + methodInsn.name);
                             }
                         }
@@ -275,7 +273,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                         {
                             String oldName = fieldInsn.name;
                             fieldInsn.name = fieldInsn.name.substring(prefix.length(), fieldInsn.name.length());
-                            if(debug)
+                            if(Dev.debug())
                                 Log.message(">>>>> CHANGED " + oldName + " to " + fieldInsn.name);
                         }
                     }
@@ -325,7 +323,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                     String prefix = (String) ASMUtils.toMap(shadowNode.values).get("prefix");
                     if(prefix == null)
                         prefix = "shadow$";
-                    if(debug)
+                    if(Dev.debug())
                         Log.message(">>> PREFIX: " + prefix);
                     if(insn.name.equals(prefix + method.name))
                         return method;

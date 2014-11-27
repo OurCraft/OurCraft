@@ -1,14 +1,16 @@
 package org.craft.items;
 
 import org.craft.entity.*;
+import org.craft.modding.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
 
 public class Item implements IStackable
 {
 
-    private String id;
-    private int    uid;
+    private String            id;
+    private int               uid;
+    private AddonContainer<?> container;
 
     public Item(String id)
     {
@@ -18,7 +20,7 @@ public class Item implements IStackable
     @Override
     public String getId()
     {
-        return "ourcraft:" + id;
+        return (container == null ? "ourcraft" : container.getId()) + ":" + id;
     }
 
     @Override
@@ -48,4 +50,15 @@ public class Item implements IStackable
     {
         return "item." + id;
     }
+
+    public AddonContainer<?> getContainer()
+    {
+        return container;
+    }
+
+    public void setContainer(AddonContainer<?> container)
+    {
+        this.container = container;
+    }
+
 }

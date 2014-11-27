@@ -1,6 +1,7 @@
 package org.craft;
 
 import org.craft.client.*;
+import org.craft.client.gui.*;
 import org.craft.entity.*;
 import org.craft.network.*;
 import org.craft.utils.*;

@@ -244,6 +244,8 @@ public class OurCraft implements Runnable, OurCraftInstance
 
             eventBus.fireEvent(new ModPostInitEvent(this), null, null);
 
+            CommonHandler.setCurrentContainer(null);
+
             running = true;
             while(running)
             {
@@ -1125,6 +1127,28 @@ public class OurCraft implements Runnable, OurCraftInstance
     public void registerGuiHandler(String registry, GuiDispatcher dispatcher)
     {
         guiMap.put(registry, dispatcher);
+    }
+
+    @Override
+    public void registerBlock(Block block)
+    {
+        AddonContainer<?> container = CommonHandler.getCurrentContainer();
+        if(container != null)
+        {
+            container.registerBlock(block);
+        }
+        block.setContainer(container);
+        Blocks.register(block);
+    }
+
+    @Override
+    public void registerItem(Item item)
+    {
+        AddonContainer<?> container = CommonHandler.getCurrentContainer();
+        if(container != null)
+            container.registerItem(item);
+        item.setContainer(container);
+        Items.register(item);
     }
 
 }

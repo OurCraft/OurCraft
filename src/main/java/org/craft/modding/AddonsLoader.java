@@ -28,6 +28,7 @@ public class AddonsLoader
     private ClassLoader                                         classLoader;
     private ArrayList<AddonContainer>                           containers;
     private ArrayList<Class<?>>                                 loaded;
+    private List<Class<? extends Annotation>>                   excluded;
 
     public AddonsLoader(OurCraftInstance gameInstance, EventBus eventBus)
     {
@@ -52,10 +53,12 @@ public class AddonsLoader
     public void loadAddon(Class<?> clazz) throws InstantiationException, IllegalAccessException
     {
         boolean added = false;
-        if(loaded.contains(clazz))
-            return;
+        //        if(loaded.contains(clazz))
+        //            return;
         annotLoop: for(Class<? extends Annotation> c : handlers.keySet())
         {
+            if(excluded != null && !excluded.isEmpty() && excluded.contains(c))
+                continue;
             for(AddonContainer container : containers)
             {
                 if(container.getAddonAnnotation().annotationType() == c && container.getInstance().getClass() == clazz)
@@ -81,6 +84,7 @@ public class AddonsLoader
                         }
                     }
                     AddonContainer container = handler.createContainer(annot, instance);
+                    CommonHandler.setCurrentContainer(container);
                     manager.loadAddon(container);
                     eventBus.register(instance);
 
@@ -92,7 +96,7 @@ public class AddonsLoader
                 }
             }
         }
-        if(!added)
+        if(!added && (excluded == null || excluded.isEmpty()))
         {
             Log.error("Tried to register addon " + clazz.getName() + " but it is not supported");
         }
@@ -131,6 +135,7 @@ public class AddonsLoader
                                 Log.message("Found lua addon with id: " + id + ", name: " + name + ", version: " + version + " and mainClass: " + mainClass + ". Author is " + author);
 
                                 LuaAddonContainer container = new LuaAddonContainer(id, name, version, author, mainClass);
+                                CommonHandler.setCurrentContainer(container);
                                 new LuaScript(zipResLoader.getResource(new ResourceLocation(mainClass)), luaListener, container, game);
 
                                 eventBus.register(container);
@@ -189,4 +194,14 @@ public class AddonsLoader
             }
         }
     }
+
+    public void exclude(Class<? extends Annotation>... classesToSearch)
+    {
+        if(classesToSearch == null || classesToSearch.length == 0)
+        {
+            excluded = null;
+        }
+        excluded = Lists.newArrayList(classesToSearch);
+    }
+
 }

@@ -1,10 +1,12 @@
 package org.craft.modding.events;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import com.google.common.collect.*;
 
+import org.craft.utils.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
 import org.spongepowered.api.event.*;
@@ -18,15 +20,17 @@ public class ASMEventListener implements IEventListener, Opcodes
 
     private final Object                           handler;
     private String                                 readable;
+    private Object                                 target;
 
     public ASMEventListener(Object target, Method method) throws Exception
     {
         handler = createWrapper(method).getConstructor(Object.class).newInstance(target);
+        this.target = target;
         readable = "ASM: " + target + " " + method.getName() + Type.getMethodDescriptor(method);
     }
 
     @Override
-    public void invoke(Object event)
+    public void invoke(Object event, Object instance)
     {
         if(handler != null)
         {
@@ -48,7 +52,8 @@ public class ASMEventListener implements IEventListener, Opcodes
             {
                 try
                 {
-                    handler.getClass().getDeclaredMethod("invoke", Object.class).invoke(handler, event);
+                    if(target == instance || instance == null)
+                        handler.getClass().getDeclaredMethod("invoke", Object.class, Object.class).invoke(handler, event, instance);
                 }
                 catch(Exception e)
                 {
@@ -98,15 +103,15 @@ public class ASMEventListener implements IEventListener, Opcodes
             {
                 mv = cw.visitMethod(ACC_PUBLIC, "invoke", HANDLER_FUNC_DESC, null, null);
                 mv.visitCode();
-
-                mv.visitVarInsn(ALOAD, 0);
+                mv.visitVarInsn(ALOAD, 0); // this
                 mv.visitFieldInsn(GETFIELD, desc, "instance", "Ljava/lang/Object;");
                 mv.visitTypeInsn(CHECKCAST, instType);
-                mv.visitVarInsn(ALOAD, 1);
+                mv.visitVarInsn(ALOAD, 1); // Event arg
                 mv.visitTypeInsn(CHECKCAST, eventType);
+
                 mv.visitMethodInsn(INVOKEVIRTUAL, instType, callback.getName(), Type.getMethodDescriptor(callback), false);
                 mv.visitInsn(RETURN);
-                mv.visitMaxs(2, 2);
+                mv.visitMaxs(3, 3);
 
                 mv.visitEnd();
             }
@@ -116,6 +121,15 @@ public class ASMEventListener implements IEventListener, Opcodes
                     name, bytes, 0, bytes.length);
             Class<?> ret = (Class<?>) o;
             cache.put(callback, ret);
+            if(Dev.debug())
+            {
+                File file = new File(Dev.getFolder(), desc.replace("/", "_") + ".class");
+                FileOutputStream out = new FileOutputStream(file);
+                out.write(bytes);
+                out.flush();
+                out.close();
+                Log.message("Wrote output to " + file.getPath());
+            }
             return ret;
         }
         catch(Exception e)

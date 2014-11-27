@@ -42,6 +42,7 @@ public class SpoongeMod implements Game
         ;
     }
 
+    @SuppressWarnings("unchecked")
     @OurModEventHandler
     public void onPreInit(ModPreInitEvent event)
     {
@@ -57,7 +58,9 @@ public class SpoongeMod implements Game
         File pluginsFolder = new File(SystemUtils.getGameFolder(), "plugins");
         if(!pluginsFolder.exists())
             pluginsFolder.mkdirs();
+        addonsLoader.exclude(Mod.class);
         addonsLoader.loadAll(pluginsFolder);
+        addonsLoader.exclude();
     }
 
     @OurModEventHandler

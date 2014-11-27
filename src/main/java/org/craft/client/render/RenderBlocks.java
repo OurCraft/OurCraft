@@ -25,7 +25,6 @@ public class RenderBlocks
         public int   z;
     }
 
-    public static boolean                              debug;
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer> chunkBuffersPass0;
     private HashMap<ChunkCoord, OffsettedOpenGLBuffer> chunkBuffersPass1;
     private RenderEngine                               renderEngine;
@@ -65,11 +64,12 @@ public class RenderBlocks
         }
         try
         {
-            ResourceLocation res = new ResourceLocation("ourcraft", "models/blockstates/" + block.getRawID() + ".json");
+            ResourceLocation loc = new ResourceLocation(block.getId());
+            ResourceLocation res = new ResourceLocation(loc.getSection(), "models/blockstates/" + block.getRawID() + ".json");
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
                 renderers.put(block, modelLoader.createBlockRenderer(res, renderEngine.blocksAndItemsMap));
-                if(debug)
+                if(Dev.debug())
                     Log.message(res.getFullPath() + " loaded.");
             }
             else

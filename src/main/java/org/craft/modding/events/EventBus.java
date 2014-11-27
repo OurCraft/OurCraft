@@ -146,14 +146,14 @@ public class EventBus
     @SuppressWarnings("unchecked")
     public boolean fireEvent(Object e, Object instance, Class<? extends Annotation> annotClass)
     {
-        for(IEventBusListener listener : eventBusListeners)
-            listener.onEvent(e, instance, annotClass);
+        for(IEventBusListener eventBusListener : eventBusListeners)
+            eventBusListener.onEvent(e, instance, annotClass);
         ArrayList<IEventListener>[] values = listeners.values().toArray(new ArrayList[0]);
         for(ArrayList<IEventListener> list : values)
         {
             for(IEventListener listener : list)
             {
-                listener.invoke(e);
+                listener.invoke(e, instance);
             }
         }
         boolean cancelled = false;

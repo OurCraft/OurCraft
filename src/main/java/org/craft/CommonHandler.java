@@ -1,9 +1,12 @@
 package org.craft;
 
+import org.craft.modding.*;
+
 public final class CommonHandler
 {
 
-    private static OurCraftInstance instance;
+    private static OurCraftInstance  instance;
+    private static AddonContainer<?> currentContainer;
 
     private CommonHandler()
     {
@@ -18,5 +21,15 @@ public final class CommonHandler
     public static void setInstance(OurCraftInstance instance)
     {
         CommonHandler.instance = instance;
+    }
+
+    public static void setCurrentContainer(AddonContainer<?> container)
+    {
+        currentContainer = container;
+    }
+
+    public static AddonContainer<?> getCurrentContainer()
+    {
+        return currentContainer;
     }
 }

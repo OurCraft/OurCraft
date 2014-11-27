@@ -6,6 +6,7 @@ import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.items.*;
 import org.craft.maths.*;
+import org.craft.modding.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -17,17 +18,19 @@ public class Block implements IStackable
     {
         normalCubeAABB = new AABB(Vector3.NULL.copy(), Vector3.get(1, 1, 1));
     }
-    protected static AABB normalCubeAABB;
+    protected static AABB     normalCubeAABB;
 
     /**
      * The string id of this block
      */
-    private String        id;
+    private String            id;
 
     /**
      * An id given at launch of the game used to identify the block.
      */
-    private short         uniqueID;
+    private short             uniqueID;
+
+    private AddonContainer<?> container;
 
     /**
      * Block constructor. Takes in an ID to identify the block
@@ -144,7 +147,7 @@ public class Block implements IStackable
     @Override
     public String getId()
     {
-        return "ourcraft:" + getRawID();
+        return (container == null ? "ourcraft" : container.getId()) + ":" + id;
     }
 
     @Override
@@ -216,5 +219,15 @@ public class Block implements IStackable
     public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
     {
         return false;
+    }
+
+    public AddonContainer<?> getContainer()
+    {
+        return container;
+    }
+
+    public void setContainer(AddonContainer<?> container)
+    {
+        this.container = container;
     }
 }

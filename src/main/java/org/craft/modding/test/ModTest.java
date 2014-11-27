@@ -1,5 +1,6 @@
 package org.craft.modding.test;
 
+import org.craft.blocks.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.slf4j.*;
@@ -19,12 +20,14 @@ public class ModTest
     {
         logger = evt.getLogger();
         logger.debug("PreInit!!!");
+        Block block = new Block("testModding");
+        evt.getOurCraftInstance().registerBlock(block);
     }
 
     @OurModEventHandler
     public void onPostInit(ModPostInitEvent evt)
     {
-        logger.debug("PostInit!!!");
+        logger.debug("PostInit!!! " + getClass());
     }
 
     @OurModEventHandler

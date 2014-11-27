@@ -16,7 +16,6 @@ import org.craft.world.*;
 public class RenderItems
 {
 
-    public static boolean                     debug;
     private RenderEngine                      renderEngine;
     private HashMap<IStackable, ItemRenderer> renderers;
     private OffsettedOpenGLBuffer             buffer;
@@ -42,11 +41,12 @@ public class RenderItems
         }
         try
         {
-            ResourceLocation res = new ResourceLocation("ourcraft", "models/items/" + item.getId().split(":")[1] + ".json");
+            ResourceLocation loc = new ResourceLocation(item.getId());
+            ResourceLocation res = new ResourceLocation(loc.getSection(), "models/items/" + item.getId().split(":")[1] + ".json");
             if(OurCraft.getOurCraft().getAssetsLoader().doesResourceExists(res))
             {
                 renderers.put(item, modelLoader.createItemRenderer(res, renderEngine.blocksAndItemsMap));
-                if(debug)
+                if(Dev.debug())
                     Log.message(res.getFullPath() + " loaded.");
             }
             else

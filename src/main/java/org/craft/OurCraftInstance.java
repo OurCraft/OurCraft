@@ -2,6 +2,8 @@ package org.craft;
 
 import java.util.*;
 
+import org.craft.blocks.*;
+import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.spongepowered.api.*;
@@ -26,4 +28,8 @@ public interface OurCraftInstance
     HashMap<String, GuiDispatcher> getGuiMap();
 
     void registerGuiHandler(String registry, GuiDispatcher dispatcher);
+
+    void registerBlock(Block block);
+
+    void registerItem(Item item);
 }
