@@ -35,7 +35,7 @@ public class EntityPlayer extends EntityLiving
         inventory.setInventorySlotContents(2, new Stack(Blocks.grass));
         inventory.setInventorySlotContents(3, new Stack(Blocks.powerSource));
         inventory.setInventorySlotContents(4, new Stack(Items.test));
-        //        inventory.setInventorySlotContents(5, new Stack(Items.test2));
+        inventory.setInventorySlotContents(5, new Stack(Blocks.powerDisplay));
         inventory.setInventorySlotContents(6, new Stack(Blocks.glass));
         inventory.setInventorySlotContents(7, new Stack(Blocks.leaves));
         inventory.setInventorySlotContents(8, new Stack(Blocks.rose));

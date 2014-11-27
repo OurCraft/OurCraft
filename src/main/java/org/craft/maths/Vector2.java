@@ -176,7 +176,8 @@ public final class Vector2 extends AbstractReference implements IDisposable
     @Override
     public void dispose()
     {
-        pool.dispose(this);
+        if(isDisposable())
+            pool.dispose(this);
     }
 
     private static ReferencedObjectPool<Vector2> pool = ReferencedObjectPool.of(Vector2.class);

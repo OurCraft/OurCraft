@@ -22,6 +22,7 @@ public class GuiPowerSourceModifier extends Gui
     private float         x;
     private float         y;
     private List<Vector2> toPlot;
+    private boolean       strictRepresentation;
 
     public GuiPowerSourceModifier(OurCraft game, World w, int x, int y, int z)
     {
@@ -48,6 +49,14 @@ public class GuiPowerSourceModifier extends Gui
         addWidget(new GuiButton(3, 0, 180, 200, 40, "Tan", getFontRenderer()));
         addWidget(new GuiButton(4, 0, 240, 200, 40, "Inverse", getFontRenderer()));
         addWidget(new GuiButton(5, 0, 300, 200, 40, "Square root", getFontRenderer()));
+
+        addWidget(new GuiButton(6, 0, 360, 200, 40, "Pulses", getFontRenderer()));
+        addWidget(new GuiButton(7, 0, 420, 200, 40, "Random", getFontRenderer()));
+
+        addWidget(new GuiButton(8, 0, 480, 200, 40, "Noise", getFontRenderer()));
+        addWidget(new GuiButton(9, 0, 540, 200, 40, "Square", getFontRenderer()));
+
+        addWidget(new GuiButton(15, getWidth() - 200, getHeight() - 40, 200, 40, "Strict representation", getFontRenderer()));
     }
 
     public void actionPerformed(GuiWidget widget)
@@ -77,6 +86,31 @@ public class GuiPowerSourceModifier extends Gui
         {
             world.setBlockState(coordX, coordY, coordZ, BlockStates.powerSourceMode, EnumPowerSourceMode.SQRT);
         }
+        else if(widget.getID() == 6)
+        {
+            world.setBlockState(coordX, coordY, coordZ, BlockStates.powerSourceMode, EnumPowerSourceMode.PULSES);
+        }
+        else if(widget.getID() == 7)
+        {
+            world.setBlockState(coordX, coordY, coordZ, BlockStates.powerSourceMode, EnumPowerSourceMode.RANDOM);
+        }
+        else if(widget.getID() == 8)
+        {
+            world.setBlockState(coordX, coordY, coordZ, BlockStates.powerSourceMode, EnumPowerSourceMode.NOISE);
+        }
+        else if(widget.getID() == 9)
+        {
+            world.setBlockState(coordX, coordY, coordZ, BlockStates.powerSourceMode, EnumPowerSourceMode.SQUARE);
+        }
+
+        else if(widget.getID() == 15)
+        {
+            strictRepresentation = !strictRepresentation;
+            if(strictRepresentation)
+                ((GuiButton) widget).setText("Non-Strict representation");
+            else
+                ((GuiButton) widget).setText("Strict representation");
+        }
         toPlot.clear();
     }
 
@@ -89,29 +123,43 @@ public class GuiPowerSourceModifier extends Gui
         getFontRenderer().drawShadowedString(title, 0xFFFFFFFF, (int) (getWidth() / 2 - getFontRenderer().getTextWidth(title) / 2), getHeight() / 9, engine);
         getFontRenderer().setScale(1f);
 
-        int repereWidth = 300;
-        int repereHeight = 300;
-        int originX = getWidth() / 2 - repereWidth / 2;
-        int originY = getHeight() / 2 - repereHeight / 2;
-        int coordX = (int) (x * repereWidth);
-        int coordY = (int) (y * repereHeight);
-        Gui.drawColoredRect(engine, originX + 0, originY + 0, repereWidth, repereHeight, 0xC0FFFFFF);
-        Gui.drawColoredRect(engine, originX + coordX, originY + coordY, 4, 4, 0xFF000000);
+        int spaceWidth = 300;
+        int spaceHeight = 300;
+        int originX = getWidth() / 2 - spaceWidth / 2;
+        int originY = getHeight() / 2 - spaceHeight / 2;
+        int xInSpace = (int) (x * spaceWidth);
+        int yInSpace = (int) (y * spaceHeight);
+        Gui.drawColoredRect(engine, originX + 0, originY + 0, spaceWidth, spaceHeight, 0xC0FFFFFF);
+        Gui.drawColoredRect(engine, originX + xInSpace, originY + yInSpace, 4, 4, 0xFF000000);
         Vector2 previous = null;
-        for(Vector2 point : toPlot)
+        EnumPowerSourceMode mode = (EnumPowerSourceMode) world.getBlockState(this.coordX, this.coordY, this.coordZ, BlockStates.powerSourceMode);
+        if(mode.usesBezier() && !strictRepresentation)
         {
-            if(previous != null)
+            Vector2[] points = new Vector2[toPlot.size()];
+            for(int i = 0; i < points.length; i++ )
             {
-                if(previous.getX() < point.getX())
-                {
-                    int xi = (int) Math.floor(point.getX() * repereWidth);
-                    int yi = (int) Math.floor(point.getY() * repereHeight);
-                    int xi2 = (int) Math.floor(previous.getX() * repereWidth);
-                    int yi2 = (int) Math.floor(previous.getY() * repereHeight);
-                    Gui.drawColoredLine(engine, originX + xi, originY + yi, originX + xi2, originY + yi2, 0xFF0000FF, 4f);
-                }
+                points[i] = toPlot.get(i).mul(spaceWidth, spaceHeight).add(originX, originY);
+                points[i].setDisposable(false);
             }
-            previous = point;
+            Gui.drawBezierCurve(engine, 0xFF0000FF, 10, 4f, points);
+        }
+        else
+        {
+            for(Vector2 point : toPlot)
+            {
+                if(previous != null)
+                {
+                    if(previous.getX() < point.getX())
+                    {
+                        int xi = (int) Math.floor(point.getX() * spaceWidth);
+                        int yi = (int) Math.floor(point.getY() * spaceHeight);
+                        int xi2 = (int) Math.floor(previous.getX() * spaceWidth);
+                        int yi2 = (int) Math.floor(previous.getY() * spaceHeight);
+                        Gui.drawColoredLine(engine, originX + xi, originY + yi, originX + xi2, originY + yi2, 0xFF0000FF, 4f);
+                    }
+                }
+                previous = point;
+            }
         }
     }
 
@@ -125,7 +173,9 @@ public class GuiPowerSourceModifier extends Gui
         {
             toPlot.clear();
         }
-        toPlot.add(Vector2.get(x, y));
+        Vector2 v = Vector2.get(x, y);
+        v.setDisposable(false);
+        toPlot.add(v);
     }
 
     public boolean keyReleased(int id, char c)

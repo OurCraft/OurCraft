@@ -32,7 +32,7 @@ public class ReferencedObjectPool<T extends AbstractReference> extends ObjectPoo
 
     public void dispose(T item)
     {
-        if(item.decreaseReferenceCounter())
+        if(item.decreaseReferenceCounter() && item.isDisposable())
             super.dispose(item);
     }
 

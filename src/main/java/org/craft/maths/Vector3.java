@@ -3,7 +3,7 @@ package org.craft.maths;
 import java.nio.*;
 
 import org.craft.utils.*;
-import org.craft.utils.io.IBufferWritable;
+import org.craft.utils.io.*;
 
 public class Vector3 extends AbstractReference implements IDisposable, IBufferWritable
 {

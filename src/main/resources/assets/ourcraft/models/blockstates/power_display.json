@@ -1,0 +1,17 @@
+{
+    "variants": 
+    {
+        "normal":
+        [
+            { "model": "display_off" }
+        ],
+        "powered=true":
+        [
+        	{ "model": "display_on" }
+        ],
+        "powered=false":
+        [
+        	{ "model": "display_off" }
+        ]
+    }
+}

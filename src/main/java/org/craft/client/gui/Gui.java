@@ -71,21 +71,7 @@ public abstract class Gui extends GuiPanel
 
     private static void drawRect(RenderEngine engine, int x, int y, int w, int h, float minU, float minV, float maxU, float maxV)
     {
-        if(buffer == null)
-        {
-            buffer = new OpenGLBuffer();
-            buffer.addVertex(Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV, bottomLeftCornerColor));
-            buffer.addVertex(Vertex.get(bottomRightCornerPos, bottomRightCornerUV, bottomRightCornerColor));
-            buffer.addVertex(Vertex.get(topLeftCornerPos, topLeftCornerUV, topLeftCornerColor));
-            buffer.addVertex(Vertex.get(topRightCornerPos, topRightCornerUV, topRightCornerColor));
-            buffer.addIndex(0);
-            buffer.addIndex(1);
-            buffer.addIndex(2);
-
-            buffer.addIndex(2);
-            buffer.addIndex(3);
-            buffer.addIndex(0);
-        }
+        initBufferIfNeeded();
         bottomLeftCornerPos.set(x, y, 0);
         bottomRightCornerPos.set(x + w, y, 0);
         topLeftCornerPos.set(x + w, y + h, 0);
@@ -119,7 +105,7 @@ public abstract class Gui extends GuiPanel
             Vector2 current = Vector2.get((float) values[0], (float) values[1]);
             if(previous != null)
             {
-                drawLine(engine, (int) current.getX(), (int) current.getY(), (int) previous.getX(), (int) previous.getY(), 0, 0, 1, 1, lineWidth);
+                drawColoredLine(engine, (int) current.getX(), (int) current.getY(), (int) previous.getX(), (int) previous.getY(), color, lineWidth);
                 //                previous.dispose();
             }
             previous = current;
@@ -190,20 +176,35 @@ public abstract class Gui extends GuiPanel
         bottomRightCornerColor.set(r, g, b, a);
         topLeftCornerColor.set(r, g, b, a);
         topRightCornerColor.set(r, g, b, a);
-        glColor4f(r, g, b, a);
         drawLine(engine, x, y, x2, y2, 0, 0, 1, 1, lineWidth);
         engine.bindLocation(widgetsTexture);
     }
 
-    public static void drawLine(RenderEngine engine, int x, int y, int x2, int y2, float minU, float minV, float maxU, float maxV, float lineWidth)
+    private static void initBufferIfNeeded()
     {
+        bottomLeftCornerPos.setDisposable(false);
+        bottomLeftCornerUV.setDisposable(false);
+        bottomRightCornerPos.setDisposable(false);
+        bottomRightCornerUV.setDisposable(false);
+        topLeftCornerPos.setDisposable(false);
+        topLeftCornerUV.setDisposable(false);
+        topRightCornerPos.setDisposable(false);
+        topRightCornerUV.setDisposable(false);
         if(buffer == null)
         {
             buffer = new OpenGLBuffer();
-            buffer.addVertex(Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV, bottomLeftCornerColor));
-            buffer.addVertex(Vertex.get(bottomRightCornerPos, bottomRightCornerUV, bottomRightCornerColor));
-            buffer.addVertex(Vertex.get(topLeftCornerPos, topLeftCornerUV, topLeftCornerColor));
-            buffer.addVertex(Vertex.get(topRightCornerPos, topRightCornerUV, topRightCornerColor));
+            Vertex a = Vertex.get(bottomLeftCornerPos, bottomLeftCornerUV, bottomLeftCornerColor);
+            a.setDisposable(false);
+            buffer.addVertex(a);
+            Vertex b = Vertex.get(bottomRightCornerPos, bottomRightCornerUV, bottomRightCornerColor);
+            b.setDisposable(false);
+            buffer.addVertex(b);
+            Vertex c = Vertex.get(topLeftCornerPos, topLeftCornerUV, topLeftCornerColor);
+            c.setDisposable(false);
+            buffer.addVertex(c);
+            Vertex d = Vertex.get(topRightCornerPos, topRightCornerUV, topRightCornerColor);
+            d.setDisposable(false);
+            buffer.addVertex(d);
             buffer.addIndex(0);
             buffer.addIndex(1);
             buffer.addIndex(2);
@@ -212,6 +213,11 @@ public abstract class Gui extends GuiPanel
             buffer.addIndex(3);
             buffer.addIndex(0);
         }
+    }
+
+    public static void drawLine(RenderEngine engine, int x, int y, int x2, int y2, float minU, float minV, float maxU, float maxV, float lineWidth)
+    {
+        initBufferIfNeeded();
         bottomLeftCornerPos.set(x, y, 0);
         bottomRightCornerPos.set(x2, y2, 0);
         topLeftCornerPos.set(x2, y2, 0);
@@ -224,7 +230,6 @@ public abstract class Gui extends GuiPanel
         glLineWidth(lineWidth);
         engine.renderBuffer(buffer, GL_LINES);
         glLineWidth(1);
-
     }
 
     public static void drawColoredRect(RenderEngine engine, int x, int y, int w, int h, int color)

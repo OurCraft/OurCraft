@@ -16,6 +16,7 @@ public final class Blocks
     public static Block                        rose;
     public static Block                        cable;
     public static Block                        powerSource;
+    public static Block                        powerDisplay;
 
     // ONLY FOR TESTING
     public static Block                        dirtSlab;
@@ -39,6 +40,7 @@ public final class Blocks
         register(rose = new BlockFlower("rose"));
         register(cable = new BlockCable("copper_cable"));
         register(powerSource = new BlockPowerSource("power_source"));
+        register(powerDisplay = new BlockPowerDisplay("power_display"));
 
         register(dirtSlab = new BlockHalfSlab("dirt_slab"));
 
