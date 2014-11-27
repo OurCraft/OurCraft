@@ -2,7 +2,7 @@ package org.craft.spongeimpl.events;
 
 import org.craft.*;
 import org.craft.modding.events.*;
-import org.spongepowered.api.event.*;
+import org.spongepowered.api.util.event.*;
 
 public abstract class SpongeEvent extends ModEvent implements Event, Cancellable
 {

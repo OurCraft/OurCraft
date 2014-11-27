@@ -6,7 +6,6 @@ import java.util.*;
 import com.google.common.base.Optional;
 
 import org.craft.*;
-import org.craft.client.gui.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.spongeimpl.events.state.*;
@@ -16,13 +15,14 @@ import org.craft.spongeimpl.util.scheduler.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.Platform;
-import org.spongepowered.api.entity.*;
-import org.spongepowered.api.event.*;
+import org.spongepowered.api.entity.player.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.*;
 import org.spongepowered.api.service.command.*;
+import org.spongepowered.api.service.event.*;
 import org.spongepowered.api.service.scheduler.*;
-import org.spongepowered.api.title.*;
+import org.spongepowered.api.text.message.*;
+import org.spongepowered.api.util.event.*;
 import org.spongepowered.api.world.*;
 
 @Mod(id = "spongeimpl", version = "1.0", name = "Sponge implementation")
@@ -66,19 +66,19 @@ public class SpoongeMod implements Game
     @OurModEventHandler
     public void onInit(ModInitEvent event)
     {
-        eventManager.call(new SpongeInitEvent(event.getOurCraftInstance()));
+        eventManager.post(new SpongeInitEvent(event.getOurCraftInstance()));
     }
 
     @OurModEventHandler
     public void onPostInit(ModPostInitEvent event)
     {
-        eventManager.call(new SpongePostInitEvent(event.getOurCraftInstance()));
+        eventManager.post(new SpongePostInitEvent(event.getOurCraftInstance()));
     }
 
     @OurModEventHandler
     public void onWorldLoad(WorldLoadEvent event)
     {
-        eventManager.call(new SpongeWorldLoadEvent(event.getOurCraftInstance(), (World) event.getWorld()));
+        eventManager.post(new SpongeWorldLoadEvent(event.getOurCraftInstance(), (World) event.getWorld()));
     }
 
     @Override
@@ -160,7 +160,7 @@ public class SpoongeMod implements Game
         return null;
     }
 
-    @Override
+    //  @Override
     public void broadcastMessage(String message)
     {
         gameInstance.broadcastMessage(message);
@@ -178,19 +178,19 @@ public class SpoongeMod implements Game
         return "Spoonge v0.1";
     }
 
-    @Override
-    public Title createTitle()
-    {
-        return (Title) new ScreenTitle();
-    }
+    /*  @Override
+      public Title createTitle()
+      {
+          return (Title) new ScreenTitle();
+      }
 
-    @Override
-    public Title updateTitle()
-    {
-        ScreenTitle title = new ScreenTitle();
-        title.show();
-        return (Title) title;
-    }
+      @Override
+      public Title updateTitle()
+      {
+          ScreenTitle title = new ScreenTitle();
+          title.show();
+          return (Title) title;
+      }*/
 
     @Override
     public ServiceManager getServiceManager()
@@ -200,10 +200,17 @@ public class SpoongeMod implements Game
     }
 
     @Override
-    public CommandDispatcher getCommandDispatcher()
+    public CommandService getCommandDispatcher()
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void broadcastMessage(Message<?> message)
+    {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -15,7 +15,7 @@ public final class Dev
     public static void debug(boolean debug)
     {
         Dev.debug = debug;
-        if(debug)
+        if(debug && debugFolder == null)
         {
             debugFolder = new File(SystemUtils.getGameFolder(), "debug");
             if(!debugFolder.exists())

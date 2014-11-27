@@ -1,10 +1,10 @@
 package org.craft.spongeimpl.tests;
 
 import org.slf4j.*;
-import org.spongepowered.api.event.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.util.event.*;
 
 @Plugin(id = "plugtest", name = "Test plugin", version = "1.0")
 public class SpongeTestPlugin

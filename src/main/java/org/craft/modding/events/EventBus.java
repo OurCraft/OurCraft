@@ -8,7 +8,7 @@ import com.google.common.collect.*;
 import com.google.common.reflect.*;
 
 import org.craft.utils.*;
-import org.spongepowered.api.event.*;
+import org.spongepowered.api.util.event.*;
 
 public class EventBus
 {

@@ -2,6 +2,8 @@ package org.craft.spongeimpl.service.command;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.commands.*;
 import org.craft.commands.CommandException;
 import org.spongepowered.api.util.command.*;
@@ -44,22 +46,22 @@ public class SpoongeCommand extends AbstractCommand
 
     public String getShortCommandDescription()
     {
-        return callable.getDescription().getShortDescription().get();
+        return callable.getShortDescription().get();
     }
 
     public String getCommandHelp()
     {
-        return callable.getDescription().getHelp().get();
+        return callable.getHelp().get();
     }
 
     public String getUsage()
     {
-        return callable.getDescription().getUsage();
+        return callable.getUsage();
     }
 
     public List<String> getPermissions()
     {
-        return callable.getDescription().getPermissions();
+        return Lists.newArrayList();//callable..getPermissions();
     }
 
 }

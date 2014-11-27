@@ -36,13 +36,13 @@ public class SpongePreInitEvent extends SpongeStateEvent implements PreInitializ
     }
 
     @Override
-    public File getSuggestedConfigurationFile()
+    public File getRecommendedConfigurationFile()
     {
         return configFile;
     }
 
     @Override
-    public File getSuggestedConfigurationDirectory()
+    public File getRecommendedConfigurationDirectory()
     {
         return suggestedConfigDir;
     }

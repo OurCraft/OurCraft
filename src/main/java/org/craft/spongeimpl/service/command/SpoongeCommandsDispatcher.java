@@ -2,6 +2,7 @@ package org.craft.spongeimpl.service.command;
 
 import java.util.*;
 
+import com.google.common.base.*;
 import com.google.common.base.Optional;
 import com.google.common.collect.*;
 
@@ -13,7 +14,7 @@ import org.spongepowered.api.util.command.*;
 import org.spongepowered.api.util.command.CommandException;
 
 @BytecodeModifier("org.craft.commands.CommandsDispatcher")
-public class SpoongeCommandsDispatcher implements CommandDispatcher
+public class SpoongeCommandsDispatcher implements CommandService
 {
 
     //===========================================================
@@ -29,20 +30,6 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     public void registerCommand(AbstractCommand command, String... alias)
     {
         ;
-    }
-
-    @Shadow
-    @Override
-    public Collection<String> getPrimaryAliases()
-    {
-        return null;
-    }
-
-    @Shadow
-    @Override
-    public Collection<String> getAliases()
-    {
-        return null;
     }
 
     @Shadow
@@ -66,7 +53,7 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     //===========================================================
     //               END OF SHADOW METHODS
     //===========================================================
-    @Override
+    //@Override
     public Set<CommandMapping> getCommands()
     {
         List<CommandMapping> mappings = Lists.newArrayList();
@@ -83,7 +70,7 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
         return Optional.of((CommandMapping) getFromAlias(alias));
     }
 
-    @Override
+    // @Override
     public boolean contains(String alias)
     {
         return containsAlias(alias);
@@ -93,12 +80,6 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     public boolean call(CommandSource source, String arguments, List<String> parents) throws CommandException
     {
         return false;
-    }
-
-    @Override
-    public Description getDescription()
-    {
-        return null;
     }
 
     @Override
@@ -114,9 +95,103 @@ public class SpoongeCommandsDispatcher implements CommandDispatcher
     }
 
     @Override
-    public void registerCommand(CommandCallable callable, Owner owner, String... alias)
+    public Set<String> getPrimaryAliases()
     {
-        registerCommand(new SpoongeCommand(callable, alias[0]), alias);
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Set<String> getAliases()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean containsMapping(CommandMapping mapping)
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public Optional<String> getShortDescription()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<String> getHelp()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getUsage()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<CommandMapping> register(Owner owner, CommandCallable callable, String... alias)
+    {
+        SpoongeCommand command = new SpoongeCommand(callable, alias[0]);
+        registerCommand(command, alias);
+        //return Optional.of(command)
+        return Optional.absent();
+    }
+
+    @Override
+    public Optional<CommandMapping> register(Owner owner, CommandCallable callable, List<String> aliases)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<CommandMapping> register(Owner owner, CommandCallable callable, List<String> aliases, Function<List<String>, List<String>> callback)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<CommandMapping> remove(String alias)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<CommandMapping> removeMapping(CommandMapping mapping)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Set<Owner> getOwners()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Set<CommandMapping> getOwnedBy(Owner owner)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int size()
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

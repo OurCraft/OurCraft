@@ -6,6 +6,7 @@ import org.craft.modding.modifiers.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.item.*;
 import org.spongepowered.api.item.inventory.*;
+import org.spongepowered.api.text.translation.*;
 
 @BytecodeModifier("org.craft.inventory.Stack")
 public class SpoongeItemStack implements ItemStack, ItemBlock
@@ -103,6 +104,13 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
         {
             return (BlockType) getStackable();
         }
+        return null;
+    }
+
+    @Override
+    public Translation getTranslation()
+    {
+        // TODO Auto-generated method stub
         return null;
     }
 

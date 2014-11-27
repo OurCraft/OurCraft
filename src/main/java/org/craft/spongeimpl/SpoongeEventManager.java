@@ -1,8 +1,10 @@
 package org.craft.spongeimpl;
 
 import org.craft.modding.events.*;
-import org.spongepowered.api.event.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.service.event.*;
+import org.spongepowered.api.util.*;
+import org.spongepowered.api.util.event.*;
 
 public class SpoongeEventManager implements EventManager
 {
@@ -15,19 +17,19 @@ public class SpoongeEventManager implements EventManager
     }
 
     @Override
-    public void register(Object obj)
-    {
-        eventBus.register(obj);
-    }
-
-    @Override
     public void unregister(Object obj)
     {
         eventBus.unregister(obj);
     }
 
     @Override
-    public boolean call(Event event)
+    public void register(Owner owner, Object obj)
+    {
+        eventBus.register(obj);
+    }
+
+    @Override
+    public boolean post(Event event)
     {
         return eventBus.fireEvent(event, null, Plugin.class);
     }

@@ -9,7 +9,7 @@ import com.google.common.collect.*;
 import org.craft.utils.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
-import org.spongepowered.api.event.*;
+import org.spongepowered.api.util.event.*;
 
 public class ASMEventListener implements IEventListener, Opcodes
 {

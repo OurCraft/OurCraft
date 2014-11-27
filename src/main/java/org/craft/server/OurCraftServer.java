@@ -27,7 +27,7 @@ import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
 import org.spongepowered.api.*;
-import org.spongepowered.api.entity.*;
+import org.spongepowered.api.entity.player.*;
 
 public class OurCraftServer implements OurCraftInstance, ICommandSender
 {

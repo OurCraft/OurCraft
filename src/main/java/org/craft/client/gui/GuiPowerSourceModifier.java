@@ -6,7 +6,6 @@ import com.google.common.collect.*;
 
 import org.craft.blocks.states.*;
 import org.craft.client.*;
-import org.craft.client.gui.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
@@ -90,10 +89,10 @@ public class GuiPowerSourceModifier extends Gui
         getFontRenderer().drawShadowedString(title, 0xFFFFFFFF, (int) (getWidth() / 2 - getFontRenderer().getTextWidth(title) / 2), getHeight() / 9, engine);
         getFontRenderer().setScale(1f);
 
-        int repereWidth = 150;
-        int repereHeight = 150;
-        int originX = getWidth() - repereWidth;
-        int originY = getHeight() - repereHeight;
+        int repereWidth = 300;
+        int repereHeight = 300;
+        int originX = getWidth() / 2 - repereWidth / 2;
+        int originY = getHeight() / 2 - repereHeight / 2;
         int coordX = (int) (x * repereWidth);
         int coordY = (int) (y * repereHeight);
         Gui.drawColoredRect(engine, originX + 0, originY + 0, repereWidth, repereHeight, 0xC0FFFFFF);

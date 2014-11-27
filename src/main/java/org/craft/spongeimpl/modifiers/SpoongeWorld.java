@@ -103,4 +103,11 @@ public class SpoongeWorld implements World
         return null;
     }
 
+    @Override
+    public Optional<Entity> getEntityFromUUID(UUID uuid)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

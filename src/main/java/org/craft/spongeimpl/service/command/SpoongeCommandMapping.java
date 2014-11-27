@@ -41,10 +41,4 @@ public class SpoongeCommandMapping implements CommandMapping
         return (CommandCallable) getCommand();
     }
 
-    @Override
-    public Description getDescription()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
