@@ -157,14 +157,11 @@ public class EventBus
             }
         }
         boolean cancelled = false;
+        boolean cancellable = false;
         if(e instanceof Cancellable)
         {
             cancelled = ((Cancellable) e).isCancelled();
-        }
-        boolean cancellable = false;
-        if(e instanceof Event)
-        {
-            cancellable = ((Event) e).isCancellable();
+            cancellable = true;
         }
         if(e instanceof ModEvent)
         {

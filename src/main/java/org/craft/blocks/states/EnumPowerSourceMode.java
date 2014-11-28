@@ -79,9 +79,11 @@ public enum EnumPowerSourceMode implements IBlockStateValue
         @Override
         public EnumPowerStates apply(Long tick)
         {
-            float x = (tick % 6) / 60f;
-            float t = x * 1.8f;
-            return EnumPowerStates.fromPowerValue((int) Math.floor(t * 100));
+            float x = (tick - 20 % 60);
+            float a = 1;
+            float p = 60 / 2;
+            float y = (float) (-(2 * a) / Math.PI * Math.atan(1.0 / Math.tan((x * Math.PI) / p)));
+            return EnumPowerStates.fromPowerValue((int) Math.floor(y * 15f));
         }
     }
 

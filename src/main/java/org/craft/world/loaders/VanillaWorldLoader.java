@@ -77,6 +77,7 @@ public class VanillaWorldLoader extends WorldLoader
                             if(b != null)
                             {
                                 chunk.setChunkBlock(x, y, z, b);
+                                b.onBlockAdded(world, readChunkX * 16 + x, readChunkY * 16 + y, readChunkZ * 16 + z, EnumSide.UNDEFINED, null);
                             }
                             else
                                 Log.message("Unknown block at " + x + "," + y + "," + z + " = " + blockId);

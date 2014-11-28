@@ -17,7 +17,7 @@ public class BlockPowerDisplay extends Block implements IPowerableBlock
     {
         super.onBlockAdded(w, x, y, z, side, placer);
         w.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, "false"));
-        w.scheduleBlockUpdates(x, y, z, 1);
+        w.scheduleBlockUpdates(x, y, z, 2);
     }
 
     public void onScheduledUpdate(World world, int x, int y, int z, long interval, long tick)

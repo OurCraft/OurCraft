@@ -111,6 +111,18 @@ public class GuiPowerSourceModifier extends Gui
             else
                 ((GuiButton) widget).setText("Strict representation");
         }
+
+        if(widget.getID() <= 14)
+            clearPoints();
+    }
+
+    public void clearPoints()
+    {
+        for(Vector2 p : toPlot)
+        {
+            p.setDisposable(true);
+            p.dispose();
+        }
         toPlot.clear();
     }
 
@@ -171,7 +183,7 @@ public class GuiPowerSourceModifier extends Gui
         y = (float) (15 - mode.function().apply(world.getTick()).powerValue()) / 15f;
         if(world.getTick() % 60 == 0 || x == 0f)
         {
-            toPlot.clear();
+            clearPoints();
         }
         Vector2 v = Vector2.get(x, y);
         v.setDisposable(false);

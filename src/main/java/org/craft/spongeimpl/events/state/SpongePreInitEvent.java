@@ -5,6 +5,7 @@ import java.io.*;
 import org.craft.*;
 import org.slf4j.*;
 import org.spongepowered.api.event.state.*;
+import org.spongepowered.api.util.event.callback.*;
 
 public class SpongePreInitEvent extends SpongeStateEvent implements PreInitializationEvent
 {
@@ -51,6 +52,13 @@ public class SpongePreInitEvent extends SpongeStateEvent implements PreInitializ
     public File getConfigurationDirectory()
     {
         return configDir;
+    }
+
+    @Override
+    public CallbackList getCallbacks()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

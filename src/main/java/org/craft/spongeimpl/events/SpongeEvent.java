@@ -12,20 +12,7 @@ public abstract class SpongeEvent extends ModEvent implements Event, Cancellable
         super(instance);
     }
 
-    private Result  result;
     private boolean cancelled;
-
-    @Override
-    public Result getResult()
-    {
-        return result;
-    }
-
-    @Override
-    public void setResult(Result result)
-    {
-        this.result = result;
-    }
 
     public boolean isCancelled()
     {

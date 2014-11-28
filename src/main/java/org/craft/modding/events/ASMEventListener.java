@@ -35,14 +35,11 @@ public class ASMEventListener implements IEventListener, Opcodes
         if(handler != null)
         {
             boolean cancelled = false;
+            boolean cancellable = false;
             if(event instanceof Cancellable)
             {
                 cancelled = ((Cancellable) event).isCancelled();
-            }
-            boolean cancellable = false;
-            if(event instanceof Event)
-            {
-                cancellable = ((Event) event).isCancellable();
+                cancellable = true;
             }
             if(event instanceof ModEvent)
             {

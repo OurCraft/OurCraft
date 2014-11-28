@@ -27,7 +27,7 @@ public class BlockPowerSource extends Block implements IPowerableBlock
         super.onBlockAdded(w, x, y, z, side, placer);
         w.setBlockState(x, y, z, BlockStates.electricPower, EnumPowerStates.POWER_15);
         w.setBlockState(x, y, z, BlockStates.powerSourceMode, EnumPowerSourceMode.CONSTANT);
-        w.scheduleBlockUpdates(x, y, z, 1);
+        w.scheduleBlockUpdates(x, y, z, 2);
     }
 
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
