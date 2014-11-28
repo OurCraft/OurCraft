@@ -206,13 +206,13 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
             icon.setHeight(stitcher.getHeight(index));
         }
 
-        if(false) // TODO: needs to know if we are in a debug mode
+        if(Dev.debug())
         {
             if(stitchedImage != null)
             {
                 try
                 {
-                    ImageIO.write(stitchedImage, "png", new File(".", StringUtils.createCorrectedFileName(this.base.getFullPath()) + ".png"));
+                    ImageIO.write(stitchedImage, "png", new File(Dev.getFolder(), StringUtils.createCorrectedFileName(this.base.getFullPath()) + ".png"));
                 }
                 catch(IOException e)
                 {

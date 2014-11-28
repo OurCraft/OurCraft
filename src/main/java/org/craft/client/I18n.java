@@ -110,9 +110,18 @@ public final class I18n
      */
     public static String format(String message, Object... objects)
     {
-        String translated = getCurrentLanguage().get(message);
+        return format(getCurrentLanguageID(), message, objects);
+    }
+
+    public static String format(String lang, String message, Object... objects)
+    {
+        String translated = languages.get(lang).get(message);
         if(translated == null)
         {
+            if(!lang.equals("en_US"))
+            {
+                return format("en_US", message, objects);
+            }
             return message;
         }
         else
@@ -173,7 +182,7 @@ public final class I18n
         return current;
     }
 
-    private static HashMap<String, String> getCurrentLanguage()
+    public static HashMap<String, String> getCurrentLanguage()
     {
         return languages.get(current);
     }

@@ -1,12 +1,18 @@
 package org.craft.world;
 
+import org.craft.utils.*;
 
-public class ChunkCoord
+public class ChunkCoord extends AbstractReference
 {
 
     public int x;
     public int y;
     public int z;
+
+    public ChunkCoord()
+    {
+
+    }
 
     public ChunkCoord(int x, int y, int z)
     {
@@ -37,12 +43,17 @@ public class ChunkCoord
         return false;
     }
 
+    private static ReferencedObjectPool<ChunkCoord> pool = ReferencedObjectPool.of(ChunkCoord.class);
+
     /**
      * Returns a chunk coords instance from given coordinates
      */
     public static ChunkCoord get(int chunkX, int chunkY, int chunkZ)
     {
-        // TODO pooling
-        return new ChunkCoord(chunkX, chunkY, chunkZ);
+        ChunkCoord coord = pool.get();
+        coord.x = chunkX;
+        coord.y = chunkY;
+        coord.z = chunkZ;
+        return coord;
     }
 }

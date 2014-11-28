@@ -36,7 +36,7 @@ public class ObjectPool<T> implements Collection<T>
             }
             catch(Exception e)
             {
-                //e.printStackTrace(); // Silently ignore this
+                // Silently ignore this
                 instance = fact.createNew(typeClass);
             }
         }
