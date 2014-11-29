@@ -139,4 +139,10 @@ public class GuiLanguage extends Gui
         return true;
     }
 
+    @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
+
 }

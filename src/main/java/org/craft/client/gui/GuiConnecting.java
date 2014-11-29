@@ -94,4 +94,10 @@ public class GuiConnecting extends Gui
         gobackButton.enabled = true;
     }
 
+    @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
+
 }

@@ -62,5 +62,4 @@ public class GuiPauseMenu extends Gui
     {
         return true;
     }
-
 }

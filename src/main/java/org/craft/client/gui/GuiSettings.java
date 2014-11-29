@@ -161,4 +161,9 @@ public class GuiSettings extends Gui
         return true;
     }
 
+    @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
 }

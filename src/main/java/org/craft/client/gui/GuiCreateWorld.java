@@ -112,4 +112,10 @@ public class GuiCreateWorld extends Gui
         drawBackground(mx, my, engine);
         super.render(mx, my, engine);
     }
+
+    @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
 }

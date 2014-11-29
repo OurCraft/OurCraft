@@ -261,6 +261,12 @@ public class GuiSelectWorld extends Gui
     }
 
     @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
+
+    @Override
     public void update()
     {
         super.update();

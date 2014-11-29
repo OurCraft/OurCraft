@@ -506,7 +506,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         else
             mouseHandler.grab();
         mouseHandler.update();
-        if(playerController != null)
+        if(playerController != null && (currentMenu == null || !currentMenu.pausesGame()))
         {
             if(Keyboard.isKeyDown(settings.forwardKey.getValueAsInt()))
             {

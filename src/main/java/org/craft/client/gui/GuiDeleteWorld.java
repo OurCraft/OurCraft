@@ -71,4 +71,9 @@ public class GuiDeleteWorld extends Gui
         super.update();
     }
 
+    @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
 }

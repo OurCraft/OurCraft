@@ -45,4 +45,10 @@ public class GuiServerSelect extends Gui
         super.update();
     }
 
+    @Override
+    public boolean pausesGame()
+    {
+        return true;
+    }
+
 }
