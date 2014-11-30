@@ -41,7 +41,7 @@ public enum EnumConnexionStates implements IBlockStateValue
      *      </tr>
      * </table>
      */
-    public static IBlockStateValue fromFlag(int fullFlag)
+    public static EnumConnexionStates fromFlag(int fullFlag)
     {
         int northModifier = 1 << 0;
         int southModifier = 1 << 1;

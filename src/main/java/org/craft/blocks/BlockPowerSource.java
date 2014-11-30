@@ -46,6 +46,8 @@ public class BlockPowerSource extends Block implements IPowerableBlock
     public void onScheduledUpdate(World world, int x, int y, int z, long interval, long tick)
     {
         EnumPowerSourceMode power = (EnumPowerSourceMode) world.getBlockState(x, y, z, BlockStates.powerSourceMode);
+        if(power == null)
+            power = EnumPowerSourceMode.CONSTANT;
         world.setBlockState(x, y, z, BlockStates.electricPower, power.function().apply(tick));
         world.updateBlockNeighbors(x, y, z, false);
     }

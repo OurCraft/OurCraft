@@ -1,7 +1,10 @@
 package org.craft.blocks;
 
+import java.util.*;
+
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
+import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
@@ -17,10 +20,9 @@ public class BlockPowerDisplay extends Block implements IPowerableBlock
     {
         super.onBlockAdded(w, x, y, z, side, placer);
         w.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, "false"));
-        w.scheduleBlockUpdates(x, y, z, 2);
     }
 
-    public void onScheduledUpdate(World world, int x, int y, int z, long interval, long tick)
+    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
     {
         int power = world.getDirectElectricPowerAt(x, y, z);
         world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, power == 0 ? "false" : "true"));

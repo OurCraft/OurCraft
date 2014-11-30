@@ -99,8 +99,8 @@ public class World
         for(Entity e : entities)
         {
             Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
-            if(c != null)
-                c.update();
+            //            if(c != null)
+            //                c.update();
             e.update(delta);
 
             if(e.isDead())
@@ -169,11 +169,12 @@ public class World
     public void setBlockState(int x, int y, int z, BlockState state, IBlockStateValue value, boolean notify)
     {
         Chunk c = getChunk(x, y, z);
-        if(c == null)
-            return;
-        c.setBlockState(x, y, z, state, value);
-        if(notify)
-            updateBlockNeighbors(x, y, z, false);
+        if(c != null)
+        {
+            c.setBlockState(x, y, z, state, value);
+            if(notify)
+                updateBlockNeighbors(x, y, z, false);
+        }
     }
 
     /**
@@ -337,11 +338,10 @@ public class World
     public void clearStates(int x, int y, int z)
     {
         Chunk c = getChunk(x, y, z);
-        if(c == null)
+        if(c != null)
         {
-            return;
+            c.clearStates(x, y, z);
         }
-        c.clearStates(x, y, z);
     }
 
     /**
@@ -355,7 +355,7 @@ public class World
     public void createChunk(final int x, final int y, final int z)
     {
         //Log.message("Generating chunk on " + x + ", " + y + ", " + z);
-        if(doesChunkExists(x, y, z))
+        if(doesChunkExists(x, y, z) && Dev.debug())
             Log.error("Cannot generate a chunk on a chunk on " + x + ", " + y + ", " + z);
         else
         {
@@ -387,10 +387,9 @@ public class World
             Vector3 posVec = Vector3.get(x, y, z);
             if(!visited.contains(posVec) || force)
             {
-                visited.add(Vector3.get(x, y, z));
+                visited.add(posVec);
                 b.onBlockUpdate(this, x, y, z, visited);
             }
-            posVec.dispose();
             return true;
         }
         if(disposeList)
@@ -425,10 +424,9 @@ public class World
             Vector3 posVec = Vector3.get(x, y, z);
             if(!visited.contains(posVec) || force)
             {
-                visited.add(Vector3.get(x, y, z));
+                visited.add(posVec);
                 b.onBlockUpdateFromNeighbor(this, x, y, z, visited);
             }
-            posVec.dispose();
             return true;
         }
         return false;
@@ -550,6 +548,11 @@ public class World
     /**
      * Schedules block updates for every <code>interval</code> tick.<br/>
      * Throws {@link IllegalArgumentException} if <code>interval <= 0</code>
+     * @param x The x coord of the block to update in the world
+     * @param y The y coord of the block to update in the world
+     * @param z The z coord of the block to update in the world
+     * @param interval A number from 1 to {@link Long#MAX_VALUE} which corresponds the rate at which the block needs to be updated (in world ticks)
+     * @throws IllegalArgumentException if <code>interval</code> <= 0
      */
     public void scheduleBlockUpdates(int x, int y, int z, long interval)
     {
