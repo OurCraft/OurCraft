@@ -179,15 +179,18 @@ public class GuiPowerSourceModifier extends Gui
     {
         super.update();
         EnumPowerSourceMode mode = (EnumPowerSourceMode) world.getBlockState(coordX, coordY, coordZ, BlockStates.powerSourceMode);
-        x = ((float) world.getTick() % 60f) / 60f;
-        y = (float) (15 - mode.function().apply(world.getTick()).powerValue()) / 15f;
-        if(world.getTick() % 60 == 0 || x == 0f)
+        if(mode != null)
         {
-            clearPoints();
+            x = ((float) world.getTick() % 60f) / 60f;
+            y = (float) (15 - mode.function().apply(world.getTick()).powerValue()) / 15f;
+            if(world.getTick() % 60 == 0 || x == 0f)
+            {
+                clearPoints();
+            }
+            Vector2 v = Vector2.get(x, y);
+            v.setDisposable(false);
+            toPlot.add(v);
         }
-        Vector2 v = Vector2.get(x, y);
-        v.setDisposable(false);
-        toPlot.add(v);
     }
 
     public boolean keyReleased(int id, char c)

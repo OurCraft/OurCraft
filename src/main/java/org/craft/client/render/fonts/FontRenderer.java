@@ -74,7 +74,12 @@ public abstract class FontRenderer implements IDisposable
      */
     public void drawShadowedString(String text, int color, int xo, int yo, RenderEngine renderEngine)
     {
-        drawString(text, 0xFF000000, (int) (xo + scale), (int) (yo + scale), renderEngine);
+        drawShadowedString(text, color, 0xFF000000, xo, yo, renderEngine);
+    }
+
+    public void drawShadowedString(String text, int color, int shadowColor, int xo, int yo, RenderEngine renderEngine)
+    {
+        drawString(text, shadowColor, (int) (xo + scale), (int) (yo + scale), renderEngine);
         drawString(text, color, xo, yo, renderEngine);
     }
 

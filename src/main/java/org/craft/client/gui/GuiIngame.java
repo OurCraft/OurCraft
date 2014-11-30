@@ -25,8 +25,8 @@ public class GuiIngame extends Gui
     {
         super(game);
         this.title = new ScreenTitle();
-        title.setMainTitle("<Insert main title here>");
-        title.setSubTitle("<Insert sub title here>");
+        title.setMainTitle("Dawn of a new day");
+        title.setSubTitle("78 hours to go.");
     }
 
     @Override
@@ -78,6 +78,7 @@ public class GuiIngame extends Gui
             String subTitle = title.getSubTitle();
 
             int color = 0;
+            int shadowColor = 0;
             long t = title.timeSinceStart();
             if(t <= title.getFadeIn() && title.getFadeIn() != 0L)
             {
@@ -86,11 +87,13 @@ public class GuiIngame extends Gui
                 int red = (int) (i * 255f);
                 int green = (int) (i * 255f);
                 int blue = (int) (i * 255f);
+                shadowColor = alpha << 24;
                 color = (alpha << 24) | (red << 16) | (green << 8) | blue;
             }
             else if(t <= title.getFadeIn() + title.getDisplayTime() && t > title.getFadeIn())
             {
                 color = 0xFFFFFFFF;
+                shadowColor = 0xFF000000;
             }
             else if(t - title.getFadeIn() - title.getDisplayTime() < title.getFadeOut())
             {
@@ -99,24 +102,25 @@ public class GuiIngame extends Gui
                 int red = (int) (i * 255f);
                 int green = (int) (i * 255f);
                 int blue = (int) (i * 255f);
+                shadowColor = alpha << 24;
                 color = (alpha << 24) | (red << 16) | (green << 8) | blue;
             }
 
             if(t < title.getFadeIn() + title.getDisplayTime() + title.getFadeOut())
             {
-                //                GL14.glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
                 renderEngine.enableGLCap(GL_ALPHA_TEST);
                 getFontRenderer().setScale(1.15f);
                 float titleX = oc.getDisplayWidth() / 2;
                 float titleY = oc.getDisplayHeight() / 2;
                 float f = (float) oc.getDisplayWidth() / getFontRenderer().getTextWidth(mainTitle);
                 getFontRenderer().setScale(f);
-                getFontRenderer().drawShadowedString(mainTitle, color, (int) (titleX - (int) getFontRenderer().getTextWidth(mainTitle) / 2), (int) (titleY - getFontRenderer().getCharHeight('A') * getFontRenderer().getScale()), renderEngine);
+                getFontRenderer().drawShadowedString(mainTitle, color, shadowColor, (int) (titleX - (int) getFontRenderer().getTextWidth(mainTitle) / 2), (int) (titleY - getFontRenderer().getCharHeight('A') * getFontRenderer().getScale()), renderEngine);
+
                 getFontRenderer().setScale(1.85f);
 
                 float f2 = (float) oc.getDisplayWidth() / getFontRenderer().getTextWidth(mainTitle);
                 getFontRenderer().setScale(f2);
-                getFontRenderer().drawShadowedString(subTitle, color, (int) (titleX - (int) getFontRenderer().getTextWidth(subTitle) / 2), (int) (titleY), renderEngine);
+                getFontRenderer().drawShadowedString(subTitle, color, shadowColor, (int) (titleX - (int) getFontRenderer().getTextWidth(subTitle) / 2), (int) (titleY), renderEngine);
                 getFontRenderer().setScale(1);
 
                 renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
