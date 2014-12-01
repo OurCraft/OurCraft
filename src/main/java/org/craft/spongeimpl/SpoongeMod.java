@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.*;
 
 import org.craft.*;
 import org.craft.modding.*;
@@ -11,7 +12,10 @@ import org.craft.modding.events.*;
 import org.craft.spongeimpl.events.state.*;
 import org.craft.spongeimpl.events.world.*;
 import org.craft.spongeimpl.plugin.*;
+import org.craft.spongeimpl.service.*;
+import org.craft.spongeimpl.service.command.*;
 import org.craft.spongeimpl.util.scheduler.*;
+import org.craft.spongeimpl.util.title.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.Platform;
@@ -22,6 +26,7 @@ import org.spongepowered.api.service.command.*;
 import org.spongepowered.api.service.event.*;
 import org.spongepowered.api.service.scheduler.*;
 import org.spongepowered.api.text.message.*;
+import org.spongepowered.api.text.title.*;
 import org.spongepowered.api.util.event.*;
 import org.spongepowered.api.world.*;
 
@@ -30,12 +35,14 @@ public class SpoongeMod implements Game
 {
 
     @Instance("spongeimpl")
-    public static SpoongeMod    instance;
-    private SpongePluginManager pluginManager;
-    private OurCraftInstance    gameInstance;
-    private SpoongeEventManager eventManager;
-    private GameRegistry        gameRegistry;
-    private SpoongeScheduler    scheduler;
+    public static SpoongeMod          instance;
+    private SpongePluginManager       pluginManager;
+    private OurCraftInstance          gameInstance;
+    private SpoongeEventManager       eventManager;
+    private GameRegistry              gameRegistry;
+    private SpoongeScheduler          scheduler;
+    private SpoongeCommandsDispatcher commandDispatcher;
+    private SpoongeServiceManager     serviceManager;
 
     public SpoongeMod()
     {
@@ -46,6 +53,17 @@ public class SpoongeMod implements Game
     @OurModEventHandler
     public void onPreInit(ModPreInitEvent event)
     {
+        serviceManager = new SpoongeServiceManager();
+        commandDispatcher = new SpoongeCommandsDispatcher();
+        try
+        {
+            serviceManager.setProvider(this, CommandService.class, commandDispatcher);
+            serviceManager.setProvider(this, TitleBuilder.class, new SpoongeTitleBuilder());
+        }
+        catch(ProviderExistsException e)
+        {
+            e.printStackTrace();
+        }
         scheduler = new SpoongeScheduler();
         gameRegistry = new SpoongeGameRegistry();
         this.gameInstance = event.getOurCraftInstance();
@@ -114,56 +132,43 @@ public class SpoongeMod implements Game
     @Override
     public Collection<Player> getOnlinePlayers()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Lists.newArrayList();
     }
 
     @Override
     public int getMaxPlayers()
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public Optional<Player> getPlayer(UUID uniqueId)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.absent();
     }
 
     @Override
     public Optional<Player> getPlayer(String name)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.absent();
     }
 
     @Override
     public Collection<World> getWorlds()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Lists.newArrayList();
     }
 
     @Override
     public World getWorld(UUID uniqueId)
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public World getWorld(String worldName)
     {
-        // TODO Auto-generated method stub
         return null;
-    }
-
-    //  @Override
-    public void broadcastMessage(String message)
-    {
-        gameInstance.broadcastMessage(message);
     }
 
     @Override
@@ -178,39 +183,22 @@ public class SpoongeMod implements Game
         return "Spoonge v0.1";
     }
 
-    /*  @Override
-      public Title createTitle()
-      {
-          return (Title) new ScreenTitle();
-      }
-
-      @Override
-      public Title updateTitle()
-      {
-          ScreenTitle title = new ScreenTitle();
-          title.show();
-          return (Title) title;
-      }*/
-
     @Override
     public ServiceManager getServiceManager()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return serviceManager;
     }
 
     @Override
     public CommandService getCommandDispatcher()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return commandDispatcher;
     }
 
     @Override
     public void broadcastMessage(Message<?> message)
     {
-        // TODO Auto-generated method stub
-
+        gameInstance.broadcastMessage(message.getContent().toString());
     }
 
 }

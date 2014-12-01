@@ -1,9 +1,14 @@
 package org.craft.spongeimpl.tests;
 
+import com.google.common.base.*;
+
+import org.craft.spongeimpl.util.text.*;
 import org.slf4j.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.text.message.*;
+import org.spongepowered.api.text.title.*;
 import org.spongepowered.api.util.event.*;
 
 @Plugin(id = "plugtest", name = "Test plugin", version = "1.0")
@@ -35,6 +40,20 @@ public class SpongeTestPlugin
     public void onWorldLoad(WorldLoadEvent evt)
     {
         logger.debug("SpongeLoading world " + evt.getWorld().getName());
+        Optional<TitleBuilder> service = evt.getGame().getServiceManager().provide(TitleBuilder.class);
+        if(service.isPresent())
+        {
+            TitleBuilder builder = service.get();
+            builder.stay(2000);
+            builder.fadeIn(5000);
+            builder.fadeOut(5000);
+            //            builder.title(Messages.of("Main title from a Sponge plugin"));
+            //            builder.subtitle(Messages.of("Subtitle from a Sponge plugin"));
+            MessageBuilder<String> messageBuilder = new SpoongeMessageBuilder<String>();
+            builder.title(messageBuilder.content("Main title from a Sponge plugin").build());
+            builder.subtitle(messageBuilder.content("Subtitle from a Sponge plugin").build());
+            builder.build();
+        }
     }
 
     @Subscribe

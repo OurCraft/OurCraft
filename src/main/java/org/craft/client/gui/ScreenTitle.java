@@ -1,5 +1,7 @@
 package org.craft.client.gui;
 
+import org.craft.client.*;
+
 public class ScreenTitle
 {
 
@@ -81,6 +83,7 @@ public class ScreenTitle
 
     public void show()
     {
+        OurCraft.getOurCraft().setScreenTitle(this);
         started = System.currentTimeMillis();
     }
 

@@ -24,9 +24,13 @@ public class GuiIngame extends Gui
     public GuiIngame(OurCraft game)
     {
         super(game);
-        this.title = new ScreenTitle();
-        title.setRawMainTitle("Dawn of a new day");
-        title.setRawSubTitle("78 hours to go.");
+        this.title = oc.getTitle();
+        if(title == null)
+        {
+            this.title = new ScreenTitle();
+            title.setRawMainTitle("Dawn of a new day");
+            title.setRawSubTitle("78 hours to go.");
+        }
     }
 
     @Override
@@ -145,6 +149,11 @@ public class GuiIngame extends Gui
     public boolean requiresMouse()
     {
         return false;
+    }
+
+    public void setTitle(ScreenTitle screenTitle)
+    {
+        this.title = screenTitle;
     }
 
 }

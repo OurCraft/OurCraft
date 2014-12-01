@@ -81,6 +81,7 @@ public class SpoongeTitleBuilder implements TitleBuilder
         title.setVisible(visible);
         title.setRawMainTitle(this.title.getContent().toString());
         title.setRawSubTitle(this.subtitle.getContent().toString());
+        title.show();
         return (Title) title;
     }
 

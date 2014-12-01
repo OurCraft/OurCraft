@@ -94,6 +94,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private GameSettings                   settings;
     private ModelLoader                    modelLoader;
     private HashMap<String, GuiDispatcher> guiMap;
+    private ScreenTitle                    screenTitle;
 
     public OurCraft()
     {
@@ -1151,4 +1152,13 @@ public class OurCraft implements Runnable, OurCraftInstance
         Items.register(item);
     }
 
+    public void setScreenTitle(ScreenTitle screenTitle)
+    {
+        this.screenTitle = screenTitle;
+    }
+
+    public ScreenTitle getTitle()
+    {
+        return screenTitle;
+    }
 }

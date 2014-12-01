@@ -9,6 +9,7 @@ public class SpoongeTransformers implements ASMTransformerPlugin
 
     public void registerModifiers(ModifierClassTransformer trans)
     {
+        trans.addModifier(SpoongeTextStyles.class);
         trans.addModifier(SpoongeItemStack.class);
         trans.addModifier(SpoongeBlock.class);
         trans.addModifier(SpoongeItem.class);

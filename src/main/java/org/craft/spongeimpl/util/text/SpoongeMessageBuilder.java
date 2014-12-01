@@ -73,7 +73,9 @@ public class SpoongeMessageBuilder<T> implements MessageBuilder<T>
     @Override
     public Message<T> build()
     {
-        return message;
+        Message<T> built = message;
+        message = new SpoongeMessage<T>();
+        return built;
     }
 
 }
