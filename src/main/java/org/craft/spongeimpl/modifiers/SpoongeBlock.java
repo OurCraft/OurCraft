@@ -1,7 +1,12 @@
 package org.craft.spongeimpl.modifiers;
 
+import java.util.*;
+
+import org.craft.blocks.states.*;
 import org.craft.modding.modifiers.*;
+import org.craft.spongeimpl.util.*;
 import org.spongepowered.api.block.*;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.text.translation.*;
 
 @BytecodeModifier("org.craft.blocks.Block")
@@ -19,6 +24,18 @@ public class SpoongeBlock implements BlockType
     }
 
     @Shadow
+    public Map<org.craft.blocks.states.BlockState, IBlockStateValue> getDefaultBlockState()
+    {
+        return null;
+    }
+
+    @Shadow
+    public String getUnlocalizedID()
+    {
+        return null;
+    }
+
+    @Shadow
     public String shadow$id;
 
     //===========================================================
@@ -28,19 +45,22 @@ public class SpoongeBlock implements BlockType
     @Override
     public BlockState getDefaultState()
     {
-        return null;
+        SpoongeBlockState blockState = new SpoongeBlockState();
+        blockState.setType(this);
+        return blockState;
     }
 
     @Override
     public BlockState getStateFromDataValue(byte data)
     {
-        return null;
+        SpoongeBlockState blockState = new SpoongeBlockState();
+        blockState.setType(this);
+        return blockState;
     }
 
     @Override
     public Translation getTranslation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return SpoongeTranslations.get(getUnlocalizedID());
     }
 }

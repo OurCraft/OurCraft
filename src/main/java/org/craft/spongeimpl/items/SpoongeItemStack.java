@@ -1,8 +1,10 @@
 package org.craft.spongeimpl.items;
 
+import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.items.*;
 import org.craft.modding.modifiers.*;
+import org.craft.spongeimpl.util.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.item.*;
 import org.spongepowered.api.item.inventory.*;
@@ -110,8 +112,6 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
     @Override
     public Translation getTranslation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return SpoongeTranslations.get(getStackable().getUnlocalizedID());
     }
-
 }

@@ -17,22 +17,22 @@ public class ScreenTitle
         subtitle = "";
     }
 
-    public String getMainTitle()
+    public String getRawMainTitle()
     {
         return mainTitle;
     }
 
-    public String getSubTitle()
+    public String getRawSubTitle()
     {
         return subtitle;
     }
 
-    public void setSubTitle(String title)
+    public void setRawSubTitle(String title)
     {
         this.subtitle = title;
     }
 
-    public void setMainTitle(String title)
+    public void setRawMainTitle(String title)
     {
         this.mainTitle = title;
     }
@@ -42,12 +42,12 @@ public class ScreenTitle
         return displayTime;
     }
 
-    public long getFadeIn()
+    public long getFadeInDuration()
     {
         return fadeInDuration;
     }
 
-    public long getFadeOut()
+    public long getFadeOutDuration()
     {
         return fadeOutDuration;
     }

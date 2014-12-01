@@ -1,14 +1,15 @@
 package org.craft.spongeimpl.math;
 
+import org.craft.maths.*;
 import org.spongepowered.api.math.*;
 
 public class SpongeEulerDirection implements EulerDirection
 {
 
     private static final long serialVersionUID = 2611648956254518238L;
-    private float yaw;
-    private float pitch;
-    private float roll;
+    private float             yaw;
+    private float             pitch;
+    private float             roll;
 
     public SpongeEulerDirection(float yaw, float pitch, float roll)
     {
@@ -38,8 +39,10 @@ public class SpongeEulerDirection implements EulerDirection
     @Override
     public Vector3f toVector()
     {
-        // TODO
-        return null;
+        Quaternion q = new Quaternion(Vector3.xAxis, (float) Math.toRadians(yaw));
+        q = q.mul(new Quaternion(Vector3.yAxis, (float) Math.toRadians(yaw)));
+        Vector3 f = q.getForward();
+        return Vectors.create3f(f.getX(), f.getY(), f.getZ());
     }
 
     @Override

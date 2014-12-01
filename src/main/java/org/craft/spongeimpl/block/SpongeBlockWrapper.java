@@ -2,9 +2,11 @@ package org.craft.spongeimpl.block;
 
 import java.util.*;
 
+import com.google.common.base.Optional;
+
 import org.craft.blocks.*;
-import org.craft.blocks.Block;
 import org.craft.spongeimpl.math.*;
+import org.craft.spongeimpl.modifiers.*;
 import org.craft.world.World;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.item.inventory.*;
@@ -13,7 +15,7 @@ import org.spongepowered.api.util.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.extent.*;
 
-public class SpongeBlockWrapper implements org.spongepowered.api.block.Block
+public class SpongeBlockWrapper implements BlockLoc
 {
 
     private Block implBlock;
@@ -36,8 +38,7 @@ public class SpongeBlockWrapper implements org.spongepowered.api.block.Block
     @Override
     public BlockSnapshot getSnapshot()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new SpoongeBlockSnapshot(getState());
     }
 
     @Override
@@ -143,35 +144,32 @@ public class SpongeBlockWrapper implements org.spongepowered.api.block.Block
     @Override
     public void replaceWith(BlockType type)
     {
-        // TODO Auto-generated method stub
-
+        world.setBlock(x, y, z, (Block) type);
     }
 
     @Override
     public void replaceWith(BlockSnapshot snapshot)
     {
-        // TODO Auto-generated method stub
-
+        world.setBlock(x, y, z, (Block) snapshot.getState().getType());
     }
 
     @Override
     public void interact()
     {
-        // TODO Auto-generated method stub
-
+        implBlock.onBlockClicked(world, x, y, z, null);
     }
 
     @Override
     public void interactWith(ItemStack itemStack)
     {
-        // TODO Auto-generated method stub
-
+        implBlock.onBlockClicked(world, x, y, z, null);
+        // TODO: ItemStack
     }
 
     @Override
     public void replaceWith(BlockState state)
     {
-        // TODO Auto-generated method stub
+        world.setBlock(x, y, z, (Block) state.getType());
     }
 
     @Override
@@ -191,29 +189,34 @@ public class SpongeBlockWrapper implements org.spongepowered.api.block.Block
     @Override
     public BlockState getState()
     {
-        // TODO Auto-generated method stub
-        return null;
+        SpoongeBlockState blockState = new SpoongeBlockState();
+        blockState.setType(getType());
+        blockState.setMap(world.getBlockStates(x, y, z));
+        return blockState;
     }
 
     @Override
     public BlockType getType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return (BlockType) implBlock;
     }
 
     @Override
     public int getDigTime()
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public int getDigTimeWith(ItemStack itemStack)
     {
-        // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public <T> Optional<T> getData(Class<T> dataClass)
+    {
+        return Optional.absent();
     }
 
 }

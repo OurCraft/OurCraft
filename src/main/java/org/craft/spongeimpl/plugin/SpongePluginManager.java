@@ -74,4 +74,15 @@ public class SpongePluginManager implements IAddonManager<Plugin>, PluginManager
         return handler;
     }
 
+    @Override
+    public Optional<PluginContainer> fromInstance(Object instance)
+    {
+        for(PluginContainer container : plugins.values())
+        {
+            if(container.getInstance() == instance)
+                return Optional.of(container);
+        }
+        return Optional.absent();
+    }
+
 }

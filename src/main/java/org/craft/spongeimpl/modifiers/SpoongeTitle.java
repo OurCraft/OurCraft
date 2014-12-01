@@ -3,12 +3,19 @@ package org.craft.spongeimpl.modifiers;
 import com.google.common.base.*;
 
 import org.craft.modding.modifiers.*;
+import org.craft.spongeimpl.util.title.*;
 import org.spongepowered.api.text.message.*;
 import org.spongepowered.api.text.title.*;
 
 @BytecodeModifier("org.craft.client.gui.ScreenTitle")
 public class SpoongeTitle implements Title
 {
+    @Shadow
+    public SpoongeTitle()
+    {
+        ;
+    }
+
     //===========================================================
     //               START OF SHADOW METHODS
     //===========================================================
@@ -19,24 +26,24 @@ public class SpoongeTitle implements Title
     }
 
     @Shadow
-    public String getMainTitle()
+    public String getRawMainTitle()
     {
         return null;
     }
 
     @Shadow
-    public String getSubTitle()
+    public String getRawSubTitle()
     {
         return null;
     }
 
     @Shadow
-    public void setSubTitle(String title)
+    public void setRawSubTitle(String title)
     {
     }
 
     @Shadow
-    public void setMainTitle(String title)
+    public void setRawMainTitle(String title)
     {
     }
 
@@ -48,6 +55,12 @@ public class SpoongeTitle implements Title
 
     @Shadow
     public long getFadeOutDuration()
+    {
+        return 0;
+    }
+
+    @Shadow
+    public long getDisplayTime()
     {
         return 0;
     }
@@ -141,36 +154,33 @@ public class SpoongeTitle implements Title
     @Override
     public Optional<Message<?>> getTitle()
     {
-        // TODO Auto-generated method stub
-        return null;
+        //return Optional.of(title);
+        return Optional.absent();
     }
 
     @Override
     public Optional<Message<?>> getSubtitle()
     {
-        // TODO Auto-generated method stub
-        return null;
+        // return Optional.of(subtitle);
+        return Optional.absent();
     }
 
     @Override
     public Optional<Integer> getFadeIn()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.of((int) getFadeInDuration());
     }
 
     @Override
     public Optional<Integer> getStay()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.of((int) getDisplayTime());
     }
 
     @Override
     public Optional<Integer> getFadeOut()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.of((int) getFadeOutDuration());
     }
 
     @Override
@@ -190,8 +200,7 @@ public class SpoongeTitle implements Title
     @Override
     public TitleBuilder builder()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new SpoongeTitleBuilder();
     }
 
 }

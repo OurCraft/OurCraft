@@ -2,6 +2,9 @@ package org.craft.blocks;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
+import org.craft.blocks.states.*;
 import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.items.*;
@@ -213,7 +216,7 @@ public class Block implements IStackable
      * @param x Coordinate of X axis of the event
      * @param y Coordinate of Y axis of the event
      * @param z Coordinate of Z axis of the event
-     * @param player The player who created the event
+     * @param player The player who created the event, Warning: Might be <code>null</code>!!
      * @return true if the block performs an action when clicking on it and cancels block placement if any scheduled. false otherwise.
      */
     public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
@@ -229,5 +232,10 @@ public class Block implements IStackable
     public void setContainer(AddonContainer<?> container)
     {
         this.container = container;
+    }
+
+    public Map<BlockState, IBlockStateValue> getDefaultBlockState()
+    {
+        return Maps.newHashMap();
     }
 }

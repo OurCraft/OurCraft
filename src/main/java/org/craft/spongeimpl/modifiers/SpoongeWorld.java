@@ -6,10 +6,13 @@ import com.google.common.base.Optional;
 
 import org.craft.modding.modifiers.*;
 import org.spongepowered.api.block.*;
+import org.spongepowered.api.effect.*;
 import org.spongepowered.api.entity.*;
+import org.spongepowered.api.item.*;
 import org.spongepowered.api.math.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.biome.*;
+import org.spongepowered.api.world.weather.*;
 
 @BytecodeModifier("org.craft.world.World")
 public class SpoongeWorld implements World
@@ -36,15 +39,15 @@ public class SpoongeWorld implements World
     //===========================================================
 
     @Override
-    public Block getBlock(Vector3d position)
+    public BlockLoc getBlock(Vector3d position)
     {
-        return (Block) getBlockAt((int) Math.floor(position.getX()), (int) Math.floor(position.getY()), (int) Math.floor(position.getZ()));
+        return (BlockLoc) getBlockAt((int) Math.floor(position.getX()), (int) Math.floor(position.getY()), (int) Math.floor(position.getZ()));
     }
 
     @Override
-    public Block getBlock(int x, int y, int z)
+    public BlockLoc getBlock(int x, int y, int z)
     {
-        return (Block) getBlockAt(x, y, z);
+        return (BlockLoc) getBlockAt(x, y, z);
     }
 
     @Override
@@ -108,6 +111,90 @@ public class SpoongeWorld implements World
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void spawnParticles(Particle particle, int particleCount, Vector3d position, Vector3d offset, double speed)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void spawnParticles(Particle particle, int particleCount, Vector3d position, Vector3d offset, double speed, int radius)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void spawnParticles(Particle particle, int particleCount, Vector3d position, Vector3d offset, double speed, ItemType itemType)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void spawnParticles(Particle particle, int particleCount, Vector3d position, Vector3d offset, double speed, int radius, ItemType itemType)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Sound sound, Vector3d position, double volume)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Sound sound, Vector3d position, double volume, double pitch)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void playSound(Sound sound, Vector3d position, double volume, double pitch, double minVolume)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Weather getWeather()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public long getRemainingDuration()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public long getRunningDuration()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void forecast(Weather weather)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void forecast(Weather weather, long duration)
+    {
+        // TODO Auto-generated method stub
+
     }
 
 }

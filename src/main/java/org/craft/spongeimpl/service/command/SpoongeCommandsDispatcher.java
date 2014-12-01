@@ -8,8 +8,8 @@ import com.google.common.collect.*;
 
 import org.craft.commands.*;
 import org.craft.modding.modifiers.*;
+import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.command.*;
-import org.spongepowered.api.util.*;
 import org.spongepowered.api.util.command.*;
 import org.spongepowered.api.util.command.CommandException;
 
@@ -137,7 +137,7 @@ public class SpoongeCommandsDispatcher implements CommandService
     }
 
     @Override
-    public Optional<CommandMapping> register(Owner owner, CommandCallable callable, String... alias)
+    public Optional<CommandMapping> register(Object owner, CommandCallable callable, String... alias)
     {
         SpoongeCommand command = new SpoongeCommand(callable, alias[0]);
         registerCommand(command, alias);
@@ -146,14 +146,14 @@ public class SpoongeCommandsDispatcher implements CommandService
     }
 
     @Override
-    public Optional<CommandMapping> register(Owner owner, CommandCallable callable, List<String> aliases)
+    public Optional<CommandMapping> register(Object owner, CommandCallable callable, List<String> aliases)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Optional<CommandMapping> register(Owner owner, CommandCallable callable, List<String> aliases, Function<List<String>, List<String>> callback)
+    public Optional<CommandMapping> register(Object owner, CommandCallable callable, List<String> aliases, Function<List<String>, List<String>> callback)
     {
         // TODO Auto-generated method stub
         return null;
@@ -174,24 +174,24 @@ public class SpoongeCommandsDispatcher implements CommandService
     }
 
     @Override
-    public Set<Owner> getOwners()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Set<CommandMapping> getOwnedBy(Owner owner)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public int size()
     {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public Set<PluginContainer> getPluginContainers()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Set<CommandMapping> getOwnedBy(PluginContainer container)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

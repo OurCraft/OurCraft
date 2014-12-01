@@ -3,7 +3,6 @@ package org.craft.spongeimpl;
 import org.craft.modding.events.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.event.*;
-import org.spongepowered.api.util.*;
 import org.spongepowered.api.util.event.*;
 
 public class SpoongeEventManager implements EventManager
@@ -23,7 +22,7 @@ public class SpoongeEventManager implements EventManager
     }
 
     @Override
-    public void register(Owner owner, Object obj)
+    public void register(Object plugin, Object obj)
     {
         eventBus.register(obj);
     }

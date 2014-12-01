@@ -25,8 +25,8 @@ public class GuiIngame extends Gui
     {
         super(game);
         this.title = new ScreenTitle();
-        title.setMainTitle("Dawn of a new day");
-        title.setSubTitle("78 hours to go.");
+        title.setRawMainTitle("Dawn of a new day");
+        title.setRawSubTitle("78 hours to go.");
     }
 
     @Override
@@ -74,15 +74,15 @@ public class GuiIngame extends Gui
 
         if(title != null)
         {
-            String mainTitle = title.getMainTitle();
-            String subTitle = title.getSubTitle();
+            String mainTitle = title.getRawMainTitle();
+            String subTitle = title.getRawSubTitle();
 
             int color = 0;
             int shadowColor = 0;
             long t = title.timeSinceStart();
-            if(t <= title.getFadeIn() && title.getFadeIn() != 0L)
+            if(t <= title.getFadeInDuration() && title.getFadeInDuration() != 0L)
             {
-                float i = (float) t / (float) title.getFadeIn();
+                float i = (float) t / (float) title.getFadeInDuration();
                 int alpha = (int) (i * 255f);
                 int red = (int) (i * 255f);
                 int green = (int) (i * 255f);
@@ -90,14 +90,14 @@ public class GuiIngame extends Gui
                 shadowColor = alpha << 24;
                 color = (alpha << 24) | (red << 16) | (green << 8) | blue;
             }
-            else if(t <= title.getFadeIn() + title.getDisplayTime() && t > title.getFadeIn())
+            else if(t <= title.getFadeInDuration() + title.getDisplayTime() && t > title.getFadeInDuration())
             {
                 color = 0xFFFFFFFF;
                 shadowColor = 0xFF000000;
             }
-            else if(t - title.getFadeIn() - title.getDisplayTime() < title.getFadeOut())
+            else if(t - title.getFadeInDuration() - title.getDisplayTime() < title.getFadeOutDuration())
             {
-                float i = 1f - (float) (t - title.getFadeIn() - title.getDisplayTime()) / (float) (title.getFadeOut());
+                float i = 1f - (float) (t - title.getFadeInDuration() - title.getDisplayTime()) / (float) (title.getFadeOutDuration());
                 int alpha = (int) (i * 255);
                 int red = (int) (i * 255f);
                 int green = (int) (i * 255f);
@@ -106,7 +106,7 @@ public class GuiIngame extends Gui
                 color = (alpha << 24) | (red << 16) | (green << 8) | blue;
             }
 
-            if(t < title.getFadeIn() + title.getDisplayTime() + title.getFadeOut())
+            if(t < title.getFadeInDuration() + title.getDisplayTime() + title.getFadeOutDuration())
             {
                 renderEngine.enableGLCap(GL_ALPHA_TEST);
                 getFontRenderer().setScale(1.15f);

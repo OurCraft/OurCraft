@@ -1,12 +1,19 @@
 package org.craft.spongeimpl.modifiers;
 
 import org.craft.modding.modifiers.*;
+import org.craft.spongeimpl.util.*;
 import org.spongepowered.api.item.*;
 import org.spongepowered.api.text.translation.*;
 
 @BytecodeModifier("org.craft.items.Item")
 public class SpoongeItem implements ItemType
 {
+
+    @Shadow
+    public String getUnlocalizedID()
+    {
+        return null;
+    }
 
     @Shadow
     @Override
@@ -25,8 +32,7 @@ public class SpoongeItem implements ItemType
     @Override
     public Translation getTranslation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return SpoongeTranslations.get(getUnlocalizedID());
     }
 
 }

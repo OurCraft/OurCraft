@@ -73,6 +73,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 byte[] bytes = writeClass(originalNode);
                 if(Dev.debug())
                 {
+                    ArrayList<String> methodNames = new ArrayList<String>();
                     ClassReader debugReader = new ClassReader(bytes);
                     ClassNode debugNode = new ClassNode();
                     debugReader.accept(debugNode, 0);
@@ -80,6 +81,12 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                     List<MethodNode> debugMethods = debugNode.methods;
                     for(MethodNode mNode : debugMethods)
                     {
+                        if(methodNames.contains(mNode.name))
+                        {
+                            Log.error("/!\\ Found potential name conflict: " + mNode.name);
+                        }
+                        else
+                            methodNames.add(mNode.name);
                         Log.message(">> Method at end: " + mNode.access + " " + mNode.desc + " " + mNode.name + " signature: " + mNode.signature);
                     }
                 }
@@ -225,6 +232,8 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             if(insn instanceof MethodInsnNode)
             {
                 MethodInsnNode methodInsn = (MethodInsnNode) insn;
+                if(methodInsn.owner.equals(modified))
+                    methodInsn.owner = original;
 
                 MethodNode node;
                 try

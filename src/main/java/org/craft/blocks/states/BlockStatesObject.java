@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
-public class BlockStatesObject implements Iterable<IBlockStateValue>
+public class BlockStatesObject implements Iterable<IBlockStateValue>, Cloneable
 {
 
     /**
@@ -86,5 +86,13 @@ public class BlockStatesObject implements Iterable<IBlockStateValue>
     public Iterator<IBlockStateValue> iterator()
     {
         return map.values().iterator();
+    }
+
+    @SuppressWarnings("unchecked")
+    public BlockStatesObject clone()
+    {
+        BlockStatesObject clone = new BlockStatesObject();
+        clone.map = (HashMap<BlockState, IBlockStateValue>) map.clone();
+        return clone;
     }
 }

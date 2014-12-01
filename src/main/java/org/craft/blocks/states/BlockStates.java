@@ -106,4 +106,9 @@ public final class BlockStates
         return BLOCK_STATES_VALUES_REGISTRY.get(state).get(string);
     }
 
+    public static Collection<IBlockStateValue> getValues(BlockState state)
+    {
+        return BLOCK_STATES_VALUES_REGISTRY.get(state).values();
+    }
+
 }
