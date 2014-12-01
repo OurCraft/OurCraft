@@ -31,6 +31,7 @@ public class DiskSimpleResource extends AbstractResource
                 }
                 baos.flush();
                 baos.close();
+                in.close();
                 bytes = baos.toByteArray();
             }
             catch(Exception e)

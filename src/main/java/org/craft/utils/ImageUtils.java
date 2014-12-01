@@ -3,14 +3,14 @@ package org.craft.utils;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
-import java.nio.ByteBuffer;
+import java.nio.*;
 import java.util.*;
 
 import javax.imageio.*;
 import javax.swing.*;
 
 import org.craft.resources.*;
-import org.lwjgl.BufferUtils;
+import org.lwjgl.*;
 
 public class ImageUtils
 {
@@ -87,7 +87,7 @@ public class ImageUtils
         }
         return null;
     }
-    
+
     public static ByteBuffer getPixels(BufferedImage img)
     {
         int w = img.getWidth();
@@ -229,7 +229,7 @@ public class ImageUtils
             img = ImageUtils.decodeTGA(res.getData());
         }
         else
-            img = ImageIO.read(res.getInputStream());
+            img = ImageIO.read(new ByteArrayInputStream(res.getData()));
         imagesMap.put(res, img);
         return img;
     }
