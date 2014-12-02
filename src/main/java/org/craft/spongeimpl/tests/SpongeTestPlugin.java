@@ -67,7 +67,11 @@ public class SpongeTestPlugin
     public void onInit(InitializationEvent evt)
     {
         logger.debug("SpongeInit!!!");
-        logger.info("TextStyles's OBFUSCATED Name: ");
-        logger.info(TextStyles.OBFUSCATED.getName());
+        logger.info("TextStyles's OBFUSCATED Name: " + TextStyles.OBFUSCATED.getName());
+        logger.info("TextStyles's RESET Name: " + TextStyles.RESET.getName());
+        logger.info("TextStyles's ITALIC Name: " + TextStyles.ITALIC.getName());
+        logger.info("TextStyles's STRIKETHROUGH Name: " + TextStyles.STRIKETHROUGH.getName());
+        logger.info("TextStyles's UNDERLINED Name: " + TextStyles.UNDERLINE.getName());
+        logger.info("TextStyles's BOLD Name: " + TextStyles.BOLD.getName());
     }
 }

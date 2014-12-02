@@ -171,19 +171,25 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             {
                 String name = originalNode.name.replace("/", ".");
                 boolean replaceStaticBlock = replacesStaticBlock.get(name);
-                boolean shouldReplace = false;//(newMethod.name.equals("<clinit>") && replaceStaticBlock);
+                boolean shouldReplace = (newMethod.name.equals("<clinit>") && replaceStaticBlock);
                 if(ASMUtils.hasAnnotation(newMethod, Overwrite.class) || shouldReplace)
                 {
                     List<MethodNode> originalMethods = originalNode.methods;
+                    List<MethodNode> toRemove = Lists.newArrayList();
                     for(MethodNode m : originalMethods)
                     {
                         if(m.name.equals(newMethod.name) && m.desc.equals(newMethod.desc) && m.access == newMethod.access)
                         {
-                            originalNode.methods.remove(m);
+                            toRemove.add(m);
                             if(!shouldReplace)
+                            {
+                                originalMethods.removeAll(toRemove);
+                                toRemove.clear();
                                 break;
+                            }
                         }
                     }
+                    originalMethods.removeAll(toRemove);
                 }
                 if(newMethod.name.equals("<clinit>") && !replaceStaticBlock)
                 {
