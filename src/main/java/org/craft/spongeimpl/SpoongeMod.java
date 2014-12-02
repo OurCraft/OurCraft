@@ -174,13 +174,13 @@ public class SpoongeMod implements Game
     @Override
     public String getAPIVersion()
     {
-        return "1.0";
+        return "Release 1.0";
     }
 
     @Override
     public String getImplementationVersion()
     {
-        return "Spoonge v0.1";
+        return "Spoonge v0.5";
     }
 
     @Override

@@ -7,4 +7,6 @@ import java.lang.annotation.*;
 public @interface BytecodeModifier
 {
     String value();
+
+    boolean replaceStaticBlock() default false;
 }

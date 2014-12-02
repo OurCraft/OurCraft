@@ -1,7 +1,6 @@
 package org.craft.client.gui.widgets;
 
 import org.craft.client.*;
-import org.craft.client.gui.widgets.*;
 import org.craft.client.render.fonts.*;
 import org.lwjgl.input.*;
 

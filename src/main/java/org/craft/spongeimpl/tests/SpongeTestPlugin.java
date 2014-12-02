@@ -7,6 +7,7 @@ import org.slf4j.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 import org.spongepowered.api.plugin.*;
+import org.spongepowered.api.text.format.*;
 import org.spongepowered.api.text.message.*;
 import org.spongepowered.api.text.title.*;
 import org.spongepowered.api.util.event.*;
@@ -19,7 +20,7 @@ public class SpongeTestPlugin
 
     public SpongeTestPlugin()
     {
-
+        ;
     }
 
     @Subscribe
@@ -33,7 +34,7 @@ public class SpongeTestPlugin
     public void onPostInit(PostInitializationEvent evt)
     {
         logger.debug("SpongePostInit!!!");
-        logger.debug("Dirt is " + evt.getGame().getRegistry().getBlock("ourcraft:dirt").get().getId());
+        logger.debug("Dirt localized name is " + evt.getGame().getRegistry().getBlock("dirt").get().getTranslation().get());
     }
 
     @Subscribe
@@ -66,5 +67,7 @@ public class SpongeTestPlugin
     public void onInit(InitializationEvent evt)
     {
         logger.debug("SpongeInit!!!");
+        logger.info("TextStyles's OBFUSCATED Name: ");
+        logger.info(TextStyles.OBFUSCATED.getName());
     }
 }

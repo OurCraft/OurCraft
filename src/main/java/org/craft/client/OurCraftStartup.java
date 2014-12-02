@@ -33,6 +33,7 @@ public class OurCraftStartup
         System.setProperty("net.java.games.input.librarypath", properties.get("nativesFolder"));
         System.setProperty("org.lwjgl.librarypath", properties.get("nativesFolder"));
 
+        I18n.setCurrentLanguage(properties.get("lang"));
         OurCraft instance = new OurCraft();
         CommonHandler.setInstance(instance);
         instance.start(properties);

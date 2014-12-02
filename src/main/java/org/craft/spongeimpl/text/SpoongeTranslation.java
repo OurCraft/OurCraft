@@ -22,8 +22,7 @@ public class SpoongeTranslation implements Translation
     @Override
     public String get()
     {
-        return get(new Object[]
-        {});
+        return get(new Object[0]);
     }
 
     @Override

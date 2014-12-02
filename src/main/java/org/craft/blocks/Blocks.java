@@ -31,7 +31,7 @@ public final class Blocks
         blockByID = new ArrayList<Block>();
         register(air = new BlockAir());
         register(dirt = new Block("dirt"));
-        register(grass = new BlockGrass("grass"));
+        register(grass = new Block("grass"));
         register(bedrock = new Block("bedrock"));
         register(stone = new Block("stone"));
         register(log = new BlockLog("log"));

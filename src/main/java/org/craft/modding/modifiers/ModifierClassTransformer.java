@@ -18,12 +18,14 @@ import org.objectweb.asm.tree.*;
 public class ModifierClassTransformer implements IClassTransformer, Opcodes
 {
 
-    private HashMap<String, String> toModify;
-    private OurClassLoader          classloader;
+    private HashMap<String, String>  toModify;
+    private HashMap<String, Boolean> replacesStaticBlock;
+    private OurClassLoader           classloader;
 
     public ModifierClassTransformer()
     {
         toModify = Maps.newHashMap();
+        replacesStaticBlock = Maps.newHashMap();
     }
 
     public void addModifier(Class<?> modifier)
@@ -32,8 +34,10 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             Log.fatal("Class " + modifier.getName() + " does not have a @BytecodeModifier annotation but was intented to be used as a modifier anyway");
         else
         {
-            String toModifyClass = modifier.getAnnotation(BytecodeModifier.class).value();
+            BytecodeModifier annot = modifier.getAnnotation(BytecodeModifier.class);
+            String toModifyClass = annot.value();
             toModify.put(toModifyClass, Type.getInternalName(modifier));
+            replacesStaticBlock.put(toModifyClass, annot.replaceStaticBlock());
             try
             {
                 classloader.findClass(toModifyClass);
@@ -160,29 +164,44 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
     @SuppressWarnings("unchecked")
     private void applyMethods(ClassReader originalReader, ClassReader modifierReader, ClassNode originalNode, ClassNode modifierNode)
     {
-        List<MethodNode> methodNodes = modifierNode.methods;
-        for(MethodNode node : methodNodes)
+        List<MethodNode> newMethodsNodes = modifierNode.methods;
+        for(MethodNode newMethod : newMethodsNodes)
         {
-            if(!ASMUtils.hasAnnotation(node, Shadow.class) || (node.name.equals("<init>") && ASMUtils.hasAnnotation(node, Overwrite.class)))
+            if(!ASMUtils.hasAnnotation(newMethod, Shadow.class) || (newMethod.name.equals("<init>") && ASMUtils.hasAnnotation(newMethod, Overwrite.class)))
             {
-                if(ASMUtils.hasAnnotation(node, Overwrite.class))
+                String name = originalNode.name.replace("/", ".");
+                boolean replaceStaticBlock = replacesStaticBlock.get(name);
+                boolean shouldReplace = false;//(newMethod.name.equals("<clinit>") && replaceStaticBlock);
+                if(ASMUtils.hasAnnotation(newMethod, Overwrite.class) || shouldReplace)
                 {
                     List<MethodNode> originalMethods = originalNode.methods;
                     for(MethodNode m : originalMethods)
                     {
-                        if(m.name.equals(node.name) && m.desc.equals(node.desc) && m.access == node.access)
+                        if(m.name.equals(newMethod.name) && m.desc.equals(newMethod.desc) && m.access == newMethod.access)
                         {
                             originalNode.methods.remove(m);
-                            break;
+                            if(!shouldReplace)
+                                break;
                         }
                     }
                 }
-                originalNode.methods.add(convertMethod(node, originalNode.name, modifierNode.name));
+                if(newMethod.name.equals("<clinit>") && !replaceStaticBlock)
+                {
+                    appendInsns(originalNode, null, newMethod);
+                    break;
+                }
+                else if(newMethod.name.equals("<clinit>") && shouldReplace)
+                {
+                    originalNode.methods.add(convertMethod(newMethod, originalNode.name, modifierNode.name));
+                    break;
+                }
+                else
+                    originalNode.methods.add(convertMethod(newMethod, originalNode.name, modifierNode.name));
             }
-            else if(ASMUtils.hasAnnotation(node, Shadow.class))
+            else if(ASMUtils.hasAnnotation(newMethod, Shadow.class))
             {
                 boolean found = false;
-                AnnotationNode shadowAnnot = ASMUtils.getAnnotation(node, Shadow.class);
+                AnnotationNode shadowAnnot = ASMUtils.getAnnotation(newMethod, Shadow.class);
                 List<MethodNode> originalMethods = originalNode.methods;
                 String prefix = (String) ASMUtils.toMap(shadowAnnot.values).get("prefix");
                 if(prefix == null)
@@ -190,17 +209,17 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 for(MethodNode originalMethod : originalMethods)
                 {
                     String mName = originalMethod.name;
-                    if(node.name.startsWith(prefix))
+                    if(newMethod.name.startsWith(prefix))
                     {
-                        node.name = node.name.substring(prefix.length(), node.name.length());
+                        newMethod.name = newMethod.name.substring(prefix.length(), newMethod.name.length());
                         found = true;
                         if(Dev.debug())
                             Log.message(">>> REPLACED NAME " + mName + " TO " + originalMethod.name);
                         originalNode.methods.remove(originalMethod);
-                        originalNode.methods.add(convertMethod(node, originalNode.name, modifierNode.name));
+                        originalNode.methods.add(convertMethod(newMethod, originalNode.name, modifierNode.name));
                         break;
                     }
-                    if(node.name.equals(mName) && originalMethod.desc.equals(node.desc))
+                    if(newMethod.name.equals(mName) && originalMethod.desc.equals(newMethod.desc))
                     {
                         found = true;
                         break;
@@ -208,7 +227,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 }
                 if(!found)
                 {
-                    Log.fatal("From modifier " + modifierNode.name + ": Tried to use method " + node.name + " of type " + node.desc + " as @Shadow while original class (" + originalNode.name + ") does not have this method.");
+                    Log.fatal("From modifier " + modifierNode.name + ": Tried to use method " + newMethod.name + " of type " + newMethod.desc + " as @Shadow while original class (" + originalNode.name + ") does not have this method.");
                 }
             }
         }
@@ -341,6 +360,51 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
             }
         }
         return null;
+    }
+
+    /**
+     * From Sponge's MixinTransformer
+     */
+    private void appendInsns(ClassNode targetClass, String targetMethodName, MethodNode sourceMethod)
+    {
+        if(Type.getReturnType(sourceMethod.desc) != Type.VOID_TYPE)
+        {
+            throw new IllegalArgumentException("Attempted to merge insns into a method which does not return void");
+        }
+
+        if(targetMethodName == null || targetMethodName.length() == 0)
+        {
+            targetMethodName = sourceMethod.name;
+        }
+
+        List<MethodNode> methods = targetClass.methods;
+        for(MethodNode method : methods)
+        {
+            if((targetMethodName.equals(method.name)) && sourceMethod.desc.equals(method.desc))
+            {
+                AbstractInsnNode returnNode = null;
+                Iterator<AbstractInsnNode> findReturnIter = method.instructions.iterator();
+                while(findReturnIter.hasNext())
+                {
+                    AbstractInsnNode insn = findReturnIter.next();
+                    if(insn.getOpcode() == Opcodes.RETURN)
+                    {
+                        returnNode = insn;
+                        break;
+                    }
+                }
+
+                Iterator<AbstractInsnNode> injectIter = sourceMethod.instructions.iterator();
+                while(injectIter.hasNext())
+                {
+                    AbstractInsnNode insn = injectIter.next();
+                    if(!(insn instanceof LineNumberNode) && insn.getOpcode() != Opcodes.RETURN)
+                    {
+                        method.instructions.insertBefore(returnNode, insn);
+                    }
+                }
+            }
+        }
     }
 
     @Override
