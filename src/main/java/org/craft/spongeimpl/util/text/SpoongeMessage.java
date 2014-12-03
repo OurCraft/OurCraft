@@ -28,6 +28,7 @@ public class SpoongeMessage<T> implements Message<T>
     @Override
     public Iterator<Message<T>> iterator()
     {
+        //return hierarchy.iterator();
         return null;
     }
 

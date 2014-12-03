@@ -21,6 +21,7 @@ import org.slf4j.*;
 public class AddonsLoader
 {
 
+    private HashMap<String, Object>                             addonInstances;
     private HashMap<Class<? extends Annotation>, IAddonManager> handlers;
     private EventBus                                            eventBus;
     private OurCraftInstance                                    game;
@@ -32,6 +33,7 @@ public class AddonsLoader
 
     public AddonsLoader(OurCraftInstance gameInstance, EventBus eventBus)
     {
+        addonInstances = Maps.newHashMap();
         containers = Lists.newArrayList();
         loaded = Lists.newArrayList();
         this.classLoader = ClassLoader.getSystemClassLoader();
@@ -45,7 +47,7 @@ public class AddonsLoader
 
     }
 
-    public void registerAddonAnnotation(Class<? extends Annotation> annot, IAddonManager handler)
+    public void registerAddonAnnotation(Class<? extends Annotation> annot, IAddonManager<?> handler)
     {
         handlers.put(annot, handler);
     }
@@ -59,7 +61,7 @@ public class AddonsLoader
         {
             if(excluded != null && !excluded.isEmpty() && excluded.contains(c))
                 continue;
-            for(AddonContainer container : containers)
+            for(AddonContainer<?> container : containers)
             {
                 if(container.getAddonAnnotation().annotationType() == c && container.getInstance().getClass() == clazz)
                 {
@@ -72,18 +74,19 @@ public class AddonsLoader
                 if(annot.annotationType() == c)
                 {
                     loaded.add(clazz);
-                    IAddonManager manager = handlers.get(c);
-                    IAddonHandler handler = manager.getHandler();
+                    IAddonManager<Annotation> manager = handlers.get(c);
+                    IAddonHandler<Annotation> handler = manager.getHandler();
                     Object instance = clazz.newInstance();
                     for(Field f : clazz.getDeclaredFields())
                     {
                         if(f.isAnnotationPresent(Instance.class))
                         {
+                            addonInstances.put(f.getAnnotation(Instance.class).value(), instance);
                             f.setAccessible(true);
                             f.set(null, instance);
                         }
                     }
-                    AddonContainer container = handler.createContainer(annot, instance);
+                    AddonContainer<Annotation> container = handler.createContainer(annot, instance);
                     CommonHandler.setCurrentContainer(container);
                     manager.loadAddon(container);
                     eventBus.register(instance);
@@ -204,4 +207,8 @@ public class AddonsLoader
         excluded = Lists.newArrayList(classesToSearch);
     }
 
+    public Object getAddonInstance(String addonID)
+    {
+        return addonInstances.get(addonID);
+    }
 }

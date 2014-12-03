@@ -1,8 +1,7 @@
-package org.craft.spongeimpl.plugin;
+package org.craft.modding;
 
 import java.util.logging.*;
 
-import org.craft.modding.*;
 import org.craft.utils.*;
 import org.craft.utils.Log.NonLoggable;
 import org.slf4j.*;

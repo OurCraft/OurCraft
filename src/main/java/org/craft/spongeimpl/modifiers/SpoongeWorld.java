@@ -2,6 +2,7 @@ package org.craft.spongeimpl.modifiers;
 
 import java.util.*;
 
+import com.flowpowered.math.vector.*;
 import com.google.common.base.Optional;
 
 import org.craft.modding.modifiers.*;
@@ -9,7 +10,6 @@ import org.spongepowered.api.block.*;
 import org.spongepowered.api.effect.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.item.*;
-import org.spongepowered.api.math.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.biome.*;
 import org.spongepowered.api.world.weather.*;

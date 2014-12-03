@@ -1,10 +1,8 @@
 package org.craft.spongeimpl;
 
 import java.io.*;
-import java.util.*;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.*;
+import com.google.common.base.*;
 
 import org.craft.*;
 import org.craft.modding.*;
@@ -19,13 +17,11 @@ import org.craft.spongeimpl.util.title.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.Platform;
-import org.spongepowered.api.entity.player.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.*;
 import org.spongepowered.api.service.command.*;
 import org.spongepowered.api.service.event.*;
 import org.spongepowered.api.service.scheduler.*;
-import org.spongepowered.api.text.message.*;
 import org.spongepowered.api.text.title.*;
 import org.spongepowered.api.util.event.*;
 import org.spongepowered.api.world.*;
@@ -43,6 +39,8 @@ public class SpoongeMod implements Game
     private SpoongeScheduler          scheduler;
     private SpoongeCommandsDispatcher commandDispatcher;
     private SpoongeServiceManager     serviceManager;
+    private Server                    server;
+    private OurCraftInstance          ocInstance;
 
     public SpoongeMod()
     {
@@ -53,6 +51,9 @@ public class SpoongeMod implements Game
     @OurModEventHandler
     public void onPreInit(ModPreInitEvent event)
     {
+        ocInstance = event.getOurCraftInstance();
+        if(event.getOurCraftInstance().isServer())
+            server = new SpoongeServer(this);
         serviceManager = new SpoongeServiceManager();
         commandDispatcher = new SpoongeCommandsDispatcher();
         try
@@ -130,48 +131,6 @@ public class SpoongeMod implements Game
     }
 
     @Override
-    public Collection<Player> getOnlinePlayers()
-    {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    public int getMaxPlayers()
-    {
-        return 0;
-    }
-
-    @Override
-    public Optional<Player> getPlayer(UUID uniqueId)
-    {
-        return Optional.absent();
-    }
-
-    @Override
-    public Optional<Player> getPlayer(String name)
-    {
-        return Optional.absent();
-    }
-
-    @Override
-    public Collection<World> getWorlds()
-    {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    public World getWorld(UUID uniqueId)
-    {
-        return null;
-    }
-
-    @Override
-    public World getWorld(String worldName)
-    {
-        return null;
-    }
-
-    @Override
     public String getAPIVersion()
     {
         return "Release 1.0";
@@ -196,9 +155,14 @@ public class SpoongeMod implements Game
     }
 
     @Override
-    public void broadcastMessage(Message<?> message)
+    public Optional<Server> getServer()
     {
-        gameInstance.broadcastMessage(message.getContent().toString());
+        return Optional.of(server);
+    }
+
+    public OurCraftInstance getOurCraftInstance()
+    {
+        return ocInstance;
     }
 
 }

@@ -17,12 +17,16 @@ public class SpoongeTextStyles
 
     @Shadow
     public static final TextStyle.Base OBFUSCATED    = new DefaultStyle("obfuscated", TextFormatting.OBFUSCATED.toString().charAt(1));
+
     @Shadow
     public static final TextStyle.Base BOLD          = new DefaultStyle("obfuscated", TextFormatting.OBFUSCATED.toString().charAt(1));
+
     @Shadow
     public static final TextStyle.Base STRIKETHROUGH = new DefaultStyle("strikethrough", 's');                                        // TODO: Add corresponding TextFormatting
+
     @Shadow
     public static final TextStyle.Base UNDERLINE     = new DefaultStyle("underline", TextFormatting.UNDERLINED.toString().charAt(1));
+
     @Shadow
     public static final TextStyle.Base ITALIC        = new DefaultStyle("italic", TextFormatting.ITALIC.toString().charAt(1));
 

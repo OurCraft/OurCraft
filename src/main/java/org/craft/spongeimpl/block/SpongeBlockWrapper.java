@@ -2,15 +2,14 @@ package org.craft.spongeimpl.block;
 
 import java.util.*;
 
+import com.flowpowered.math.vector.*;
 import com.google.common.base.Optional;
 
 import org.craft.blocks.*;
-import org.craft.spongeimpl.math.*;
 import org.craft.spongeimpl.modifiers.*;
 import org.craft.world.World;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.item.inventory.*;
-import org.spongepowered.api.math.*;
 import org.spongepowered.api.util.*;
 import org.spongepowered.api.world.*;
 import org.spongepowered.api.world.extent.*;
@@ -18,12 +17,12 @@ import org.spongepowered.api.world.extent.*;
 public class SpongeBlockWrapper implements BlockLoc
 {
 
-    private Block implBlock;
-    private int   x;
-    private int   y;
-    private int   z;
-    private World world;
-    private Vec3i pos;
+    private Block    implBlock;
+    private int      x;
+    private int      y;
+    private int      z;
+    private World    world;
+    private Vector3i pos;
 
     public SpongeBlockWrapper(Block block, int x, int y, int z, World world)
     {
@@ -31,7 +30,7 @@ public class SpongeBlockWrapper implements BlockLoc
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pos = new Vec3i(x, y, z);
+        this.pos = new Vector3i(x, y, z);
         this.world = world;
     }
 
