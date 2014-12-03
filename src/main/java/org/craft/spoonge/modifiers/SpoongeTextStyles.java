@@ -19,7 +19,7 @@ public class SpoongeTextStyles
     public static final TextStyle.Base OBFUSCATED    = new DefaultStyle("obfuscated", TextFormatting.OBFUSCATED.toString().charAt(1));
 
     @Shadow
-    public static final TextStyle.Base BOLD          = new DefaultStyle("obfuscated", TextFormatting.OBFUSCATED.toString().charAt(1));
+    public static final TextStyle.Base BOLD          = new DefaultStyle("bold", TextFormatting.BOLD.toString().charAt(1));
 
     @Shadow
     public static final TextStyle.Base STRIKETHROUGH = new DefaultStyle("strikethrough", 's');                                        // TODO: Add corresponding TextFormatting

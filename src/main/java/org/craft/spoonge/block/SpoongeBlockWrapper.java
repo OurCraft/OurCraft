@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.flowpowered.math.vector.*;
 import com.google.common.base.Optional;
+import com.google.common.collect.*;
 
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
@@ -182,15 +183,19 @@ public class SpoongeBlockWrapper implements BlockLoc
     @Override
     public Collection<Direction> getPoweredFaces()
     {
-        // TODO
-        return null;
+        List<Direction> directions = Lists.newArrayList();
+        for(Direction direct : Direction.values())
+        {
+            if(isFacePowered(direct))
+                directions.add(direct);
+        }
+        return directions;
     }
 
     @Override
     public Collection<Direction> getIndirectlyPoweredFaces()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getPoweredFaces();
     }
 
     @Override
