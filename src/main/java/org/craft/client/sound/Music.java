@@ -5,6 +5,8 @@ import java.util.*;
 import org.craft.resources.*;
 import org.lwjgl.openal.*;
 
+import com.google.common.collect.Lists;
+
 /**
  * Needs to use streaming!!!!
  * 
@@ -88,10 +90,10 @@ public class Music
         return this;
     }
 
-    public static ArrayList<Music> musicsPlaying()
+    public static List<Music> musicsPlaying()
     {
         Iterator<Music> it = musics.values().iterator();
-        ArrayList<Music> playing = new ArrayList<Music>();
+        List<Music> playing = Lists.newArrayList();
         while(it.hasNext())
         {
             Music mus = it.next();

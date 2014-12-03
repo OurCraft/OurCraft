@@ -27,8 +27,8 @@ public class AddonsLoader
     private OurCraftInstance                                    game;
     private LuaEventBusListener                                 luaListener;
     private ClassLoader                                         classLoader;
-    private ArrayList<AddonContainer>                           containers;
-    private ArrayList<Class<?>>                                 loaded;
+    private List<AddonContainer>                           containers;
+    private List<Class<?>>                                 loaded;
     private List<Class<? extends Annotation>>                   excluded;
 
     public AddonsLoader(OurCraftInstance gameInstance, EventBus eventBus)

@@ -10,9 +10,9 @@ import org.craft.client.render.*;
 public class BlockVariant
 {
 
-    private ArrayList<BlockState>       states;
-    private ArrayList<IBlockStateValue> values;
-    private ArrayList<Model>       models;
+    private List<BlockState>       states;
+    private List<IBlockStateValue> values;
+    private List<Model>       models;
     private EnumRenderPass              pass;
 
     public BlockVariant()
@@ -26,7 +26,7 @@ public class BlockVariant
     /**
      * Sets block state of this variant
      */
-    public void setBlockStateKeys(ArrayList<BlockState> states)
+    public void setBlockStateKeys(List<BlockState> states)
     {
         this.states = states;
     }
@@ -34,7 +34,7 @@ public class BlockVariant
     /**
      * Sets block state value of this variant
      */
-    public void setBlockStateValues(ArrayList<IBlockStateValue> values)
+    public void setBlockStateValues(List<IBlockStateValue> values)
     {
         this.values = values;
     }
@@ -42,7 +42,7 @@ public class BlockVariant
     /**
      * Gets block state of this variant
      */
-    public ArrayList<BlockState> getBlockStates()
+    public List<BlockState> getBlockStates()
     {
         return states;
     }
@@ -50,7 +50,7 @@ public class BlockVariant
     /**
      * Gets block state value of this variant
      */
-    public ArrayList<IBlockStateValue> getBlockStateValues()
+    public List<IBlockStateValue> getBlockStateValues()
     {
         return values;
     }

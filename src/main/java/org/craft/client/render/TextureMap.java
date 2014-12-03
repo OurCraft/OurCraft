@@ -1,15 +1,26 @@
 package org.craft.client.render;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 
-import org.craft.client.*;
-import org.craft.resources.*;
-import org.craft.utils.*;
+import org.craft.client.OpenGLHelper;
+import org.craft.resources.AbstractResource;
+import org.craft.resources.ResourceLoader;
+import org.craft.resources.ResourceLocation;
+import org.craft.utils.Dev;
+import org.craft.utils.IDisposable;
+import org.craft.utils.ImageUtils;
+import org.craft.utils.Log;
+import org.craft.utils.StringUtils;
+
+import com.google.common.collect.Lists;
 
 public class TextureMap implements IconGenerator, ITextureObject, IDisposable, ITickable
 {
@@ -21,7 +32,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
     private BufferedImage               emptyImage;
     private boolean                     forceResize;
     private Stitcher                    stitcher;
-    private ArrayList<TextureMapSprite> registredSprites;
+    private List<TextureMapSprite> registredSprites;
 
     /**
      * Creates TextureMap with given loader and base
@@ -45,7 +56,7 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
         this.loader = loader;
         this.base = base;
 
-        registredSprites = new ArrayList<TextureMapSprite>();
+        registredSprites = Lists.newArrayList();
 
         initNullAndEmptyImages();
         stitcher = new Stitcher(emptyImage, putInCorner);

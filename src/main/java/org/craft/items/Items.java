@@ -1,18 +1,21 @@
 package org.craft.items;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 public class Items
 {
 
     public static final HashMap<String, Item> ITEM_REGISTRY = new HashMap<String, Item>();
-    private static ArrayList<Item>            itemByID;
+    private static List<Item>            itemByID;
     public static Item                        test;
     public static Item                        test2;
 
     public static void init()
     {
-        itemByID = new ArrayList<Item>();
+        itemByID = Lists.newArrayList();
 
         register(test = new Item("test"));
         register(test2 = new Item("test2"));

@@ -13,17 +13,17 @@ import org.spongepowered.api.util.event.*;
 public class EventBus
 {
 
-    private HashMap<Class<?>, ArrayList<IEventListener>> listeners;
-    private ArrayList<Class<? extends Annotation>>       annotations;
-    private ArrayList<IEventBusListener>                 eventBusListeners;
-    private ArrayList<Class<?>>                          eventClasses;
+    private HashMap<Class<?>, List<IEventListener>> listeners;
+    private List<Class<? extends Annotation>>       annotations;
+    private List<IEventBusListener>                 eventBusListeners;
+    private List<Class<?>>                          eventClasses;
 
     public EventBus(Class<?>[] eventClasses, Class<? extends Annotation>... annots)
     {
         this.eventClasses = Lists.newArrayList(eventClasses);
-        this.eventBusListeners = new ArrayList<IEventBusListener>();
+        this.eventBusListeners = Lists.newArrayList();
         this.annotations = Lists.newArrayList(annots);
-        listeners = new HashMap<Class<?>, ArrayList<IEventListener>>();
+        listeners = new HashMap<Class<?>, List<IEventListener>>();
     }
 
     public void addAnnotationClass(Class<? extends Annotation> annotClass)
@@ -36,7 +36,7 @@ public class EventBus
         eventClasses.add(eventClass);
     }
 
-    public HashMap<Class<?>, ArrayList<IEventListener>> getListeners()
+    public HashMap<Class<?>, List<IEventListener>> getListeners()
     {
         return listeners;
     }
@@ -57,7 +57,7 @@ public class EventBus
                 clazz = clazz.getSuperclass();
             }
             Set<? extends Class<?>> classes = TypeToken.of(object.getClass()).getTypes().rawTypes();
-            ArrayList<String> checked = new ArrayList<String>();
+            List<String> checked = Lists.newArrayList();
             for(Method method : methods)
             {
                 for(Class<?> cls : classes)
@@ -104,9 +104,9 @@ public class EventBus
         try
         {
             listener = new ASMEventListener(object, m);
-            ArrayList<IEventListener> list = listeners.get(eventClass);
+            List<IEventListener> list = listeners.get(eventClass);
             if(list == null)
-                list = new ArrayList<IEventListener>();
+                list = Lists.newArrayList();
             list.add(listener);
             listeners.put(eventClass, list);
         }
@@ -128,10 +128,10 @@ public class EventBus
 
     public boolean hasListener(Object object)
     {
-        Iterator<ArrayList<IEventListener>> it = getListeners().values().iterator();
+        Iterator<List<IEventListener>> it = getListeners().values().iterator();
         while(it.hasNext())
         {
-            ArrayList<IEventListener> list = it.next();
+            List<IEventListener> list = it.next();
             if(list.contains(object))
                 return true;
         }
@@ -148,8 +148,8 @@ public class EventBus
     {
         for(IEventBusListener eventBusListener : eventBusListeners)
             eventBusListener.onEvent(e, instance, annotClass);
-        ArrayList<IEventListener>[] values = listeners.values().toArray(new ArrayList[0]);
-        for(ArrayList<IEventListener> list : values)
+        List<IEventListener>[] values = listeners.values().toArray(new ArrayList[0]);
+        for(List<IEventListener> list : values)
         {
             for(IEventListener listener : list)
             {

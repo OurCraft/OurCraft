@@ -67,7 +67,7 @@ public class World
     }
 
     private LinkedList<Entity>              entities;
-    private ArrayList<Entity>               spawingQueue;
+    private List<Entity>               spawingQueue;
     private ChunkProvider                   chunkProvider;
     private WorldGenerator                  generator;
     private String                          name;
@@ -76,7 +76,7 @@ public class World
     private Random                          rng;
     private long                            tick;
     private float                           gravity;
-    private ArrayList<BlockUpdateScheduler> schedulers;
+    private List<BlockUpdateScheduler> schedulers;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
@@ -87,7 +87,7 @@ public class World
         this.generator = generator;
         this.chunkProvider = prov;
         this.gravity = 9.81f / 360f;
-        spawingQueue = new ArrayList<Entity>();
+        spawingQueue = Lists.newArrayList();
         entities = new LinkedList<Entity>();
     }
 
@@ -95,7 +95,7 @@ public class World
     {
         while(!spawingQueue.isEmpty())
             entities.add(spawingQueue.remove(0));
-        ArrayList<Entity> deadEntities = new ArrayList<Entity>();
+        List<Entity> deadEntities = Lists.newArrayList();
         for(Entity e : entities)
         {
             Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
@@ -373,13 +373,13 @@ public class World
         return null;
     }
 
-    public boolean updateBlock(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
+    public boolean updateBlock(int x, int y, int z, boolean force, List<Vector3> visited)
     {
         boolean disposeList = false;
         if(visited == null)
         {
             disposeList = true;
-            visited = new ArrayList<Vector3>();
+            visited = Lists.newArrayList();
         }
         Block b = getBlockAt(x, y, z);
         if(b != null)
@@ -416,7 +416,7 @@ public class World
         return false;
     }
 
-    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
+    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force, List<Vector3> visited)
     {
         Block b = getBlockAt(x, y, z);
         if(b != null)
@@ -432,13 +432,13 @@ public class World
         return false;
     }
 
-    public void updateBlockAndNeighbors(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
+    public void updateBlockAndNeighbors(int x, int y, int z, boolean force, List<Vector3> visited)
     {
         boolean disposeList = false;
         if(visited == null)
         {
             disposeList = true;
-            visited = new ArrayList<Vector3>();
+            visited = Lists.newArrayList();
         }
         updateBlock(x, y, z, force, visited);
         updateBlockNeighbors(x, y, z, force, visited);
@@ -455,12 +455,12 @@ public class World
         updateBlockNeighbors(x, y, z, force, null);
     }
 
-    public void updateBlockNeighbors(int x, int y, int z, boolean force, ArrayList<Vector3> visited)
+    public void updateBlockNeighbors(int x, int y, int z, boolean force, List<Vector3> visited)
     {
         boolean disposeList = false;
         if(visited == null)
         {
-            visited = new ArrayList<Vector3>();
+            visited = Lists.newArrayList();
             disposeList = true;
         }
         updateBlockFromNeighbor(x, y, z + 1, force, visited);

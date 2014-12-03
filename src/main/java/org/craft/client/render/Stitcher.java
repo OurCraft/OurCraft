@@ -1,16 +1,19 @@
 package org.craft.client.render;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
-import org.craft.maths.*;
-import org.craft.utils.*;
+import org.craft.maths.MathHelper;
+import org.craft.utils.ImageUtils;
+import org.craft.utils.Log;
+
+import com.google.common.collect.Lists;
 
 public class Stitcher
 {
-    private ArrayList<BufferedImage> imgs;
-    private ArrayList<Slot>          slots;
+    private List<BufferedImage> imgs;
+    private List<Slot>          slots;
     private int                      tileWidth;
     private int                      tileHeight;
     private BufferedImage            emptySlotImage;
@@ -19,8 +22,8 @@ public class Stitcher
     public Stitcher(BufferedImage emptyImage, boolean putInCorner)
     {
         this.emptySlotImage = emptyImage;
-        slots = new ArrayList<Slot>();
-        imgs = new ArrayList<BufferedImage>();
+        slots = Lists.newArrayList();
+        imgs = Lists.newArrayList();
         this.putInCorner = putInCorner;
         tileWidth = -1;
         tileHeight = -1;

@@ -182,7 +182,7 @@ public class Block implements IStackable
      * Called when a neighbor block is updated
      * @param visited : Positions already visited by a call on updateBlocks
      */
-    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
+    public void onBlockUpdate(World world, int x, int y, int z, List<Vector3> visited)
     {
         ;
     }
@@ -191,7 +191,7 @@ public class Block implements IStackable
      * Called when a neighbor block is updated
      * @param visited : Positions already visited by a call on updateBlocks
      */
-    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z, ArrayList<Vector3> visited)
+    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z, List<Vector3> visited)
     {
         onBlockUpdate(world, x, y, z, visited);
     }

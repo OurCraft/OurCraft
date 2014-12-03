@@ -7,7 +7,7 @@ import com.google.common.collect.*;
 public class CommandsDispatcher
 {
 
-    private ArrayList<OCommandMapping> commandMappings = new ArrayList<OCommandMapping>();
+    private List<OCommandMapping> commandMappings = Lists.newArrayList();
 
     public void registerCommand(AbstractCommand command, String... alias)
     {
@@ -21,7 +21,7 @@ public class CommandsDispatcher
 
     public Collection<String> getPrimaryAliases()
     {
-        ArrayList<String> list = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
         for(OCommandMapping mapping : commandMappings)
         {
             list.add(mapping.getPrimaryAlias());
@@ -31,7 +31,7 @@ public class CommandsDispatcher
 
     public Collection<String> getAliases()
     {
-        ArrayList<String> list = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
         for(OCommandMapping mapping : commandMappings)
         {
             list.addAll(mapping.getAllAliases());

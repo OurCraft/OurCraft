@@ -5,10 +5,12 @@ import java.util.*;
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
 
+import com.google.common.collect.Lists;
+
 public class GuiList<T extends GuiListSlot> extends GuiWidget
 {
 
-    private ArrayList<T> list;
+    private List<T> list;
     private int          scroll;
     private int          selectedIndex;
     private int          slotHeight;
@@ -23,7 +25,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         this.showScrollBar = true;
         this.slotHeight = slotHeight;
         selectedIndex = -1;
-        list = new ArrayList<T>();
+        list = Lists.newArrayList();
     }
 
     public void setScrollable(boolean scroll)

@@ -1,13 +1,14 @@
 package org.craft.utils;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
+
 
 public final class ArraysUtils
 {
 
     public static String[] trim(String[] split)
     {
-        ArrayList<String> strings = new ArrayList<String>();
+        java.util.List<String> strings = Lists.newArrayList();
         for(String s : split)
             if(s != null && !s.trim().equals(""))
                 strings.add(s);

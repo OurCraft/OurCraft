@@ -7,9 +7,11 @@ import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.modding.events.gui.*;
 
+import com.google.common.collect.Lists;
+
 public class GuiPanel extends GuiWidget
 {
-    protected ArrayList<GuiWidget> widgets;
+    protected List<GuiWidget> widgets;
     protected GuiWidget            selectedWidget;
     protected OurCraft             oc;
     protected FontRenderer         fontRenderer;
@@ -24,7 +26,7 @@ public class GuiPanel extends GuiWidget
     {
         super(id, x, y, w, h);
         this.fontRenderer = fontRenderer;
-        widgets = new ArrayList<GuiWidget>();
+        widgets = Lists.newArrayList();
         this.oc = oc;
     }
 

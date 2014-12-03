@@ -77,7 +77,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 byte[] bytes = writeClass(originalNode);
                 if(Dev.debug())
                 {
-                    ArrayList<String> methodNames = new ArrayList<String>();
+                    List<String> methodNames = Lists.newArrayList();
                     ClassReader debugReader = new ClassReader(bytes);
                     ClassNode debugNode = new ClassNode();
                     debugReader.accept(debugNode, 0);
