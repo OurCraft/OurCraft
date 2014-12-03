@@ -2,6 +2,8 @@ package org.craft.maths;
 
 import java.util.*;
 
+import com.google.common.collect.Lists;
+
 public class MathHelper
 {
 
@@ -58,7 +60,7 @@ public class MathHelper
     {
         Random rng = new Random(seed);
         int[] newArray = new int[perm.length];
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = Lists.newArrayList();
         for(int p : perm)
             list.add(p);
         Collections.shuffle(list, rng);

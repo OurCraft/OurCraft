@@ -57,7 +57,7 @@ public class BlockCable extends Block implements IPowerableBlock
         return true;
     }
 
-    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
+    public void onBlockUpdate(World world, int x, int y, int z, List<Vector3> visited)
     {
         EnumConnexionStates conState = handleConnections(world, x, y, z);
 

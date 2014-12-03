@@ -10,12 +10,14 @@ import org.craft.maths.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
+import com.google.common.collect.Lists;
+
 public class OpenGLBuffer
 {
 
     private int               vboID;
     private int               iboID;
-    private ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+    private List<Vertex> vertices;
     private TIntArrayList     indices  = new TIntArrayList();
     private int               verticesLength;
 
@@ -26,6 +28,7 @@ public class OpenGLBuffer
     {
         vboID = glGenBuffers();
         iboID = glGenBuffers();
+        vertices = Lists.newArrayList();
     }
 
     /**

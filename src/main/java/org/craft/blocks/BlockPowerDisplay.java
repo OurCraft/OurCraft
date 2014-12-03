@@ -22,7 +22,7 @@ public class BlockPowerDisplay extends Block implements IPowerableBlock
         w.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, "false"));
     }
 
-    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
+    public void onBlockUpdate(World world, int x, int y, int z, List<Vector3> visited)
     {
         int power = world.getDirectElectricPowerAt(x, y, z);
         world.setBlockState(x, y, z, BlockStates.powered, BlockStates.getValue(BlockStates.powered, power == 0 ? "false" : "true"));

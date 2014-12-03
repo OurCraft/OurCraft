@@ -4,11 +4,13 @@ import java.util.*;
 
 import org.craft.blocks.*;
 
+import com.google.common.collect.Lists;
+
 public class WorldGenerator
 {
 
     private long                       seed;
-    private ArrayList<IWorldPopulator> populators = new ArrayList<IWorldPopulator>();
+    private List<IWorldPopulator> populators = Lists.newArrayList();
     private Random                     rng;
 
     public WorldGenerator()

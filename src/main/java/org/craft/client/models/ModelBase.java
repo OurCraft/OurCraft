@@ -2,17 +2,19 @@ package org.craft.client.models;
 
 import java.util.*;
 
+import com.google.common.collect.Lists;
+
 /**
  * UNDOCUMENTED: System far from being done and/or even kept
  */
 public class ModelBase
 {
 
-    private ArrayList<ModelBox> boxes = new ArrayList<ModelBox>();
+    private List<ModelBox> boxes;
 
     public ModelBase()
     {
-
+        boxes = Lists.newArrayList();
     }
 
     public ModelBox addBox(float x, float y, float z, float width, float height, float depth)

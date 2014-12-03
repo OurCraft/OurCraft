@@ -13,8 +13,8 @@ public abstract class AddonContainer<T extends Annotation>
 
     private T                addonAnnot;
     private Object           addonInstance;
-    private ArrayList<Block> addonBlocks;
-    private ArrayList<Item>  addonItems;
+    private List<Block> addonBlocks;
+    private List<Item>  addonItems;
 
     public AddonContainer(T addonAnnot, Object instance)
     {

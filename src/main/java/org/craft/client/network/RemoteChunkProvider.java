@@ -6,17 +6,19 @@ import org.craft.client.*;
 import org.craft.network.packets.*;
 import org.craft.world.*;
 
+import com.google.common.collect.Lists;
+
 public class RemoteChunkProvider extends ChunkProvider
 {
 
     private ChunkMap              chunkMap;
-    private ArrayList<ChunkCoord> pending;
+    private List<ChunkCoord> pending;
     private OurCraft              game;
 
     public RemoteChunkProvider()
     {
         this.game = OurCraft.getOurCraft();
-        this.pending = new ArrayList<ChunkCoord>();
+        this.pending = Lists.newArrayList();
         chunkMap = new ChunkMap();
     }
 

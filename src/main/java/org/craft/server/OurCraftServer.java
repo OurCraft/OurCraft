@@ -38,7 +38,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
     private EventBus                       eventBus;
     private int                            maxPlayers;
 
-    private ArrayList<Player>              onlinePlayers;
+    private List<Player>              onlinePlayers;
     private AddonsLoader                   addonsLoader;
     private boolean                        nogui;
     private ServerGui                      serverGui;
@@ -69,7 +69,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         EnumVanillaGuis.register(guiMap, NetworkSide.SERVER);
         instance = this;
         assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
-        onlinePlayers = new ArrayList<Player>();
+        onlinePlayers = Lists.newArrayList();
         this.maxPlayers = maxPlayers;
         WorldGenerator gen = new WorldGenerator();
         gen.addPopulator(new RockPopulator());

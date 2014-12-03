@@ -8,14 +8,16 @@ import org.craft.modding.events.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
 
+import com.google.common.collect.Lists;
+
 public class LuaEventBusListener implements IEventBusListener
 {
 
-    private ArrayList<LuaEventListener> listeners;
+    private List<LuaEventListener> listeners;
 
     public LuaEventBusListener()
     {
-        listeners = new ArrayList<LuaEventListener>();
+        listeners = Lists.newArrayList();
     }
 
     @Override

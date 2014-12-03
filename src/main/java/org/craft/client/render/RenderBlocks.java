@@ -185,7 +185,7 @@ public class RenderBlocks
                         }
                         else
                         {
-                            ArrayList<BlockRenderInfos> infosList = new ArrayList<RenderBlocks.BlockRenderInfos>();
+                            List<BlockRenderInfos> infosList = Lists.newArrayList();
                             for(int x = 0; x < 16; x++ )
                             {
                                 for(int y = 0; y < 16; y++ )

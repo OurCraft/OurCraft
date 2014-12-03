@@ -2,18 +2,20 @@ package org.craft.client.models;
 
 import java.util.*;
 
+import com.google.common.collect.Lists;
+
 public class Model
 {
 
     private HashMap<String, String> textures;
-    private ArrayList<ModelElement> elements;
+    private List<ModelElement> elements;
     private String                  name;
 
     public Model(String name)
     {
         this.name = name;
         textures = new HashMap<String, String>();
-        elements = new ArrayList<ModelElement>();
+        elements = Lists.newArrayList();
     }
 
     /**

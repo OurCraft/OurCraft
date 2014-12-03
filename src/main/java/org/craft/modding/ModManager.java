@@ -2,6 +2,8 @@ package org.craft.modding;
 
 import java.util.*;
 
+import com.google.common.collect.Lists;
+
 public class ModManager implements IAddonManager
 {
 
@@ -23,7 +25,7 @@ public class ModManager implements IAddonManager
     @Override
     public Collection<AddonContainer> getAddons()
     {
-        ArrayList<AddonContainer> containers = new ArrayList<AddonContainer>();
+        List<AddonContainer> containers = Lists.newArrayList();
         for(ModContainer plugin : mods.values())
         {
             containers.add((AddonContainer) plugin);

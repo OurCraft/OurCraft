@@ -2,6 +2,8 @@ package org.craft.blocks;
 
 import java.util.*;
 
+import com.google.common.collect.Lists;
+
 public final class Blocks
 {
 
@@ -21,14 +23,14 @@ public final class Blocks
     // ONLY FOR TESTING
     public static Block                        dirtSlab;
     public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
-    private static ArrayList<Block>            blockByID;
+    private static List<Block>            blockByID;
 
     /**
      * Registers all blocks of the game
      */
     public static void init()
     {
-        blockByID = new ArrayList<Block>();
+        blockByID = Lists.newArrayList();
         register(air = new BlockAir());
         register(dirt = new Block("dirt"));
         register(grass = new Block("grass"));

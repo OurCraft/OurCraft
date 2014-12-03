@@ -50,7 +50,7 @@ public class ModelLoader
      */
     public List<BlockVariant> loadBlockVariants(AbstractResource variantFile, IconGenerator blockMap) throws Exception
     {
-        ArrayList<BlockVariant> variants = Lists.newArrayList();
+        List<BlockVariant> variants = Lists.newArrayList();
         String rawJsonData = new String(variantFile.getData(), "UTF-8");
         JsonObject data = gson.fromJson(rawJsonData, JsonObject.class);
         JsonObject variantsObject = data.get("variants").getAsJsonObject();
@@ -67,8 +67,8 @@ public class ModelLoader
                 {
                         entry.getKey()
                 };
-            ArrayList<BlockState> states = new ArrayList<BlockState>();
-            ArrayList<IBlockStateValue> values = new ArrayList<IBlockStateValue>();
+            List<BlockState> states = Lists.newArrayList();
+            List<IBlockStateValue> values = Lists.newArrayList();
             for(String condition : conditions)
             {
                 String[] split = condition.split("=");
