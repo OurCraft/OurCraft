@@ -2,7 +2,6 @@ package org.craft.spoonge.tests;
 
 import com.google.common.base.*;
 
-import org.craft.spoonge.util.text.*;
 import org.slf4j.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
@@ -48,11 +47,8 @@ public class SpoongeTestPlugin
             builder.stay(2000);
             builder.fadeIn(5000);
             builder.fadeOut(5000);
-            //            builder.title(Messages.of("Main title from a Sponge plugin"));
-            //            builder.subtitle(Messages.of("Subtitle from a Sponge plugin"));
-            MessageBuilder<String> messageBuilder = new SpoongeMessageBuilder<String>();
-            builder.title(messageBuilder.content("Main title from a Sponge plugin").build());
-            builder.subtitle(messageBuilder.content("Subtitle from a Sponge plugin").build());
+            builder.title(Messages.of("Main title from a Sponge plugin"));
+            builder.subtitle(Messages.of("Subtitle from a Sponge plugin"));
             builder.build();
         }
     }

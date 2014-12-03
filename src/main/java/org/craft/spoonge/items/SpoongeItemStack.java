@@ -4,6 +4,7 @@ import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.items.*;
 import org.craft.modding.modifiers.*;
+import org.craft.spoonge.text.*;
 import org.craft.spoonge.util.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.item.*;

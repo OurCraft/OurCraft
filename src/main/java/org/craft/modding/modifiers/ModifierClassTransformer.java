@@ -77,7 +77,7 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                 byte[] bytes = writeClass(originalNode);
                 if(Dev.debug())
                 {
-                    ArrayList<String> methodNames = new ArrayList<String>();
+                    List<String> methodNames = Lists.newArrayList();
                     ClassReader debugReader = new ClassReader(bytes);
                     ClassNode debugNode = new ClassNode();
                     debugReader.accept(debugNode, 0);
@@ -93,6 +93,23 @@ public class ModifierClassTransformer implements IClassTransformer, Opcodes
                             methodNames.add(mNode.name);
                         Log.message(">> Method at end: " + mNode.access + " " + mNode.desc + " " + mNode.name + " signature: " + mNode.signature);
                     }
+                    File classFile = new File(Dev.getFolder(), "classes/original/" + transformedName.replace(".", "/") + ".class");
+                    if(!classFile.getParentFile().exists())
+                        classFile.getParentFile().mkdirs();
+                    classFile.createNewFile();
+                    FileOutputStream originalOut = new FileOutputStream(classFile);
+                    originalOut.write(classBytes);
+                    originalOut.flush();
+                    originalOut.close();
+
+                    File modifiedClass = new File(Dev.getFolder(), "classes/modified/" + transformedName.replace(".", "/") + ".class");
+                    if(!modifiedClass.getParentFile().exists())
+                        modifiedClass.getParentFile().mkdirs();
+                    modifiedClass.createNewFile();
+                    FileOutputStream modifiedOut = new FileOutputStream(modifiedClass);
+                    modifiedOut.write(bytes);
+                    modifiedOut.flush();
+                    modifiedOut.close();
                 }
 
                 Log.message("Succesfully modified " + originalNode.name + " using " + modifierNode.name);

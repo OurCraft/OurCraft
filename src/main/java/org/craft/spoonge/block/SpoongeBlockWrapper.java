@@ -6,9 +6,14 @@ import com.flowpowered.math.vector.*;
 import com.google.common.base.Optional;
 
 import org.craft.blocks.*;
+import org.craft.blocks.states.*;
 import org.craft.spoonge.modifiers.*;
+import org.craft.spoonge.util.*;
+import org.craft.spoonge.world.*;
+import org.craft.utils.*;
 import org.craft.world.World;
 import org.spongepowered.api.block.*;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.item.inventory.*;
 import org.spongepowered.api.util.*;
 import org.spongepowered.api.world.*;
@@ -23,6 +28,8 @@ public class SpoongeBlockWrapper implements BlockLoc
     private int      z;
     private World    world;
     private Vector3i pos;
+    private Location location;
+    private Extent   extent;
 
     public SpoongeBlockWrapper(Block block, int x, int y, int z, World world)
     {
@@ -32,6 +39,8 @@ public class SpoongeBlockWrapper implements BlockLoc
         this.z = z;
         this.pos = new Vector3i(x, y, z);
         this.world = world;
+        extent = new SpoongeExtent();
+        this.location = new Location(extent, new Vector3d(x, y, z));
     }
 
     @Override
@@ -43,29 +52,34 @@ public class SpoongeBlockWrapper implements BlockLoc
     @Override
     public boolean isPowered()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return world.getDirectElectricPowerAt(x, y, z) != 0;
     }
 
     @Override
     public boolean isIndirectlyPowered()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return isPowered();
     }
 
     @Override
     public boolean isFacePowered(Direction direction)
     {
-        // TODO Auto-generated method stub
+        EnumSide side = DirectionUtils.fromDirection(direction);
+        int x1 = side.getTranslationX() + x;
+        int y1 = side.getTranslationY() + y;
+        int z1 = side.getTranslationZ() + z;
+        IBlockStateValue value = world.getBlockState(x1, y1, z1, BlockStates.powered);
+        if(value != null)
+        {
+            return value.toString().equals("true");
+        }
         return false;
     }
 
     @Override
     public boolean isFaceIndirectlyPowered(Direction direction)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return isFacePowered(direction);
     }
 
     @Override
@@ -84,29 +98,25 @@ public class SpoongeBlockWrapper implements BlockLoc
     @Override
     public byte getLuminance()
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public byte getLuminanceFromSky()
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public byte getLuminanceFromGround()
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public Extent getExtent()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return extent;
     }
 
     @Override
@@ -118,8 +128,7 @@ public class SpoongeBlockWrapper implements BlockLoc
     @Override
     public Location getLocation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return location;
     }
 
     @Override
@@ -155,14 +164,13 @@ public class SpoongeBlockWrapper implements BlockLoc
     @Override
     public void interact()
     {
-        implBlock.onBlockClicked(world, x, y, z, null);
+        interactWith(null);
     }
 
     @Override
     public void interactWith(ItemStack itemStack)
     {
-        implBlock.onBlockClicked(world, x, y, z, null);
-        // TODO: ItemStack
+        implBlock.onBlockClicked(world, x, y, z, null, (org.craft.inventory.Stack) itemStack);
     }
 
     @Override
@@ -174,7 +182,7 @@ public class SpoongeBlockWrapper implements BlockLoc
     @Override
     public Collection<Direction> getPoweredFaces()
     {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 

@@ -120,12 +120,15 @@ public class ASMEventListener implements IEventListener, Opcodes
             cache.put(callback, ret);
             if(Dev.debug())
             {
-                File file = new File(Dev.getFolder(), desc.replace("/", "_") + ".class");
-                FileOutputStream out = new FileOutputStream(file);
-                out.write(bytes);
-                out.flush();
-                out.close();
-                Log.message("Wrote output to " + file.getPath());
+                File classFile = new File(Dev.getFolder(), "classes/events/" + desc + ".class");
+                if(!classFile.getParentFile().exists())
+                    classFile.getParentFile().mkdirs();
+                classFile.createNewFile();
+                FileOutputStream originalOut = new FileOutputStream(classFile);
+                originalOut.write(bytes);
+                originalOut.flush();
+                originalOut.close();
+                Log.message("Wrote output to " + classFile.getPath());
             }
             return ret;
         }

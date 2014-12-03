@@ -182,7 +182,7 @@ public class Block implements IStackable
      * Called when a neighbor block is updated
      * @param visited : Positions already visited by a call on updateBlocks
      */
-    public void onBlockUpdate(World world, int x, int y, int z, ArrayList<Vector3> visited)
+    public void onBlockUpdate(World world, int x, int y, int z, List<Vector3> visited)
     {
         ;
     }
@@ -191,7 +191,7 @@ public class Block implements IStackable
      * Called when a neighbor block is updated
      * @param visited : Positions already visited by a call on updateBlocks
      */
-    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z, ArrayList<Vector3> visited)
+    public void onBlockUpdateFromNeighbor(World world, int x, int y, int z, List<Vector3> visited)
     {
         onBlockUpdate(world, x, y, z, visited);
     }
@@ -217,9 +217,10 @@ public class Block implements IStackable
      * @param y Coordinate of Y axis of the event
      * @param z Coordinate of Z axis of the event
      * @param player The player who created the event, Warning: Might be <code>null</code>!!
+     * @param heldStack The item stack held by the player, might be null!
      * @return true if the block performs an action when clicking on it and cancels block placement if any scheduled. false otherwise.
      */
-    public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
+    public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player, org.craft.inventory.Stack heldStack)
     {
         return false;
     }

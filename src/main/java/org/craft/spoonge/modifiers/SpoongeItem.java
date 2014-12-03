@@ -1,6 +1,7 @@
 package org.craft.spoonge.modifiers;
 
 import org.craft.modding.modifiers.*;
+import org.craft.spoonge.text.*;
 import org.craft.spoonge.util.*;
 import org.spongepowered.api.item.*;
 import org.spongepowered.api.text.translation.*;

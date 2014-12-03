@@ -88,7 +88,7 @@ public class LocalPlayerController extends PlayerController
         if(infos.type == CollisionType.BLOCK)
         {
             Block b = player.worldObj.getBlockAt((int) Math.floor(infos.x), (int) Math.floor(infos.y), (int) Math.floor(infos.z));
-            if(b != null && b.onBlockClicked(player.worldObj, (int) Math.floor(infos.x), (int) Math.floor(infos.y), (int) Math.floor(infos.z), player))
+            if(b != null && b.onBlockClicked(player.worldObj, (int) Math.floor(infos.x), (int) Math.floor(infos.y), (int) Math.floor(infos.z), player, player.getHeldItem()))
                 return;
         }
         if(s != null)

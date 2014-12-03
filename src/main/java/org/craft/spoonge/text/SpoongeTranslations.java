@@ -1,4 +1,4 @@
-package org.craft.spoonge.util;
+package org.craft.spoonge.text;
 
 import java.util.*;
 

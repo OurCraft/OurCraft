@@ -3,6 +3,7 @@ package org.craft.blocks;
 import org.craft.*;
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
+import org.craft.inventory.*;
 import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -52,7 +53,8 @@ public class BlockPowerSource extends Block implements IPowerableBlock
         world.updateBlockNeighbors(x, y, z, false);
     }
 
-    public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player)
+    @Override
+    public boolean onBlockClicked(World world, int x, int y, int z, EntityPlayer player, Stack heldStack)
     {
         player.openMenu(OurCraftInstance.REGISTRIES_ID, EnumVanillaGuis.POWER_SOURCE_MODIFIER.id());
         return true;

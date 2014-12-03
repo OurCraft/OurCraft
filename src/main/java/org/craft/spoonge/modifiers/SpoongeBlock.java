@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.craft.blocks.states.*;
 import org.craft.modding.modifiers.*;
+import org.craft.spoonge.text.*;
 import org.craft.spoonge.util.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.block.BlockState;
