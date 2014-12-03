@@ -30,7 +30,7 @@ import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
-import org.craft.spongeimpl.game.*;
+import org.craft.spoonge.game.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.Log.NonLoggable;
@@ -69,7 +69,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private OpenGLBuffer                   selectionBoxBuffer;
     private DiskSimpleResourceLoader       gameFolderLoader;
     private PlayerController               playerController;
-    private SpongeGameRegistry             gameRegistry;
+    private SpoongeGameRegistry             gameRegistry;
     private EventBus                       eventBus;
     private Session                        session;
     private RenderItems                    renderItems;

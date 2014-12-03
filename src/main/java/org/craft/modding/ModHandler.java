@@ -4,7 +4,7 @@ import java.io.*;
 
 import org.craft.*;
 import org.craft.modding.events.*;
-import org.craft.spongeimpl.plugin.*;
+import org.craft.spoonge.plugin.*;
 import org.craft.utils.*;
 import org.slf4j.*;
 

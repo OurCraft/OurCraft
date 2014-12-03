@@ -20,8 +20,8 @@ import org.craft.network.packets.*;
 import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
-import org.craft.spongeimpl.events.state.*;
-import org.craft.spongeimpl.game.*;
+import org.craft.spoonge.events.state.*;
+import org.craft.spoonge.game.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
@@ -34,7 +34,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
 
     private static OurCraftServer          instance;
     private NettyServerWrapper             serverWrapper;
-    private SpongeGameRegistry             gameRegistry;
+    private SpoongeGameRegistry             gameRegistry;
     private EventBus                       eventBus;
     private int                            maxPlayers;
 
@@ -133,7 +133,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
-        eventBus.fireEvent(new SpongeServerAboutToStartEvent(this), null, null);
+        eventBus.fireEvent(new SpoongeServerAboutToStartEvent(this), null, null);
         new Thread(serverWrapper).start();
 
         eventBus.fireEvent(new ModPostInitEvent(this), null, null);
