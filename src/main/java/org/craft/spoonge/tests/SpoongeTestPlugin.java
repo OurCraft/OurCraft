@@ -1,8 +1,7 @@
 package org.craft.spoonge.tests;
 
-import com.google.common.base.*;
-
 import org.slf4j.*;
+import org.spongepowered.api.event.block.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 import org.spongepowered.api.plugin.*;
@@ -40,17 +39,13 @@ public class SpoongeTestPlugin
     public void onWorldLoad(WorldLoadEvent evt)
     {
         logger.debug("SpongeLoading world " + evt.getWorld().getName());
-        Optional<TitleBuilder> service = evt.getGame().getServiceManager().provide(TitleBuilder.class);
-        if(service.isPresent())
-        {
-            TitleBuilder builder = service.get();
-            builder.stay(2000);
-            builder.fadeIn(5000);
-            builder.fadeOut(5000);
-            builder.title(Messages.of("Main title from a Sponge plugin"));
-            builder.subtitle(Messages.of("Subtitle from a Sponge plugin"));
-            builder.build();
-        }
+        TitleBuilder builder = Titles.builder();
+        builder.stay(2000);
+        builder.fadeIn(5000);
+        builder.fadeOut(5000);
+        builder.title(Messages.of("Main title from a Sponge plugin"));
+        builder.subtitle(Messages.of("Subtitle from a Sponge plugin"));
+        builder.build();
     }
 
     @Subscribe
@@ -70,4 +65,19 @@ public class SpoongeTestPlugin
         logger.info("TextStyles's UNDERLINED Name: " + TextStyles.UNDERLINE.getName());
         logger.info("TextStyles's BOLD Name: " + TextStyles.BOLD.getName());
     }
+
+    @Subscribe
+    public void onBlockChange(BlockChangeEvent evt)
+    {
+        logger.info("Block changed: " + evt.getBlock().getState().getType().getId());
+        logger.info("Block that will remplace it: " + evt.getReplacementBlock().getState().getType().getId());
+    }
+
+    @Subscribe
+    public void onBlockUpdate(BlockUpdateEvent evt)
+    {
+        logger.info("Block to update: " + evt.getBlock().getState().getType().getId());
+        logger.info("Block that updated it: " + evt.getCauseBlockType().getId());
+    }
+
 }

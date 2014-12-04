@@ -7,13 +7,13 @@ import com.google.common.base.*;
 import org.craft.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.spoonge.events.*;
 import org.craft.spoonge.events.state.*;
 import org.craft.spoonge.events.world.*;
 import org.craft.spoonge.plugin.*;
 import org.craft.spoonge.service.*;
 import org.craft.spoonge.service.command.*;
 import org.craft.spoonge.util.scheduler.*;
-import org.craft.spoonge.util.title.*;
 import org.craft.utils.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.Platform;
@@ -22,17 +22,16 @@ import org.spongepowered.api.service.*;
 import org.spongepowered.api.service.command.*;
 import org.spongepowered.api.service.event.*;
 import org.spongepowered.api.service.scheduler.*;
-import org.spongepowered.api.text.title.*;
 import org.spongepowered.api.util.event.*;
 import org.spongepowered.api.world.*;
 
-@Mod(id = "spongeimpl", version = "1.0", name = "Sponge implementation")
+@Mod(id = "spoonge", version = "1.0", name = "Sponge implementation")
 public class SpoongeMod implements Game
 {
 
-    @Instance("spongeimpl")
+    @Instance("spoonge")
     public static SpoongeMod          instance;
-    private SpoongePluginManager       pluginManager;
+    private SpoongePluginManager      pluginManager;
     private OurCraftInstance          gameInstance;
     private SpoongeEventManager       eventManager;
     private GameRegistry              gameRegistry;
@@ -59,7 +58,6 @@ public class SpoongeMod implements Game
         try
         {
             serviceManager.setProvider(this, CommandService.class, commandDispatcher);
-            serviceManager.setProvider(this, TitleBuilder.class, new SpoongeTitleBuilder());
         }
         catch(ProviderExistsException e)
         {
@@ -80,6 +78,8 @@ public class SpoongeMod implements Game
         addonsLoader.exclude(Mod.class);
         addonsLoader.loadAll(pluginsFolder);
         addonsLoader.exclude();
+
+        gameInstance.getEventBus().register(new SpoongeBlockEventsListener(this));
     }
 
     @OurModEventHandler

@@ -4,10 +4,12 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
+import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
+import org.craft.modding.events.block.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 
@@ -66,16 +68,16 @@ public class World
         }
     }
 
-    private LinkedList<Entity>              entities;
+    private LinkedList<Entity>         entities;
     private List<Entity>               spawingQueue;
-    private ChunkProvider                   chunkProvider;
-    private WorldGenerator                  generator;
-    private String                          name;
-    private WorldLoader                     worldLoader;
-    public boolean                          isRemote;
-    private Random                          rng;
-    private long                            tick;
-    private float                           gravity;
+    private ChunkProvider              chunkProvider;
+    private WorldGenerator             generator;
+    private String                     name;
+    private WorldLoader                worldLoader;
+    public boolean                     isRemote;
+    private Random                     rng;
+    private long                       tick;
+    private float                      gravity;
     private List<BlockUpdateScheduler> schedulers;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
@@ -192,6 +194,8 @@ public class World
         {
             return;
         }
+        Block oldBlock = c.getBlock(this, x, y, z);
+        CommonHandler.getCurrentInstance().getEventBus().fireEvent(new ModBlockChangeEvent(CommonHandler.getCurrentInstance(), this, x, y, z, oldBlock, block));
         c.setBlock(this, x, y, z, block);
         c.markDirty();
         if(notify)
@@ -373,7 +377,7 @@ public class World
         return null;
     }
 
-    public boolean updateBlock(int x, int y, int z, boolean force, List<Vector3> visited)
+    public boolean updateBlock(int x, int y, int z, boolean force, List<Vector3> visited, Block from)
     {
         boolean disposeList = false;
         if(visited == null)
@@ -388,7 +392,8 @@ public class World
             if(!visited.contains(posVec) || force)
             {
                 visited.add(posVec);
-                b.onBlockUpdate(this, x, y, z, visited);
+                if(!CommonHandler.getCurrentInstance().getEventBus().fireEvent(new ModBlockUpdateEvent(CommonHandler.getCurrentInstance(), this, x, y, z, b, from)))
+                    b.onBlockUpdate(this, x, y, z, visited);
             }
             return true;
         }
@@ -416,7 +421,7 @@ public class World
         return false;
     }
 
-    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force, List<Vector3> visited)
+    protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force, List<Vector3> visited, Block from)
     {
         Block b = getBlockAt(x, y, z);
         if(b != null)
@@ -425,7 +430,8 @@ public class World
             if(!visited.contains(posVec) || force)
             {
                 visited.add(posVec);
-                b.onBlockUpdateFromNeighbor(this, x, y, z, visited);
+                if(!CommonHandler.getCurrentInstance().getEventBus().fireEvent(new ModBlockUpdateEvent(CommonHandler.getCurrentInstance(), this, x, y, z, b, from)))
+                    b.onBlockUpdateFromNeighbor(this, x, y, z, visited);
             }
             return true;
         }
@@ -440,7 +446,7 @@ public class World
             disposeList = true;
             visited = Lists.newArrayList();
         }
-        updateBlock(x, y, z, force, visited);
+        updateBlock(x, y, z, force, visited, getBlockAt(x, y, z));
         updateBlockNeighbors(x, y, z, force, visited);
         if(disposeList)
         {
@@ -457,18 +463,19 @@ public class World
 
     public void updateBlockNeighbors(int x, int y, int z, boolean force, List<Vector3> visited)
     {
+        Block from = getBlockAt(x, y, z);
         boolean disposeList = false;
         if(visited == null)
         {
             visited = Lists.newArrayList();
             disposeList = true;
         }
-        updateBlockFromNeighbor(x, y, z + 1, force, visited);
-        updateBlockFromNeighbor(x, y, z - 1, force, visited);
-        updateBlockFromNeighbor(x, y + 1, z, force, visited);
-        updateBlockFromNeighbor(x, y - 1, z, force, visited);
-        updateBlockFromNeighbor(x + 1, y, z, force, visited);
-        updateBlockFromNeighbor(x - 1, y, z, force, visited);
+        updateBlockFromNeighbor(x, y, z + 1, force, visited, from);
+        updateBlockFromNeighbor(x, y, z - 1, force, visited, from);
+        updateBlockFromNeighbor(x, y + 1, z, force, visited, from);
+        updateBlockFromNeighbor(x, y - 1, z, force, visited, from);
+        updateBlockFromNeighbor(x + 1, y, z, force, visited, from);
+        updateBlockFromNeighbor(x - 1, y, z, force, visited, from);
         if(disposeList)
         {
             for(Vector3 v : visited)

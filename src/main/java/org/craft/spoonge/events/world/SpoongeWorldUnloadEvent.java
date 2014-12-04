@@ -2,7 +2,6 @@ package org.craft.spoonge.events.world;
 
 import org.craft.*;
 import org.spongepowered.api.event.world.*;
-import org.spongepowered.api.util.event.callback.*;
 import org.spongepowered.api.world.*;
 
 public class SpoongeWorldUnloadEvent extends SpoongeWorldEvent implements WorldUnloadEvent
@@ -17,13 +16,6 @@ public class SpoongeWorldUnloadEvent extends SpoongeWorldEvent implements WorldU
     public boolean isCancellable()
     {
         return false;
-    }
-
-    @Override
-    public CallbackList getCallbacks()
-    {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

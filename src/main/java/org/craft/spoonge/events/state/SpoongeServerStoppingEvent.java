@@ -2,7 +2,6 @@ package org.craft.spoonge.events.state;
 
 import org.craft.*;
 import org.spongepowered.api.event.state.*;
-import org.spongepowered.api.util.event.callback.*;
 
 public class SpoongeServerStoppingEvent extends SpoongeStateEvent implements ServerStoppingEvent
 {
@@ -17,12 +16,4 @@ public class SpoongeServerStoppingEvent extends SpoongeStateEvent implements Ser
     {
         return false;
     }
-
-    @Override
-    public CallbackList getCallbacks()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

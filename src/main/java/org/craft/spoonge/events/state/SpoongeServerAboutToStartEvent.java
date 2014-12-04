@@ -18,11 +18,4 @@ public class SpoongeServerAboutToStartEvent extends SpoongeStateEvent implements
         return false;
     }
 
-    @Override
-    public CallbackList getCallbacks()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

@@ -1,116 +1,48 @@
 package org.craft.client;
 
-import static org.lwjgl.opengl.GL11.GL_ALPHA_TEST;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_COLOR_LOGIC_OP;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_LINES;
-import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_XOR;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glGetError;
-import static org.lwjgl.opengl.GL11.glLogicOp;
-import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.util.glu.GLU.gluErrorString;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.*;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.nio.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
-import org.craft.CommonHandler;
-import org.craft.EnumVanillaGuis;
-import org.craft.GuiDispatcher;
-import org.craft.OurCraftInstance;
-import org.craft.blocks.Block;
-import org.craft.blocks.Blocks;
-import org.craft.blocks.states.BlockStates;
-import org.craft.client.gui.Gui;
-import org.craft.client.gui.GuiMainMenu;
-import org.craft.client.gui.GuiPauseMenu;
-import org.craft.client.gui.ScreenTitle;
-import org.craft.client.models.ModelLoader;
-import org.craft.client.network.ClientNetHandler;
-import org.craft.client.render.OpenGLBuffer;
-import org.craft.client.render.RenderBlocks;
-import org.craft.client.render.RenderEngine;
-import org.craft.client.render.RenderItems;
-import org.craft.client.render.Vertex;
-import org.craft.client.render.entity.FallbackRender;
-import org.craft.client.render.fonts.BaseFontRenderer;
-import org.craft.client.render.fonts.FontRenderer;
-import org.craft.client.render.fonts.TrueTypeFontRenderer;
-import org.craft.client.sound.SoundEngine;
-import org.craft.entity.Entity;
-import org.craft.entity.EntityPlayer;
-import org.craft.items.Item;
-import org.craft.items.Items;
-import org.craft.maths.AABB;
-import org.craft.maths.Matrix4;
-import org.craft.maths.Quaternion;
-import org.craft.maths.Vector2;
-import org.craft.maths.Vector3;
-import org.craft.modding.AddonContainer;
-import org.craft.modding.AddonsLoader;
-import org.craft.modding.OurModEventHandler;
-import org.craft.modding.events.EventBus;
-import org.craft.modding.events.ModEvent;
-import org.craft.modding.events.ModInitEvent;
-import org.craft.modding.events.ModPostInitEvent;
-import org.craft.modding.events.WorldLoadEvent;
-import org.craft.modding.events.WorldUnloadEvent;
-import org.craft.network.AbstractPacket;
-import org.craft.network.NetworkSide;
-import org.craft.network.PacketRegistry;
-import org.craft.resources.AssetLoader;
-import org.craft.resources.ClasspathSimpleResourceLoader;
-import org.craft.resources.DiskSimpleResourceLoader;
-import org.craft.resources.ResourceLoader;
-import org.craft.resources.ResourceLocation;
-import org.craft.resources.ZipSimpleResourceLoader;
-import org.craft.spoonge.game.SpoongeGameRegistry;
-import org.craft.utils.CollisionInfos;
+import com.google.common.collect.*;
+
+import org.craft.*;
+import org.craft.blocks.*;
+import org.craft.blocks.states.*;
+import org.craft.client.gui.*;
+import org.craft.client.models.*;
+import org.craft.client.network.*;
+import org.craft.client.render.*;
+import org.craft.client.render.entity.*;
+import org.craft.client.render.fonts.*;
+import org.craft.client.sound.*;
+import org.craft.entity.*;
+import org.craft.items.*;
+import org.craft.maths.*;
+import org.craft.modding.*;
+import org.craft.modding.events.*;
+import org.craft.network.*;
+import org.craft.resources.*;
+import org.craft.spoonge.game.*;
+import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
-import org.craft.utils.ImageUtils;
-import org.craft.utils.Log;
 import org.craft.utils.Log.NonLoggable;
-import org.craft.utils.Session;
-import org.craft.utils.SessionManager;
-import org.craft.utils.SystemUtils;
-import org.craft.utils.crash.CrashReport;
-import org.craft.world.Chunk;
-import org.craft.world.World;
-import org.craft.world.WorldLoader;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.openal.AL;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
+import org.craft.utils.crash.*;
+import org.craft.world.*;
+import org.lwjgl.*;
+import org.lwjgl.input.*;
+import org.lwjgl.openal.*;
+import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
-import org.lwjgl.opengl.PixelFormat;
-import org.spongepowered.api.GameRegistry;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.spongepowered.api.*;
 
 public class OurCraft implements Runnable, OurCraftInstance
 {
@@ -138,7 +70,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private OpenGLBuffer                   selectionBoxBuffer;
     private DiskSimpleResourceLoader       gameFolderLoader;
     private PlayerController               playerController;
-    private SpoongeGameRegistry             gameRegistry;
+    private SpoongeGameRegistry            gameRegistry;
     private EventBus                       eventBus;
     private Session                        session;
     private RenderItems                    renderItems;
@@ -164,6 +96,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private ModelLoader                    modelLoader;
     private HashMap<String, GuiDispatcher> guiMap;
     private ScreenTitle                    screenTitle;
+    private ParticleRenderer               particleRenderer;
 
     public OurCraft()
     {
@@ -261,6 +194,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             PacketRegistry.init();
             I18n.init(assetsLoader);
             I18n.setCurrentLanguage(settings.lang.getValue());
+            ParticleRegistry.init();
             eventBus.fireEvent(new ModInitEvent(this), null, null);
 
             modelLoader = new ModelLoader();
@@ -268,6 +202,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             renderItems = new RenderItems(renderEngine, modelLoader);
             renderEngine.createBlockAndItemMap(renderBlocks, renderItems);
             fallbackRenderer = new FallbackRender<Entity>();
+            particleRenderer = new ParticleRenderer(20000);
             openMenu(new GuiMainMenu(this));
 
             loadCrosshairBuffer();
@@ -447,6 +382,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         {
             objectInFront = player.getObjectInFront(5f);
         }
+        particleRenderer.updateAll();
         if(newMenu != currentMenu)
         {
             currentMenu = newMenu;
@@ -513,7 +449,24 @@ public class OurCraft implements Runnable, OurCraftInstance
                 if(!state)
                 {
                     currentMenu.keyPressed(id, c);
-                    if(id == Keyboard.KEY_F2)
+                    if(id == Keyboard.KEY_P)
+                    {
+                        float r = 5f;
+                        for(int s = 0; s < 360; s += 20)
+                        {
+                            for(int t = 0; t < 360; t += 20)
+                            {
+                                float x = (float) player.getX() + 0.5f;
+                                float y = (float) player.getY() + 0.5f;
+                                float z = (float) player.getZ() + 0.5f;
+                                x += r * Math.cos(Math.toRadians(s)) * Math.sin(Math.toRadians(t)) + Math.random();
+                                y += r * Math.sin(Math.toRadians(s)) * Math.sin(Math.toRadians(t)) + Math.random();
+                                z += r * Math.cos(Math.toRadians(t)) + Math.random();
+                                particleRenderer.spawnParticle("test", x, y, z);
+                            }
+                        }
+                    }
+                    else if(id == Keyboard.KEY_F2)
                     {
                         File out = new File(SystemUtils.getGameFolder(), "screenshots/" + System.currentTimeMillis() + ".png");
                         try
@@ -634,6 +587,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         renderEngine.switchToPerspective();
         if(clientWorld != null)
         {
+            particleRenderer.renderAll(renderEngine);
             renderWorld(visiblesChunks, delta, drawGui);
             if(player != null)
             {
