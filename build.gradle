@@ -30,6 +30,10 @@ apply plugin: 'idea'
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'sonatype-nexus'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
 }
 
 task wrapper(type: Wrapper) {
