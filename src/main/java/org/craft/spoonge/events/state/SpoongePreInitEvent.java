@@ -29,28 +29,5 @@ public class SpoongePreInitEvent extends SpoongeStateEvent implements PreInitial
         return false;
     }
 
-    @Override
-    public Logger getPluginLog()
-    {
-        return pluginLogger;
-    }
-
-    @Override
-    public File getRecommendedConfigurationFile()
-    {
-        return configFile;
-    }
-
-    @Override
-    public File getRecommendedConfigurationDirectory()
-    {
-        return suggestedConfigDir;
-    }
-
-    @Override
-    public File getConfigurationDirectory()
-    {
-        return configDir;
-    }
 
 }

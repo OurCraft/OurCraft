@@ -24,8 +24,9 @@ public class SpoongeTestPlugin
     @Subscribe
     public void onPreInit(PreInitializationEvent evt)
     {
-        logger = evt.getPluginLog();
-        evt.getPluginLog().debug("SpongePreInit!!!");
+        //TODO: Get Logger working
+        logger = LoggerFactory.getLogger("plugtest");
+        logger.debug("SpongePreInit!!!");
     }
 
     @Subscribe

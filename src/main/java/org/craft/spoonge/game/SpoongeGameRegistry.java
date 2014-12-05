@@ -1,5 +1,7 @@
 package org.craft.spoonge.game;
 
+import java.util.List;
+
 import com.google.common.base.*;
 
 import org.craft.blocks.*;
@@ -23,16 +25,6 @@ public class SpoongeGameRegistry implements GameRegistry
         return Optional.of((ItemType) Items.get(id));
     }
 
-    @Override
-    public Optional<String> getId(Object obj)
-    {
-        if(obj instanceof IStackable)
-        {
-            return Optional.of(((IStackable) obj).getId());
-        }
-        return Optional.of(obj.toString());
-    }
-
     public void registerBlock(Block block)
     {
         Blocks.register(block);
@@ -41,5 +33,19 @@ public class SpoongeGameRegistry implements GameRegistry
     public void registerItem(Item item)
     {
         Items.register(item);
+    }
+
+    @Override
+    public List<BlockType> getBlocks()
+    {
+        // TODO ASM IT
+        return (List<BlockType>)Blocks.getBlocks();
+    }
+
+    @Override
+    public List<ItemType> getItems()
+    {
+        // TODO Auto-generated method stub
+        return (List<ItemType>)Items.getItems();
     }
 }

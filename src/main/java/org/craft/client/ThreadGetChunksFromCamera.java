@@ -1,8 +1,6 @@
 package org.craft.client;
 
 import org.craft.client.render.*;
-import org.craft.utils.Log;
-import org.craft.world.*;
 
 public class ThreadGetChunksFromCamera extends Thread implements Runnable
 {

@@ -87,4 +87,9 @@ public final class Blocks
             b = air;
         return b;
     }
+    
+    public static List<?> getBlocks()
+    {
+        return blockByID;
+    }
 }

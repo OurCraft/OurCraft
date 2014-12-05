@@ -109,7 +109,7 @@ public abstract class FontRenderer implements IDisposable
         float x = (float) xo;
         float y = (float) yo;
 
-        boolean bold = false;
+        boolean bold = false; //TODO: Reimplement Bold
         boolean italic = false;
         boolean underlined = false;
         boolean obfuscated = false;

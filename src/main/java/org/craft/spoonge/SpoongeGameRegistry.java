@@ -1,5 +1,7 @@
 package org.craft.spoonge;
 
+import java.util.List;
+
 import org.craft.blocks.*;
 import org.craft.items.*;
 import org.spongepowered.api.*;
@@ -33,18 +35,19 @@ public class SpoongeGameRegistry implements GameRegistry
         return com.google.common.base.Optional.of((ItemType) Items.get(id));
     }
 
+
     @Override
-    public com.google.common.base.Optional<String> getId(Object obj)
+    public List<BlockType> getBlocks()
     {
-        if(obj instanceof BlockType)
-        {
-            return com.google.common.base.Optional.of(((BlockType) obj).getId());
-        }
-        else if(obj instanceof ItemType)
-        {
-            return com.google.common.base.Optional.of(((ItemType) obj).getId());
-        }
-        return null;
+        // TODO Need test
+        return (List<BlockType>) Blocks.getBlocks();
+    }
+
+    @Override
+    public List<ItemType> getItems()
+    {
+        // TODO Need test
+        return (List<ItemType>) Items.getItems();
     }
 
 }

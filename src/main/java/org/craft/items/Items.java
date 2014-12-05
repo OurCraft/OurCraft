@@ -55,4 +55,9 @@ public class Items
     {
         return itemByID.get(id);
     }
+    
+    public static List<?> getItems()
+    {
+        return itemByID;
+    }
 }

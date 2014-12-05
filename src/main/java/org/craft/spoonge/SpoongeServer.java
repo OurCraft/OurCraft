@@ -9,6 +9,7 @@ import com.google.common.collect.*;
 import org.spongepowered.api.*;
 import org.spongepowered.api.entity.player.*;
 import org.spongepowered.api.text.message.*;
+import org.spongepowered.api.text.message.Message.Text;
 import org.spongepowered.api.world.*;
 
 public class SpoongeServer implements Server
@@ -71,17 +72,11 @@ public class SpoongeServer implements Server
         spoonge.getOurCraftInstance().broadcastMessage(message.getContent().toString());
     }
 
-    @Override
-    public int getPort()
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
     @Override
-    public InetSocketAddress getBoundIP()
+    public Optional<InetSocketAddress> getBoundAddress()
     {
-        // TODO Auto-generated method stub
+        // TODO Create a Server
         return null;
     }
 
@@ -101,5 +96,12 @@ public class SpoongeServer implements Server
     public boolean getOnlineMode()
     {
         return onlineMode;
+    }
+
+    @Override
+    public Text getMOTD()
+    {
+        // TODO MotD
+        return null;
     }
 }

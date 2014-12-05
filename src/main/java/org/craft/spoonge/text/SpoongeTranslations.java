@@ -1,8 +1,6 @@
 package org.craft.spoonge.text;
 
 import java.util.*;
-
-import org.craft.spoonge.text.*;
 import org.spongepowered.api.text.translation.*;
 
 public final class SpoongeTranslations
