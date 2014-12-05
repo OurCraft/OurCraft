@@ -40,7 +40,7 @@ public class SpoongeBlockWrapper implements BlockLoc
         this.z = z;
         this.pos = new Vector3i(x, y, z);
         this.world = world;
-        extent = new SpoongeExtent();
+        extent = new SpoongeExtent(this);
         this.location = new Location(extent, new Vector3d(x, y, z));
     }
 

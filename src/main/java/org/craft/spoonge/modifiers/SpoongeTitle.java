@@ -94,74 +94,18 @@ public class SpoongeTitle implements Title
     //===========================================================
     //               END OF SHADOW METHODS
     //===========================================================
-    /*   @Override
-       public Title title(String text)
-       {
-           setMainTitle(text);
-           return this;
-       }
-
-       @Override
-       public Title subTitle(String text)
-       {
-           setSubTitle(text);
-           return this;
-       }
-
-       @Override
-       public Title fadeIn(int ticks)
-       {
-           setFadeInDuration((long) (((float) ticks / 20f) * 1000L));
-           return this;
-       }
-
-       @Override
-       public Title stay(int ticks)
-       {
-           setDisplayDuration((long) (((float) ticks / 20f) * 1000L));
-           return this;
-       }
-
-       @Override
-       public Title fadeOut(int ticks)
-       {
-           setFadeOutDuration((long) (((float) ticks / 20f) * 1000L));
-           return this;
-       }
-
-       @Override
-       public Title clear()
-       {
-           setVisible(false);
-           return this;
-       }
-
-       @Override
-       public Title reset()
-       {
-           setVisible(true);
-           return this;
-       }
-
-       @Override
-       public Title send(Player player)
-       {
-           setVisible(true);
-           show();
-           return this;
-       }*/
 
     @Override
     public Optional<Message<?>> getTitle()
     {
-        //return Optional.of(title);
+        //return Optional.of(Messages.of(getRawTitle()));
         return Optional.absent();
     }
 
     @Override
     public Optional<Message<?>> getSubtitle()
     {
-        // return Optional.of(subtitle);
+        //return Optional.of(Messages.of(getRawSubTitle()));
         return Optional.absent();
     }
 

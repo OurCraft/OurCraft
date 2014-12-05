@@ -7,7 +7,7 @@ import com.google.common.collect.*;
 
 import org.craft.blocks.states.*;
 import org.craft.modding.modifiers.*;
-import org.craft.spoonge.blocks.*;
+import org.craft.spoonge.block.*;
 import org.spongepowered.api.block.*;
 import org.spongepowered.api.block.BlockState;
 

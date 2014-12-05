@@ -145,34 +145,35 @@ public class GuiPowerSourceModifier extends Gui
         Gui.drawColoredRect(engine, originX + xInSpace, originY + yInSpace, 4, 4, 0xFF000000);
         Vector2 previous = null;
         EnumPowerSourceMode mode = (EnumPowerSourceMode) world.getBlockState(this.coordX, this.coordY, this.coordZ, BlockStates.powerSourceMode);
-        if(mode.usesBezier() && !strictRepresentation)
-        {
-            Vector2[] points = new Vector2[toPlot.size()];
-            for(int i = 0; i < points.length; i++ )
+        if(mode != null)
+            if(mode.usesBezier() && !strictRepresentation)
             {
-                points[i] = toPlot.get(i).mul(spaceWidth, spaceHeight).add(originX, originY);
-                points[i].setDisposable(false);
-            }
-            Gui.drawBezierCurve(engine, 0xFF0000FF, 10, 4f, points);
-        }
-        else
-        {
-            for(Vector2 point : toPlot)
-            {
-                if(previous != null)
+                Vector2[] points = new Vector2[toPlot.size()];
+                for(int i = 0; i < points.length; i++ )
                 {
-                    if(previous.getX() < point.getX())
-                    {
-                        int xi = (int) Math.floor(point.getX() * spaceWidth);
-                        int yi = (int) Math.floor(point.getY() * spaceHeight);
-                        int xi2 = (int) Math.floor(previous.getX() * spaceWidth);
-                        int yi2 = (int) Math.floor(previous.getY() * spaceHeight);
-                        Gui.drawColoredLine(engine, originX + xi, originY + yi, originX + xi2, originY + yi2, 0xFF0000FF, 4f);
-                    }
+                    points[i] = toPlot.get(i).mul(spaceWidth, spaceHeight).add(originX, originY);
+                    points[i].setDisposable(false);
                 }
-                previous = point;
+                Gui.drawBezierCurve(engine, 0xFF0000FF, 10, 4f, points);
             }
-        }
+            else
+            {
+                for(Vector2 point : toPlot)
+                {
+                    if(previous != null)
+                    {
+                        if(previous.getX() < point.getX())
+                        {
+                            int xi = (int) Math.floor(point.getX() * spaceWidth);
+                            int yi = (int) Math.floor(point.getY() * spaceHeight);
+                            int xi2 = (int) Math.floor(previous.getX() * spaceWidth);
+                            int yi2 = (int) Math.floor(previous.getY() * spaceHeight);
+                            Gui.drawColoredLine(engine, originX + xi, originY + yi, originX + xi2, originY + yi2, 0xFF0000FF, 4f);
+                        }
+                    }
+                    previous = point;
+                }
+            }
     }
 
     public void update()

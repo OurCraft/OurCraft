@@ -1,4 +1,4 @@
-package org.craft.spoonge.blocks;
+package org.craft.spoonge.block;
 
 import java.util.*;
 

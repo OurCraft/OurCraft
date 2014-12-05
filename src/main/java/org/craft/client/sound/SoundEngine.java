@@ -2,8 +2,7 @@ package org.craft.client.sound;
 
 import org.craft.maths.*;
 import org.craft.resources.*;
-import org.craft.utils.*;
-import org.craft.utils.io.IOUtils;
+import org.craft.utils.io.*;
 import org.lwjgl.openal.*;
 
 public class SoundEngine
