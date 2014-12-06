@@ -27,6 +27,8 @@ public final class Log
     {
         message(msg, true);
     }
+    
+    @NonLoggable
     private static String format(String rawMessage)
     {
         // TODO format
@@ -120,18 +122,26 @@ public final class Log
         String formated = format(msg);
         log.debug(formated);
     }
+    
+    @NonLoggable
     public static void error(String formated, Throwable t)
     {
         log.error(formated, t);
     }
+    
+    @NonLoggable
     public static void debug(String formated, Throwable t)
     {
         log.debug(formated, t);
     }
+    
+    @NonLoggable
     public static void message(String formated, Throwable t)
     {
         log.info(formated, t);
     }
+    
+    @NonLoggable
     public static void trace(String formated, Throwable t)
     {
         log.trace(formated, t);

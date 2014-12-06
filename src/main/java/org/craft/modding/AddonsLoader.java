@@ -146,7 +146,7 @@ public class AddonsLoader
                                 {
                                     configFolder.mkdirs();
                                 }
-                                Logger logger = new AddonLogger(container);
+                                Logger logger = LoggerFactory.getLogger(container.getName());
                                 ModPreInitEvent preInitEvent = new ModPreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder);
                                 eventBus.fireEvent(preInitEvent, container, null);
                                 containers.add(container);

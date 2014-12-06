@@ -73,7 +73,7 @@ public class OurClassLoader extends URLClassLoader
         addClassLoaderExclusion("javassist.");
         addClassLoaderExclusion("com.google.");
         addClassLoaderExclusion("org.slf4j.");
-
+        addClassLoaderExclusion("org.apache.logging.log4j.*");
         // transformer exclusions
         addTransformerExclusion("javax.");
         addTransformerExclusion("argo.");
@@ -163,7 +163,7 @@ public class OurClassLoader extends URLClassLoader
 
             CodeSigner[] signers = null;
 
-            if(lastDot > -1 && !untransformedName.startsWith("net.minecraft."))
+            if(lastDot > -1)
             {
                 if(urlConnection instanceof JarURLConnection)
                 {
@@ -212,6 +212,7 @@ public class OurClassLoader extends URLClassLoader
             }
 
             final byte[] transformedClass = runTransformers(untransformedName, transformedName, getClassBytes(untransformedName));
+            if(transformedClass == null) return null;
             final CodeSource codeSource = urlConnection == null ? null : new CodeSource(urlConnection.getURL(), signers);
             Class<?> clazz = defineClass(transformedName, transformedClass, 0, transformedClass.length, codeSource);
             return clazz;

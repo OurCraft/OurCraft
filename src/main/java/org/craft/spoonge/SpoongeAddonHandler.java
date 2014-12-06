@@ -27,7 +27,7 @@ public class SpoongeAddonHandler implements IAddonHandler<Plugin>
         {
             configFolder.mkdirs();
         }
-        Logger logger = new AddonLogger(container);
+        Logger logger = LoggerFactory.getLogger(container.getName());
         SpoongePreInitEvent preInitEvent = new SpoongePreInitEvent(instance, logger, new File(configFolder, container.getId() + ".cfg"), configFolder, configFolder);
         instance.getEventBus().fireEvent(preInitEvent, container.getInstance(), null);
     }
