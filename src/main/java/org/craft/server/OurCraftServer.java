@@ -303,4 +303,10 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         item.setContainer(container);
         Items.register(item);
     }
+
+    @Override
+    public AssetLoader getAssetsLoader()
+    {
+        return assetsLoader;
+    }
 }

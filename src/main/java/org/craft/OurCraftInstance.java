@@ -6,6 +6,7 @@ import org.craft.blocks.*;
 import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.resources.*;
 import org.spongepowered.api.*;
 
 public interface OurCraftInstance
@@ -32,4 +33,6 @@ public interface OurCraftInstance
     void registerBlock(Block block);
 
     void registerItem(Item item);
+
+    AssetLoader getAssetsLoader();
 }

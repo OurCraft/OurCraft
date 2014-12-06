@@ -768,7 +768,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     /**
      * Returns the game's assets loader
      */
-    public ResourceLoader getAssetsLoader()
+    public AssetLoader getAssetsLoader()
     {
         return assetsLoader;
     }
