@@ -25,6 +25,7 @@ block.glass=Verre
 block.leaves=Feuilles
 block.rose=Rose
 block.copper_cable=Cable
+block.obsidian=Obsidian
 
 players.joined=%1$s a rejoint la partie!
 

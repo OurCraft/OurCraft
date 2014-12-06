@@ -24,6 +24,7 @@ block.glass=Glass
 block.leaves=Leaves
 block.rose=Rose
 block.copper_cable=Cable
+block.obsidian=Obsidian
 
 players.joined=%1$s joined the game!
 

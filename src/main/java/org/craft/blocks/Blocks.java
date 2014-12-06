@@ -19,7 +19,7 @@ public final class Blocks
     public static Block                        cable;
     public static Block                        powerSource;
     public static Block                        powerDisplay;
-
+    public static Block                        obsidian;
     // ONLY FOR TESTING
     public static Block                        dirtSlab;
     public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
@@ -43,7 +43,7 @@ public final class Blocks
         register(cable = new BlockCable("copper_cable"));
         register(powerSource = new BlockPowerSource("power_source"));
         register(powerDisplay = new BlockPowerDisplay("power_display"));
-
+        register(obsidian = new Block("obsidian"));
         register(dirtSlab = new BlockHalfSlab("dirt_slab"));
 
         for(short i = 0; i < blockByID.size(); i++ )
