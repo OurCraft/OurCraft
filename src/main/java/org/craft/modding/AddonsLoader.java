@@ -159,7 +159,7 @@ public class AddonsLoader
                             {
                                 Log.error("Missing data when loading lua addon: luaAddon.json must contain fields \"id\", \"name\", \"version\" and \"mainClass\"");
                             }
-                            
+
                             try
                             {
                                 Method m = classLoader.getClass().getDeclaredMethod("addURL", URL.class);
@@ -203,14 +203,15 @@ public class AddonsLoader
         try
         {
             ClassPath path = ClassPath.from(OurClassLoader.instance);
-            for(ResourceInfo info : path.getResources())
-            {
-                if(info.getResourceName().endsWith("/luaAddon.json"))
+            if(excluded == null || excluded.isEmpty())
+                for(ResourceInfo info : path.getResources())
                 {
-                    Log.message("Loading lua addon " + info.getResourceName());
-                    addLuaScript(IOUtils.readString(info.url().openStream(), "UTF-8"), game.getAssetsLoader());
+                    if(info.getResourceName().endsWith("/luaAddon.json"))
+                    {
+                        Log.message("Loading lua addon " + info.getResourceName());
+                        addLuaScript(IOUtils.readString(info.url().openStream(), "UTF-8"), game.getAssetsLoader());
+                    }
                 }
-            }
         }
         catch(IOException e)
         {
