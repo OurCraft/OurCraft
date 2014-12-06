@@ -1,7 +1,5 @@
 package org.craft.modding;
 
-import java.util.logging.*;
-
 import org.craft.utils.*;
 import org.craft.utils.Log.NonLoggable;
 import org.slf4j.*;
@@ -19,11 +17,9 @@ public class AddonLogger implements Logger
     }
 
     @NonLoggable
-    public void log(String s, Level level, Throwable t)
+    public String format(String rawMsg)
     {
-        Log.log("[" + annot.getName() + " " + annot.getVersion() + "] " + s, level, false);
-        if(t != null)
-            t.printStackTrace();
+        return "[" + annot.getName() + " " + annot.getVersion() + "] " + rawMsg;
     }
 
     @Override
@@ -65,7 +61,7 @@ public class AddonLogger implements Logger
     @Override
     public void trace(String msg, Throwable t)
     {
-        log(msg, Level.FINER, t);
+        Log.trace(format(msg), t);
     }
 
     @Override
@@ -137,7 +133,7 @@ public class AddonLogger implements Logger
     @Override
     public void debug(String msg, Throwable t)
     {
-        log(msg, Level.FINEST, t);
+        Log.debug(format(msg), t);
     }
 
     @Override
@@ -209,7 +205,7 @@ public class AddonLogger implements Logger
     @Override
     public void info(String msg, Throwable t)
     {
-        log(msg, Level.INFO, t);
+        Log.message(format(msg), t);
     }
 
     @Override
@@ -353,7 +349,8 @@ public class AddonLogger implements Logger
     @Override
     public void error(String msg, Throwable t)
     {
-        log(msg, Level.SEVERE, t);
+        
+        Log.error(format(msg), t);
     }
 
     @Override
