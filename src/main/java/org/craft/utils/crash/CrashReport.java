@@ -84,7 +84,7 @@ public class CrashReport
             add(buffer, new OpenGLInfos());
             add(buffer, new RenderStateInfos(OurCraft.getOurCraft().getRenderEngine()));
         }
-        System.out.println(buffer.toString());
+        System.err.println(buffer.toString());
     }
 
     private void add(StringBuffer buffer, CrashInfos infos)

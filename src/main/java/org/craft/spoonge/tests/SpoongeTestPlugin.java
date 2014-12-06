@@ -12,7 +12,7 @@ import org.spongepowered.api.text.message.*;
 import org.spongepowered.api.text.title.*;
 import org.spongepowered.api.util.event.*;
 
-@Plugin(id = "plugtest", name = "Test plugin", version = "1.0")
+@Plugin(id = "plugtest", name = "Test Plugin", version = "1.0")
 public class SpoongeTestPlugin
 {
 
@@ -26,8 +26,7 @@ public class SpoongeTestPlugin
     @Subscribe
     public void onPreInit(PreInitializationEvent evt)
     {
-        //TODO: Get Logger working
-        logger = LoggerFactory.getLogger("plugtest");
+        logger = LoggerFactory.getLogger("Test Plugin");
         logger.debug("SpongePreInit!!!");
     }
 
@@ -69,26 +68,26 @@ public class SpoongeTestPlugin
     public void onInit(InitializationEvent evt)
     {
         logger.debug("SpongeInit!!!");
-        logger.info("TextStyles's OBFUSCATED Name: " + TextStyles.OBFUSCATED.getName());
-        logger.info("TextStyles's RESET Name: " + TextStyles.RESET.getName());
-        logger.info("TextStyles's ITALIC Name: " + TextStyles.ITALIC.getName());
-        logger.info("TextStyles's STRIKETHROUGH Name: " + TextStyles.STRIKETHROUGH.getName());
-        logger.info("TextStyles's UNDERLINED Name: " + TextStyles.UNDERLINE.getName());
-        logger.info("TextStyles's BOLD Name: " + TextStyles.BOLD.getName());
+        logger.debug("TextStyles's OBFUSCATED Name: " + TextStyles.OBFUSCATED.getName());
+        logger.debug("TextStyles's RESET Name: " + TextStyles.RESET.getName());
+        logger.debug("TextStyles's ITALIC Name: " + TextStyles.ITALIC.getName());
+        logger.debug("TextStyles's STRIKETHROUGH Name: " + TextStyles.STRIKETHROUGH.getName());
+        logger.debug("TextStyles's UNDERLINED Name: " + TextStyles.UNDERLINE.getName());
+        logger.debug("TextStyles's BOLD Name: " + TextStyles.BOLD.getName());
     }
 
     @Subscribe
     public void onBlockChange(BlockChangeEvent evt)
     {
-        logger.info("Block changed: " + evt.getBlock().getState().getType().getId());
-        logger.info("Block that will remplace it: " + evt.getReplacementBlock().getState().getType().getId());
+        logger.debug("Block changed: " + evt.getBlock().getState().getType().getId());
+        logger.debug("Block that will remplace it: " + evt.getReplacementBlock().getState().getType().getId());
     }
 
     @Subscribe
     public void onBlockUpdate(BlockUpdateEvent evt)
     {
-        logger.info("Block to update: " + evt.getBlock().getState().getType().getId());
-        logger.info("Block that updated it: " + evt.getCauseBlockType().getId());
+        logger.debug("Block to update: " + evt.getBlock().getState().getType().getId());
+        logger.debug("Block that updated it: " + evt.getCauseBlockType().getId());
     }
 
 }

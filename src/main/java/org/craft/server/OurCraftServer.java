@@ -98,7 +98,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
             serverGui.pack();
             serverGui.setLocationRelativeTo(null);
             serverGui.setVisible(true);
-            Log.addHandler(serverGui.getLogHandler());
+            //Log.addHandler(serverGui.getLogHandler());
         }
         Log.message("Loading game data");
         Commands.init();

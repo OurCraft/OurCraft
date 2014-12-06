@@ -22,7 +22,6 @@ public class ThreadGetChunksFromCamera extends Thread implements Runnable
             RenderEngine renderEngine = game.getRenderEngine();
             ChunkGeneratorTask gen = new ChunkGeneratorTask(game);
             int renderDistance = 6;
-            System.out.println(Thread.currentThread().getName());
             while(game.isRunning())
             {
                 
