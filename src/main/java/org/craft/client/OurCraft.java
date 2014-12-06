@@ -31,7 +31,7 @@ import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
-import org.craft.spoonge.game.*;
+import org.craft.spoonge.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.Log.NonLoggable;

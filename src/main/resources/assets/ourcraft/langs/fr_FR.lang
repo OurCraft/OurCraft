@@ -12,6 +12,8 @@ main.play.return=Retourner dans le jeu
 main.play.quitToMainScreen=Returner sur le menu principal
 main.settings=Options
 main.lang=Langue
+main.addons=Mods
+
 
 block.log=Bûche
 block.dirt=Terre
@@ -39,6 +41,8 @@ menu.deleteworld.title=Supprimer le monde
 menu.deleteworld.delete=Oui, j'en suis sûr
 menu.deleteworld.desc0=Supprimer le monde dure pour §ul'éternité§r (une période de temps extrêmement longue).
 menu.deleteworld.desc1=Êtes-vous sûr de vouloir le supprimer ?
+
+menu.addonlist.title=List des extensions
 
 settings.jumpKey=Sauter
 settings.forwardKey=Se déplacer vers l'avant

@@ -1,6 +1,6 @@
 package org.craft.spoonge;
 
-import java.util.List;
+import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.items.*;
@@ -32,9 +32,16 @@ public class SpoongeGameRegistry implements GameRegistry
     @Override
     public com.google.common.base.Optional<ItemType> getItem(String id)
     {
+        if(!id.contains(":"))
+        {
+            id = "ourcraft:" + id;
+        }
+        else if(id.startsWith("minecraft:"))
+        {
+            id = id.replace("minecraft:", "ourcraft:");
+        }
         return com.google.common.base.Optional.of((ItemType) Items.get(id));
     }
-
 
     @Override
     public List<BlockType> getBlocks()
@@ -48,6 +55,16 @@ public class SpoongeGameRegistry implements GameRegistry
     {
         // TODO Need test
         return (List<ItemType>) Items.getItems();
+    }
+
+    public void registerBlock(Block b)
+    {
+        Blocks.register(b);
+    }
+
+    public void registerItem(Item i)
+    {
+        Items.register(i);
     }
 
 }

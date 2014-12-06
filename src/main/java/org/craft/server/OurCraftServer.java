@@ -20,8 +20,8 @@ import org.craft.network.packets.*;
 import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
+import org.craft.spoonge.*;
 import org.craft.spoonge.events.state.*;
-import org.craft.spoonge.game.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
@@ -34,11 +34,11 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
 
     private static OurCraftServer          instance;
     private NettyServerWrapper             serverWrapper;
-    private SpoongeGameRegistry             gameRegistry;
+    private SpoongeGameRegistry            gameRegistry;
     private EventBus                       eventBus;
     private int                            maxPlayers;
 
-    private List<Player>              onlinePlayers;
+    private List<Player>                   onlinePlayers;
     private AddonsLoader                   addonsLoader;
     private boolean                        nogui;
     private ServerGui                      serverGui;

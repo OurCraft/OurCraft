@@ -1,12 +1,12 @@
 package org.craft.modding;
 
-
 public class ModContainer extends AddonContainer<Mod>
 {
 
     private String id;
     private String name;
     private String version;
+    private String author;
 
     public ModContainer(Object instance, Mod addonAnnot)
     {
@@ -16,6 +16,7 @@ public class ModContainer extends AddonContainer<Mod>
             id = addonAnnot.id();
             name = addonAnnot.name();
             version = addonAnnot.version();
+            author = addonAnnot.author();
         }
         catch(Exception e)
         {
@@ -39,6 +40,12 @@ public class ModContainer extends AddonContainer<Mod>
     public String getVersion()
     {
         return version;
+    }
+
+    @Override
+    public String getAuthor()
+    {
+        return author;
     }
 
 }

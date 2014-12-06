@@ -11,8 +11,8 @@ import org.craft.items.*;
 public abstract class AddonContainer<T extends Annotation>
 {
 
-    private T                addonAnnot;
-    private Object           addonInstance;
+    private T           addonAnnot;
+    private Object      addonInstance;
     private List<Block> addonBlocks;
     private List<Item>  addonItems;
 
@@ -29,6 +29,8 @@ public abstract class AddonContainer<T extends Annotation>
     public abstract String getName();
 
     public abstract String getVersion();
+
+    public abstract String getAuthor();
 
     public T getAddonAnnotation()
     {
@@ -49,4 +51,5 @@ public abstract class AddonContainer<T extends Annotation>
     {
         addonItems.add(item);
     }
+
 }

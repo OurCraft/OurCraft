@@ -25,7 +25,7 @@ import org.spongepowered.api.service.scheduler.*;
 import org.spongepowered.api.util.event.*;
 import org.spongepowered.api.world.*;
 
-@Mod(id = "spoonge", version = "1.0", name = "Sponge implementation")
+@Mod(id = "spoonge", version = "1.0", name = "Sponge implementation", author = "OurCraftTeam")
 public class SpoongeMod implements Game
 {
 

@@ -1,9 +1,11 @@
 package org.craft.spoonge.tests;
 
 import org.slf4j.*;
+import org.spongepowered.api.block.*;
 import org.spongepowered.api.event.block.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
+import org.spongepowered.api.item.*;
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.text.format.*;
 import org.spongepowered.api.text.message.*;
@@ -34,6 +36,14 @@ public class SpoongeTestPlugin
     {
         logger.debug("SpongePostInit!!!");
         logger.debug("Dirt localized name is " + evt.getGame().getRegistry().getBlock("dirt").get().getTranslation().get());
+        for(BlockType block : evt.getGame().getRegistry().getBlocks())
+        {
+            logger.debug("Found block: " + block.getId() + ", translation is: " + block.getTranslation().get());
+        }
+        for(ItemType block : evt.getGame().getRegistry().getItems())
+        {
+            logger.debug("Found item: " + block.getId() + ", translation is: " + block.getTranslation().get());
+        }
     }
 
     @Subscribe

@@ -26,8 +26,8 @@ public class AddonsLoader
     private OurCraftInstance                                    game;
     private LuaEventBusListener                                 luaListener;
     private ClassLoader                                         classLoader;
-    private List<AddonContainer>                           containers;
-    private List<Class<?>>                                 loaded;
+    private List<AddonContainer>                                containers;
+    private List<Class<?>>                                      loaded;
     private List<Class<? extends Annotation>>                   excluded;
 
     public AddonsLoader(OurCraftInstance gameInstance, EventBus eventBus)
@@ -209,5 +209,10 @@ public class AddonsLoader
     public Object getAddonInstance(String addonID)
     {
         return addonInstances.get(addonID);
+    }
+
+    public Collection<AddonContainer> getContainersList()
+    {
+        return containers;
     }
 }

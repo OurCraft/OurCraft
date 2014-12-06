@@ -43,4 +43,10 @@ public class SpoongePluginContainer extends AddonContainer<Plugin> implements Pl
         return version;
     }
 
+    @Override
+    public String getAuthor()
+    {
+        return "<unknown: sponge plugin>";
+    }
+
 }
