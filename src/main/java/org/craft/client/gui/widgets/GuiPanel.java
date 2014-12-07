@@ -2,20 +2,20 @@ package org.craft.client.gui.widgets;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.client.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.modding.events.gui.*;
 
-import com.google.common.collect.Lists;
-
 public class GuiPanel extends GuiWidget
 {
     protected List<GuiWidget> widgets;
-    protected GuiWidget            selectedWidget;
-    protected OurCraft             oc;
-    protected FontRenderer         fontRenderer;
-    protected boolean              forceDrawAll;
+    protected GuiWidget       selectedWidget;
+    protected OurCraft        oc;
+    protected FontRenderer    fontRenderer;
+    protected boolean         forceDrawAll;
 
     public GuiPanel(int x, int y, int w, int h, OurCraft oc, FontRenderer fontRenderer)
     {
@@ -41,8 +41,8 @@ public class GuiPanel extends GuiWidget
     {
         for(GuiWidget widget : widgets)
         {
-            if(widget.getX() >= getX() && widget.getX() + widget.getWidth() <= getX() + getWidth()
-                    && widget.getY() >= getY() && widget.getY() + widget.getHeight() <= getY() + getHeight() || forceDrawAll)
+            if(widget.getX() + widget.getWidth() >= getX() && widget.getX() <= getX() + getWidth()
+                    && widget.getY() + widget.getHeight() >= getY() && widget.getY() <= getY() + getHeight() || forceDrawAll)
                 widget.render(mx, my, engine);
         }
     }

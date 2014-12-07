@@ -15,6 +15,7 @@ public abstract class AddonContainer<T extends Annotation>
     private Object      addonInstance;
     private List<Block> addonBlocks;
     private List<Item>  addonItems;
+    private AddonData   data;
 
     public AddonContainer(T addonAnnot, Object instance)
     {
@@ -50,6 +51,16 @@ public abstract class AddonContainer<T extends Annotation>
     public void registerItem(Item item)
     {
         addonItems.add(item);
+    }
+
+    public void setAddonData(AddonData data)
+    {
+        this.data = data;
+    }
+
+    public AddonData getAddonData()
+    {
+        return data;
     }
 
 }

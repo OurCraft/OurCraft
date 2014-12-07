@@ -73,8 +73,8 @@ public class OurClassLoader extends URLClassLoader
         addClassLoaderExclusion("javassist.");
         addClassLoaderExclusion("com.google.");
         addClassLoaderExclusion("org.slf4j.");
-        addClassLoaderExclusion("org.apache.logging.log4j.*");
-        // transformer exclusions
+        addClassLoaderExclusion("org.apache.logging.log4j.");
+
         addTransformerExclusion("javax.");
         addTransformerExclusion("argo.");
         addTransformerExclusion("org.objectweb.asm.");
@@ -212,7 +212,8 @@ public class OurClassLoader extends URLClassLoader
             }
 
             final byte[] transformedClass = runTransformers(untransformedName, transformedName, getClassBytes(untransformedName));
-            if(transformedClass == null) return null;
+            if(transformedClass == null)
+                return null;
             final CodeSource codeSource = urlConnection == null ? null : new CodeSource(urlConnection.getURL(), signers);
             Class<?> clazz = defineClass(transformedName, transformedClass, 0, transformedClass.length, codeSource);
             return clazz;

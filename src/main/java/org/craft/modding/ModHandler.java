@@ -25,7 +25,9 @@ public class ModHandler implements IAddonHandler<Mod>
             configFolder.mkdirs();
         }
         Logger logger = LoggerFactory.getLogger(container.getName());
-        ModPreInitEvent preInitEvent = new ModPreInitEvent(instance, logger, new File(configFolder, container.getId() + ".cfg"), configFolder);
+        AddonData addonData = new AddonData(container);
+        container.setAddonData(addonData);
+        ModPreInitEvent preInitEvent = new ModPreInitEvent(instance, container, logger, new File(configFolder, container.getId() + ".cfg"), configFolder);
         instance.getEventBus().fireEvent(preInitEvent, container.getInstance(), null);
     }
 

@@ -9,6 +9,7 @@ public class GuiDualTextSlot extends GuiListSlot
 
     private GuiLabel mainLabel;
     private GuiLabel subLabel;
+    private Object   data;
 
     public GuiDualTextSlot(String mainText, String subText, FontRenderer font)
     {
@@ -61,6 +62,26 @@ public class GuiDualTextSlot extends GuiListSlot
         }
         mainLabel.render(mx, my, engine);
         subLabel.render(mx, my, engine);
+    }
+
+    /**
+     * Stores an user-provided object to be retrieved from the slot
+     * @param userData Object provided by the user to be saved in this slot
+     * @see #getData()
+     */
+    public void setData(Object userData)
+    {
+        this.data = userData;
+    }
+
+    /**
+     * Gets the user-provided object saved in this slot. 
+     * @return Object provided by the user saved in this slot.
+     * @see #setData(Object)
+     */
+    public Object getData()
+    {
+        return data;
     }
 
 }

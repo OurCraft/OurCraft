@@ -213,6 +213,7 @@ public class AddonsLoader
             CommonHandler.setCurrentContainer(container);
             new LuaScript(loader.getResource(new ResourceLocation(mainClassPath)), luaListener, container, game);
 
+            container.setAddonData(new AddonData(container));
             eventBus.register(container);
             File configFolder = new File(SystemUtils.getGameFolder(), "configs/");
             if(!configFolder.exists())
@@ -220,7 +221,7 @@ public class AddonsLoader
                 configFolder.mkdirs();
             }
             Logger logger = LoggerFactory.getLogger(name);
-            ModPreInitEvent preInitEvent = new ModPreInitEvent(game, logger, new File(configFolder, container.getId() + ".cfg"), configFolder);
+            ModPreInitEvent preInitEvent = new ModPreInitEvent(game, container, logger, new File(configFolder, container.getId() + ".cfg"), configFolder);
             eventBus.fireEvent(preInitEvent, container, null);
             containers.add(container);
         }

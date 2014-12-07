@@ -7,6 +7,7 @@ import com.google.common.base.*;
 import org.craft.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.resources.*;
 import org.craft.spoonge.events.*;
 import org.craft.spoonge.events.state.*;
 import org.craft.spoonge.events.world.*;
@@ -25,7 +26,7 @@ import org.spongepowered.api.service.scheduler.*;
 import org.spongepowered.api.util.event.*;
 import org.spongepowered.api.world.*;
 
-@Mod(id = "spoonge", version = "1.0", name = "Sponge implementation", author = "OurCraftTeam")
+@Mod(id = "spoonge", version = "1.0", name = "Spoonge", author = "OurCraftTeam")
 public class SpoongeMod implements Game
 {
 
@@ -50,6 +51,9 @@ public class SpoongeMod implements Game
     @OurModEventHandler
     public void onPreInit(ModPreInitEvent event)
     {
+        AddonData addonData = event.getContainer().getAddonData();
+        addonData.setLogoPath(new ResourceLocation("spoonge", "textures/logo.png"));
+        addonData.setDescription("Sponge implementation made by the developpers of OurCraft");
         ocInstance = event.getOurCraftInstance();
         if(event.getOurCraftInstance().isServer())
             server = new SpoongeServer(this);

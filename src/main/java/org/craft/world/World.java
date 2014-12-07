@@ -227,7 +227,7 @@ public class World
         float step = 0.005f;
         AABB rayBB = new AABB(Vector3.get(0, 0, 0), Vector3.get(size, size, size));
         Vector3 blockPos = null;
-        for(float dist = 0f; dist <= maxDist + step; dist += step)
+        for(float dist = 0f; dist < maxDist - step; dist += step)
         {
             x = (int) Math.round(pos.getX());
             y = (int) Math.round(pos.getY());
