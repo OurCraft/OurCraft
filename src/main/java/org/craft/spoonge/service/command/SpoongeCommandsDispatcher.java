@@ -44,6 +44,7 @@ public class SpoongeCommandsDispatcher implements CommandService
         return null;
     }
 
+    @Override
     @Shadow
     public boolean containsAlias(String alias)
     {
@@ -54,6 +55,7 @@ public class SpoongeCommandsDispatcher implements CommandService
     //               END OF SHADOW METHODS
     //===========================================================
     //@Override
+    @Override
     public Set<CommandMapping> getCommands()
     {
         List<CommandMapping> mappings = Lists.newArrayList();

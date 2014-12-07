@@ -23,6 +23,7 @@ public class BlockPowerSource extends Block implements IPowerableBlock
         super(id);
     }
 
+    @Override
     public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
     {
         super.onBlockAdded(w, x, y, z, side, placer);
@@ -31,11 +32,13 @@ public class BlockPowerSource extends Block implements IPowerableBlock
         w.scheduleBlockUpdates(x, y, z, 2);
     }
 
+    @Override
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
     {
         return false;
     }
 
+    @Override
     public AABB getCollisionBox(World w, int x, int y, int z)
     {
         Vector3 translation = Vector3.get(x, y, z);
@@ -44,6 +47,7 @@ public class BlockPowerSource extends Block implements IPowerableBlock
         return result;
     }
 
+    @Override
     public void onScheduledUpdate(World world, int x, int y, int z, long interval, long tick)
     {
         EnumPowerSourceMode power = (EnumPowerSourceMode) world.getBlockState(x, y, z, BlockStates.powerSourceMode);

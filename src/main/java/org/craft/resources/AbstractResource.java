@@ -31,6 +31,7 @@ public abstract class AbstractResource
         return location;
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if(o instanceof AbstractResource)
@@ -42,6 +43,7 @@ public abstract class AbstractResource
         return false;
     }
 
+    @Override
     public int hashCode()
     {
         final int BASE = 17;

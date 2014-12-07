@@ -138,6 +138,7 @@ public class Shader implements IDisposable
         return locsMap.get(uniform);
     }
 
+    @Override
     public void dispose()
     {
         glDeleteProgram(program);

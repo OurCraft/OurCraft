@@ -35,5 +35,6 @@ public abstract class ChunkProvider implements Iterable<Chunk>
      */
     public abstract void addChunk(World w, Chunk c);
 
+    @Override
     public abstract Iterator<Chunk> iterator();
 }

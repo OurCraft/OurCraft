@@ -39,6 +39,7 @@ public class NettyServerWrapper implements Runnable
         this.eventBus = eventBus;
     }
 
+    @Override
     public void run()
     {
         EventLoopGroup bossGroup = new NioEventLoopGroup();

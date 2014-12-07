@@ -74,6 +74,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         return list.size();
     }
 
+    @Override
     public boolean onButtonReleased(int mx, int my, int button)
     {
         if(isMouseOver(mx, my))
@@ -92,6 +93,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         return false;
     }
 
+    @Override
     public boolean onButtonPressed(int mx, int my, int button)
     {
         if(isMouseOver(mx, my))
@@ -109,6 +111,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         return false;
     }
 
+    @Override
     public boolean handleMouseMovement(int mx, int my, int dx, int dy)
     {
         if(isMouseOver(mx, my))
@@ -179,6 +182,7 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
         return null;
     }
 
+    @Override
     public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
     {
         if(isMouseOver(mx, my) && scrollable)

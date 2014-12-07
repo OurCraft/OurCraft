@@ -41,6 +41,7 @@ public class GuiLabel extends GuiWidget
         this.scale = 1f;
     }
 
+    @Override
     public int getWidth()
     {
         font.setScale(scale);
@@ -49,6 +50,7 @@ public class GuiLabel extends GuiWidget
         return textWidth;
     }
 
+    @Override
     public int getHeight()
     {
         font.setScale(scale);

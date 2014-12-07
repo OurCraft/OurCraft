@@ -44,6 +44,7 @@ public class EntityPlayer extends EntityLiving
         setSize(0.75f, 1.80f, 0.75f);
     }
 
+    @Override
     public float getEyeOffset()
     {
         return 1.7f;
@@ -65,6 +66,7 @@ public class EntityPlayer extends EntityLiving
         return uuid;
     }
 
+    @Override
     public org.craft.inventory.Stack getHeldItem()
     {
         return inventory.getStackInSlot(((PlayerInventory) inventory).getSelectedIndex());
@@ -115,6 +117,7 @@ public class EntityPlayer extends EntityLiving
         // TODO: Implementation
     }
 
+    @Override
     public void readFromNBT(NBTCompoundTag compound)
     {
         super.readFromNBT(compound);
@@ -126,6 +129,7 @@ public class EntityPlayer extends EntityLiving
         displayName = compound.getString("displayName");
     }
 
+    @Override
     public void writeToNBT(NBTCompoundTag compound)
     {
         super.writeToNBT(compound);

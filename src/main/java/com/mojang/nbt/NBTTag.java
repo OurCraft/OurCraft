@@ -33,12 +33,14 @@ public abstract class NBTTag implements Cloneable
 
     public abstract void read(DataInput dis) throws IOException;
 
+    @Override
     public abstract String toString();
 
     public abstract JsonElement toJson();
 
     public abstract NBTTypes getID();
 
+    @Override
     public boolean equals(Object o)
     {
         if(o instanceof NBTTag)

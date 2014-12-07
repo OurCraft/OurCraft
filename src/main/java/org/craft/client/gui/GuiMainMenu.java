@@ -48,6 +48,7 @@ public class GuiMainMenu extends Gui
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 180, 300, 40, I18n.format("main.quit"), getFontRenderer()));
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 0)

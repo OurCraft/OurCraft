@@ -39,26 +39,31 @@ public class SpoongeCommand extends AbstractCommand
         return name;
     }
 
+    @Override
     public boolean testPermission(ICommandSender source)
     {
         return callable.testPermission((CommandSource) source);
     }
 
+    @Override
     public String getShortCommandDescription()
     {
         return callable.getShortDescription().get();
     }
 
+    @Override
     public String getCommandHelp()
     {
         return callable.getHelp().get();
     }
 
+    @Override
     public String getUsage()
     {
         return callable.getUsage();
     }
 
+    @Override
     public List<String> getPermissions()
     {
         return Lists.newArrayList();//callable..getPermissions();

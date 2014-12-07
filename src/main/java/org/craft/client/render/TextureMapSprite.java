@@ -12,6 +12,7 @@ public class TextureMapSprite implements ITickable
 
     protected boolean          useRawImage = false;
 
+    @Override
     public void tick()
     {
         ;

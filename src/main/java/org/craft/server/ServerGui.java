@@ -105,6 +105,7 @@ public class ServerGui extends JFrame
 
         addWindowListener(new WindowAdapter()
         {
+            @Override
             public void windowClosing(WindowEvent evt)
             {
                 OurCraftServer.getServer().shutdown();

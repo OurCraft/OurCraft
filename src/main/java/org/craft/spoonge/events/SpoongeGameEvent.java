@@ -13,6 +13,7 @@ public abstract class SpoongeGameEvent extends SpoongeEvent implements GameEvent
         super(instance);
     }
 
+    @Override
     public Game getGame()
     {
         return SpoongeMod.instance;

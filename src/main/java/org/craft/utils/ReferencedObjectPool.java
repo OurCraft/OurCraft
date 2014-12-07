@@ -23,6 +23,7 @@ public class ReferencedObjectPool<T extends AbstractReference> extends ObjectPoo
         super(clazz, fact);
     }
 
+    @Override
     public T get()
     {
         T instance = super.get();
@@ -30,6 +31,7 @@ public class ReferencedObjectPool<T extends AbstractReference> extends ObjectPoo
         return instance;
     }
 
+    @Override
     public void dispose(T item)
     {
         if(item.decreaseReferenceCounter() && item.isDisposable())

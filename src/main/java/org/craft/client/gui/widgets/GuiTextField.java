@@ -118,6 +118,7 @@ public class GuiTextField extends GuiWidget
         return (int) ((getWidth() - 8) / (font.getCharWidth(' ') + font.getCharSpacing(' ', ' ')));
     }
 
+    @Override
     public boolean onButtonPressed(int x, int y, int button)
     {
         if(isMouseOver(x, y))
@@ -128,6 +129,7 @@ public class GuiTextField extends GuiWidget
         return false;
     }
 
+    @Override
     public boolean onButtonReleased(int x, int y, int button)
     {
         if(!isMouseOver(x, y))
@@ -158,6 +160,7 @@ public class GuiTextField extends GuiWidget
             cursorCounter = 0;
     }
 
+    @Override
     public boolean keyPressed(int id, char c)
     {
         if(focused)
@@ -167,6 +170,7 @@ public class GuiTextField extends GuiWidget
         return focused;
     }
 
+    @Override
     public boolean keyReleased(int id, char c)
     {
         if(focused)

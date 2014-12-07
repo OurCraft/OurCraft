@@ -36,21 +36,25 @@ public class TextureRegion implements TextureIcon
         return texture;
     }
 
+    @Override
     public float getMinU()
     {
         return minU;
     }
 
+    @Override
     public float getMinV()
     {
         return minV;
     }
 
+    @Override
     public float getMaxU()
     {
         return maxU;
     }
 
+    @Override
     public float getMaxV()
     {
         return maxV;

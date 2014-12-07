@@ -30,6 +30,7 @@ public class ClientNetHandler implements INetworkHandler
     {
         new Thread("Client Multiplayer Thread")
         {
+            @Override
             public void run()
             {
                 EventLoopGroup workerGroup = new NioEventLoopGroup();

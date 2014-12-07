@@ -13,12 +13,14 @@ public class SpoongeCommandMapping implements CommandMapping
     //===========================================================
     //               START OF SHADOW METHODS
     //===========================================================
+    @Override
     @Shadow
     public String getPrimaryAlias()
     {
         return null;
     }
 
+    @Override
     @Shadow
     public Set<String> getAllAliases()
     {

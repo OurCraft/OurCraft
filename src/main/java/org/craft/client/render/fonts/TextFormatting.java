@@ -28,6 +28,7 @@ public enum TextFormatting
         return charsAfter;
     }
 
+    @Override
     public String toString()
     {
         return "" + BEGINNING + s;

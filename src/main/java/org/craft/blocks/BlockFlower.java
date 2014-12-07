@@ -20,16 +20,19 @@ public class BlockFlower extends Block
         super(id);
     }
 
+    @Override
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
     {
         return false;
     }
 
+    @Override
     public AABB getCollisionBox(World w, int x, int y, int z)
     {
         return null;
     }
 
+    @Override
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         Vector3 translation = Vector3.get(x, y, z);
@@ -38,6 +41,7 @@ public class BlockFlower extends Block
         return result;
     }
 
+    @Override
     public boolean shouldRenderInPass(EnumRenderPass pass)
     {
         return pass == EnumRenderPass.ALPHA;
@@ -51,6 +55,7 @@ public class BlockFlower extends Block
         }
     }
 
+    @Override
     public boolean isSolid()
     {
         return false;

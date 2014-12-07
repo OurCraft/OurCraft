@@ -21,6 +21,7 @@ public class VanillaWorldLoader extends WorldLoader
         super(worldFolder, loader);
     }
 
+    @Override
     public void loadWorldConstants(World world) throws IOException
     {
         try
@@ -34,6 +35,7 @@ public class VanillaWorldLoader extends WorldLoader
         }
     }
 
+    @Override
     public void writeWorldConstants(File file, World world) throws IOException
     {
         try
@@ -154,6 +156,7 @@ public class VanillaWorldLoader extends WorldLoader
         NBTTag.writeCompoundToFile(file, tag);
     }
 
+    @Override
     public NBTCompoundTag loadWorldInfos(File worldDataFile) throws IOException
     {
         return NBTTag.readCompoundFromFile(worldDataFile);

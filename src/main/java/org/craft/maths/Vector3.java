@@ -32,6 +32,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         ;
     }
 
+    @Override
     public String toString()
     {
         return "vec3(" + x + "," + y + "," + z + ")";
@@ -152,6 +153,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         return z;
     }
 
+    @Override
     public void write(FloatBuffer buffer)
     {
         buffer.put((float) getX());
@@ -159,6 +161,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         buffer.put((float) getZ());
     }
 
+    @Override
     public int getSize()
     {
         return 3;
@@ -260,6 +263,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         return this;
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if(o == null)
@@ -277,6 +281,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         return false;
     }
 
+    @Override
     public int hashCode()
     {
         final int BASE = 17;

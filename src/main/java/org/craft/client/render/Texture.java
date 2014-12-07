@@ -44,6 +44,7 @@ public class Texture implements ITextureObject, IDisposable
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+    @Override
     public void bind()
     {
         glBindTexture(GL_TEXTURE_2D, texID);
@@ -57,6 +58,7 @@ public class Texture implements ITextureObject, IDisposable
         return texID;
     }
 
+    @Override
     public void dispose()
     {
         glDeleteTextures(texID);

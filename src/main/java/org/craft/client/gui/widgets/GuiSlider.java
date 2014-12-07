@@ -54,6 +54,7 @@ public class GuiSlider extends GuiWidget
         this.rangeMax = rangeMax;
     }
 
+    @Override
     public boolean onButtonPressed(int x, int y, int button)
     {
         if(isMouseOver(x, y))
@@ -61,6 +62,7 @@ public class GuiSlider extends GuiWidget
         return true;
     }
 
+    @Override
     public boolean onButtonReleased(int x, int y, int button)
     {
         pressed = false;
@@ -72,6 +74,7 @@ public class GuiSlider extends GuiWidget
         return pressed;
     }
 
+    @Override
     public boolean handleMouseMovement(int mx, int my, int dx, int dy)
     {
         if(pressed)

@@ -251,6 +251,7 @@ public abstract class Gui extends GuiPanel
     {
     }
 
+    @Override
     public boolean onButtonReleased(int x, int y, int button)
     {
         boolean result = super.onButtonReleased(x, y, button);
@@ -344,6 +345,7 @@ public abstract class Gui extends GuiPanel
         return result;
     }
 
+    @Override
     public void update()
     {
         popupMenu.update();

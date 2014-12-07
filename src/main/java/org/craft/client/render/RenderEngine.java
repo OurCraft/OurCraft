@@ -349,6 +349,7 @@ public class RenderEngine implements IDisposable
     /**
      * Disposes of current shader and textures bound to ResourceLocations
      */
+    @Override
     public void dispose()
     {
         for(ITextureObject o : texturesLocs.values())

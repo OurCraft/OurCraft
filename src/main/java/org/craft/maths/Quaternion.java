@@ -253,6 +253,7 @@ public class Quaternion implements IDisposable
         this.w = w;
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if(o instanceof Quaternion)
@@ -334,6 +335,7 @@ public class Quaternion implements IDisposable
         return new Quaternion(x, y, z, w);
     }
 
+    @Override
     public void dispose()
     {
         // TODO Auto-generated method stub

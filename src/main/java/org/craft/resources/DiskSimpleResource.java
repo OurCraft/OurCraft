@@ -42,6 +42,7 @@ public class DiskSimpleResource extends AbstractResource
         return bytes;
     }
 
+    @Override
     public File asFile()
     {
         return file;

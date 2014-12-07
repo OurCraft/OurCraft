@@ -14,6 +14,7 @@ public class PrintFunction extends LibFunction
         this.globals = globals;
     }
 
+    @Override
     public LuaValue call(LuaValue arg)
     {
         try

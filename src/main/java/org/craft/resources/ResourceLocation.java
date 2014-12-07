@@ -111,6 +111,7 @@ public class ResourceLocation
         }
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if(o instanceof ResourceLocation)
@@ -121,6 +122,7 @@ public class ResourceLocation
         return false;
     }
 
+    @Override
     public int hashCode()
     {
         return getFullPath().hashCode();

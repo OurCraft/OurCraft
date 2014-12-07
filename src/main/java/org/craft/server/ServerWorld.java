@@ -12,6 +12,7 @@ public class ServerWorld extends World
         super(name, prov, generator, worldLoader);
     }
 
+    @Override
     public void spawn(Entity e)
     {
         super.spawn(e);

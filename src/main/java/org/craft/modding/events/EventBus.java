@@ -18,11 +18,11 @@ public class EventBus
     private List<IEventBusListener>                 eventBusListeners;
     private List<Class<?>>                          eventClasses;
 
-    public EventBus(Class<?>[] eventClasses, Class<? extends Annotation>... annots)
+    public EventBus(Class<?>[] eventClasses, List<Class<? extends Annotation>> annots)
     {
         this.eventClasses = Lists.newArrayList(eventClasses);
         this.eventBusListeners = Lists.newArrayList();
-        this.annotations = Lists.newArrayList(annots);
+        this.annotations = annots;
         listeners = new HashMap<Class<?>, List<IEventListener>>();
     }
 

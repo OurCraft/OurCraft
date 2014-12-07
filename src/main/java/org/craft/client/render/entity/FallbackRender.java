@@ -41,6 +41,7 @@ public class FallbackRender<T extends Entity> extends ModelRender<T>
         return fallbackModel;
     }
 
+    @Override
     public Texture getTexture(Entity e)
     {
         return baseTexture;

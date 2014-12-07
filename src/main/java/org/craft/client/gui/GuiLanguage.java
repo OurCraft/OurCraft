@@ -84,6 +84,7 @@ public class GuiLanguage extends Gui
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 0)

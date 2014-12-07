@@ -21,6 +21,7 @@ public class ChunkCoord extends AbstractReference
         this.z = z;
     }
 
+    @Override
     public int hashCode()
     {
         final int BASE = 17;
@@ -33,6 +34,7 @@ public class ChunkCoord extends AbstractReference
         return result;
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if(o instanceof ChunkCoord)

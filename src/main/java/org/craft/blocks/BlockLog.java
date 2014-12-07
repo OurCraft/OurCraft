@@ -13,6 +13,7 @@ public class BlockLog extends Block
         super(id);
     }
 
+    @Override
     public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
     {
         super.onBlockAdded(w, x, y, z, side, placer);

@@ -26,6 +26,7 @@ public class NBTListTag<T extends NBTTag> extends NBTTag
         super(name);
     }
 
+    @Override
     public void write(DataOutput dos) throws IOException
     {
         if(list.size() > 0)
@@ -39,6 +40,7 @@ public class NBTListTag<T extends NBTTag> extends NBTTag
             list.get(i).write(dos);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void read(DataInput dis) throws IOException
     {
@@ -54,11 +56,13 @@ public class NBTListTag<T extends NBTTag> extends NBTTag
         }
     }
 
+    @Override
     public NBTTypes getID()
     {
         return NBTTypes.LIST;
     }
 
+    @Override
     public String toString()
     {
         return "" + list.size() + " entries of type " + type.name();

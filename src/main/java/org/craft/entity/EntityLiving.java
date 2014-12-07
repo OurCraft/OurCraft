@@ -47,12 +47,14 @@ public class EntityLiving extends Entity
         return null;
     }
 
+    @Override
     public void readFromNBT(NBTCompoundTag compound)
     {
         super.readFromNBT(compound);
         health = compound.getDouble("health");
     }
 
+    @Override
     public void writeToNBT(NBTCompoundTag compound)
     {
         super.writeToNBT(compound);

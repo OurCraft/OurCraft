@@ -52,6 +52,7 @@ public class GuiButton extends GuiWidget
         }
     }
 
+    @Override
     public boolean onButtonPressed(int x, int y, int button)
     {
         if(isMouseOver(x, y))
@@ -59,6 +60,7 @@ public class GuiButton extends GuiWidget
         return pressed;
     }
 
+    @Override
     public boolean onButtonReleased(int x, int y, int button)
     {
         pressed = false;

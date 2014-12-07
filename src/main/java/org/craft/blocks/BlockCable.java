@@ -24,21 +24,25 @@ public class BlockCable extends Block implements IPowerableBlock
         super(id);
     }
 
+    @Override
     public boolean isSolid()
     {
         return false;
     }
 
+    @Override
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
     {
         return false;
     }
 
+    @Override
     public AABB getCollisionBox(World w, int x, int y, int z)
     {
         return null;
     }
 
+    @Override
     public AABB getSelectionBox(World world, int x, int y, int z)
     {
         Vector3 translation = Vector3.get(x, y, z);
@@ -47,16 +51,19 @@ public class BlockCable extends Block implements IPowerableBlock
         return result;
     }
 
+    @Override
     public boolean shouldRenderInPass(EnumRenderPass pass)
     {
         return pass == EnumRenderPass.ALPHA;
     }
 
+    @Override
     public boolean letLightGoThrough()
     {
         return true;
     }
 
+    @Override
     public void onBlockUpdate(World world, int x, int y, int z, List<Vector3> visited)
     {
         EnumConnexionStates conState = handleConnections(world, x, y, z);
@@ -83,6 +90,7 @@ public class BlockCable extends Block implements IPowerableBlock
         }
     }
 
+    @Override
     public void onBlockAdded(World w, int x, int y, int z, EnumSide side, Entity placer)
     {
         super.onBlockAdded(w, x, y, z, side, placer);

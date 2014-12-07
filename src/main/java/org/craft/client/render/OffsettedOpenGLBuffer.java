@@ -13,6 +13,7 @@ public class OffsettedOpenGLBuffer extends OpenGLBuffer
      */
     private int max = 0;
 
+    @Override
     public void addIndex(int index)
     {
         super.addIndex(this.offset + index);

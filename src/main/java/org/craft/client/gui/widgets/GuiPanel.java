@@ -54,6 +54,7 @@ public class GuiPanel extends GuiWidget
     /**
      * Method called when a key is pressed
      */
+    @Override
     public boolean keyPressed(int id, char c)
     {
         for(GuiWidget widget : widgets)
@@ -69,6 +70,7 @@ public class GuiPanel extends GuiWidget
     /**
      * Method called when a key is released
      */
+    @Override
     public boolean keyReleased(int id, char c)
     {
         for(GuiWidget widget : widgets)
@@ -81,6 +83,7 @@ public class GuiPanel extends GuiWidget
         return false;
     }
 
+    @Override
     public boolean onButtonReleased(int x, int y, int button)
     {
         boolean result = false;
@@ -103,6 +106,7 @@ public class GuiPanel extends GuiWidget
         return result;
     }
 
+    @Override
     public boolean onButtonPressed(int x, int y, int button)
     {
         boolean result = false;
@@ -136,6 +140,7 @@ public class GuiPanel extends GuiWidget
      * @param dx : The movement of mouse on X axis
      * @param dy : The movement of mouse on Y axis
      */
+    @Override
     public boolean handleMouseMovement(int mx, int my, int dx, int dy)
     {
         for(GuiWidget widget : widgets)
@@ -151,6 +156,7 @@ public class GuiPanel extends GuiWidget
     /**
      * Handles a 'mouse wheel moved' event
      */
+    @Override
     public boolean handleMouseWheelMovement(int mx, int my, int deltaWheel)
     {
         for(GuiWidget widget : widgets)
@@ -166,6 +172,7 @@ public class GuiPanel extends GuiWidget
     /**
      * Updates this panel and its children
      */
+    @Override
     public void update()
     {
         for(GuiWidget widget : widgets)

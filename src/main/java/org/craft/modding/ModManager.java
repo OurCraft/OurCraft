@@ -33,6 +33,7 @@ public class ModManager implements IAddonManager
         return containers;
     }
 
+    @Override
     public IAddonHandler getHandler()
     {
         return handler;

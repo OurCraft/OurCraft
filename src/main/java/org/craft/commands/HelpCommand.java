@@ -32,6 +32,7 @@ public class HelpCommand extends AbstractCommand
         return true;
     }
 
+    @Override
     public String getShortCommandDescription()
     {
         return "Displays an usage tip about every command in the game";

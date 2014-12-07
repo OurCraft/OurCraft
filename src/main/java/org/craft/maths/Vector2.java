@@ -24,6 +24,7 @@ public final class Vector2 extends AbstractReference implements IDisposable
         this.y = y;
     }
 
+    @Override
     public String toString()
     {
         return "vec2(" + x + "," + y + ")";
@@ -158,6 +159,7 @@ public final class Vector2 extends AbstractReference implements IDisposable
         return dest.sub(this).mul(factor).add(this);
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if(o instanceof Vector2)

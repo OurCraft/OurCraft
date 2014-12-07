@@ -14,6 +14,7 @@ public class ThreadGetChunksFromCamera extends Thread implements Runnable
         setDaemon(true);
     }
 
+    @Override
     public void run()
     {
         

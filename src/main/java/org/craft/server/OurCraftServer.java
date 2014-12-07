@@ -1,6 +1,7 @@
 package org.craft.server;
 
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 import javax.swing.*;
@@ -117,10 +118,12 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         PacketRegistry.init();
 
         Log.message("Loading addons...");
+        List<Class<? extends Annotation>> annots = Lists.newArrayList();
+        annots.add(OurModEventHandler.class);
         eventBus = new EventBus(new Class<?>[]
         {
                 ModEvent.class
-        }, OurModEventHandler.class);
+        }, annots);
         addonsLoader = new AddonsLoader(this, eventBus);
         File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
         if(!modsFolder.exists())

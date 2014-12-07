@@ -45,6 +45,7 @@ public class TrueTypeFontRenderer extends FontRenderer
         return font.getCharHeight(c);
     }
 
+    @Override
     public double getCharSpacing(char c, char next)
     {
         return 1;

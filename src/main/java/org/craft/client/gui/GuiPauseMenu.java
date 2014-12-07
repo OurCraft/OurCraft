@@ -26,6 +26,7 @@ public class GuiPauseMenu extends Gui
         addWidget(new GuiButton(2, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2 + 120, 300, 40, I18n.format("main.play.quitToMainScreen"), getFontRenderer()));
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 0)
@@ -48,6 +49,7 @@ public class GuiPauseMenu extends Gui
         super.update();
     }
 
+    @Override
     public boolean keyReleased(int id, char c)
     {
         super.keyReleased(id, c);
@@ -58,6 +60,7 @@ public class GuiPauseMenu extends Gui
         return true;
     }
 
+    @Override
     public boolean pausesGame()
     {
         return true;

@@ -48,6 +48,7 @@ public class GuiConnecting extends Gui
         updateCounter++ ;
     }
 
+    @Override
     public void render(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);

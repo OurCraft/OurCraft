@@ -27,6 +27,7 @@ public class GuiSpinner extends GuiPanel
         step = 1f;
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 1)
@@ -67,6 +68,7 @@ public class GuiSpinner extends GuiPanel
         return step;
     }
 
+    @Override
     public boolean keyReleased(int id, char c)
     {
         if(textInput.isFocused())
@@ -85,6 +87,7 @@ public class GuiSpinner extends GuiPanel
         return super.keyReleased(id, c);
     }
 
+    @Override
     public void update()
     {
         String txt = textInput.getText();

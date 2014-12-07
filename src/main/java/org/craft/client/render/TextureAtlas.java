@@ -64,6 +64,7 @@ public class TextureAtlas implements ITextureObject, IDisposable
         return tiles;
     }
 
+    @Override
     public void dispose()
     {
         texture.dispose();

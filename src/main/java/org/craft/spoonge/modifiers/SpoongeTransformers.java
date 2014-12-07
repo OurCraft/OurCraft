@@ -7,6 +7,7 @@ import org.craft.spoonge.service.command.*;
 public class SpoongeTransformers implements ASMTransformerPlugin
 {
 
+    @Override
     public void registerModifiers(ModifierClassTransformer trans)
     {
         trans.addModifier(SpoongeTextStyles.class);

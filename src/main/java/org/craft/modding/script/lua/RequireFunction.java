@@ -24,6 +24,7 @@ public class RequireFunction extends LuaFunction
         this.globals = globals;
     }
 
+    @Override
     @SuppressWarnings("unused")
     public LuaValue call(LuaValue arg)
     {

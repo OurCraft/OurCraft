@@ -41,6 +41,7 @@ public class SpoongePluginManager implements IAddonManager<Plugin>, PluginManage
         return plugins.values();
     }
 
+    @Override
     public void loadAddon(AddonContainer<Plugin> container)
     {
         plugins.put(container.getId(), (PluginContainer) container);

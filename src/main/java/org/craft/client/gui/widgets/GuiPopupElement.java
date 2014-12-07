@@ -92,6 +92,7 @@ public class GuiPopupElement extends GuiListSlot
         }
     }
 
+    @Override
     public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
     {
         super.onButtonReleased(index, x, y, w, h, mx, my, button, owner);

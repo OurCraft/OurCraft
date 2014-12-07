@@ -22,6 +22,7 @@ public abstract class FontRenderer implements IDisposable
 
         }
 
+        @Override
         public int hashCode()
         {
             final int BASE = 17;
@@ -37,6 +38,7 @@ public abstract class FontRenderer implements IDisposable
             return result;
         }
 
+        @Override
         public boolean equals(Object o)
         {
             if(o instanceof TextInfos)
@@ -369,6 +371,7 @@ public abstract class FontRenderer implements IDisposable
         cache.clear();
     }
 
+    @Override
     public void dispose()
     {
         disposeCache();

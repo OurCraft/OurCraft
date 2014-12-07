@@ -59,6 +59,7 @@ public class GuiPowerSourceModifier extends Gui
         addWidget(new GuiButton(15, getWidth() - 200, getHeight() - 40, 200, 40, "Strict representation", getFontRenderer()));
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         super.actionPerformed(widget);
@@ -126,6 +127,7 @@ public class GuiPowerSourceModifier extends Gui
         toPlot.clear();
     }
 
+    @Override
     public void render(int mx, int my, RenderEngine engine)
     {
         Gui.drawColoredRect(engine, 0, 0, getWidth(), getHeight(), 0x70000000);
@@ -176,6 +178,7 @@ public class GuiPowerSourceModifier extends Gui
             }
     }
 
+    @Override
     public void update()
     {
         super.update();
@@ -194,6 +197,7 @@ public class GuiPowerSourceModifier extends Gui
         }
     }
 
+    @Override
     public boolean keyReleased(int id, char c)
     {
         if(id == Keyboard.KEY_ESCAPE)

@@ -17,6 +17,7 @@ public interface ScriptValue
 
     public int length();
 
+    @Override
     public String toString();
 
     public int asInt();

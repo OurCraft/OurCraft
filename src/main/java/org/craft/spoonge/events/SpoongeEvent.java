@@ -18,16 +18,19 @@ public abstract class SpoongeEvent extends ModEvent implements Event, Cancellabl
 
     private boolean cancelled;
 
+    @Override
     public boolean isCancelled()
     {
         return cancelled;
     }
 
+    @Override
     public void setCancelled(boolean cancel)
     {
         this.cancelled = cancel;
     }
 
+    @Override
     public CallbackList getCallbacks()
     {
         return callbacksList;

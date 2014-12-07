@@ -58,6 +58,7 @@ public class LuaAddonContainer extends AddonContainer<Mod>
         this.mainClass = mainClass;
     }
 
+    @Override
     public String getAuthor()
     {
         return author;
@@ -81,6 +82,7 @@ public class LuaAddonContainer extends AddonContainer<Mod>
         return version;
     }
 
+    @Override
     public Object getInstance()
     {
         return this;

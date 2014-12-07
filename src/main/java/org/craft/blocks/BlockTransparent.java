@@ -12,22 +12,26 @@ public class BlockTransparent extends Block
         super(id);
     }
 
+    @Override
     public boolean isSideOpaque(World w, int x, int y, int z, EnumSide side)
     {
         return false;
     }
 
+    @Override
     public boolean shouldRenderInPass(EnumRenderPass pass)
     {
         return pass == EnumRenderPass.ALPHA;
     }
 
+    @Override
     public boolean shouldSideBeRendered(World w, int x, int y, int z, EnumSide side)
     {
         Block next = w.getBlockNextTo(x, y, z, side);
         return next != this;
     }
 
+    @Override
     public boolean letLightGoThrough()
     {
         return true;

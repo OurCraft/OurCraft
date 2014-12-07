@@ -40,6 +40,7 @@ public class GuiDeleteWorld extends Gui
         addWidget(confirm);
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 0)
@@ -54,6 +55,7 @@ public class GuiDeleteWorld extends Gui
         }
     }
 
+    @Override
     public void render(int mx, int my, RenderEngine renderEngine)
     {
         drawBackground(mx, my, renderEngine);

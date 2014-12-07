@@ -88,6 +88,7 @@ public class BlockStatesObject implements Iterable<IBlockStateValue>, Cloneable
         return map.values().iterator();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public BlockStatesObject clone()
     {

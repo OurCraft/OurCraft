@@ -52,11 +52,13 @@ public class GuiSettings extends Gui
             widget.render(mx, my, engine);
         }
 
+        @Override
         public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
         {
             this.widget.onButtonPressed(mx, my, button);
         }
 
+        @Override
         public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
         {
             if(option.getType() == GameOptionType.INPUT)
@@ -75,6 +77,7 @@ public class GuiSettings extends Gui
             }
         }
 
+        @Override
         public void handleMouseMovement(int index, int x, int y, int w, int h, int mx, int my, int dx, int dy)
         {
             this.widget.handleMouseMovement(mx, my, dx, dy);
@@ -96,11 +99,13 @@ public class GuiSettings extends Gui
         this.parent = parent;
     }
 
+    @Override
     public boolean keyPressed(int id, char c)
     {
         return super.keyPressed(id, c);
     }
 
+    @Override
     public boolean keyReleased(int id, char c)
     {
         super.keyReleased(id, c);
@@ -129,6 +134,7 @@ public class GuiSettings extends Gui
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));
     }
 
+    @Override
     public void actionPerformed(GuiWidget widget)
     {
         if(widget.getID() == 10)

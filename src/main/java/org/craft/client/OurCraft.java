@@ -6,6 +6,7 @@ import static org.lwjgl.util.glu.GLU.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.nio.*;
 import java.util.*;
 import java.util.List;
@@ -116,7 +117,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         run();
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public void run()
     {
         try
@@ -167,10 +168,12 @@ public class OurCraft implements Runnable, OurCraftInstance
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             Log.message("Loading Mods...");
+            List<Class<? extends Annotation>> annots = Lists.newArrayList();
+            annots.add(OurModEventHandler.class);
             eventBus = new EventBus(new Class<?>[]
             {
                     ModEvent.class
-            }, OurModEventHandler.class);
+            }, annots);
             addonsLoader = new AddonsLoader(this, eventBus);
             File modsFolder = new File(SystemUtils.getGameFolder(), "mods");
             if(!modsFolder.exists())
@@ -768,6 +771,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     /**
      * Returns the game's assets loader
      */
+    @Override
     public AssetLoader getAssetsLoader()
     {
         return assetsLoader;
@@ -1034,11 +1038,13 @@ public class OurCraft implements Runnable, OurCraftInstance
         return currentMenu;
     }
 
+    @Override
     public EventBus getEventBus()
     {
         return eventBus;
     }
 
+    @Override
     public GameRegistry getRegistry()
     {
         return gameRegistry;
@@ -1049,6 +1055,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         return player;
     }
 
+    @Override
     public void broadcastMessage(String message)
     {
         Log.message(message);

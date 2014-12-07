@@ -14,11 +14,13 @@ public class FallbackWorldLoader extends WorldLoader
         super(null, null);
     }
 
+    @Override
     public void loadWorldConstants(World world) throws IOException
     {
         ;
     }
 
+    @Override
     public void writeWorldConstants(File file, World world) throws IOException
     {
         ;

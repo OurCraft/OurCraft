@@ -25,6 +25,7 @@ public class NBTCompoundTag extends NBTTag
         super(name);
     }
 
+    @Override
     public void write(DataOutput dos) throws IOException
     {
         for(NBTTag tag : tags.values())
@@ -34,6 +35,7 @@ public class NBTCompoundTag extends NBTTag
         dos.writeByte(NBTTypes.END.getByteID());
     }
 
+    @Override
     public void read(DataInput dis) throws IOException
     {
         tags.clear();
@@ -49,6 +51,7 @@ public class NBTCompoundTag extends NBTTag
         return tags.values();
     }
 
+    @Override
     public NBTTypes getID()
     {
         return NBTTypes.COMPOUND;
@@ -207,6 +210,7 @@ public class NBTCompoundTag extends NBTTag
         return getByte(string) != 0;
     }
 
+    @Override
     public String toString()
     {
         return "" + tags.size() + " entries";
@@ -217,6 +221,7 @@ public class NBTCompoundTag extends NBTTag
         return tags.isEmpty();
     }
 
+    @Override
     public NBTTag clone()
     {
         NBTCompoundTag tag = new NBTCompoundTag(getName());

@@ -40,6 +40,7 @@ public class SimpleResource extends AbstractResource
         return bytes;
     }
 
+    @Override
     public File asFile()
     {
         throw new IllegalArgumentException("Impossible to retrieve simple resource as file");
