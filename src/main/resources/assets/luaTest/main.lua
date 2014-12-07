@@ -1,12 +1,13 @@
 function preInitHandler(evt)
 	print("Lua plugin test preInit");
-	print(evt:getOurCraftInstance().REGISTRIES_ID);
 	addonData = evt:getContainer():getAddonData();
 	addonData:setDescription("Lua test addon");
 	addonData:setLogoPath(OurCraft.ResourceLocation("ourcraft", "textures/favicon_128.png"));
 	testBlock = OurCraftAPI.Block("luaTestBlock");
-	print(testBlock:getId());
 	evt:getOurCraftInstance():registerBlock(testBlock);
+	configuration = OC.Configuration(evt:getSuggestedConfigurationFile());
+	configuration:setInt("testInt", 0);
+	configuration:save();
 end;
 
 function guiBuilding(evt)

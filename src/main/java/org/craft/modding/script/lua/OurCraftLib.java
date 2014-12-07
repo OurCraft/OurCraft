@@ -2,11 +2,8 @@ package org.craft.modding.script.lua;
 
 import org.craft.*;
 import org.craft.modding.script.lua.funcs.*;
-import org.craft.resources.*;
-import org.craft.utils.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.*;
-import org.luaj.vm2.lib.jse.*;
 
 public class OurCraftLib extends TwoArgFunction
 {
@@ -22,46 +19,14 @@ public class OurCraftLib extends TwoArgFunction
         this.container = container;
     }
 
-    public class GetGameRegistryFunc extends LuaFunction
-    {
-        @Override
-        public LuaValue call(LuaValue name, LuaValue method)
-        {
-            return CoerceJavaToLua.coerce(game.getRegistry());
-        }
-    }
-
-    public class RegisterHandlerFunc extends TwoArgFunction
-    {
-        @Override
-        public LuaValue call(LuaValue name, LuaValue method)
-        {
-            String eventName = name.toString();
-            LuaFunction function = method.checkfunction();
-            Log.message("Registred " + eventName + " listener: " + function.tojstring());
-            eventBus.register(new LuaEventListener(eventName, function, container));
-            return LuaValue.TRUE;
-        }
-    }
-
-    public class NewResourceLocFunc extends TwoArgFunction
-    {
-        @Override
-        public LuaValue call(LuaValue sectionValue, LuaValue pathValue)
-        {
-            String section = sectionValue.toString();
-            String function = pathValue.toString();
-            return CoerceJavaToLua.coerce(new ResourceLocation(section, function));
-        }
-    }
-
     @Override
     public LuaValue call(LuaValue par1, LuaValue par2)
     {
         LuaTable table = new LuaTable();
-        table.set("registerHandler", new RegisterHandlerFunc());
-        table.set("getGameRegistry", new GetGameRegistryFunc());
+        table.set("registerHandler", new RegisterHandlerFunc(eventBus, container));
+        table.set("getGameRegistry", new GetGameRegistryFunc(game));
         table.set("ResourceLocation", new NewResourceLocFunc());
+        table.set("Configuration", new NewConfigurationFunc());
         table.set("Block", new NewBlockFunc());
         table.set("Item", new NewItemFunc());
 

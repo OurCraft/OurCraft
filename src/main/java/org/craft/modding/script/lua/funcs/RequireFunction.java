@@ -1,8 +1,9 @@
-package org.craft.modding.script.lua;
+package org.craft.modding.script.lua.funcs;
 
 import java.io.*;
 
 import org.craft.*;
+import org.craft.modding.script.lua.*;
 import org.craft.resources.*;
 import org.luaj.vm2.*;
 

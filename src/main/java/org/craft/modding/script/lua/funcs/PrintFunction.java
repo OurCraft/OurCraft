@@ -1,4 +1,4 @@
-package org.craft.modding.script.lua;
+package org.craft.modding.script.lua.funcs;
 
 import org.craft.utils.*;
 import org.luaj.vm2.*;
