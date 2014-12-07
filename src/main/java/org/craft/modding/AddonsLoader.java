@@ -44,7 +44,7 @@ public class AddonsLoader
 
         this.game = gameInstance;
         this.eventBus = eventBus;
-        handlers = new HashMap<Class<? extends Annotation>, IAddonManager>();
+        handlers = Maps.newHashMap();
         registerAddonAnnotation(Mod.class, new ModManager());
 
     }

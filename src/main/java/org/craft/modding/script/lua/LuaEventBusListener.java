@@ -3,12 +3,12 @@ package org.craft.modding.script.lua;
 import java.lang.annotation.*;
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
-
-import com.google.common.collect.Lists;
 
 public class LuaEventBusListener implements IEventBusListener
 {
@@ -31,7 +31,7 @@ public class LuaEventBusListener implements IEventBusListener
                 {
                     String eventName = listener.getEventName();
                     LuaFunction handler = listener.getHandler();
-                    if(event.getClass().getSimpleName().replaceFirst("Sponge", "").equals(eventName))
+                    if(event.getClass().getCanonicalName().endsWith(eventName))
                     {
                         try
                         {

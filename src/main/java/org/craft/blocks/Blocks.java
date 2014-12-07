@@ -2,7 +2,7 @@ package org.craft.blocks;
 
 import java.util.*;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
 public final class Blocks
 {
@@ -22,15 +22,14 @@ public final class Blocks
     public static Block                        obsidian;
     // ONLY FOR TESTING
     public static Block                        dirtSlab;
-    public static final HashMap<String, Block> BLOCK_REGISTRY = new HashMap<String, Block>();
-    private static List<Block>            blockByID;
+    public static final HashMap<String, Block> BLOCK_REGISTRY = Maps.newHashMap();
+    private static List<Block>                 blockByID      = Lists.newArrayList();
 
     /**
      * Registers all blocks of the game
      */
     public static void init()
     {
-        blockByID = Lists.newArrayList();
         register(air = new BlockAir());
         register(dirt = new Block("dirt"));
         register(grass = new Block("grass"));
@@ -87,7 +86,7 @@ public final class Blocks
             b = air;
         return b;
     }
-    
+
     public static List<?> getBlocks()
     {
         return blockByID;

@@ -6,7 +6,6 @@ import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.modding.*;
-import org.craft.utils.*;
 
 public class GuiAddonList extends Gui
 {
@@ -82,7 +81,6 @@ public class GuiAddonList extends Gui
                     {
                         try
                         {
-                            Log.message(data.getLogoPath().getFullPath());
                             GuiImage image = new GuiImage(-1, 0, 24, data.getLogoPath());
                             descY += image.getHeight();
                             modDataPanel.addWidget(image);

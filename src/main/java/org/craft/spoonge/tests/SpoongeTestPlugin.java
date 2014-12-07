@@ -2,7 +2,6 @@ package org.craft.spoonge.tests;
 
 import org.slf4j.*;
 import org.spongepowered.api.block.*;
-import org.spongepowered.api.event.block.*;
 import org.spongepowered.api.event.state.*;
 import org.spongepowered.api.event.world.*;
 import org.spongepowered.api.item.*;
@@ -74,20 +73,6 @@ public class SpoongeTestPlugin
         logger.debug("TextStyles's STRIKETHROUGH Name: " + TextStyles.STRIKETHROUGH.getName());
         logger.debug("TextStyles's UNDERLINED Name: " + TextStyles.UNDERLINE.getName());
         logger.debug("TextStyles's BOLD Name: " + TextStyles.BOLD.getName());
-    }
-
-    @Subscribe
-    public void onBlockChange(BlockChangeEvent evt)
-    {
-        logger.debug("Block changed: " + evt.getBlock().getState().getType().getId());
-        logger.debug("Block that will remplace it: " + evt.getReplacementBlock().getState().getType().getId());
-    }
-
-    @Subscribe
-    public void onBlockUpdate(BlockUpdateEvent evt)
-    {
-        logger.debug("Block to update: " + evt.getBlock().getState().getType().getId());
-        logger.debug("Block that updated it: " + evt.getCauseBlockType().getId());
     }
 
 }
