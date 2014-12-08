@@ -2,13 +2,13 @@ package org.craft.client;
 
 import java.util.*;
 
-public class GameOption
+public class GameOption<T>
 {
 
-    private String                                   id;
-    private String                                   value;
-    private GameOptionType                               type;
-    private static final HashMap<String, GameOption> options = new HashMap<String, GameOption>();
+    private String                                      id;
+    private T                                           value;
+    private GameOptionType                              type;
+    private static final HashMap<String, GameOption<?>> options = new HashMap<String, GameOption<?>>();
 
     public GameOption(String id, GameOptionType type)
     {
@@ -27,28 +27,19 @@ public class GameOption
         return id;
     }
 
-    public void setValue(String value)
+    public void setValue(T value)
     {
         this.value = value;
     }
 
-    public String getValue()
+    public T getValue()
     {
         return value;
     }
 
-    public static GameOption get(String id)
+    public static GameOption<?> get(String id)
     {
         return options.get(id);
     }
 
-    public int getValueAsInt()
-    {
-        return Integer.parseInt(value);
-    }
-
-    public float getValueAsFloat()
-    {
-        return Float.parseFloat(value);
-    }
 }

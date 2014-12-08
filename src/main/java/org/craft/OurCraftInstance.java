@@ -34,4 +34,5 @@ public interface OurCraftInstance
     void registerItem(Item item);
 
     AssetLoader getAssetsLoader();
+
 }

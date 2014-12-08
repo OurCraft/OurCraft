@@ -83,43 +83,99 @@ public class Configuration
         properties.setProperty(key, "" + value);
     }
 
-    public long getShort(String key)
+    public short getShort(String key, short defaultValue)
     {
-        return Short.parseShort(properties.getProperty(key));
+        try
+        {
+            return Short.parseShort(get(key));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
-    public long getByte(String key)
+    public byte getByte(String key, byte defaultValue)
     {
-        return Byte.parseByte(properties.getProperty(key));
+        try
+        {
+            return Byte.parseByte(get(key));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
-    public long getLong(String key)
+    public long getLong(String key, long defaultValue)
     {
-        return Long.parseLong(properties.getProperty(key));
+        try
+        {
+            return Long.parseLong(get(key));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
-    public int getInt(String key)
+    public int getInt(String key, int defaultValue)
     {
-        return Integer.parseInt(properties.getProperty(key));
+        try
+        {
+            return Integer.parseInt(get(key));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
-    public float getFloat(String key)
+    public float getFloat(String key, float defaultValue)
     {
-        return Float.parseFloat(properties.getProperty(key));
+        try
+        {
+            return Float.parseFloat(get(key));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
-    public double getDouble(String key)
+    public double getDouble(String key, double defaultValue)
     {
-        return Double.parseDouble(key);
+        try
+        {
+            return Double.parseDouble(get(key));
+        }
+        catch(NumberFormatException e)
+        {
+            return defaultValue;
+        }
     }
 
-    public boolean getBoolean(String key)
+    public boolean getBoolean(String key, boolean defaultValue)
     {
-        return Boolean.parseBoolean(properties.getProperty(key));
+        try
+        {
+            return Boolean.parseBoolean(get(key));
+        }
+        catch(Exception e)
+        {
+            return defaultValue;
+        }
     }
 
     public String get(String key)
     {
+        return get(key, "");
+    }
+
+    public String get(String key, String defaultValue)
+    {
+        if(!properties.containsKey(key))
+            return defaultValue;
         return properties.getProperty(key);
     }
 }

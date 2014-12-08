@@ -9,18 +9,19 @@ import org.lwjgl.input.*;
 public class GuiSettings extends Gui
 {
 
-    public class GuiOptionSlot extends GuiListSlot
+    public class GuiOptionSlot<T> extends GuiListSlot
     {
 
-        private GameOption option;
-        private GuiWidget  widget;
+        private GameOption<T> option;
+        private GuiWidget     widget;
 
-        public GuiOptionSlot(GameOption option)
+        public GuiOptionSlot(GameOption<T> option)
         {
             this.option = option;
             if(option.getType() == GameOptionType.INPUT)
             {
-                String value = Keyboard.getKeyName(Integer.parseInt(option.getValue()));
+                T v = option.getValue();
+                String value = Keyboard.getKeyName((Integer) v);
                 widget = new GuiButton(0, 0, 0, 200, 40, value, oc.getFontRenderer());
             }
             else if(option.getType() == GameOptionType.RANGE)
@@ -29,12 +30,12 @@ public class GuiSettings extends Gui
             }
         }
 
-        public void setValue(String v)
+        public void setValue(T v)
         {
             option.setValue(v);
             if(option.getType() == GameOptionType.INPUT)
             {
-                ((GuiButton) widget).setText(Keyboard.getKeyName(Integer.parseInt(option.getValue())));
+                ((GuiButton) widget).setText(Keyboard.getKeyName((Integer) option.getValue()));
             }
             else if(option.getType() == GameOptionType.INPUT)
             {
@@ -58,6 +59,7 @@ public class GuiSettings extends Gui
             this.widget.onButtonPressed(mx, my, button);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public void onButtonReleased(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)
         {
@@ -73,7 +75,7 @@ public class GuiSettings extends Gui
             else if(option.getType() == GameOptionType.RANGE)
             {
                 this.widget.onButtonReleased(mx, my, button);
-                option.setValue("" + ((GuiSlider) widget).getValue());
+                option.setValue((T) Float.valueOf(((GuiSlider) widget).getValue()));
             }
         }
 
@@ -89,9 +91,9 @@ public class GuiSettings extends Gui
         }
     }
 
-    private GuiOptionSlot          pending;
-    private Gui                    parent;
-    private GuiList<GuiOptionSlot> optionsList;
+    private GuiOptionSlot<?>          pending;
+    private Gui                       parent;
+    private GuiList<GuiOptionSlot<?>> optionsList;
 
     public GuiSettings(OurCraft game, Gui parent)
     {
@@ -105,13 +107,14 @@ public class GuiSettings extends Gui
         return super.keyPressed(id, c);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean keyReleased(int id, char c)
     {
         super.keyReleased(id, c);
         if(pending != null)
         {
-            pending.setValue("" + id);
+            ((GuiOptionSlot<Integer>) pending).setValue(id);
             pending = null;
         }
         return false;
@@ -120,15 +123,15 @@ public class GuiSettings extends Gui
     @Override
     public void init()
     {
-        optionsList = new GuiList<GuiOptionSlot>(0, 40, 60, oc.getDisplayWidth() - 80, oc.getDisplayHeight() - 80, 80);
-        optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().jumpKey));
-        optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().forwardKey));
-        optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().backwardsKey));
-        optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().leftKey));
-        optionsList.addSlot(new GuiOptionSlot(oc.getGameSettings().rightKey));
-        GuiOptionSlot sensitivitySlot = new GuiOptionSlot(oc.getGameSettings().sensitivity);
+        optionsList = new GuiList<GuiOptionSlot<?>>(0, 40, 60, oc.getDisplayWidth() - 80, oc.getDisplayHeight() - 80, 80);
+        optionsList.addSlot(new GuiOptionSlot<Integer>(oc.getGameSettings().jumpKey));
+        optionsList.addSlot(new GuiOptionSlot<Integer>(oc.getGameSettings().forwardKey));
+        optionsList.addSlot(new GuiOptionSlot<Integer>(oc.getGameSettings().backwardsKey));
+        optionsList.addSlot(new GuiOptionSlot<Integer>(oc.getGameSettings().leftKey));
+        optionsList.addSlot(new GuiOptionSlot<Integer>(oc.getGameSettings().rightKey));
+        GuiOptionSlot<Float> sensitivitySlot = new GuiOptionSlot<Float>(oc.getGameSettings().sensitivity);
         ((GuiSlider) sensitivitySlot.getWidget()).setRangeMax(3);
-        ((GuiSlider) sensitivitySlot.getWidget()).setValue(OurCraft.getOurCraft().getGameSettings().sensitivity.getValueAsFloat());
+        ((GuiSlider) sensitivitySlot.getWidget()).setValue(OurCraft.getOurCraft().getGameSettings().sensitivity.getValue());
         optionsList.addSlot(sensitivitySlot);
         addWidget(optionsList);
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));

@@ -534,23 +534,23 @@ public class OurCraft implements Runnable, OurCraftInstance
         mouseHandler.update();
         if(playerController != null && (currentMenu == null || !currentMenu.pausesGame()))
         {
-            if(Keyboard.isKeyDown(settings.forwardKey.getValueAsInt()))
+            if(Keyboard.isKeyDown(settings.forwardKey.getValue()))
             {
                 playerController.onMoveForwardRequested();
             }
-            if(Keyboard.isKeyDown(settings.backwardsKey.getValueAsInt()))
+            if(Keyboard.isKeyDown(settings.backwardsKey.getValue()))
             {
                 playerController.onMoveBackwardsRequested();
             }
-            if(Keyboard.isKeyDown(settings.leftKey.getValueAsInt()))
+            if(Keyboard.isKeyDown(settings.leftKey.getValue()))
             {
                 playerController.onMoveLeftRequested();
             }
-            if(Keyboard.isKeyDown(settings.rightKey.getValueAsInt()))
+            if(Keyboard.isKeyDown(settings.rightKey.getValue()))
             {
                 playerController.onMoveRightRequested();
             }
-            if(Keyboard.isKeyDown(settings.jumpKey.getValueAsInt()))
+            if(Keyboard.isKeyDown(settings.jumpKey.getValue()))
             {
                 playerController.onJumpRequested();
             }

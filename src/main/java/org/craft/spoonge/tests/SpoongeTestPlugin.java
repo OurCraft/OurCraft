@@ -48,7 +48,7 @@ public class SpoongeTestPlugin
     public void onWorldLoad(WorldLoadEvent evt)
     {
         logger.debug("SpongeLoading world " + evt.getWorld().getName());
-        TitleBuilder builder = Titles.builder();
+        TitleBuilder builder = Titles.update();
         builder.stay(2000);
         builder.fadeIn(5000);
         builder.fadeOut(5000);

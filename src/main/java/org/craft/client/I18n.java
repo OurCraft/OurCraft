@@ -115,7 +115,16 @@ public final class I18n
 
     public static String format(String lang, String message, Object... objects)
     {
-        String translated = languages.get(lang).get(message);
+        HashMap<String, String> langMap = languages.get(lang);
+        if(langMap == null)
+        {
+            if(!lang.equals("en_US"))
+            {
+                return format("en_US", message, objects);
+            }
+            return message;
+        }
+        String translated = langMap.get(message);
         if(translated == null)
         {
             if(!lang.equals("en_US"))
