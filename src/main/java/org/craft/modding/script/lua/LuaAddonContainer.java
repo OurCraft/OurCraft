@@ -7,11 +7,12 @@ import org.craft.modding.*;
 public class LuaAddonContainer extends AddonContainer<Mod>
 {
 
-    private String id;
-    private String name;
-    private String author;
-    private String mainClass;
-    private String version;
+    private String    id;
+    private String    name;
+    private String    author;
+    private String    mainClass;
+    private String    version;
+    private LuaScript script;
 
     public LuaAddonContainer(final String id, final String name, final String version, final String author, final String mainClass)
     {
@@ -85,7 +86,12 @@ public class LuaAddonContainer extends AddonContainer<Mod>
     @Override
     public Object getInstance()
     {
-        return this;
+        return script;
+    }
+
+    public void setInstance(LuaScript script)
+    {
+        this.script = script;
     }
 
     public String getMainClass()

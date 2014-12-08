@@ -19,7 +19,6 @@ public class ModTest
     @OurModEventHandler
     public void onPreInit(ModPreInitEvent evt)
     {
-        evt.getContainer().getAddonData().setDescription("TEST DESCRIPTION");
         logger = evt.getLogger();
         logger.debug("PreInit!!!");
         Block block = new Block("testModding");

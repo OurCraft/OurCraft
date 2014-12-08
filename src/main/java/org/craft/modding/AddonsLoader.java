@@ -212,8 +212,7 @@ public class AddonsLoader
 
             LuaAddonContainer container = new LuaAddonContainer(id, name, version, author, mainClassPath);
             CommonHandler.setCurrentContainer(container);
-            new LuaScript(loader.getResource(new ResourceLocation(mainClassPath)), luaListener, container, game);
-
+            container.setInstance(new LuaScript(loader.getResource(new ResourceLocation(mainClassPath)), luaListener, container, game));
             container.setAddonData(new AddonData(container));
             eventBus.register(container);
             File configFolder = new File(SystemUtils.getGameFolder(), "configs/");

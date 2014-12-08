@@ -5,6 +5,7 @@ import java.io.*;
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
+import org.craft.client.render.fonts.*;
 import org.craft.modding.*;
 
 public class GuiAddonList extends Gui
@@ -75,7 +76,7 @@ public class GuiAddonList extends Gui
                 AddonData data = container.getAddonData();
                 if(data != null)
                 {
-                    modDataPanel.addWidget(new GuiLabel(-1, 0, 0, container.getName(), getFontRenderer()));
+                    modDataPanel.addWidget(new GuiLabel(-1, 0, 0, container.getName() + " " + "('" + TextFormatting.UNDERLINED + container.getId() + TextFormatting.RESET + "') - " + container.getVersion(), getFontRenderer()));
                     int descY = 20;
                     if(data.getLogoPath() != null)
                     {
