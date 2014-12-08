@@ -16,12 +16,12 @@ import org.craft.commands.*;
 import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.modding.events.state.*;
 import org.craft.network.*;
 import org.craft.network.packets.*;
 import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
-import org.craft.spoonge.events.state.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
@@ -79,7 +79,6 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         serverWorld = new ServerWorld("remote-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }
 
-    @SuppressWarnings("unchecked")
     public void start(Map<String, String> properties)
     {
         nogui = Boolean.parseBoolean(properties.get("nogui"));
@@ -135,7 +134,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         serverWrapper = new NettyServerWrapper(this, eventBus, Integer.parseInt(properties.get("port")));
 
         Log.message("Starting server connexion");
-        eventBus.fireEvent(new SpoongeServerAboutToStartEvent(this), null, null);
+        eventBus.fireEvent(new ModServerAboutStartingEvent(this), null, null);
         new Thread(serverWrapper).start();
 
         eventBus.fireEvent(new ModPostInitEvent(this), null, null);

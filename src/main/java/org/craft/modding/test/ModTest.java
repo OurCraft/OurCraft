@@ -3,6 +3,7 @@ package org.craft.modding.test;
 import org.craft.blocks.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.modding.events.state.*;
 import org.slf4j.*;
 
 @Mod(id = "modtest", name = "Test mod", version = "1.0")

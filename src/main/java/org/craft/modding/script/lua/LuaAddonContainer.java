@@ -88,4 +88,9 @@ public class LuaAddonContainer extends AddonContainer<Mod>
         return this;
     }
 
+    public String getMainClass()
+    {
+        return mainClass;
+    }
+
 }

@@ -100,7 +100,7 @@ public class World
         List<Entity> deadEntities = Lists.newArrayList();
         for(Entity e : entities)
         {
-            Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
+            //            Chunk c = getChunk((int) e.getX(), (int) e.getY(), (int) e.getZ());
             //            if(c != null)
             //                c.update();
             e.update(delta);

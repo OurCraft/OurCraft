@@ -2,9 +2,9 @@ package org.craft.modding;
 
 import java.util.*;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
-public class ModManager implements IAddonManager
+public class ModManager implements IAddonManager<Mod>
 {
 
     private HashMap<String, ModContainer> mods;
@@ -17,30 +17,30 @@ public class ModManager implements IAddonManager
     }
 
     @Override
-    public AddonContainer getAddon(String id)
+    public AddonContainer<Mod> getAddon(String id)
     {
         return mods.get(id);
     }
 
     @Override
-    public Collection<AddonContainer> getAddons()
+    public Collection<AddonContainer<Mod>> getAddons()
     {
-        List<AddonContainer> containers = Lists.newArrayList();
+        List<AddonContainer<Mod>> containers = Lists.newArrayList();
         for(ModContainer plugin : mods.values())
         {
-            containers.add((AddonContainer) plugin);
+            containers.add(plugin);
         }
         return containers;
     }
 
     @Override
-    public IAddonHandler getHandler()
+    public IAddonHandler<Mod> getHandler()
     {
         return handler;
     }
 
     @Override
-    public void loadAddon(AddonContainer container)
+    public void loadAddon(AddonContainer<Mod> container)
     {
         mods.put(container.getId(), (ModContainer) container);
     }

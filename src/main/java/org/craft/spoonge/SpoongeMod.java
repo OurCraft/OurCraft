@@ -7,6 +7,7 @@ import com.google.common.base.*;
 import org.craft.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
+import org.craft.modding.events.state.*;
 import org.craft.resources.*;
 import org.craft.spoonge.events.*;
 import org.craft.spoonge.events.state.*;
@@ -102,6 +103,36 @@ public class SpoongeMod implements Game
     public void onWorldLoad(WorldLoadEvent event)
     {
         eventManager.post(new SpoongeWorldLoadEvent(event.getOurCraftInstance(), (World) event.getWorld()));
+    }
+
+    @OurModEventHandler
+    public void onServerAboutStarting(ModServerAboutStartingEvent event)
+    {
+        eventManager.post(new SpoongeServerAboutToStartEvent(event.getOurCraftInstance()));
+    }
+
+    @OurModEventHandler
+    public void onServerStopping(ModServerStoppingEvent event)
+    {
+        eventManager.post(new SpoongeServerStoppingEvent(event.getOurCraftInstance()));
+    }
+
+    @OurModEventHandler
+    public void onServerStopped(ModServerStoppedEvent event)
+    {
+        eventManager.post(new SpoongeServerStoppedEvent(event.getOurCraftInstance()));
+    }
+
+    @OurModEventHandler
+    public void onServerStarted(ModServerStartedEvent event)
+    {
+        eventManager.post(new SpoongeServerStartedEvent(event.getOurCraftInstance()));
+    }
+
+    @OurModEventHandler
+    public void onServerStarting(ModServerStartingEvent event)
+    {
+        eventManager.post(new SpoongeServerStartingEvent(event.getOurCraftInstance()));
     }
 
     @Override
