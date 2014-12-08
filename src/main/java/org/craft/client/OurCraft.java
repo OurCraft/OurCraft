@@ -6,7 +6,7 @@ import static org.lwjgl.util.glu.GLU.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
-import java.lang.annotation.Annotation;
+import java.lang.annotation.*;
 import java.nio.*;
 import java.util.*;
 import java.util.List;
@@ -32,7 +32,6 @@ import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.network.*;
 import org.craft.resources.*;
-import org.craft.spoonge.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.Log.NonLoggable;
@@ -43,7 +42,6 @@ import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
-import org.spongepowered.api.*;
 
 public class OurCraft implements Runnable, OurCraftInstance
 {
@@ -71,7 +69,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private OpenGLBuffer                   selectionBoxBuffer;
     private DiskSimpleResourceLoader       gameFolderLoader;
     private PlayerController               playerController;
-    private SpoongeGameRegistry            gameRegistry;
+    private GlobalRegistry                 gameRegistry;
     private EventBus                       eventBus;
     private Session                        session;
     private RenderItems                    renderItems;
@@ -168,6 +166,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             //Init Game Content
             session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
             Log.message("Loading Mods...");
+            gameRegistry = new GlobalRegistry();
             List<Class<? extends Annotation>> annots = Lists.newArrayList();
             annots.add(OurModEventHandler.class);
             eventBus = new EventBus(new Class<?>[]
@@ -1045,7 +1044,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     }
 
     @Override
-    public GameRegistry getRegistry()
+    public GlobalRegistry getRegistry()
     {
         return gameRegistry;
     }

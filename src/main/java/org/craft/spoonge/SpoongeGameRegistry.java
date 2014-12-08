@@ -2,6 +2,8 @@ package org.craft.spoonge;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.blocks.*;
 import org.craft.items.*;
 import org.spongepowered.api.*;
@@ -46,25 +48,19 @@ public class SpoongeGameRegistry implements GameRegistry
     @Override
     public List<BlockType> getBlocks()
     {
-        // TODO Need test
-        return (List<BlockType>) Blocks.getBlocks();
+        List<BlockType> types = Lists.newArrayList();
+        for(Block block : Blocks.getBlocks())
+            types.add((BlockType) block);
+        return types;
     }
 
     @Override
     public List<ItemType> getItems()
     {
-        // TODO Need test
-        return (List<ItemType>) Items.getItems();
-    }
-
-    public void registerBlock(Block b)
-    {
-        Blocks.register(b);
-    }
-
-    public void registerItem(Item i)
-    {
-        Items.register(i);
+        List<ItemType> types = Lists.newArrayList();
+        for(Item item : Items.getItems())
+            types.add((ItemType) item);
+        return types;
     }
 
 }

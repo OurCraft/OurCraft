@@ -1,15 +1,14 @@
 package org.craft.items;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
 public class Items
 {
 
     public static final HashMap<String, Item> ITEM_REGISTRY = new HashMap<String, Item>();
-    private static List<Item>            itemByID;
+    private static List<Item>                 itemByID;
     public static Item                        test;
     public static Item                        test2;
 
@@ -55,8 +54,8 @@ public class Items
     {
         return itemByID.get(id);
     }
-    
-    public static List<?> getItems()
+
+    public static List<Item> getItems()
     {
         return itemByID;
     }

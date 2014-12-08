@@ -1,7 +1,7 @@
 package org.craft.server;
 
 import java.io.*;
-import java.lang.annotation.Annotation;
+import java.lang.annotation.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -21,13 +21,11 @@ import org.craft.network.packets.*;
 import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
-import org.craft.spoonge.*;
 import org.craft.spoonge.events.state.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.craft.world.populators.*;
-import org.spongepowered.api.*;
 import org.spongepowered.api.entity.player.*;
 
 public class OurCraftServer implements OurCraftInstance, ICommandSender
@@ -35,7 +33,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
 
     private static OurCraftServer          instance;
     private NettyServerWrapper             serverWrapper;
-    private SpoongeGameRegistry            gameRegistry;
+    private GlobalRegistry                 gameRegistry;
     private EventBus                       eventBus;
     private int                            maxPlayers;
 
@@ -107,6 +105,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         Blocks.init();
         BlockStates.init();
         Items.init();
+        gameRegistry = new GlobalRegistry();
         try
         {
             I18n.init(assetsLoader);
@@ -160,7 +159,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
     }
 
     @Override
-    public GameRegistry getRegistry()
+    public GlobalRegistry getRegistry()
     {
         return gameRegistry;
     }

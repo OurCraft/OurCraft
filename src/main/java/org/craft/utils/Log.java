@@ -1,19 +1,21 @@
 package org.craft.utils;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Method;
+import java.lang.annotation.*;
+import java.lang.reflect.*;
 
-import org.craft.client.OurCraft;
-import org.craft.utils.crash.CrashReport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.craft.client.*;
+import org.craft.utils.Log.NonLoggable;
+import org.craft.utils.crash.*;
+import org.slf4j.*;
 
+@NonLoggable
 public final class Log
 {
     private static final Logger log = LoggerFactory.getLogger("Ourcraft");
 
-
+    /**
+     * If a method or a class has this annotation on, the logger will ignore them when searching for the caller.
+     */
     @Retention(RetentionPolicy.RUNTIME)
     public static @interface NonLoggable
     {
@@ -27,7 +29,7 @@ public final class Log
     {
         message(msg, true);
     }
-    
+
     @NonLoggable
     private static String format(String rawMessage)
     {
@@ -38,6 +40,7 @@ public final class Log
         }
         return rawMessage;
     }
+
     @NonLoggable
     private static String getCaller()
     {
@@ -122,25 +125,25 @@ public final class Log
         String formated = format(msg);
         log.debug(formated);
     }
-    
+
     @NonLoggable
     public static void error(String formated, Throwable t)
     {
         log.error(formated, t);
     }
-    
+
     @NonLoggable
     public static void debug(String formated, Throwable t)
     {
         log.debug(formated, t);
     }
-    
+
     @NonLoggable
     public static void message(String formated, Throwable t)
     {
         log.info(formated, t);
     }
-    
+
     @NonLoggable
     public static void trace(String formated, Throwable t)
     {
@@ -148,4 +151,3 @@ public final class Log
     }
 
 }
-

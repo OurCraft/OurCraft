@@ -87,7 +87,7 @@ public final class Blocks
         return b;
     }
 
-    public static List<?> getBlocks()
+    public static List<Block> getBlocks()
     {
         return blockByID;
     }

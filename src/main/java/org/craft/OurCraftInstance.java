@@ -7,14 +7,13 @@ import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.resources.*;
-import org.spongepowered.api.*;
 
 public interface OurCraftInstance
 {
 
     String REGISTRIES_ID = "ourcraft";
 
-    GameRegistry getRegistry();
+    GlobalRegistry getRegistry();
 
     void broadcastMessage(String message);
 
