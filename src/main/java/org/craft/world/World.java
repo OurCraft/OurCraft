@@ -13,7 +13,7 @@ import org.craft.modding.events.block.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 
-public class World
+public class World implements IParticleHandler
 {
 
     public class BlockUpdateScheduler
@@ -79,6 +79,7 @@ public class World
     private long                       tick;
     private float                      gravity;
     private List<BlockUpdateScheduler> schedulers;
+    private IParticleHandler           delegateParticleHandler;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
@@ -582,5 +583,25 @@ public class World
         }
         schedulers.remove(toRemove);
         return toRemove != null;
+    }
+
+    public void setDelegateParticleHandler(IParticleHandler delegate)
+    {
+        this.delegateParticleHandler = delegate;
+    }
+
+    public IParticleHandler getDelegateParticleHandler()
+    {
+        return delegateParticleHandler;
+    }
+
+    public void spawnParticle(String string, float x, float y, float z)
+    {
+        delegateParticleHandler.spawnParticle(string, x, y, z);
+    }
+
+    public void spawnParticle(Particle particle)
+    {
+        delegateParticleHandler.spawnParticle(particle);
     }
 }

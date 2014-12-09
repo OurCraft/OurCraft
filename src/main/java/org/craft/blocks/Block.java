@@ -35,6 +35,8 @@ public class Block implements IStackable
 
     private AddonContainer<?> container;
 
+    private float             explosionResistance;
+
     /**
      * Block constructor. Takes in an ID to identify the block
      */
@@ -238,5 +240,16 @@ public class Block implements IStackable
     public Map<BlockState, IBlockStateValue> getDefaultBlockState()
     {
         return Maps.newHashMap();
+    }
+
+    public float getExplosionResistance()
+    {
+        return explosionResistance;
+    }
+
+    public Block setExplosionResistance(float r)
+    {
+        this.explosionResistance = r;
+        return this;
     }
 }

@@ -97,6 +97,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private HashMap<String, GuiDispatcher> guiMap;
     private ScreenTitle                    screenTitle;
     private ParticleRenderer               particleRenderer;
+    private ModelRender<Entity>            primedTNTRenderer;
 
     public OurCraft()
     {
@@ -205,6 +206,9 @@ public class OurCraft implements Runnable, OurCraftInstance
             renderItems = new RenderItems(renderEngine, modelLoader);
             renderEngine.createBlockAndItemMap(renderBlocks, renderItems);
             fallbackRenderer = new FallbackRender<Entity>();
+
+            primedTNTRenderer = new RenderPrimedTNT();
+
             particleRenderer = new ParticleRenderer(20000);
             openMenu(new GuiMainMenu(this));
 
@@ -452,24 +456,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                 if(!state)
                 {
                     currentMenu.keyPressed(id, c);
-                    if(id == Keyboard.KEY_P)
-                    {
-                        float r = 5f;
-                        for(int s = 0; s < 360; s += 20)
-                        {
-                            for(int t = 0; t < 360; t += 20)
-                            {
-                                float x = (float) player.getX() + 0.5f;
-                                float y = (float) player.getY() + 0.5f;
-                                float z = (float) player.getZ() + 0.5f;
-                                x += r * Math.cos(Math.toRadians(s)) * Math.sin(Math.toRadians(t)) + Math.random();
-                                y += r * Math.sin(Math.toRadians(s)) * Math.sin(Math.toRadians(t)) + Math.random();
-                                z += r * Math.cos(Math.toRadians(t)) + Math.random();
-                                particleRenderer.spawnParticle("test", x, y, z);
-                            }
-                        }
-                    }
-                    else if(id == Keyboard.KEY_F2)
+                    if(id == Keyboard.KEY_F2)
                     {
                         File out = new File(SystemUtils.getGameFolder(), "screenshots/" + System.currentTimeMillis() + ".png");
                         try
@@ -482,6 +469,17 @@ public class OurCraft implements Runnable, OurCraftInstance
                         catch(Exception e)
                         {
                             e.printStackTrace();
+                        }
+                    }
+                    else if(id == Keyboard.KEY_F)
+                    {
+                        if(clientWorld != null)
+                        {
+                            EntityPrimedTNT tnt = new EntityPrimedTNT(clientWorld);
+                            tnt.setFuse(120L);
+                            tnt.setSize(1, 1, 1);
+                            tnt.setLocation(player.posX, player.posY, player.posZ);
+                            clientWorld.spawn(tnt);
                         }
                     }
                 }
@@ -699,7 +697,14 @@ public class OurCraft implements Runnable, OurCraftInstance
         {
             if(e != renderEngine.getRenderViewEntity())
             {
-                fallbackRenderer.render(renderEngine, e, (float) e.getX(), (float) e.getY(), (float) e.getZ());
+                AbstractRender<Entity> renderer = null;
+                if(e instanceof EntityPrimedTNT) // TODO: Implement a map Entity<->Renderer
+                {
+                    renderer = primedTNTRenderer;
+                }
+                else
+                    renderer = fallbackRenderer;
+                renderer.render(renderEngine, e, (float) e.getX(), (float) e.getY(), (float) e.getZ());
             }
         }
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -883,6 +888,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         }
         else
         {
+            world.setDelegateParticleHandler(particleRenderer);
             try
             {
                 world.getLoader().loadWorldConstants(world);

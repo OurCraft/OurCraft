@@ -8,9 +8,9 @@ import org.craft.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
-import org.craft.utils.*;
+import org.craft.world.*;
 
-public class ParticleRenderer
+public class ParticleRenderer implements IParticleHandler
 {
 
     private Particle[]                   particles;
@@ -51,7 +51,6 @@ public class ParticleRenderer
         int index = getFreeIndex();
         particles[index] = particle;
         this.index = index;
-        Log.message("Index: " + index);
     }
 
     private int getFreeIndex()

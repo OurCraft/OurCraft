@@ -2,11 +2,8 @@ package org.craft.client.models;
 
 import java.util.*;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
-/**
- * UNDOCUMENTED: System far from being done and/or even kept
- */
 public class ModelBase
 {
 

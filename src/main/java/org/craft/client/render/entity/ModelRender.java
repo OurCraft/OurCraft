@@ -14,9 +14,9 @@ import org.lwjgl.*;
 public class ModelRender<T extends Entity> extends AbstractRender<T>
 {
 
-    private ModelBase                       model;
+    protected ModelBase                     model;
     private HashMap<ModelBox, OpenGLBuffer> buffers;
-    private static Texture                  defaultTexture;
+    protected static Texture                defaultTexture;
 
     public ModelRender(ModelBase model)
     {
@@ -40,7 +40,9 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
         for(ModelBox box : model.getChildren())
         {
             if(box == null)
+            {
                 continue;
+            }
             if(!buffers.containsKey(box))
             {
                 OpenGLBuffer buffer = new OpenGLBuffer();
@@ -54,7 +56,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             Matrix4 rot1 = erot.toRotationMatrix();
 
             Matrix4 finalMatrix = scale.mul(translation.mul(rot.mul(rot1)));
-            Shader.getCurrentlyBound().setUniform("modelview", finalMatrix);
+            engine.setModelviewMatrix(finalMatrix);
             engine.renderBuffer(buffers.get(box), getTexture(e));
         }
         engine.setModelviewMatrix(Matrix4.get().initIdentity());

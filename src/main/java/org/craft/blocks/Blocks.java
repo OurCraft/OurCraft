@@ -31,19 +31,19 @@ public final class Blocks
     public static void init()
     {
         register(air = new BlockAir());
-        register(dirt = new Block("dirt"));
-        register(grass = new Block("grass"));
-        register(bedrock = new Block("bedrock"));
-        register(stone = new Block("stone"));
-        register(log = new BlockLog("log"));
-        register(leaves = new BlockTransparent("leaves"));
-        register(glass = new BlockTransparent("glass"));
+        register(dirt = new Block("dirt").setExplosionResistance(2.5f));
+        register(grass = new Block("grass").setExplosionResistance(3f));
+        register(bedrock = new Block("bedrock").setExplosionResistance(18000f));
+        register(stone = new Block("stone").setExplosionResistance(30f));
+        register(log = new BlockLog("log").setExplosionResistance(10f));
+        register(leaves = new BlockTransparent("leaves").setExplosionResistance(1f));
+        register(glass = new BlockTransparent("glass").setExplosionResistance(1.5f));
         register(rose = new BlockFlower("rose"));
         register(cable = new BlockCable("copper_cable"));
-        register(powerSource = new BlockPowerSource("power_source"));
-        register(powerDisplay = new BlockPowerDisplay("power_display"));
-        register(obsidian = new Block("obsidian"));
-        register(dirtSlab = new BlockHalfSlab("dirt_slab"));
+        register(powerSource = new BlockPowerSource("power_source").setExplosionResistance(15f));
+        register(powerDisplay = new BlockPowerDisplay("power_display").setExplosionResistance(15f));
+        register(obsidian = new Block("obsidian").setExplosionResistance(6000));
+        register(dirtSlab = new BlockHalfSlab("dirt_slab").setExplosionResistance(2f));
 
         for(short i = 0; i < blockByID.size(); i++ )
         {
