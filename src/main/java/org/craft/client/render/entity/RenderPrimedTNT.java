@@ -12,6 +12,7 @@ public class RenderPrimedTNT extends ModelRender<Entity>
 {
 
     private Texture text;
+    private Texture whiteText;
 
     public RenderPrimedTNT()
     {
@@ -19,6 +20,7 @@ public class RenderPrimedTNT extends ModelRender<Entity>
         try
         {
             text = OpenGLHelper.loadTexture(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "textures/entities/tnt.png")));
+            whiteText = Texture.createColoredRect(0xFFFFFFFF);
         }
         catch(IOException e)
         {
@@ -29,7 +31,13 @@ public class RenderPrimedTNT extends ModelRender<Entity>
     @Override
     public Texture getTexture(Entity e)
     {
+        if(e instanceof EntityPrimedTNT)
+        {
+            EntityPrimedTNT tnt = (EntityPrimedTNT) e;
+            // TODO: Better function
+            if(tnt.getFuse() % 40 <= 14)
+                return whiteText;
+        }
         return text;
     }
-
 }

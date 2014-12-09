@@ -71,7 +71,20 @@ public class Explosion
                         if(!affectedBlocks.contains(v))
                         {
                             if(block != Blocks.air)
+                            {
                                 affectedBlocks.add(v);
+                                world.setBlock(blockX, blockY, blockZ, Blocks.air);
+                                if(smoke)
+                                {
+                                    Vector3 dir = center.sub(blockX, blockY, blockZ).normalize();
+                                    float vx = (float) (dir.getX() + Math.random() * 2f - 1f) * -0.005f;
+                                    float vy = (float) (dir.getY() + Math.random() * -2f) * -0.01f;
+                                    float vz = (float) (dir.getZ() + Math.random() * 2f - 1f) * -0.005f;
+                                    dir.dispose();
+                                    Particle particle = new Particle("test", blockX + 0.5f + (float) Math.random() - 0.5f, blockY + 0.5f + (float) Math.random() - 0.5f, blockZ + 0.5f + (float) Math.random() - 0.5f, vx, vy, vz, 120L);
+                                    world.spawnParticle(particle);
+                                }
+                            }
                         }
                         else
                         {
@@ -90,24 +103,10 @@ public class Explosion
                 }
             }
         }
-        Vector3 center = Vector3.get(x, y, z);
         for(Vector3 v : affectedBlocks)
         {
-            int blockX = (int) Math.floor(v.getX());
-            int blockY = (int) Math.floor(v.getY());
-            int blockZ = (int) Math.floor(v.getZ());
-            world.setBlock(blockX, blockY, blockZ, Blocks.air);
-            if(smoke)
-            {
-                Vector3 dir = center.sub(blockX, blockY, blockZ).normalize();
-                float vx = (float) (dir.getX() + Math.random() * 2f - 1f) * -0.005f;
-                float vy = (float) (dir.getY() + Math.random() * -2f) * -0.01f;
-                float vz = (float) (dir.getZ() + Math.random() * 2f - 1f) * -0.005f;
-                dir.dispose();
-                Particle particle = new Particle("test", blockX + 0.5f + (float) Math.random() - 0.5f, blockY + 0.5f + (float) Math.random() - 0.5f, blockZ + 0.5f + (float) Math.random() - 0.5f, vx, vy, vz, 120L);
-                world.spawnParticle(particle);
-            }
             v.dispose();
         }
+        //world.playSound("explode", x,y,z);
     }
 }

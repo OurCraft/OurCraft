@@ -46,7 +46,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             if(!buffers.containsKey(box))
             {
                 OpenGLBuffer buffer = new OpenGLBuffer();
-                box.prepareBuffer(getTexture(e), buffer, 1);
+                box.prepareBuffer(getTexture(e), buffer, getColor(e));
                 buffers.put(box, buffer);
             }
             Matrix4 rot = box.getRotation().toRotationMatrix();
@@ -60,5 +60,10 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
             engine.renderBuffer(buffers.get(box), getTexture(e));
         }
         engine.setModelviewMatrix(Matrix4.get().initIdentity());
+    }
+
+    public Quaternion getColor(Entity e)
+    {
+        return Quaternion.get(1, 1, 1, 1);
     }
 }

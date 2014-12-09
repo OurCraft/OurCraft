@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.nio.*;
 
 import org.craft.utils.*;
+import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
 public class Texture implements ITextureObject, IDisposable
@@ -86,5 +87,32 @@ public class Texture implements ITextureObject, IDisposable
     public ByteBuffer getPixels()
     {
         return pixels;
+    }
+
+    public static Texture createColoredRect(int color)
+    {
+        return createColoredRect(1, 1, color);
+    }
+
+    public static Texture createColoredRect(int w, int h, int color)
+    {
+        ByteBuffer buffer = BufferUtils.createByteBuffer(w * h * 4);
+        int a = color >> 24 & 0xFF;
+        int r = color >> 16 & 0xFF;
+        int g = color >> 8 & 0xFF;
+        int b = color >> 0 & 0xFF;
+        for(int y = 0; y < h; y++ )
+        {
+            for(int x = 0; x < w; x++ )
+            {
+                buffer.put((byte) r);
+                buffer.put((byte) g);
+                buffer.put((byte) b);
+                buffer.put((byte) a);
+            }
+        }
+        buffer.flip();
+        Texture result = new Texture(w, h, buffer);
+        return result;
     }
 }
