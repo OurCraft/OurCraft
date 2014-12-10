@@ -44,7 +44,7 @@ public class ZipSimpleResourceLoader extends ResourceLoader
 
                 dataWriter.flush();
                 dataWriter.close();
-                resources.put(currentLoc.getFullPath(), new SimpleResource(currentLoc, new ByteArrayInputStream(dataWriter.toByteArray()), this));
+                resources.put(currentLoc.getFullPath(), new SimpleResource(currentLoc, null, new ByteArrayInputStream(dataWriter.toByteArray()), this));
             }
 
             inputStream.close();

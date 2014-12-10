@@ -10,10 +10,11 @@ import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.modding.events.block.*;
+import org.craft.sound.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 
-public class World implements IParticleHandler
+public class World implements IParticleHandler, ISoundProducer
 {
 
     public class BlockUpdateScheduler
@@ -80,6 +81,7 @@ public class World implements IParticleHandler
     private float                      gravity;
     private List<BlockUpdateScheduler> schedulers;
     private IParticleHandler           delegateParticleHandler;
+    private ISoundProducer             delegateSoundProducer;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
@@ -198,9 +200,11 @@ public class World implements IParticleHandler
         Block oldBlock = c.getBlock(this, x, y, z);
         CommonHandler.getCurrentInstance().getEventBus().fireEvent(new ModBlockChangeEvent(CommonHandler.getCurrentInstance(), this, x, y, z, oldBlock, block));
         c.setBlock(this, x, y, z, block);
-        c.markDirty();
         if(notify)
+        {
+            c.markDirty();
             updateBlockNeighbors(x, y, z, false);
+        }
     }
 
     /**
@@ -595,6 +599,16 @@ public class World implements IParticleHandler
         return delegateParticleHandler;
     }
 
+    public void setDelegateSoundProducer(ISoundProducer delegate)
+    {
+        this.delegateSoundProducer = delegate;
+    }
+
+    public ISoundProducer getDelegateSoundProducer()
+    {
+        return delegateSoundProducer;
+    }
+
     public void spawnParticle(String string, float x, float y, float z)
     {
         delegateParticleHandler.spawnParticle(string, x, y, z);
@@ -603,5 +617,27 @@ public class World implements IParticleHandler
     public void spawnParticle(Particle particle)
     {
         delegateParticleHandler.spawnParticle(particle);
+    }
+
+    public void playSound(String id, float x, float y, float z)
+    {
+        delegateSoundProducer.playSound(id, this, x, y, z);
+    }
+
+    @Override
+    public void playSound(String id, World w, float x, float y, float z)
+    {
+        playSound(id, x, y, z);
+    }
+
+    @Override
+    public void playSound(Sound sound)
+    {
+        delegateSoundProducer.playSound(sound);
+    }
+
+    public void performExplosion(Explosion explosion)
+    {
+        new Thread(explosion).start();
     }
 }

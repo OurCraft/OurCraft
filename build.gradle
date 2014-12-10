@@ -71,6 +71,7 @@ compileJava.source = sourceSets.filtered.java
 compileJava.dependsOn processVersion 
 
 dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
     compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
     compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
     compile 'io.netty:netty-all:4.0.24.Final'

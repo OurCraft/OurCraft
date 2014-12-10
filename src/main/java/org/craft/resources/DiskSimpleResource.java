@@ -1,6 +1,7 @@
 package org.craft.resources;
 
 import java.io.*;
+import java.net.*;
 
 public class DiskSimpleResource extends AbstractResource
 {
@@ -40,6 +41,11 @@ public class DiskSimpleResource extends AbstractResource
             }
         }
         return bytes;
+    }
+
+    public URL getURL() throws MalformedURLException
+    {
+        return file.toURI().toURL();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.craft.resources;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 public class ClasspathSimpleResourceLoader extends ResourceLoader
@@ -28,7 +29,10 @@ public class ClasspathSimpleResourceLoader extends ResourceLoader
         {
             InputStream stream = ClasspathSimpleResourceLoader.class.getResourceAsStream("/" + base + location.getFullPath());
             if(stream != null)
-                resources.put(location.getFullPath(), new SimpleResource(location, stream, this));
+            {
+                URL url = ClasspathSimpleResourceLoader.class.getResource("/" + base + location.getFullPath());
+                resources.put(location.getFullPath(), new SimpleResource(location, url, stream, this));
+            }
             else
                 throw new FileNotFoundException("Resource /" + base + location.getFullPath() + " not found.");
         }

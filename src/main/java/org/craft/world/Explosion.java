@@ -7,7 +7,7 @@ import com.google.common.collect.*;
 import org.craft.blocks.*;
 import org.craft.maths.*;
 
-public class Explosion
+public class Explosion implements Runnable
 {
 
     private World   world;
@@ -41,7 +41,10 @@ public class Explosion
         return smoke;
     }
 
-    public void perform()
+    /**
+     * Reference: <a href="http://minecraft.gamepedia.com/Explosion">Minecraft's explosion algorithm</a>
+     */
+    public void run()
     {
         List<Vector3> affectedBlocks = Lists.newArrayList();
         for(int gridX = 0; gridX <= 16; gridX++ )
@@ -68,12 +71,14 @@ public class Explosion
                         Vector3 v = Vector3.get(blockX, blockY, blockZ);
                         float blastResistance = 0f;
                         Block block = world.getBlockAt(blockX, blockY, blockZ);
+                        blastResistance = block.getExplosionResistance();
+                        float attenuation = (0.3f * 0.75f + (blastResistance / 5.f) * 0.3f);
                         if(!affectedBlocks.contains(v))
                         {
+                            affectedBlocks.add(v);
                             if(block != Blocks.air)
                             {
-                                affectedBlocks.add(v);
-                                world.setBlock(blockX, blockY, blockZ, Blocks.air);
+                                world.setBlock(blockX, blockY, blockZ, Blocks.air, false);
                                 if(smoke)
                                 {
                                     Vector3 dir = center.sub(blockX, blockY, blockZ).normalize();
@@ -90,8 +95,6 @@ public class Explosion
                         {
                             v.dispose();
                         }
-                        blastResistance = block.getExplosionResistance(); // TODO: Per block resistance
-                        float attenuation = (0.3f * 0.75f + (blastResistance / 5.f) * 0.3f);
                         intensity -= attenuation;
                         ray.dispose();
                         if(intensity < 0f)
@@ -105,8 +108,11 @@ public class Explosion
         }
         for(Vector3 v : affectedBlocks)
         {
+            Chunk c = world.getChunk((int) Math.floor(v.getX()), (int) Math.floor(v.getY()), (int) Math.floor(v.getZ()));
+            if(c != null)
+                c.markDirty();
             v.dispose();
         }
-        //world.playSound("explode", x,y,z);
+        world.playSound("explode", x, y, z);
     }
 }

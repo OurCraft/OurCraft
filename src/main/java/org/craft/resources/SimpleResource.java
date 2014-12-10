@@ -1,17 +1,18 @@
 package org.craft.resources;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
+import java.net.*;
 
 public class SimpleResource extends AbstractResource
 {
 
     private byte[] bytes;
+    private URL    url;
 
-    public SimpleResource(ResourceLocation location, InputStream inputStream, ResourceLoader loader)
+    public SimpleResource(ResourceLocation location, URL url, InputStream inputStream, ResourceLoader loader)
     {
         super(location, inputStream, loader);
+        this.url = url;
     }
 
     @Override
@@ -44,5 +45,10 @@ public class SimpleResource extends AbstractResource
     public File asFile()
     {
         throw new IllegalArgumentException("Impossible to retrieve simple resource as file");
+    }
+
+    public URL getURL()
+    {
+        return url;
     }
 }

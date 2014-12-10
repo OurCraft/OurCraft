@@ -32,7 +32,7 @@ public class EntityPrimedTNT extends Entity
         {
             Explosion explosion = new Explosion(worldObj, posX, posY, posZ, 4f);
             explosion.producesSmoke(true);
-            explosion.perform();
+            worldObj.performExplosion(explosion);
             setDead();
         }
     }

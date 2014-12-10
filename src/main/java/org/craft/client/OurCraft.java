@@ -33,6 +33,7 @@ import org.craft.modding.events.*;
 import org.craft.modding.events.state.*;
 import org.craft.network.*;
 import org.craft.resources.*;
+import org.craft.sound.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.Log.NonLoggable;
@@ -91,13 +92,13 @@ public class OurCraft implements Runnable, OurCraftInstance
     private int                            lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private ClientNetHandler               netHandler;
     private WorldLoader                    worldLoader;
-    private SoundEngine                    sndEngine;
     private GameSettings                   settings;
     private ModelLoader                    modelLoader;
     private HashMap<String, GuiDispatcher> guiMap;
     private ScreenTitle                    screenTitle;
     private ParticleRenderer               particleRenderer;
     private ModelRender<Entity>            primedTNTRenderer;
+    private DirectSoundProducer            sndProducer;
 
     public OurCraft()
     {
@@ -122,7 +123,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         try
         {
-            AL.create();
             objectInFront = new CollisionInfos();
             objectInFront.type = CollisionType.NONE;
             //LWJGL Properties
@@ -181,12 +181,13 @@ public class OurCraft implements Runnable, OurCraftInstance
                 modsFolder.mkdirs();
             addonsLoader.loadAll(modsFolder);
 
-            sndEngine = new SoundEngine();
+            sndProducer = new DirectSoundProducer();
             settings = new GameSettings();
             File propsFile = new File(SystemUtils.getGameFolder(), "properties.txt");
             settings.loadFrom(propsFile);
             settings.saveTo(propsFile);
 
+            Sounds.init();
             if(settings.font.getValue().equals("default"))
                 fontRenderer = new BaseFontRenderer();
             else
@@ -387,6 +388,8 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         if(player != null)
         {
+            sndProducer.setListenerLocation(player.posX, player.posY, player.posZ);
+            sndProducer.setListenerOrientation(player.getQuaternionRotation());
             objectInFront = player.getObjectInFront(5f);
         }
         particleRenderer.updateAll();
@@ -889,6 +892,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         else
         {
             world.setDelegateParticleHandler(particleRenderer);
+            world.setDelegateSoundProducer(sndProducer);
             try
             {
                 world.getLoader().loadWorldConstants(world);
@@ -1106,11 +1110,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     public RenderBlocks getRenderBlocks()
     {
         return renderBlocks;
-    }
-
-    public SoundEngine getSoundEngine()
-    {
-        return sndEngine;
     }
 
     public GameSettings getGameSettings()

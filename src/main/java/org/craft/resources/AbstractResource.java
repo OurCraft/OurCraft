@@ -1,6 +1,7 @@
 package org.craft.resources;
 
 import java.io.*;
+import java.net.*;
 
 public abstract class AbstractResource
 {
@@ -65,4 +66,9 @@ public abstract class AbstractResource
      * Returns raw data from resource
      */
     public abstract byte[] getData();
+
+    public URL getURL() throws MalformedURLException
+    {
+        throw new UnsupportedOperationException();
+    }
 }
