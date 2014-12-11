@@ -20,6 +20,7 @@ public final class Blocks
     public static Block                        powerSource;
     public static Block                        powerDisplay;
     public static Block                        obsidian;
+    public static Block                        tnt;
     // ONLY FOR TESTING
     public static Block                        dirtSlab;
     public static final HashMap<String, Block> BLOCK_REGISTRY = Maps.newHashMap();
@@ -44,6 +45,7 @@ public final class Blocks
         register(powerDisplay = new BlockPowerDisplay("power_display").setExplosionResistance(15f));
         register(obsidian = new Block("obsidian").setExplosionResistance(6000));
         register(dirtSlab = new BlockHalfSlab("dirt_slab").setExplosionResistance(2f));
+        register(tnt = new BlockTnT("tnt").setExplosionResistance(0));
 
         for(short i = 0; i < blockByID.size(); i++ )
         {

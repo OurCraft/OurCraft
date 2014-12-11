@@ -4,7 +4,7 @@ import com.mojang.nbt.*;
 
 import org.craft.world.*;
 
-public class EntityPrimedTNT extends Entity
+public class EntityPrimedTNT extends Entity implements IExplosiveEntity
 {
 
     private long fuse;
@@ -30,7 +30,7 @@ public class EntityPrimedTNT extends Entity
         fuse-- ;
         if(fuse <= 0)
         {
-            Explosion explosion = new Explosion(worldObj, posX, posY, posZ, 4f);
+            Explosion explosion = new Explosion(worldObj, posX, posY, posZ, 6f);
             explosion.producesSmoke(true);
             worldObj.performExplosion(explosion);
             setDead();
@@ -41,6 +41,12 @@ public class EntityPrimedTNT extends Entity
     {
         super.writeToNBT(compound);
         compound.putLong("fuse", fuse);
+    }
+
+    @Override
+    public void onExplosion(Explosion explosion, World world, float x, float y, float z)
+    {
+        ;
     }
 
 }

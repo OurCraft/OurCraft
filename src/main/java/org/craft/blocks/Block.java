@@ -252,4 +252,9 @@ public class Block implements IStackable
         this.explosionResistance = r;
         return this;
     }
+
+    public void onDestroyedByExplosion(Explosion explosion, World world, int blockX, int blockY, int blockZ)
+    {
+        ;
+    }
 }

@@ -8,7 +8,6 @@ import org.craft.*;
 import org.craft.blocks.*;
 import org.craft.inventory.*;
 import org.craft.inventory.Stack;
-import org.craft.items.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 
@@ -35,7 +34,7 @@ public class EntityPlayer extends EntityLiving
         inventory.setInventorySlotContents(2, new Stack(Blocks.grass));
         inventory.setInventorySlotContents(2, new Stack(Blocks.obsidian));
         inventory.setInventorySlotContents(3, new Stack(Blocks.powerSource));
-        inventory.setInventorySlotContents(4, new Stack(Items.test));
+        inventory.setInventorySlotContents(4, new Stack(Blocks.tnt));
         inventory.setInventorySlotContents(5, new Stack(Blocks.powerDisplay));
         inventory.setInventorySlotContents(6, new Stack(Blocks.glass));
         inventory.setInventorySlotContents(7, new Stack(Blocks.leaves));

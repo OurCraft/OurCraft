@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": 
+    {
+        "up": "blocks/tnt_top",
+        "down": "blocks/tnt_bottom",
+        "east": "blocks/tnt_side",
+        "west": "blocks/tnt_side",
+        "north": "blocks/tnt_side",
+        "south": "blocks/tnt_side"
+    }
+}

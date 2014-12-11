@@ -81,6 +81,7 @@ public class Explosion implements Runnable
 
                             if(block != Blocks.air)
                             {
+                                block.onDestroyedByExplosion(this, world, blockX, blockY, blockZ);
                                 world.setBlock(blockX, blockY, blockZ, Blocks.air, false);
                                 if(smoke)
                                 {
@@ -120,18 +121,26 @@ public class Explosion implements Runnable
         Vector3 center = Vector3.get(x, y, z);
         for(Entity e : within)
         {
-            Vector3 entPos = Vector3.get(e.posX, e.posY, e.posZ);
-            float exposure = 1f;
-            float dist = entPos.sub(center).length();
-            float impact = (1f - dist / power / 2f) * exposure;
-            float damage = (impact * impact + impact) * 8 * power + 1;
+            if(e instanceof IExplosiveEntity)
+            {
+                IExplosiveEntity explosive = (IExplosiveEntity) e;
+                explosive.onExplosion(this, world, x, y, z);
+            }
+            else
+            {
+                Vector3 entPos = Vector3.get(e.posX, e.posY, e.posZ);
+                float exposure = 0.5f;
+                float dist = entPos.sub(center).length();
+                float impact = (1f - dist / power / 2f) * exposure;
+                float damage = (impact * impact + impact) * 8 * power + 1;
 
-            Vector3 dir = entPos.sub(center);
-            e.velX = dir.getX();
-            e.velY = dir.getY();
-            e.velZ = dir.getZ();
-            dir.dispose();
-            entPos.dispose();
+                Vector3 dir = entPos.sub(center).mul(exposure);
+                e.velX = dir.getX();
+                e.velY = dir.getY();
+                e.velZ = dir.getZ();
+                dir.dispose();
+                entPos.dispose();
+            }
         }
         center.dispose();
         world.playSound("explode", x, y, z);
