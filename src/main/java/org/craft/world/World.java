@@ -640,4 +640,19 @@ public class World implements IParticleHandler, ISoundProducer
     {
         new Thread(explosion).start();
     }
+
+    public List<Entity> getEntitiesInRadius(float x, float y, float z, float f)
+    {
+        List<Entity> result = Lists.newArrayList();
+        Vector3 center = Vector3.get(x, y, z);
+        for(Entity e : entities)
+        {
+            Vector3 entPos = Vector3.get(e.posX, e.posY, e.posZ);
+            if(entPos.sub(center).length() < f)
+                result.add(e);
+            entPos.dispose();
+        }
+        center.dispose();
+        return result;
+    }
 }

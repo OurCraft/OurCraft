@@ -1,23 +1,22 @@
 package org.craft.client.render;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.awt.*;
+import java.awt.image.*;
 import java.util.List;
 
-import org.craft.maths.MathHelper;
-import org.craft.utils.ImageUtils;
-import org.craft.utils.Log;
+import com.google.common.collect.*;
 
-import com.google.common.collect.Lists;
+import org.craft.maths.*;
+import org.craft.utils.*;
 
 public class Stitcher
 {
     private List<BufferedImage> imgs;
     private List<Slot>          slots;
-    private int                      tileWidth;
-    private int                      tileHeight;
-    private BufferedImage            emptySlotImage;
-    private boolean                  putInCorner;
+    private int                 tileWidth;
+    private int                 tileHeight;
+    private BufferedImage       emptySlotImage;
+    private boolean             putInCorner;
 
     public Stitcher(BufferedImage emptyImage, boolean putInCorner)
     {
@@ -32,15 +31,15 @@ public class Stitcher
     /**
      * Adds a image to the list
      */
-    public int addImage(BufferedImage img)
+    public int addImage(BufferedImage img, String name)
     {
-        return addImage(img, false);
+        return addImage(img, name, false);
     }
 
     /**
      * Adds a image to the list and resizes it if asked
      */
-    public int addImage(BufferedImage img, boolean forceResize)
+    public int addImage(BufferedImage img, String name, boolean forceResize)
     {
         if(tileWidth == -1 || tileHeight == -1)
         {
@@ -51,7 +50,7 @@ public class Stitcher
         {
             if(!forceResize && !putInCorner)
             {
-                Log.fatal("Unexpected size: " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
+                Log.fatal("Unexpected size in " + name + ": " + img.getWidth() + "x" + img.getHeight() + "px, expected " + tileWidth + "x" + tileHeight + "px. Image index: " + imgs.size());
             }
             else if(forceResize)
             {

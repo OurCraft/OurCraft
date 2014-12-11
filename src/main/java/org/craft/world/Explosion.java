@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.common.collect.*;
 
 import org.craft.blocks.*;
+import org.craft.entity.*;
 import org.craft.maths.*;
 
 public class Explosion implements Runnable
@@ -47,15 +48,16 @@ public class Explosion implements Runnable
     public void run()
     {
         List<Vector3> affectedBlocks = Lists.newArrayList();
-        for(int gridX = 0; gridX <= 16; gridX++ )
+        float gridSize = 16f;
+        for(int gridX = 0; gridX <= gridSize; gridX++ )
         {
-            for(int gridY = 0; gridY <= 16; gridY++ )
+            for(int gridY = 0; gridY <= gridSize; gridY++ )
             {
-                for(int gridZ = 0; gridZ <= 16; gridZ++ )
+                for(int gridZ = 0; gridZ <= gridSize; gridZ++ )
                 {
-                    float endX = (float) gridX / 16f;
-                    float endY = (float) gridY / 16f;
-                    float endZ = (float) gridZ / 16f;
+                    float endX = (float) gridX / gridSize;
+                    float endY = (float) gridY / gridSize;
+                    float endZ = (float) gridZ / gridSize;
                     Vector3 center = Vector3.get(0.5f, 0.5f, 0.5f);
                     Vector3 end = Vector3.get(endX, endY, endZ);
                     Vector3 initialRay = center.sub(end).normalize();
@@ -76,6 +78,7 @@ public class Explosion implements Runnable
                         if(!affectedBlocks.contains(v))
                         {
                             affectedBlocks.add(v);
+
                             if(block != Blocks.air)
                             {
                                 world.setBlock(blockX, blockY, blockZ, Blocks.air, false);
@@ -86,7 +89,7 @@ public class Explosion implements Runnable
                                     float vy = (float) (dir.getY() + Math.random() * -2f) * -0.01f;
                                     float vz = (float) (dir.getZ() + Math.random() * 2f - 1f) * -0.005f;
                                     dir.dispose();
-                                    Particle particle = new Particle("test", blockX + 0.5f + (float) Math.random() - 0.5f, blockY + 0.5f + (float) Math.random() - 0.5f, blockZ + 0.5f + (float) Math.random() - 0.5f, vx, vy, vz, 120L);
+                                    Particle particle = new Particle("smoke", blockX + 0.5f + (float) Math.random() - 0.5f, blockY + 0.5f + (float) Math.random() - 0.5f, blockZ + 0.5f + (float) Math.random() - 0.5f, vx, vy, vz, 120L);
                                     world.spawnParticle(particle);
                                 }
                             }
@@ -113,6 +116,24 @@ public class Explosion implements Runnable
                 c.markDirty();
             v.dispose();
         }
+        List<Entity> within = world.getEntitiesInRadius(x, y, z, 2 * power);
+        Vector3 center = Vector3.get(x, y, z);
+        for(Entity e : within)
+        {
+            Vector3 entPos = Vector3.get(e.posX, e.posY, e.posZ);
+            float exposure = 1f;
+            float dist = entPos.sub(center).length();
+            float impact = (1f - dist / power / 2f) * exposure;
+            float damage = (impact * impact + impact) * 8 * power + 1;
+
+            Vector3 dir = entPos.sub(center);
+            e.velX = dir.getX();
+            e.velY = dir.getY();
+            e.velZ = dir.getZ();
+            dir.dispose();
+            entPos.dispose();
+        }
+        center.dispose();
         world.playSound("explode", x, y, z);
     }
 }

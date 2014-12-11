@@ -386,6 +386,8 @@ public class OurCraft implements Runnable, OurCraftInstance
      */
     private void update(final double delta)
     {
+        renderEngine.blocksAndItemsMap.tick();
+        particleRenderer.getMap().tick();
         if(player != null)
         {
             sndProducer.setListenerLocation(player.posX, player.posY, player.posZ);

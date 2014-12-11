@@ -11,7 +11,7 @@ public class ParticleRegistry
 
     public static void init()
     {
-        registerType("test");
+        registerType("smoke");
     }
 
     public static void registerType(String type)

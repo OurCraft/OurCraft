@@ -13,12 +13,13 @@ import org.craft.world.*;
 public class ParticleRenderer implements IParticleHandler
 {
 
-    private Particle[]                   particles;
-    private int                          max;
-    private int                          index;
-    private OpenGLBuffer[]               buffers;
-    private TextureMap                   map;
-    private HashMap<String, TextureIcon> particleIcons;
+    private Particle[]                        particles;
+    private int                               max;
+    private int                               index;
+    private OpenGLBuffer[]                    buffers;
+    private TextureMap                        map;
+    private HashMap<String, TextureIcon>      particleIcons;
+    private HashMap<String, TextureMapSprite> sprites;
 
     public ParticleRenderer()
     {
@@ -29,12 +30,14 @@ public class ParticleRenderer implements IParticleHandler
     {
         this.max = max;
         particleIcons = Maps.newHashMap();
+        sprites = Maps.newHashMap();
         particles = new Particle[max];
         buffers = new OpenGLBuffer[max];
         map = new TextureMap(OurCraft.getOurCraft().getAssetsLoader(), new ResourceLocation("ourcraft", "textures/particles"));
         for(String particle : ParticleRegistry.getTypes())
         {
             particleIcons.put(particle, map.generateIcon(particle));
+            sprites.put(particle, map.getSprite(particleIcons.get(particle)));
         }
         try
         {
@@ -84,7 +87,7 @@ public class ParticleRenderer implements IParticleHandler
         {
             if(particles[i] != null)
             {
-                if(buffers[i] == null)
+                //  if(buffers[i] == null)
                 {
                     OpenGLBuffer buffer = new OpenGLBuffer();
                     TextureIcon icon = particleIcons.get(particles[i].getName());
@@ -106,6 +109,7 @@ public class ParticleRenderer implements IParticleHandler
                     buffer.addIndex(3);
                     buffer.upload();
                     buffers[i] = buffer;
+                    sprites.get(particles[i].getName()).tick();
                 }
                 Matrix4 translation = Matrix4.get().initTranslation(particles[i].getX(), particles[i].getY(), particles[i].getZ());
                 Matrix4 camRot = engine.getRenderViewEntity().getQuaternionRotation().toRotationMatrix();
@@ -138,5 +142,10 @@ public class ParticleRenderer implements IParticleHandler
             else
                 index = i;
         }
+    }
+
+    public TextureMap getMap()
+    {
+        return map;
     }
 }

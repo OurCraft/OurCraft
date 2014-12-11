@@ -1,37 +1,30 @@
 package org.craft.client.render;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
-import org.craft.client.OpenGLHelper;
-import org.craft.resources.AbstractResource;
-import org.craft.resources.ResourceLoader;
-import org.craft.resources.ResourceLocation;
-import org.craft.utils.Dev;
-import org.craft.utils.IDisposable;
-import org.craft.utils.ImageUtils;
-import org.craft.utils.Log;
-import org.craft.utils.StringUtils;
+import com.google.common.collect.*;
+import com.google.gson.*;
 
-import com.google.common.collect.Lists;
+import org.craft.client.*;
+import org.craft.resources.*;
+import org.craft.utils.*;
 
 public class TextureMap implements IconGenerator, ITextureObject, IDisposable, ITickable
 {
 
-    private ResourceLoader              loader;
-    private ResourceLocation            base;
-    private Texture                     texture;
-    private BufferedImage               nullImage;
-    private BufferedImage               emptyImage;
-    private boolean                     forceResize;
-    private Stitcher                    stitcher;
+    private ResourceLoader         loader;
+    private ResourceLocation       base;
+    private Texture                texture;
+    private BufferedImage          nullImage;
+    private BufferedImage          emptyImage;
+    private boolean                forceResize;
+    private Stitcher               stitcher;
     private List<TextureMapSprite> registredSprites;
 
     /**
@@ -142,6 +135,49 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
             if(!sprite.useRawImage && sprite.location.equals(loc))
                 return sprite.icon;
         }
+        ResourceLocation metaLoc = new ResourceLocation(completeLocation(loc).getFullPath() + ".json");
+        if(loader.doesResourceExists(metaLoc))
+        {
+            try
+            {
+                Log.message("ANIM >> " + metaLoc.getFullPath());
+                String jsonData = new String(loader.getResource(metaLoc).getData(), "UTF-8");
+                Gson gson = new Gson();
+                JsonObject object = gson.fromJson(jsonData, JsonObject.class);
+                if(object.has("animation"))
+                {
+                    JsonObject animData = object.get("animation").getAsJsonObject();
+                    long totalTime = animData.get("totalTime").getAsLong();
+                    int w = animData.get("tileWidth").getAsInt();
+                    int h = animData.get("tileHeight").getAsInt();
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(loader.getResource(completeLocation(loc)).getData()));
+                    int xNbr = image.getWidth() / w;
+                    int yNbr = image.getHeight() / h;
+                    TextureIcon[] tiles = new TextureIcon[xNbr * yNbr];
+                    Log.message("w: " + w + ", h: " + h);
+                    for(int y = 0; y < yNbr; y++ )
+                    {
+                        for(int x = 0; x < xNbr; x++ )
+                        {
+                            int xIndex = x * w;
+                            int yIndex = y * h;
+
+                            tiles[x + y * xNbr] = generateIcon(image.getSubimage(xIndex, yIndex, w, h));
+                        }
+                    }
+                    TextureAnimatedSprite sprite = new TextureAnimatedSprite(totalTime);
+                    AnimatedIcon animatedIcon = new AnimatedIcon(tiles);
+                    sprite.location = loc;
+                    sprite.icon = animatedIcon;
+                    registredSprites.add(sprite);
+                    return animatedIcon;
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
         TextureMapSprite sprite = new TextureMapSprite();
         TextureMapIcon icon = new TextureMapIcon(0, 0, 0, 0, 0, 0);
         sprite.location = loc;
@@ -181,11 +217,13 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
 
             TextureIcon icon = sprite.icon;
             BufferedImage img = null;
+            String name = null;
             if(!sprite.useRawImage)
             {
                 ResourceLocation loc = completeLocation(sprite.location);
                 try
                 {
+                    name = loc.getName();
                     AbstractResource res = loader.getResource(loc);
                     img = ImageUtils.loadImage(res);
                 }
@@ -197,9 +235,15 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
             }
             else
             {
+                name = sprite.rawImage.toString();
                 img = sprite.rawImage;
             }
-            indexes.put(stitcher.addImage(img, forceResize), icon);
+            if(!(sprite instanceof TextureAnimatedSprite))
+            {
+                indexes.put(stitcher.addImage(img, name, forceResize), icon);
+            }
+            else
+                indexes.put(-1, icon);
         }
 
         BufferedImage stitchedImage = stitcher.stitch();
@@ -207,14 +251,17 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
         while(indexesIt.hasNext())
         {
             int index = indexesIt.next();
-            TextureMapSprite sprite = registredSprites.get(index);
-            TextureMapIcon icon = (TextureMapIcon) sprite.icon;
-            icon.setMinU(stitcher.getMinU(index));
-            icon.setMinV(stitcher.getMinV(index));
-            icon.setMaxU(stitcher.getMaxU(index));
-            icon.setMaxV(stitcher.getMaxV(index));
-            icon.setWidth(stitcher.getWidth(index));
-            icon.setHeight(stitcher.getHeight(index));
+            if(index >= 0)
+            {
+                TextureMapSprite sprite = registredSprites.get(index);
+                TextureMapIcon icon = (TextureMapIcon) sprite.icon;
+                icon.setMinU(stitcher.getMinU(index));
+                icon.setMinV(stitcher.getMinV(index));
+                icon.setMaxU(stitcher.getMaxU(index));
+                icon.setMaxV(stitcher.getMaxV(index));
+                icon.setWidth(stitcher.getWidth(index));
+                icon.setHeight(stitcher.getHeight(index));
+            }
         }
 
         if(Dev.debug())
@@ -251,7 +298,9 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
         for(TextureMapSprite sprite : registredSprites)
         {
             if(!sprite.useRawImage && sprite.location.equals(loc))
+            {
                 return sprite.icon;
+            }
         }
         return TextureIcon.NULL_ICON;
     }
@@ -399,7 +448,22 @@ public class TextureMap implements IconGenerator, ITextureObject, IDisposable, I
         for(TextureMapSprite sprite : registredSprites)
         {
             sprite.tick();
+            if(sprite instanceof TextureAnimatedSprite)
+            {
+                TextureAnimatedSprite animated = (TextureAnimatedSprite) sprite;
+                animated.activate();
+            }
         }
+    }
+
+    public TextureMapSprite getSprite(TextureIcon textureIcon)
+    {
+        for(TextureMapSprite sprite : registredSprites)
+        {
+            if(sprite.icon == textureIcon)
+                return sprite;
+        }
+        return null;
     }
 
 }
