@@ -394,7 +394,6 @@ public class OurCraft implements Runnable, OurCraftInstance
             sndProducer.setListenerOrientation(player.getQuaternionRotation());
             objectInFront = player.getObjectInFront(5f);
         }
-        particleRenderer.updateAll();
         if(newMenu != currentMenu)
         {
             currentMenu = newMenu;
@@ -564,9 +563,13 @@ public class OurCraft implements Runnable, OurCraftInstance
             if(currentMenu != null && !currentMenu.pausesGame())
             {
                 clientWorld.update(delta);
+                clientWorld.updateAllParticles();
             }
             else if(currentMenu == null)
+            {
                 clientWorld.update(delta);
+                clientWorld.updateAllParticles();
+            }
         }
     }
 

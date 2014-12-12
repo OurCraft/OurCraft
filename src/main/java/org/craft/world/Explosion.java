@@ -73,7 +73,7 @@ public class Explosion implements Runnable
                         Vector3 v = Vector3.get(blockX, blockY, blockZ);
                         float blastResistance = 0f;
                         Block block = world.getBlockAt(blockX, blockY, blockZ);
-                        blastResistance = block.getExplosionResistance();
+                        blastResistance = Math.max(0, block.getExplosionResistance());
                         float attenuation = (0.3f * 0.75f + (blastResistance / 5.f) * 0.3f);
                         if(!affectedBlocks.contains(v))
                         {

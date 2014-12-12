@@ -87,7 +87,7 @@ public class ParticleRenderer implements IParticleHandler
         {
             if(particles[i] != null)
             {
-                //  if(buffers[i] == null)
+                if(buffers[i] == null)
                 {
                     OpenGLBuffer buffer = new OpenGLBuffer();
                     TextureIcon icon = particleIcons.get(particles[i].getName());
@@ -118,13 +118,13 @@ public class ParticleRenderer implements IParticleHandler
                 translation.dispose();
                 engine.setModelviewMatrix(modelview);
                 engine.renderBuffer(buffers[i]);
-                //                modelview.dispose();
+                modelview.dispose();
             }
         }
         engine.setModelviewMatrix(Matrix4.get().initIdentity());
     }
 
-    public void updateAll()
+    public void updateAllParticles()
     {
         for(int i = 0; i < max; i++ )
         {

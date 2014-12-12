@@ -16,7 +16,7 @@ public class BlockTnT extends Block
         EntityPrimedTNT tnt = new EntityPrimedTNT(world);
         tnt.setLocation(blockX, blockY, blockZ);
         tnt.velY = 0.1f;
-        tnt.setFuse(15L);
+        tnt.setFuse(7L);
         world.spawn(tnt);
     }
 

@@ -655,4 +655,10 @@ public class World implements IParticleHandler, ISoundProducer
         center.dispose();
         return result;
     }
+
+    @Override
+    public void updateAllParticles()
+    {
+        delegateParticleHandler.updateAllParticles();
+    }
 }
