@@ -1,5 +1,7 @@
 package org.craft.client.sound;
 
+import de.cuina.fireandfuel.*;
+
 import org.craft.maths.*;
 import org.craft.sound.*;
 import org.craft.utils.*;
@@ -19,6 +21,7 @@ public class DirectSoundProducer implements ISoundProducer
             SoundSystemConfig.addLibrary(paulscode.sound.libraries.LibraryLWJGLOpenAL.class);
             SoundSystemConfig.setCodec("ogg", paulscode.sound.codecs.CodecJOrbis.class);
             SoundSystemConfig.setCodec("wav", paulscode.sound.codecs.CodecWav.class);
+            SoundSystemConfig.setCodec("mp3", CodecJLayerMP3.class);
             SoundSystemConfig.setDefaultFadeDistance(100);
         }
         catch(Throwable throwable)

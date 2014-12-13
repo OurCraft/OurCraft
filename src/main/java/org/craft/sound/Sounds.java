@@ -41,7 +41,7 @@ public class Sounds
             }
             else
             {
-                Log.error("Sound file " + subSoundLoc.getFullPath() + " doesn't exist, stopping to search for sub sounds of " + loc.getFullPath());
+                Log.message("Sound file " + subSoundLoc.getFullPath() + " doesn't exist, stopping to search for sub sounds of " + loc.getFullPath());
                 break;
             }
         }
