@@ -16,6 +16,9 @@ public class GameSettings
     public GameOption<String>  lang;
     public GameOption<String>  font;
     public GameOption<Float>   sensitivity;
+    public GameOption<Float>   musicVolume;
+    public GameOption<Float>   soundVolume;
+    public GameOption<Float>   masterVolume;
     private Configuration      configuration;
 
     public GameSettings()
@@ -28,6 +31,9 @@ public class GameSettings
         lang = new GameOption<String>("lang", GameOptionType.PLAIN_TEXT);
         font = new GameOption<String>("font", GameOptionType.PLAIN_TEXT);
         sensitivity = new GameOption<Float>("sensitivity", GameOptionType.RANGE);
+        musicVolume = new GameOption<Float>("musicVolume", GameOptionType.RANGE);
+        soundVolume = new GameOption<Float>("soundVolume", GameOptionType.RANGE);
+        masterVolume = new GameOption<Float>("masterVolume", GameOptionType.RANGE);
     }
 
     public void loadFrom(File file) throws IOException
@@ -41,6 +47,9 @@ public class GameSettings
         lang.setValue(configuration.get(lang.getID(), "en_US"));
         font.setValue(configuration.get(font.getID(), "default"));
         sensitivity.setValue(configuration.getFloat(sensitivity.getID(), 1f));
+        musicVolume.setValue(configuration.getFloat(musicVolume.getID(), 1f));
+        soundVolume.setValue(configuration.getFloat(soundVolume.getID(), 1f));
+        masterVolume.setValue(configuration.getFloat(masterVolume.getID(), 1f));
     }
 
     public void saveTo(File file) throws IOException
@@ -55,6 +64,9 @@ public class GameSettings
             configuration.set(lang.getID(), lang.getValue());
             configuration.set(font.getID(), font.getValue());
             configuration.setFloat(sensitivity.getID(), sensitivity.getValue());
+            configuration.setFloat(musicVolume.getID(), musicVolume.getValue());
+            configuration.setFloat(soundVolume.getID(), soundVolume.getValue());
+            configuration.setFloat(masterVolume.getID(), masterVolume.getValue());
             configuration.save();
         }
     }

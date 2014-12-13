@@ -27,6 +27,8 @@ public class GuiSettings extends Gui
             else if(option.getType() == GameOptionType.RANGE)
             {
                 widget = new GuiSlider(0, 0, 0, 200, 40, 0, 1, oc.getFontRenderer());
+                if(option.getValue() instanceof Float)
+                    ((GuiSlider) widget).setValue((Float) option.getValue());
             }
         }
 
@@ -133,6 +135,9 @@ public class GuiSettings extends Gui
         ((GuiSlider) sensitivitySlot.getWidget()).setRangeMax(3);
         ((GuiSlider) sensitivitySlot.getWidget()).setValue(OurCraft.getOurCraft().getGameSettings().sensitivity.getValue());
         optionsList.addSlot(sensitivitySlot);
+        optionsList.addSlot(new GuiOptionSlot<Float>(oc.getGameSettings().masterVolume));
+        optionsList.addSlot(new GuiOptionSlot<Float>(oc.getGameSettings().musicVolume));
+        optionsList.addSlot(new GuiOptionSlot<Float>(oc.getGameSettings().soundVolume));
         addWidget(optionsList);
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));
     }

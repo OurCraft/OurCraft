@@ -50,3 +50,6 @@ settings.backwardsKey=Move backwards
 settings.leftKey=Move to the left
 settings.rightKey=Move to the right
 settings.sensitivity=Mouse sensitivity
+settings.masterVolume=Master volume
+settings.soundVolume=Sound volume
+settings.musicVolume=Music volume

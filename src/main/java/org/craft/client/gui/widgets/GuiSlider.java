@@ -17,8 +17,8 @@ public class GuiSlider extends GuiWidget
     public GuiSlider(int id, int x, int y, int w, int h, float rangeMin, float rangeMax, FontRenderer fontRenderer)
     {
         super(id, x, y, w, h);
-        this.rangeMin = 0;
-        this.rangeMax = 0;
+        this.rangeMin = rangeMin;
+        this.rangeMax = rangeMax;
         this.fontRenderer = fontRenderer;
     }
 

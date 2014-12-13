@@ -187,7 +187,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             settings.loadFrom(propsFile);
             settings.saveTo(propsFile);
 
-            Sounds.init();
+            AudioRegistry.init();
             if(settings.font.getValue().equals("default"))
                 fontRenderer = new BaseFontRenderer();
             else
@@ -388,6 +388,9 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         renderEngine.blocksAndItemsMap.tick();
         particleRenderer.getMap().tick();
+        sndProducer.setMasterVolume(settings.masterVolume.getValue());
+        sndProducer.setSoundVolume(settings.soundVolume.getValue());
+        sndProducer.setMusicVolume(settings.musicVolume.getValue());
         if(player != null)
         {
             sndProducer.setListenerLocation(player.posX, player.posY, player.posZ);
@@ -1200,5 +1203,10 @@ public class OurCraft implements Runnable, OurCraftInstance
     public ScreenTitle getTitle()
     {
         return screenTitle;
+    }
+
+    public DirectSoundProducer getSoundProducer()
+    {
+        return sndProducer;
     }
 }

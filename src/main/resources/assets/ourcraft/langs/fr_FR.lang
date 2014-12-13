@@ -51,3 +51,6 @@ settings.backwardsKey=Se déplacer vers l'arrière
 settings.leftKey=Se déplacer à gauche
 settings.rightKey=Se déplacer à droite
 settings.sensitivity=Sensibilitée de la souris
+settings.masterVolume=Volume principal
+settings.soundVolume=Volume des sons
+settings.musicVolume=Volume des musiques

@@ -7,22 +7,20 @@ import org.craft.world.*;
 public class Sound
 {
 
-    private String identifier;
-    private String id;
-    private URL    url;
-    private float  x;
-    private float  y;
-    private float  z;
-    private float  volume;
-    private float  pitch;
-    private World  world;
+    private float     x;
+    private float     y;
+    private float     z;
+    private float     volume;
+    private float     pitch;
+    private World     world;
+    private AudioInfo infos;
 
-    public Sound(SoundInfo infos, float volume, World w, float x, float y, float z)
+    public Sound(AudioInfo infos, float volume, World w, float x, float y, float z)
     {
         this(infos, volume, 1, w, x, y, z);
     }
 
-    public Sound(SoundInfo infos, float volume, float pitch, World w, float x, float y, float z)
+    public Sound(AudioInfo infos, float volume, float pitch, World w, float x, float y, float z)
     {
         this.x = x;
         this.y = y;
@@ -30,9 +28,7 @@ public class Sound
         this.world = w;
         this.volume = volume;
         this.pitch = pitch;
-        this.url = infos.getURL();
-        this.id = infos.getID();
-        this.identifier = infos.getFileIdentifier();
+        this.infos = infos;
     }
 
     public float getPitch()
@@ -67,16 +63,16 @@ public class Sound
 
     public URL getURL()
     {
-        return url;
+        return infos.getURL();
     }
 
     public String getSourceName()
     {
-        return id;
+        return infos.getID();
     }
 
     public String getFileIdentifier()
     {
-        return identifier;
+        return infos.getFileIdentifier();
     }
 }

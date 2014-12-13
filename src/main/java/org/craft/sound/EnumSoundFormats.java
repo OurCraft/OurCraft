@@ -3,7 +3,7 @@ package org.craft.sound;
 public enum EnumSoundFormats
 {
 
-    VORBIS("ogg"), WAV("wav"), UNKNOWN(null);
+    VORBIS("ogg"), WAV("wav"), MP3("mp3"), UNKNOWN(null);
 
     private String id;
 
