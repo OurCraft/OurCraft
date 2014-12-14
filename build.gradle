@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 
-def filteredSourceDir = file("${buildDir}/filtered") 
+def filteredSourceDir = file("${buildDir}/filtered")
 
 // Read properties file
 ext {
@@ -11,7 +11,7 @@ ext {
         // Load config.  It shall from now be referenced as simply config or project.config
         def prop = new Properties()
         prop.load(it)
-        config = new ConfigSlurper().parse prop
+        config = new ConfigSlurper().parse(prop)
     }
 }
 
@@ -56,9 +56,9 @@ task processVersion(type: Copy) {
 sourceSets {  
     filtered { 
         java { 
-            srcDirs = [filteredSourceDir] 
+            srcDirs = ['CodecJLayerMP3/src', filteredSourceDir] 
         } 
-    } 
+    }
 } 
 
 //force UTF-8 to the compileJava task
@@ -85,7 +85,6 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.1'
     compile 'org.apache.logging.log4j:log4j-core:2.1'
     compile project(':SpongeAPI')
-    compile fileTree(dir: 'CodecJLayerMP3/src', include: "*")
 }
 
 jar
