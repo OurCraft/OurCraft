@@ -17,7 +17,7 @@ public class ChunkMap implements Iterable<Chunk>
      */
     public Chunk getAt(int chunkX, int chunkY, int chunkZ)
     {
-        return map.get(new ChunkCoord(chunkX, chunkY, chunkZ));
+        return map.get(ChunkCoord.get(chunkX, chunkY, chunkZ));
     }
 
     @Override

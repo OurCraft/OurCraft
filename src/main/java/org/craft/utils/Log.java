@@ -33,7 +33,6 @@ public final class Log
     @NonLoggable
     private static String format(String rawMessage)
     {
-        // TODO format
         if(showCaller)
         {
             return "[In " + getCaller() + "] " + rawMessage;

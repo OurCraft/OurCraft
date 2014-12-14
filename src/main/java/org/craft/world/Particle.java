@@ -52,9 +52,9 @@ public class Particle
     public void update()
     {
         life-- ;
+        x += vx;
         y += vy;
         z += vz;
-        x += vx;
     }
 
     public boolean shouldBeKilled()

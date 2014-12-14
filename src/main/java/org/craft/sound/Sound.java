@@ -4,7 +4,7 @@ import java.net.*;
 
 import org.craft.world.*;
 
-public class Sound
+public class Sound implements ILocatable
 {
 
     private float     x;
@@ -18,6 +18,16 @@ public class Sound
     public Sound(AudioInfo infos, float volume, World w, float x, float y, float z)
     {
         this(infos, volume, 1, w, x, y, z);
+    }
+
+    public Sound(AudioInfo infos, float volume, World w, ILocatable loc)
+    {
+        this(infos, volume, 1, w, loc.getPosX(), loc.getPosY(), loc.getPosZ());
+    }
+
+    public Sound(AudioInfo infos, float volume, float pitch, World w, ILocatable loc)
+    {
+        this(infos, volume, pitch, w, loc.getPosX(), loc.getPosY(), loc.getPosZ());
     }
 
     public Sound(AudioInfo infos, float volume, float pitch, World w, float x, float y, float z)
@@ -46,17 +56,17 @@ public class Sound
         return world;
     }
 
-    public float getX()
+    public float getPosX()
     {
         return x;
     }
 
-    public float getY()
+    public float getPosY()
     {
         return y;
     }
 
-    public float getZ()
+    public float getPosZ()
     {
         return z;
     }

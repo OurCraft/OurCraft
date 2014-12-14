@@ -17,7 +17,7 @@ public class ThreadGetChunksFromCamera extends Thread implements Runnable
     @Override
     public void run()
     {
-        
+
         try
         {
             RenderEngine renderEngine = game.getRenderEngine();
@@ -25,10 +25,10 @@ public class ThreadGetChunksFromCamera extends Thread implements Runnable
             int renderDistance = 6;
             while(game.isRunning())
             {
-                
-                int ox = (int) renderEngine.getRenderViewEntity().getX();
-                int oy = (int) renderEngine.getRenderViewEntity().getY();
-                int oz = (int) renderEngine.getRenderViewEntity().getZ();
+
+                int ox = (int) renderEngine.getRenderViewEntity().getPosX();
+                int oy = (int) renderEngine.getRenderViewEntity().getPosY();
+                int oz = (int) renderEngine.getRenderViewEntity().getPosZ();
                 for(int radius = 0; radius < renderDistance; radius++ )
                 {
                     for(int x = -radius; x < radius; x++ )

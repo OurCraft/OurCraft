@@ -14,7 +14,7 @@ import org.craft.world.*;
 
 import paulscode.sound.*;
 
-public class DirectSoundProducer implements ISoundProducer
+public class DirectSoundProducer implements IAudioHandler
 {
 
     private SoundSystem        sndSystem;
@@ -48,19 +48,34 @@ public class DirectSoundProducer implements ISoundProducer
     @Override
     public void playSound(Sound sound)
     {
-        sndSystem.newStreamingSource(false, sound.getSourceName(), sound.getURL(), sound.getFileIdentifier(), false, sound.getX(), sound.getY(), sound.getZ(), 0, 0);
+        sndSystem.newStreamingSource(false, sound.getSourceName(), sound.getURL(), sound.getFileIdentifier(), false, sound.getPosX(), sound.getPosY(), sound.getPosZ(), 0, 0);
         sndSystem.setVolume(sound.getSourceName(), sound.getVolume());
         sndSystem.setPitch(sound.getSourceName(), sound.getPitch());
         sndSystem.play(sound.getSourceName());
         playingSounds.add(sound);
     }
 
+    public void playMusic(Music music)
+    {
+        playMusicWithID(music, music.getID());
+    }
+
+    public void playMusic(String id, float volume)
+    {
+        playMusic(new Music(AudioRegistry.getRandom(id), volume));
+    }
+
     public void playBackgroundMusic(Music music)
     {
-        sndSystem.newStreamingSource(true, BACKGROUND_MUSIC, music.getURL(), music.getFileIdentifier(), false, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, 0);
-        sndSystem.setVolume(BACKGROUND_MUSIC, music.getVolume());
-        sndSystem.setPitch(BACKGROUND_MUSIC, music.getPitch());
-        sndSystem.play(BACKGROUND_MUSIC);
+        playMusicWithID(music, BACKGROUND_MUSIC);
+    }
+
+    private void playMusicWithID(Music music, String id)
+    {
+        sndSystem.newStreamingSource(true, id, music.getURL(), music.getFileIdentifier(), false, 0, 0, 0, SoundSystemConfig.ATTENUATION_ROLLOFF, 0);
+        sndSystem.setVolume(id, music.getVolume());
+        sndSystem.setPitch(id, music.getPitch());
+        sndSystem.play(id);
     }
 
     public void setListenerOrientation(Quaternion q)
@@ -73,6 +88,11 @@ public class DirectSoundProducer implements ISoundProducer
         float upY = q.getUp().getY();
         float upZ = q.getUp().getZ();
         sndSystem.setListenerOrientation(lookX, lookY, lookZ, upX, upY, upZ);
+    }
+
+    public void setListenerLocation(ILocatable loc)
+    {
+        setListenerLocation(loc.getPosX(), loc.getPosY(), loc.getPosZ());
     }
 
     public void setListenerLocation(float x, float y, float z)
@@ -120,5 +140,11 @@ public class DirectSoundProducer implements ISoundProducer
     public void setMasterVolume(float volume)
     {
         sndSystem.setMasterVolume(volume);
+    }
+
+    @Override
+    public void playSound(String id, World w, ILocatable location)
+    {
+        playSound(id, w, location.getPosX(), location.getPosY(), location.getPosZ());
     }
 }

@@ -663,9 +663,9 @@ public class OurCraft implements Runnable, OurCraftInstance
         {
             //AABB chunkBB = new AABB(Vector3.NULL, Vector3.get(16, 16, 16));
             int renderDistance = 8;
-            int ox = (int) renderEngine.getRenderViewEntity().getX();
-            int oy = (int) renderEngine.getRenderViewEntity().getY();
-            int oz = (int) renderEngine.getRenderViewEntity().getZ();
+            int ox = (int) renderEngine.getRenderViewEntity().getPosX();
+            int oy = (int) renderEngine.getRenderViewEntity().getPosY();
+            int oz = (int) renderEngine.getRenderViewEntity().getPosZ();
             for(int x = -renderDistance; x < renderDistance; x++ )
             {
                 for(int y = -renderDistance; y < renderDistance; y++ )
@@ -715,7 +715,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                 }
                 else
                     renderer = fallbackRenderer;
-                renderer.render(renderEngine, e, (float) e.getX(), (float) e.getY(), (float) e.getZ());
+                renderer.render(renderEngine, e, (float) e.getPosX(), (float) e.getPosY(), (float) e.getPosZ());
             }
         }
         glClear(GL_DEPTH_BUFFER_BIT);

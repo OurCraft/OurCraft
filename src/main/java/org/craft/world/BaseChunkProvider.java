@@ -55,7 +55,7 @@ public class BaseChunkProvider extends ChunkProvider
         {
             e.printStackTrace();
         }
-        Chunk newChunk = new Chunk(world, new ChunkCoord(chunkX, chunkY, chunkZ));
+        Chunk newChunk = new Chunk(world, ChunkCoord.get(chunkX, chunkY, chunkZ));
         addChunk(world, newChunk);
         world.getGenerator().populateChunk(world, newChunk);
         newChunk.markDirty();

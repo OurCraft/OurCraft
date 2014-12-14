@@ -14,7 +14,7 @@ import org.craft.sound.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 
-public class World implements IParticleHandler, ISoundProducer
+public class World implements IParticleHandler, IAudioHandler
 {
 
     public class BlockUpdateScheduler
@@ -81,7 +81,7 @@ public class World implements IParticleHandler, ISoundProducer
     private float                      gravity;
     private List<BlockUpdateScheduler> schedulers;
     private IParticleHandler           delegateParticleHandler;
-    private ISoundProducer             delegateSoundProducer;
+    private IAudioHandler              delegateSoundProducer;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
@@ -599,12 +599,12 @@ public class World implements IParticleHandler, ISoundProducer
         return delegateParticleHandler;
     }
 
-    public void setDelegateSoundProducer(ISoundProducer delegate)
+    public void setDelegateSoundProducer(IAudioHandler delegate)
     {
         this.delegateSoundProducer = delegate;
     }
 
-    public ISoundProducer getDelegateSoundProducer()
+    public IAudioHandler getDelegateSoundProducer()
     {
         return delegateSoundProducer;
     }
@@ -660,5 +660,23 @@ public class World implements IParticleHandler, ISoundProducer
     public void updateAllParticles()
     {
         delegateParticleHandler.updateAllParticles();
+    }
+
+    @Override
+    public void playMusic(String id, float volume)
+    {
+        delegateSoundProducer.playMusic(id, volume);
+    }
+
+    @Override
+    public void playMusic(Music music)
+    {
+        delegateSoundProducer.playMusic(music);
+    }
+
+    @Override
+    public void playSound(String id, World w, ILocatable location)
+    {
+        playSound(id, w, location.getPosX(), location.getPosY(), location.getPosZ());
     }
 }

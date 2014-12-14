@@ -10,7 +10,7 @@ import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
 
-public class Entity
+public class Entity implements ILocatable
 {
 
     public float           posX;
@@ -286,17 +286,17 @@ public class Entity
         return worldObj;
     }
 
-    public double getX()
+    public float getPosX()
     {
         return posX;
     }
 
-    public double getY()
+    public float getPosY()
     {
         return posY;
     }
 
-    public double getZ()
+    public float getPosZ()
     {
         return posZ;
     }
@@ -337,9 +337,9 @@ public class Entity
      */
     public float getDistance(Entity other)
     {
-        float dx = (float) (other.getX() - posX);
-        float dy = (float) (other.getY() - posY);
-        float dz = (float) (other.getZ() - posZ);
+        float dx = (float) (other.getPosX() - posX);
+        float dy = (float) (other.getPosY() - posY);
+        float dz = (float) (other.getPosZ() - posZ);
         return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
