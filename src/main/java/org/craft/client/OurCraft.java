@@ -39,6 +39,7 @@ import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.Log.NonLoggable;
 import org.craft.utils.crash.*;
 import org.craft.world.*;
+import org.craft.world.biomes.*;
 import org.lwjgl.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
@@ -193,6 +194,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             else
                 fontRenderer = new TrueTypeFontRenderer(settings.font.getValue());
 
+            Biomes.init();
             Blocks.init();
             BlockStates.init();
             Items.init();
@@ -968,12 +970,44 @@ public class OurCraft implements Runnable, OurCraftInstance
             loader.writeWorldConstants(worldData, clientWorld);
 
             Iterator<Chunk> chunks = clientWorld.getChunkProvider().iterator();
+            Chunk bottomCorner = null;
+            Chunk topCorner = null;
             while(chunks.hasNext())
             {
                 Chunk chunk = chunks.next();
+                if(bottomCorner == null)
+                    bottomCorner = chunk;
+                else if(bottomCorner.getCoords().x > chunk.getCoords().x || bottomCorner.getCoords().z > chunk.getCoords().z)
+                {
+                    bottomCorner = chunk;
+                }
+
+                if(topCorner == null)
+                    topCorner = chunk;
+                else if(topCorner.getCoords().x < chunk.getCoords().x || topCorner.getCoords().z < chunk.getCoords().z)
+                {
+                    topCorner = chunk;
+                }
                 if(chunk.isModified())
                     loader.writeChunk(new File(worldFolder, "chunkData/chunk" + chunk.getCoords().x + "." + chunk.getCoords().y + "." + chunk.getCoords().z + ".data"), chunk, chunk.getCoords().x, chunk.getCoords().y, chunk.getCoords().z);
             }
+
+            chunks = clientWorld.getChunkProvider().iterator();
+            BufferedImage image = new BufferedImage(topCorner.getCoords().x - bottomCorner.getCoords().x, topCorner.getCoords().z - bottomCorner.getCoords().z, BufferedImage.TYPE_INT_ARGB);
+            while(chunks.hasNext())
+            {
+                Chunk chunk = chunks.next();
+                int px = chunk.getCoords().x - bottomCorner.getCoords().x;
+                int py = chunk.getCoords().z - bottomCorner.getCoords().z;
+                float tempNormalized = Biomes.normalizeTemperature(chunk.getBiome().getTemperature());
+                int red = (int) (tempNormalized * 255f);
+                int blue = (int) (255 - tempNormalized * 255f);
+                int color = 0xFF000000 | (red << 16) | (blue);
+                if(px >= image.getWidth() || py >= image.getHeight() || px < 0 || py < 0)
+                    continue;
+                image.setRGB(px, py, color);
+            }
+            ImageIO.write(image, "png", new File(worldFolder, "temperatures.png"));
             loader.writeEntities(clientWorld.getEntitiesList());
         }
         catch(Exception e)

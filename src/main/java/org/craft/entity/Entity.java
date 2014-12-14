@@ -137,8 +137,8 @@ public class Entity implements ILocatable
         }
         else
         {
-            velX *= 0.12f / 2f;
-            velZ *= 0.12f / 2f;
+            velX *= 0.20f;
+            velZ *= 0.20f;
         }
 
         onEntityUpdate();

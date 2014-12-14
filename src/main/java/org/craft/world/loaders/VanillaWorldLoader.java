@@ -12,6 +12,7 @@ import org.craft.entity.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
+import org.craft.world.biomes.*;
 
 public class VanillaWorldLoader extends WorldLoader
 {
@@ -41,6 +42,7 @@ public class VanillaWorldLoader extends WorldLoader
         try
         {
             NBTCompoundTag compoundTag = new NBTCompoundTag("worldData");
+            compoundTag.putInt("formatVersion", 1);
             compoundTag.putLong("seed", world.getSeed());
             compoundTag.putLong("timestamp", System.currentTimeMillis());
             compoundTag.putString("name", world.getName());
@@ -63,6 +65,8 @@ public class VanillaWorldLoader extends WorldLoader
             {
                 DataInputStream input = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(loader.getResource(res).getData()))));
                 NBTCompoundTag chunkData = (NBTCompoundTag) NBTTag.readNamedTag(input);
+                Biome biome = Biomes.get(chunkData.getString("biomeType"));
+                chunk.setBiome(biome);
                 int readChunkX = chunkData.getInt("xCoord");
                 int readChunkY = chunkData.getInt("yCoord");
                 int readChunkZ = chunkData.getInt("zCoord");
@@ -124,6 +128,7 @@ public class VanillaWorldLoader extends WorldLoader
         tag.putInt("xCoord", chunkX);
         tag.putInt("yCoord", chunkY);
         tag.putInt("zCoord", chunkZ);
+        tag.putString("biomeType", chunk.getBiome().getID());
         for(int x = 0; x < 16; x++ )
         {
             for(int y = 0; y < 16; y++ )

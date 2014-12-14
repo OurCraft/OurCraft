@@ -3,6 +3,7 @@ package org.craft.world;
 import java.util.*;
 
 import org.craft.blocks.*;
+import org.craft.maths.*;
 import org.craft.world.biomes.*;
 
 public class WorldGenerator
@@ -29,7 +30,12 @@ public class WorldGenerator
     {
         if(chunk == null)
             return false;
-        Biome biome = Biomes.BASE;
+        if(chunk.getBiome() == null)
+        {
+            float temperature = MathHelper.perlinNoise(chunk.getCoords().x * 8, chunk.getCoords().z * 8, seed);
+            chunk.setBiome(Biomes.getClosestFromNoise(temperature));
+        }
+        Biome biome = chunk.getBiome();
         for(IWorldPopulator populator : biome.getPopulators())
         {
             populator.populate(world, chunk, rng);

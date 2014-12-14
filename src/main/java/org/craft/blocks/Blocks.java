@@ -23,6 +23,7 @@ public final class Blocks
     public static Block                        tnt;
     // ONLY FOR TESTING
     public static Block                        dirtSlab;
+
     public static final HashMap<String, Block> BLOCK_REGISTRY = Maps.newHashMap();
     private static List<Block>                 blockByID      = Lists.newArrayList();
 

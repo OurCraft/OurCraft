@@ -5,6 +5,7 @@ import java.util.*;
 import org.craft.blocks.*;
 import org.craft.blocks.states.*;
 import org.craft.maths.*;
+import org.craft.world.biomes.*;
 
 public class Chunk
 {
@@ -19,6 +20,7 @@ public class Chunk
     private World                              owner;
     private boolean                            shouldUpdate;
     private boolean                            modified;
+    private Biome                              biome;
 
     public Chunk(World owner, ChunkCoord coords)
     {
@@ -413,6 +415,16 @@ public class Chunk
             object = blockStatesObjects.get(v);
         }
         return object;
+    }
+
+    public void setBiome(Biome biome)
+    {
+        this.biome = biome;
+    }
+
+    public Biome getBiome()
+    {
+        return biome;
     }
 
     public void cleanDirtiness(int worldX, int worldY, int worldZ)
