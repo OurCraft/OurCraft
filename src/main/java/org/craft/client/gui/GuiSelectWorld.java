@@ -18,7 +18,6 @@ import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
-import org.craft.world.populators.*;
 
 public class GuiSelectWorld extends Gui
 {
@@ -227,10 +226,6 @@ public class GuiSelectWorld extends Gui
     private void launchGameOnWorld(String worldName)
     {
         WorldGenerator generator = new WorldGenerator();
-        generator.addPopulator(new RockPopulator());
-        generator.addPopulator(new GrassPopulator());
-        generator.addPopulator(new TreePopulator());
-        generator.addPopulator(new FlowerPopulator());
         WorldLoader worldLoader;
         try
         {

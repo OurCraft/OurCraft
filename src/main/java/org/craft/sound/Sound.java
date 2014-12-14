@@ -20,14 +20,14 @@ public class Sound implements ILocatable
         this(infos, volume, 1, w, x, y, z);
     }
 
-    public Sound(AudioInfo infos, float volume, World w, ILocatable loc)
+    public Sound(AudioInfo infos, float volume, ILocatable loc)
     {
-        this(infos, volume, 1, w, loc.getPosX(), loc.getPosY(), loc.getPosZ());
+        this(infos, volume, 1, loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ());
     }
 
-    public Sound(AudioInfo infos, float volume, float pitch, World w, ILocatable loc)
+    public Sound(AudioInfo infos, float volume, float pitch, ILocatable loc)
     {
-        this(infos, volume, pitch, w, loc.getPosX(), loc.getPosY(), loc.getPosZ());
+        this(infos, volume, pitch, loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ());
     }
 
     public Sound(AudioInfo infos, float volume, float pitch, World w, float x, float y, float z)

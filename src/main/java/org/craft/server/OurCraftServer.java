@@ -25,7 +25,6 @@ import org.craft.server.network.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
-import org.craft.world.populators.*;
 import org.spongepowered.api.entity.player.*;
 
 public class OurCraftServer implements OurCraftInstance, ICommandSender
@@ -71,10 +70,6 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         onlinePlayers = Lists.newArrayList();
         this.maxPlayers = maxPlayers;
         WorldGenerator gen = new WorldGenerator();
-        gen.addPopulator(new RockPopulator());
-        gen.addPopulator(new GrassPopulator());
-        gen.addPopulator(new FlowerPopulator());
-        gen.addPopulator(new TreePopulator());
         worldLoader = new VanillaWorldLoader(new ResourceLocation("worlds"), new DiskSimpleResourceLoader());
         serverWorld = new ServerWorld("remote-world", new BaseChunkProvider(worldLoader), gen, worldLoader);
     }

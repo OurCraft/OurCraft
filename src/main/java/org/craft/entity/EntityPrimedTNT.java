@@ -30,11 +30,17 @@ public class EntityPrimedTNT extends Entity implements IExplosiveEntity
         fuse-- ;
         if(fuse <= 0)
         {
-            Explosion explosion = new Explosion(worldObj, posX, posY, posZ, 6f);
+            Explosion explosion = new Explosion(this, 6f);
             explosion.producesSmoke(true);
             worldObj.performExplosion(explosion);
             setDead();
         }
+    }
+
+    public void readFromNBT(NBTCompoundTag compound)
+    {
+        super.readFromNBT(compound);
+        fuse = compound.getLong("fuse");
     }
 
     public void writeToNBT(NBTCompoundTag compound)

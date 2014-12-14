@@ -4,6 +4,7 @@ import java.nio.*;
 
 import org.craft.utils.*;
 import org.craft.utils.io.*;
+import org.craft.world.*;
 
 public class Vector3 extends AbstractReference implements IDisposable, IBufferWritable
 {

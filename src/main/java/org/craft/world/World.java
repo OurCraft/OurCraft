@@ -609,9 +609,14 @@ public class World implements IParticleHandler, IAudioHandler
         return delegateSoundProducer;
     }
 
-    public void spawnParticle(String string, float x, float y, float z)
+    public void spawnParticle(String string, ILocatable loc)
     {
-        delegateParticleHandler.spawnParticle(string, x, y, z);
+        spawnParticle(string, loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ());
+    }
+
+    public void spawnParticle(String string, World w, float x, float y, float z)
+    {
+        delegateParticleHandler.spawnParticle(string, w, x, y, z);
     }
 
     public void spawnParticle(Particle particle)
@@ -675,8 +680,8 @@ public class World implements IParticleHandler, IAudioHandler
     }
 
     @Override
-    public void playSound(String id, World w, ILocatable location)
+    public void playSound(String id, ILocatable location)
     {
-        playSound(id, w, location.getPosX(), location.getPosY(), location.getPosZ());
+        playSound(id, location.getWorld(), location.getPosX(), location.getPosY(), location.getPosZ());
     }
 }

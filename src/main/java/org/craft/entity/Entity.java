@@ -208,6 +208,13 @@ public class Entity implements ILocatable
         posZ = z;
     }
 
+    public void setLocation(ILocatable location)
+    {
+        posX = location.getPosX();
+        posY = location.getPosY();
+        posZ = location.getPosZ();
+    }
+
     public void moveBackwards(float distance)
     {
         moveForward(-distance);

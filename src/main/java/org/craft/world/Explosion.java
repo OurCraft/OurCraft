@@ -8,7 +8,7 @@ import org.craft.blocks.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 
-public class Explosion implements Runnable
+public class Explosion implements Runnable, ILocatable
 {
 
     private World   world;
@@ -21,6 +21,16 @@ public class Explosion implements Runnable
     public Explosion(World w, float x, float y, float z)
     {
         this(w, x, y, z, 1);
+    }
+
+    public Explosion(ILocatable loc)
+    {
+        this(loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ());
+    }
+
+    public Explosion(ILocatable loc, float power)
+    {
+        this(loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ(), power);
     }
 
     public Explosion(World w, float x, float y, float z, float power)
@@ -90,7 +100,7 @@ public class Explosion implements Runnable
                                     float vy = (float) (dir.getY() + Math.random() * -2f) * -0.01f;
                                     float vz = (float) (dir.getZ() + Math.random() * 2f - 1f) * -0.005f;
                                     dir.dispose();
-                                    Particle particle = new Particle("smoke", blockX + 0.5f + (float) Math.random() - 0.5f, blockY + 0.5f + (float) Math.random() - 0.5f, blockZ + 0.5f + (float) Math.random() - 0.5f, vx, vy, vz, 120L);
+                                    Particle particle = new Particle("smoke", world, blockX + 0.5f + (float) Math.random() - 0.5f, blockY + 0.5f + (float) Math.random() - 0.5f, blockZ + 0.5f + (float) Math.random() - 0.5f, vx, vy, vz, 120L);
                                     world.spawnParticle(particle);
                                 }
                             }
@@ -143,6 +153,30 @@ public class Explosion implements Runnable
             }
         }
         center.dispose();
-        world.playSound("explode", x, y, z);
+        world.playSound("explode", this);
+    }
+
+    @Override
+    public World getWorld()
+    {
+        return world;
+    }
+
+    @Override
+    public float getPosX()
+    {
+        return x;
+    }
+
+    @Override
+    public float getPosY()
+    {
+        return y;
+    }
+
+    @Override
+    public float getPosZ()
+    {
+        return z;
     }
 }

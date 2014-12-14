@@ -10,7 +10,6 @@ import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
-import org.craft.world.populators.*;
 
 public class GuiCreateWorld extends Gui
 {
@@ -74,10 +73,6 @@ public class GuiCreateWorld extends Gui
     {
         // TODO: Loading screen
         WorldGenerator generator = new WorldGenerator();
-        generator.addPopulator(new RockPopulator());
-        generator.addPopulator(new GrassPopulator());
-        generator.addPopulator(new TreePopulator());
-        generator.addPopulator(new FlowerPopulator());
         WorldLoader worldLoader;
         try
         {

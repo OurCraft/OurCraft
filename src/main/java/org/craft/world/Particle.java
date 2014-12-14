@@ -1,6 +1,6 @@
 package org.craft.world;
 
-public class Particle
+public class Particle implements ILocatable
 {
 
     private String name;
@@ -11,15 +11,27 @@ public class Particle
     private float  vy;
     private float  vz;
     private long   life;
+    private World  world;
 
-    public Particle(String name, float x, float y, float z, long life)
+    public Particle(String name, ILocatable loc, long life)
     {
-        this(name, x, y, z, 0, 0, 0, life);
+        this(name, loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ(), life);
     }
 
-    public Particle(String name, float x, float y, float z, float vx, float vy, float vz, long life)
+    public Particle(String name, ILocatable loc, float vx, float vy, float vz, long life)
+    {
+        this(name, loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ(), vx, vy, vz, life);
+    }
+
+    public Particle(String name, World w, float x, float y, float z, long life)
+    {
+        this(name, w, x, y, z, 0, 0, 0, life);
+    }
+
+    public Particle(String name, World w, float x, float y, float z, float vx, float vy, float vz, long life)
     {
         this.name = name;
+        this.world = w;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -34,17 +46,17 @@ public class Particle
         return name;
     }
 
-    public float getX()
+    public float getPosX()
     {
         return x;
     }
 
-    public float getY()
+    public float getPosY()
     {
         return y;
     }
 
-    public float getZ()
+    public float getPosZ()
     {
         return z;
     }
@@ -60,5 +72,11 @@ public class Particle
     public boolean shouldBeKilled()
     {
         return life <= 0;
+    }
+
+    @Override
+    public World getWorld()
+    {
+        return world;
     }
 }

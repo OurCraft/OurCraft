@@ -3,15 +3,13 @@ package org.craft.world;
 import java.util.*;
 
 import org.craft.blocks.*;
-
-import com.google.common.collect.Lists;
+import org.craft.world.biomes.*;
 
 public class WorldGenerator
 {
 
-    private long                       seed;
-    private List<IWorldPopulator> populators = Lists.newArrayList();
-    private Random                     rng;
+    private long   seed;
+    private Random rng;
 
     public WorldGenerator()
     {
@@ -31,7 +29,8 @@ public class WorldGenerator
     {
         if(chunk == null)
             return false;
-        for(IWorldPopulator populator : populators)
+        Biome biome = Biomes.BASE;
+        for(IWorldPopulator populator : biome.getPopulators())
         {
             populator.populate(world, chunk, rng);
         }
@@ -46,11 +45,6 @@ public class WorldGenerator
             }
         }
         return true;
-    }
-
-    public void addPopulator(IWorldPopulator populator)
-    {
-        populators.add(populator);
     }
 
     public long getSeed()

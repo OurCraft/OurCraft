@@ -70,14 +70,24 @@ public class ParticleRenderer implements IParticleHandler
         return index;
     }
 
-    public void spawnParticle(String particleID, float x, float y, float z)
+    public void spawnParticle(String particleID, ILocatable loc)
     {
-        spawnParticle(particleID, x, y, z, 120);
+        spawnParticle(particleID, loc, 120L);
     }
 
-    public void spawnParticle(String particleID, float x, float y, float z, long life)
+    public void spawnParticle(String particleID, World w, float x, float y, float z)
     {
-        spawnParticle(new Particle(particleID, x, y, z, life));
+        spawnParticle(particleID, w, x, y, z, 120);
+    }
+
+    public void spawnParticle(String particleID, ILocatable loc, long life)
+    {
+        spawnParticle(particleID, loc.getWorld(), loc.getPosX(), loc.getPosY(), loc.getPosZ(), life);
+    }
+
+    public void spawnParticle(String particleID, World w, float x, float y, float z, long life)
+    {
+        spawnParticle(new Particle(particleID, w, x, y, z, life));
     }
 
     public void renderAll(RenderEngine engine)
@@ -111,7 +121,7 @@ public class ParticleRenderer implements IParticleHandler
                     buffers[i] = buffer;
                     sprites.get(particles[i].getName()).tick();
                 }
-                Matrix4 translation = Matrix4.get().initTranslation(particles[i].getX(), particles[i].getY(), particles[i].getZ());
+                Matrix4 translation = Matrix4.get().initTranslation(particles[i].getPosX(), particles[i].getPosY(), particles[i].getPosZ());
                 Matrix4 camRot = engine.getRenderViewEntity().getQuaternionRotation().toRotationMatrix();
                 Matrix4 modelview = translation.mul(camRot);
                 camRot.dispose();
@@ -148,4 +158,5 @@ public class ParticleRenderer implements IParticleHandler
     {
         return map;
     }
+
 }

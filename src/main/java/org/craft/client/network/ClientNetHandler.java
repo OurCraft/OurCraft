@@ -14,7 +14,6 @@ import org.craft.network.*;
 import org.craft.network.packets.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
-import org.craft.world.populators.*;
 
 public class ClientNetHandler implements INetworkHandler
 {
@@ -101,10 +100,6 @@ public class ClientNetHandler implements INetworkHandler
     private void launchGame()
     {
         WorldGenerator generator = new WorldGenerator();
-        generator.addPopulator(new RockPopulator());
-        generator.addPopulator(new GrassPopulator());
-        generator.addPopulator(new TreePopulator());
-        generator.addPopulator(new FlowerPopulator());
         WorldLoader worldLoader;
         try
         {

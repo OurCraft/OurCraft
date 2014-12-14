@@ -143,8 +143,8 @@ public class DirectSoundProducer implements IAudioHandler
     }
 
     @Override
-    public void playSound(String id, World w, ILocatable location)
+    public void playSound(String id, ILocatable location)
     {
-        playSound(id, w, location.getPosX(), location.getPosY(), location.getPosZ());
+        playSound(id, location.getWorld(), location.getPosX(), location.getPosY(), location.getPosZ());
     }
 }
