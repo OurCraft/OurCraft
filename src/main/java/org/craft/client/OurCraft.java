@@ -1044,10 +1044,10 @@ public class OurCraft implements Runnable, OurCraftInstance
             int blue = color >> 0 & 0xFF;
             int x1 = index % w;
             int y1 = h - (index / w) - 1;
-            finalArray[x1 + y1 * w] = (alpha << 24) | (blue << 16) | (green << 8) | red; // We invert colors
+            finalArray[x1 + y1 * w] = (alpha << 24) | (blue << 16) | (green << 8) | red; // We invert the colors given by OpenGL
         }
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        image.setRGB(0, 0, w, h, finalArray, 0, Display.getWidth());
+        image.setRGB(0, 0, w, h, finalArray, 0, w);
         return image;
     }
 
