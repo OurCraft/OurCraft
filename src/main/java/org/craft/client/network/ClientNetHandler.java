@@ -106,8 +106,7 @@ public class ClientNetHandler implements INetworkHandler
             worldLoader = new FallbackWorldLoader();
             World clientWorld = new World("remote world", new RemoteChunkProvider(), generator, worldLoader);
             clientWorld.isRemote = true;
-            EntityPlayer player = new EntityPlayer(clientWorld, game.getSession().getUUID());
-            player.setLocation(0, 160 + 17, 0);
+            EntityPlayer player = clientWorld.createPlayerEntity(game.getSession().getUUID());
             clientWorld.spawn(player);
             game.getRenderEngine().setRenderViewEntity(player);
             game.setPlayerController(new RemotePlayerController(player, game));

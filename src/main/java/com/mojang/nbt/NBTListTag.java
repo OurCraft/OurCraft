@@ -10,7 +10,7 @@ import com.google.gson.*;
  * <br/>Following the <a href="http://web.archive.org/web/20110723210920/http://www.minecraft.net/docs/NBT.txt">specifications created by Markus 'notch' Personn </a>
  * @author Mojang AB
  */
-public class NBTListTag<T extends NBTTag> extends NBTTag
+public class NBTListTag<T extends NBTTag> extends NBTTag implements Iterable<T>
 {
 
     private List<T>  list = new ArrayList<T>();
@@ -122,5 +122,11 @@ public class NBTListTag<T extends NBTTag> extends NBTTag
             array.add(list.get(i).toJson());
         }
         return array;
+    }
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return list.iterator();
     }
 }

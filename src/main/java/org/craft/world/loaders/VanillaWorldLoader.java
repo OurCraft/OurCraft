@@ -195,4 +195,15 @@ public class VanillaWorldLoader extends WorldLoader
         NBTTag.writeCompoundToFile(playersFile, playersTag);
         NBTTag.writeCompoundToFile(entitiesFile, entitiesTag);
     }
+
+    @Override
+    public NBTListTag<NBTCompoundTag> loadPlayersInfos(World w) throws IOException
+    {
+        NBTTag tag = NBTTag.readCompoundFromFile(loader.getResource(new ResourceLocation(worldFolder, "players.data")).asFile()).getList("list");
+        if(!(tag instanceof NBTListTag))
+        {
+            Log.fatal("Expected player data to be a NBTListTag of NBTCompoundTags. Found " + tag.getClass().getSimpleName());
+        }
+        return (NBTListTag<NBTCompoundTag>) tag;
+    }
 }

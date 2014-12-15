@@ -13,7 +13,6 @@ import org.craft.world.*;
 
 public class EntityPlayer extends EntityLiving
 {
-    private UUID   uuid;
     private String name;
     private String displayName;
     private double experience;
@@ -57,12 +56,6 @@ public class EntityPlayer extends EntityLiving
     public String getDisplayName()
     {
         return displayName;
-    }
-
-    @Override
-    public UUID generateUUID()
-    {
-        return uuid;
     }
 
     @Override

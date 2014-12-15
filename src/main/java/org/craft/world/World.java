@@ -1,8 +1,10 @@
 package org.craft.world;
 
+import java.io.*;
 import java.util.*;
 
 import com.google.common.collect.*;
+import com.mojang.nbt.*;
 
 import org.craft.*;
 import org.craft.blocks.*;
@@ -69,25 +71,51 @@ public class World implements IParticleHandler, IAudioHandler
         }
     }
 
-    private LinkedList<Entity>         entities;
-    private List<Entity>               spawingQueue;
-    private ChunkProvider              chunkProvider;
-    private WorldGenerator             generator;
-    private String                     name;
-    private WorldLoader                worldLoader;
-    public boolean                     isRemote;
-    private Random                     rng;
-    private long                       tick;
-    private float                      gravity;
-    private List<BlockUpdateScheduler> schedulers;
-    private IParticleHandler           delegateParticleHandler;
-    private IAudioHandler              delegateSoundProducer;
+    private LinkedList<Entity>            entities;
+    private List<Entity>                  spawingQueue;
+    private ChunkProvider                 chunkProvider;
+    private WorldGenerator                generator;
+    private String                        name;
+    private WorldLoader                   worldLoader;
+    public boolean                        isRemote;
+    private Random                        rng;
+    private long                          tick;
+    private float                         gravity;
+    private List<BlockUpdateScheduler>    schedulers;
+    private IParticleHandler              delegateParticleHandler;
+    private IAudioHandler                 delegateSoundProducer;
+    private HashMap<UUID, NBTCompoundTag> playerData;
 
     public World(String name, ChunkProvider prov, WorldGenerator generator, WorldLoader worldLoader)
     {
         schedulers = Lists.newArrayList();
         this.rng = new Random(generator.getSeed());
         this.worldLoader = worldLoader;
+        if(worldLoader != null) // Load all player data
+        {
+            playerData = Maps.newHashMap();
+            try
+            {
+                NBTListTag<NBTCompoundTag> players = worldLoader.loadPlayersInfos(this);
+                for(NBTCompoundTag playerTag : players)
+                {
+                    UUID uuid = null;
+                    if(playerTag.contains("uuid"))
+                    {
+                        uuid = UUID.fromString(playerTag.getString("uuid"));
+                    }
+                    else
+                    {
+                        uuid = SessionManager.getInstance().getUUID(playerTag.getString("displayName"));
+                    }
+                    playerData.put(uuid, playerTag);
+                }
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
         this.name = name;
         this.generator = generator;
         this.chunkProvider = prov;
@@ -683,5 +711,27 @@ public class World implements IParticleHandler, IAudioHandler
     public void playSound(String id, ILocatable location)
     {
         playSound(id, location.getWorld(), location.getPosX(), location.getPosY(), location.getPosZ());
+    }
+
+    /**
+     * Creates a new EntityPlayer based on given UUID. This method will search for this player's spawnpoint and will get the
+     * global one if none is found.
+     * @param uuid The UUID of the player
+     * @return A newly created Entity with the data saved in the world's data. This entity has to be spawned manually into the world.
+     */
+    public EntityPlayer createPlayerEntity(UUID uuid)
+    {
+        EntityPlayer player = new EntityPlayer(this, uuid);
+        if(playerData.containsKey(player.getUUID()))
+        {
+            player.readFromNBT(playerData.get(player.getUUID()));
+            Log.message(">>FOUND for player: " + uuid + " => " + SessionManager.getInstance().getName(uuid));
+        }
+        else
+        {
+            player.setLocation(0, 160 + 17, 0);
+            Log.error("No infos for player: " + uuid + " => " + SessionManager.getInstance().getName(uuid));
+        }
+        return player;
     }
 }

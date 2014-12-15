@@ -40,7 +40,6 @@ import org.craft.world.*;
 import org.craft.world.biomes.*;
 import org.lwjgl.*;
 import org.lwjgl.input.*;
-import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
 
 public class OurCraft implements Runnable, OurCraftInstance
@@ -164,7 +163,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             OpenGLHelper.loadCapNames();
 
             //Init Game Content
-            session = SessionManager.getInstance().registerPlayer(UUID.randomUUID(), username, username);
+            session = SessionManager.getInstance().registerPlayer(new UUID(username.length() << 24, username.length() << 10), username, username);
             Log.message("Loading Mods...");
             gameRegistry = new GlobalRegistry();
             List<Class<? extends Annotation>> annots = Lists.newArrayList();
@@ -1072,7 +1071,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     public void cleanup()
     {
         renderEngine.dispose();
-        AL.destroy();
         Display.destroy();
     }
 

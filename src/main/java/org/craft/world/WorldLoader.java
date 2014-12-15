@@ -39,4 +39,6 @@ public abstract class WorldLoader
     }
 
     public abstract void writeEntities(List<Entity> entitiesList) throws IOException;
+
+    public abstract NBTListTag<NBTCompoundTag> loadPlayersInfos(World w) throws IOException;
 }

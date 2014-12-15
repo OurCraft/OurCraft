@@ -235,8 +235,7 @@ public class GuiSelectWorld extends Gui
             worldLoader = new VanillaWorldLoader(new ResourceLocation(worldName), new DiskSimpleResourceLoader(worldFolder.getParentFile().getAbsolutePath()));
             World clientWorld = new World(worldName, new BaseChunkProvider(worldLoader), generator, worldLoader);
 
-            EntityPlayer player = new EntityPlayer(clientWorld, oc.getSession().getUUID());
-            player.setLocation(0, 160 + 17, 0);
+            EntityPlayer player = clientWorld.createPlayerEntity(oc.getSession().getUUID());
             clientWorld.spawn(player);
             oc.getRenderEngine().setRenderViewEntity(player);
             oc.setPlayerController(new LocalPlayerController(player));

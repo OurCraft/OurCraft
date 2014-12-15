@@ -3,6 +3,8 @@ package org.craft.world.loaders;
 import java.io.*;
 import java.util.*;
 
+import com.mojang.nbt.*;
+
 import org.craft.entity.*;
 import org.craft.world.*;
 
@@ -42,5 +44,11 @@ public class FallbackWorldLoader extends WorldLoader
     public void writeEntities(List<Entity> entitiesList)
     {
         ;
+    }
+
+    @Override
+    public NBTListTag<NBTCompoundTag> loadPlayersInfos(World w) throws IOException
+    {
+        return null;
     }
 }

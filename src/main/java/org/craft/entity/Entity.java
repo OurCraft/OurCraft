@@ -37,7 +37,7 @@ public class Entity implements ILocatable
     private Quaternion     rotationQuaternion;
     private boolean        onFire;
     private int            fireTicks;
-    private UUID           uuid;
+    protected UUID         uuid;
     protected float        stepHeight;
     private boolean        wasOnGround;
     public int             entityID;
@@ -408,4 +408,8 @@ public class Entity implements ILocatable
         compound.putBoolean("dead", isDead);
     }
 
+    public UUID getUUID()
+    {
+        return uuid;
+    }
 }

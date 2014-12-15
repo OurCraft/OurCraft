@@ -45,4 +45,14 @@ public final class SessionManager
             return "Unknown";
         return sessions.get(uuid).getDisplayName();
     }
+
+    public UUID getUUID(String id)
+    {
+        for(Session s : sessions.values())
+        {
+            if(s.getId().equals(id))
+                return s.getUUID();
+        }
+        return null;
+    }
 }
