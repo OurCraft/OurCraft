@@ -3,13 +3,11 @@ package org.craft.client;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
-import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.nio.*;
 import java.util.*;
-import java.util.List;
 
 import javax.imageio.*;
 
@@ -44,7 +42,6 @@ import org.lwjgl.*;
 import org.lwjgl.input.*;
 import org.lwjgl.openal.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.opengl.DisplayMode;
 
 public class OurCraft implements Runnable, OurCraftInstance
 {
@@ -1017,37 +1014,41 @@ public class OurCraft implements Runnable, OurCraftInstance
     }
 
     private static int[]     screenshotBufferArray;
-    private static IntBuffer screenshotBuffer;
+    private static IntBuffer pixelBuffer;
 
     public static BufferedImage takeScreenshot()
     {
-        int k = Display.getWidth() * Display.getHeight();
-        if(screenshotBuffer == null || screenshotBuffer.capacity() < k)
+        return takeScreenshot(0, 0, Display.getWidth(), Display.getHeight());
+    }
+
+    public static BufferedImage takeScreenshot(int x, int y, int w, int h)
+    {
+        int n = w * h;
+        if(pixelBuffer == null || pixelBuffer.capacity() < n)
         {
-            screenshotBuffer = BufferUtils.createIntBuffer(k);
-            screenshotBufferArray = new int[k];
+            pixelBuffer = BufferUtils.createIntBuffer(n);
+            screenshotBufferArray = new int[n];
         }
         GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        screenshotBuffer.clear();
-        GL11.glReadPixels(0, 0, Display.getWidth(), Display.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, screenshotBuffer);
-        screenshotBuffer.get(screenshotBufferArray);
-        int[] aint1 = new int[Display.getWidth()];
-        int j = Display.getHeight() / 2;
-        for(int l = 0; l < j; ++l)
+        pixelBuffer.clear();
+        GL11.glReadPixels(x, y, w, h, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelBuffer);
+        pixelBuffer.get(screenshotBufferArray);
+        int[] finalArray = new int[n];
+        for(int index = 0; index < n; index++ )
         {
-            System.arraycopy(screenshotBufferArray, l * Display.getWidth(), aint1, 0, Display.getWidth());
-            System.arraycopy(screenshotBufferArray, (Display.getHeight() - 1 - l) * Display.getWidth(), screenshotBufferArray, l * Display.getWidth(), Display.getWidth());
-            System.arraycopy(aint1, 0, screenshotBufferArray, (Display.getHeight() - 1 - l) * Display.getWidth(), Display.getWidth());
+            int color = screenshotBufferArray[index];
+            int alpha = color >> 24 & 0xFF;
+            int red = color >> 16 & 0xFF;
+            int green = color >> 8 & 0xFF;
+            int blue = color >> 0 & 0xFF;
+            int x1 = index % w;
+            int y1 = h - (index / w) - 1;
+            finalArray[x1 + y1 * w] = (alpha << 24) | (blue << 16) | (green << 8) | red; // We invert colors
         }
-        BufferedImage bufferedimage = new BufferedImage(Display.getWidth(), Display.getHeight(), BufferedImage.TYPE_INT_RGB);
-        for(int i = 0; i < screenshotBufferArray.length; i++ )
-        {
-            Color c = ImageUtils.getColor(screenshotBufferArray[i]);
-            screenshotBufferArray[i] = new Color(c.getBlue(), c.getGreen(), c.getRed()).getRGB();
-        }
-        bufferedimage.setRGB(0, 0, Display.getWidth(), Display.getHeight(), screenshotBufferArray, 0, Display.getWidth());
-        return bufferedimage;
+        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        image.setRGB(0, 0, w, h, finalArray, 0, Display.getWidth());
+        return image;
     }
 
     public ResourceLoader getGameFolderLoader()
