@@ -20,12 +20,14 @@ block.dirt=Terre
 block.grass=Herbe
 block.stone=Pierre
 block.power_source=Source électrique
+block.power_display=Afficheur basique
 block.dirt_slab=Demi-bloc de terre
 block.glass=Verre
 block.leaves=Feuilles
 block.rose=Rose
 block.copper_cable=Cable
 block.obsidian=Obsidian
+block.tnt=TnT
 
 players.joined=%1$s a rejoint la partie!
 

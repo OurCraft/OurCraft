@@ -5,7 +5,7 @@ import com.mojang.nbt.*;
 import org.craft.inventory.*;
 import org.craft.world.*;
 
-public class EntityLiving extends Entity
+public abstract class EntityLiving extends Entity
 {
 
     private double       health;

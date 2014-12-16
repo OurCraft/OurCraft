@@ -206,4 +206,15 @@ public class VanillaWorldLoader extends WorldLoader
         }
         return (NBTListTag<NBTCompoundTag>) tag;
     }
+
+    @Override
+    public NBTListTag<NBTCompoundTag> loadEntitiesInfos(World world) throws IOException
+    {
+        NBTTag tag = NBTTag.readCompoundFromFile(loader.getResource(new ResourceLocation(worldFolder, "entities.data")).asFile()).getList("list");
+        if(!(tag instanceof NBTListTag))
+        {
+            Log.fatal("Expected entities data to be a NBTListTag of NBTCompoundTags. Found " + tag.getClass().getSimpleName());
+        }
+        return (NBTListTag<NBTCompoundTag>) tag;
+    }
 }

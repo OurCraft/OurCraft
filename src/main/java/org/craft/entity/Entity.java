@@ -10,7 +10,7 @@ import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
 
-public class Entity implements ILocatable
+public abstract class Entity implements ILocatable
 {
 
     public float           posX;
@@ -386,6 +386,7 @@ public class Entity implements ILocatable
     {
         if(uuid != null)
             compound.putString("uuid", uuid.toString());
+        compound.putString("typeID", EntityRegistry.getType(this));
         compound.putFloat("posX", posX);
         compound.putFloat("posY", posY);
         compound.putFloat("posZ", posZ);

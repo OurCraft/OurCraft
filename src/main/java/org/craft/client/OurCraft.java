@@ -190,6 +190,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             else
                 fontRenderer = new TrueTypeFontRenderer(settings.font.getValue());
 
+            EntityRegistry.init();
             Biomes.init();
             Blocks.init();
             BlockStates.init();
@@ -989,7 +990,9 @@ public class OurCraft implements Runnable, OurCraftInstance
             }
 
             chunks = clientWorld.getChunkProvider().iterator();
-            BufferedImage image = new BufferedImage(topCorner.getCoords().x - bottomCorner.getCoords().x, topCorner.getCoords().z - bottomCorner.getCoords().z, BufferedImage.TYPE_INT_ARGB);
+            int w = Math.max(1, topCorner.getCoords().x - bottomCorner.getCoords().x);
+            int h = Math.max(1, topCorner.getCoords().z - bottomCorner.getCoords().z);
+            BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             while(chunks.hasNext())
             {
                 Chunk chunk = chunks.next();

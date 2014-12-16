@@ -91,6 +91,12 @@ public class World implements IParticleHandler, IAudioHandler
         schedulers = Lists.newArrayList();
         this.rng = new Random(generator.getSeed());
         this.worldLoader = worldLoader;
+        this.name = name;
+        this.generator = generator;
+        this.chunkProvider = prov;
+        this.gravity = 9.81f / 360f;
+        spawingQueue = Lists.newArrayList();
+        entities = new LinkedList<Entity>();
         if(worldLoader != null) // Load all player data
         {
             playerData = Maps.newHashMap();
@@ -110,18 +116,26 @@ public class World implements IParticleHandler, IAudioHandler
                     }
                     playerData.put(uuid, playerTag);
                 }
+
+                NBTListTag<NBTCompoundTag> entities = worldLoader.loadEntitiesInfos(this);
+                for(NBTCompoundTag entityData : entities)
+                {
+                    try
+                    {
+                        Entity e = EntityRegistry.createEntity(this, entityData);
+                        this.entities.add(e);
+                    }
+                    catch(Exception e)
+                    {
+                        Log.error("Error while loading entity of data " + entityData.toJson().toString(), e);
+                    }
+                }
             }
             catch(IOException e)
             {
                 e.printStackTrace();
             }
         }
-        this.name = name;
-        this.generator = generator;
-        this.chunkProvider = prov;
-        this.gravity = 9.81f / 360f;
-        spawingQueue = Lists.newArrayList();
-        entities = new LinkedList<Entity>();
     }
 
     public void update(double delta)
@@ -266,12 +280,12 @@ public class World implements IParticleHandler, IAudioHandler
             y = (int) Math.round(pos.getY());
             z = (int) Math.round(pos.getZ());
             Block b = getBlockAt(x, y, z);
+            AABB translatedRay = rayBB.translate(pos);
             if(b != null)
             {
                 AABB blockBB = b.getSelectionBox(this, x, y, z);
                 if(blockBB != null)
                 {
-                    AABB translatedRay = rayBB.translate(pos);
                     if(blockBB.intersectAABB(translatedRay))
                     {
                         infos.x = x;
@@ -312,7 +326,6 @@ public class World implements IParticleHandler, IAudioHandler
                         }
                         diff.dispose();
                     }
-                    translatedRay.dispose();
                     blockBB.dispose();
                 }
             }
@@ -323,7 +336,7 @@ public class World implements IParticleHandler, IAudioHandler
             multipliedRay.dispose();
             for(Entity e : entities)
             {
-                if(e.getBoundingBox().intersectAABB(rayBB))
+                if(e.getBoundingBox().intersectAABB(translatedRay) && e != sender)
                 {
                     infos.type = CollisionType.ENTITY;
                     infos.value = e;
@@ -333,6 +346,7 @@ public class World implements IParticleHandler, IAudioHandler
                     infos.distance = maxReachedDist;
                 }
             }
+            translatedRay.dispose();
         }
         if(blockPos != null)
             blockPos.dispose();

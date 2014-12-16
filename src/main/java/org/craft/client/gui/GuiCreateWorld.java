@@ -87,7 +87,7 @@ public class GuiCreateWorld extends Gui
             oc.getRenderEngine().setRenderViewEntity(player);
             oc.setPlayerController(new LocalPlayerController(player));
 
-            Entity testEntity = new Entity(clientWorld);
+            Entity testEntity = new EntityTest(clientWorld);
             testEntity.setLocation(player.posX, player.posY + 20, player.posZ);
             clientWorld.spawn(testEntity);
 

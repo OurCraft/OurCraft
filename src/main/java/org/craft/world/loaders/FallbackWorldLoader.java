@@ -51,4 +51,10 @@ public class FallbackWorldLoader extends WorldLoader
     {
         return null;
     }
+
+    @Override
+    public NBTListTag<NBTCompoundTag> loadEntitiesInfos(World world)
+    {
+        return null;
+    }
 }

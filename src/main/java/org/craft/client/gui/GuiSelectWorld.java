@@ -240,10 +240,6 @@ public class GuiSelectWorld extends Gui
             oc.getRenderEngine().setRenderViewEntity(player);
             oc.setPlayerController(new LocalPlayerController(player));
 
-            Entity testEntity = new Entity(clientWorld);
-            testEntity.setLocation(player.posX, player.posY + 20, player.posZ);
-            clientWorld.spawn(testEntity);
-
             new ThreadGetChunksFromCamera(oc).start();
             oc.setWorld(clientWorld);
             oc.setPlayer(player);
