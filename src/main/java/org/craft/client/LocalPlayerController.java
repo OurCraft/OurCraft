@@ -75,16 +75,10 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onLeftClick(CollisionInfos infos)
     {
-        Log.message(">> " + infos.type + ", " + infos.x + ", " + infos.y + ", " + infos.z);
         if(infos.type == CollisionInfos.CollisionType.BLOCK)
         {
             Blocks.air.onBlockAdded(player.worldObj, (int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), infos.side, player);
             player.worldObj.setBlock((int) Math.round(infos.x), (int) Math.round(infos.y), (int) Math.round(infos.z), Blocks.air);
-        }
-        else if(infos.type == CollisionInfos.CollisionType.ENTITY)
-        {
-            Entity e = (Entity) infos.value;
-            Log.message(">> " + e.getClass());
         }
     }
 
