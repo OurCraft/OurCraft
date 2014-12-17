@@ -414,4 +414,18 @@ public abstract class Entity implements ILocatable
         return uuid;
     }
 
+    public int getFireTicks()
+    {
+        return fireTicks;
+    }
+
+    public void setFire(int ticks)
+    {
+        this.fireTicks = ticks;
+    }
+
+    public void onInteract(org.craft.inventory.Stack itemStack)
+    {
+        ;
+    }
 }

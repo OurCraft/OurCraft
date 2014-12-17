@@ -4,9 +4,14 @@ import java.util.*;
 
 import com.flowpowered.math.vector.*;
 import com.google.common.base.Optional;
+import com.google.common.collect.*;
 
 import org.craft.entity.*;
+import org.craft.maths.*;
 import org.craft.modding.modifiers.*;
+import org.craft.spoonge.util.*;
+import org.craft.spoonge.world.*;
+import org.spongepowered.api.block.*;
 import org.spongepowered.api.entity.*;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.item.inventory.*;
@@ -20,6 +25,15 @@ public class SpoongeEntity implements Entity, EntityType
 
     @Shadow
     public org.craft.world.World worldObj;
+
+    @Shadow
+    public float                 yaw;
+
+    @Shadow
+    public float                 pitch;
+
+    @Shadow
+    public float                 roll;
 
     @Shadow
     public SpoongeEntity(org.craft.world.World w)
@@ -76,6 +90,30 @@ public class SpoongeEntity implements Entity, EntityType
         ;
     }
 
+    @Shadow
+    public int getFireTicks()
+    {
+        return 0;
+    }
+
+    @Shadow
+    public void setFire(int t)
+    {
+        ;
+    }
+
+    @Shadow
+    public AABB getBoundingBox()
+    {
+        return null;
+    }
+
+    @Shadow
+    public void onInteract(org.craft.inventory.Stack itemStack)
+    {
+        ;
+    }
+
     // END OF SHADOW METHODS
     @Override
     public UUID getUniqueId()
@@ -111,22 +149,19 @@ public class SpoongeEntity implements Entity, EntityType
     @Override
     public void interact(EntityInteractionType interactionType)
     {
-        // TODO Auto-generated method stub
-
+        interactWith(null, interactionType);
     }
 
     @Override
     public void interactWith(ItemStack itemStack, EntityInteractionType interactionType)
     {
-        // TODO Auto-generated method stub
-
+        onInteract((org.craft.inventory.Stack) itemStack);
     }
 
     @Override
     public Location getLocation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new Location(new SpoongeExtent(new BlockLoc[0], Lists.<Entity> newArrayList(this)), new Vector3d(getPosX(), getPosY(), getPosZ()));
     }
 
     @Override
@@ -196,50 +231,45 @@ public class SpoongeEntity implements Entity, EntityType
     @Override
     public Vector3f getVectorRotation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getRotation().toVector();
     }
 
     @Override
     public void setVectorRotation(Vector3f rotation)
     {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public EulerDirection getRotation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new SpoongeEulerDirection(yaw, pitch, roll);
     }
 
     @Override
     public void setRotation(EulerDirection rotation)
     {
-        // TODO Auto-generated method stub
-
+        yaw = rotation.getYaw();
+        pitch = rotation.getPitch();
+        roll = rotation.getRoll();
     }
 
     @Override
     public void mount(Entity entity)
     {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void dismount()
     {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void eject()
     {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -257,22 +287,22 @@ public class SpoongeEntity implements Entity, EntityType
     @Override
     public float getBase()
     {
-        // TODO Auto-generated method stub
-        return 0;
+        float w = getBoundingBox().getMaxExtents().getX() - getBoundingBox().getMinExtents().getX();
+        return w;
     }
 
     @Override
     public float getHeight()
     {
-        // TODO Auto-generated method stub
-        return 0;
+        float h = getBoundingBox().getMaxExtents().getY() - getBoundingBox().getMinExtents().getY();
+        return h;
     }
 
     @Override
     public float getScale()
     {
         // TODO Auto-generated method stub
-        return 0;
+        return 1;
     }
 
     @Override
@@ -282,17 +312,9 @@ public class SpoongeEntity implements Entity, EntityType
     }
 
     @Override
-    public int getFireTicks()
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public void setFireTicks(int ticks)
     {
-        // TODO Auto-generated method stub
-
+        setFire(ticks);
     }
 
     @Override
