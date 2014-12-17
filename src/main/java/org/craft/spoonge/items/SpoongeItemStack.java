@@ -1,7 +1,8 @@
 package org.craft.spoonge.items;
 
+import java.util.*;
+
 import org.craft.blocks.*;
-import org.craft.inventory.*;
 import org.craft.items.*;
 import org.craft.modding.modifiers.*;
 import org.craft.spoonge.text.*;
@@ -113,5 +114,40 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
     public Translation getTranslation()
     {
         return SpoongeTranslations.get(getStackable().getUnlocalizedID());
+    }
+
+    @Override
+    public Map<Enchantment, Integer> getEnchantments()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isEnchanted()
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setEnchantment(Enchantment enchant, int level)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void removeEnchantment(Enchantment enchant)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getEnchantment(Enchantment enchant)
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

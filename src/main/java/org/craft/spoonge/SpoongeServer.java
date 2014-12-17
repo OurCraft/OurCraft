@@ -67,11 +67,10 @@ public class SpoongeServer implements Server
     }
 
     @Override
-    public void broadcastMessage(Message<?> message)
+    public void broadcastMessage(Message message)
     {
         spoonge.getOurCraftInstance().broadcastMessage(message.getContent().toString());
     }
-
 
     @Override
     public Optional<InetSocketAddress> getBoundAddress()
@@ -103,5 +102,12 @@ public class SpoongeServer implements Server
     {
         // TODO MotD
         return null;
+    }
+
+    @Override
+    public int getRunningTimeTicks()
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

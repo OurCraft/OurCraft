@@ -63,4 +63,18 @@ public class SpoongeBlock implements BlockType
     {
         return SpoongeTranslations.get(getUnlocalizedID());
     }
+
+    @Override
+    public boolean getTickRandomly()
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setTickRandomly(boolean tickRandomly)
+    {
+        // TODO Auto-generated method stub
+
+    }
 }

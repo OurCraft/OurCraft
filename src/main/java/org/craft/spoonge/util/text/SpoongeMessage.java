@@ -9,16 +9,16 @@ import org.spongepowered.api.text.action.*;
 import org.spongepowered.api.text.format.*;
 import org.spongepowered.api.text.message.*;
 
-public class SpoongeMessage<T> implements Message<T>
+public class SpoongeMessage implements Message
 {
 
-    private ShiftClickAction<?>   onShiftClickAction;
-    private ClickAction<?>        onClickAction;
-    private HoverAction<?>        onHoverAction;
-    private ArrayList<Message<?>> hierarchy;
-    private T                     content;
-    private TextStyle             style;
-    private TextColor             color;
+    private ShiftClickAction<?> onShiftClickAction;
+    private ClickAction<?>      onClickAction;
+    private HoverAction<?>      onHoverAction;
+    private ArrayList<Message>  hierarchy;
+    private Object              content;
+    private TextStyle           style;
+    private TextColor           color;
 
     public SpoongeMessage()
     {
@@ -26,14 +26,7 @@ public class SpoongeMessage<T> implements Message<T>
     }
 
     @Override
-    public Iterator<Message<T>> iterator()
-    {
-        //return hierarchy.iterator();
-        return null;
-    }
-
-    @Override
-    public T getContent()
+    public Object getContent()
     {
         return content;
     }
@@ -51,7 +44,7 @@ public class SpoongeMessage<T> implements Message<T>
     }
 
     @Override
-    public List<Message<?>> getChildren()
+    public List<Message> getChildren()
     {
         return hierarchy;
     }
@@ -78,13 +71,12 @@ public class SpoongeMessage<T> implements Message<T>
     }
 
     @Override
-    public MessageBuilder<T> builder()
+    public MessageBuilder builder()
     {
-        SpoongeMessageBuilder<T> builder = new SpoongeMessageBuilder<T>();
+        SpoongeMessageBuilder builder = new SpoongeMessageBuilder();
         builder.append(hierarchy);
         builder.color(color);
         builder.style(style);
-        builder.content(content);
         builder.onClick(onClickAction);
         builder.onShiftClick(onShiftClickAction);
         builder.onHover(onHoverAction);
@@ -106,19 +98,19 @@ public class SpoongeMessage<T> implements Message<T>
         this.onHoverAction = onHoverAction;
     }
 
-    public void append(Message<?>... children)
+    public void append(Message... children)
     {
-        for(Message<?> child : children)
+        for(Message child : children)
             hierarchy.add(child);
     }
 
-    public void append(Iterable<Message<?>> children)
+    public void append(Iterable<Message> children)
     {
-        for(Message<?> child : children)
+        for(Message child : children)
             hierarchy.add(child);
     }
 
-    public void setContent(T content)
+    public void setContent(Object content)
     {
         this.content = content;
     }
@@ -131,5 +123,26 @@ public class SpoongeMessage<T> implements Message<T>
     public void setColor(TextColor color)
     {
         this.color = color;
+    }
+
+    @Override
+    public Iterable<Message> withChildren()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public String toLegacy()
+    {
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public String toLegacy(char code)
+    {
+        return null;
     }
 }

@@ -5,13 +5,12 @@ import java.util.*;
 import com.google.common.base.Optional;
 import com.google.common.collect.*;
 
-import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.scheduler.*;
 
 public class SpoongeScheduler implements Scheduler
 {
 
-    private HashMap<PluginContainer, ArrayList<Task>> scheduled;
+    private HashMap<Object, ArrayList<Task>> scheduled;
 
     public SpoongeScheduler()
     {
@@ -19,15 +18,15 @@ public class SpoongeScheduler implements Scheduler
     }
 
     @Override
-    public Optional<Task> runTask(PluginContainer plugin, Runnable task)
+    public Optional<Task> runTask(Object plugin, Runnable task)
     {
         Task spoongeTask = new SpoongeTask(plugin, task);
-        //TODO:  spoongeTask.run();
+        spoongeTask.getRunnable().run();
         return Optional.of(spoongeTask);
     }
 
     @Override
-    public Optional<Task> runTaskAfter(PluginContainer plugin, Runnable task, long delay)
+    public Optional<Task> runTaskAfter(Object plugin, Runnable task, long delay)
     {
         Task spoongeTask = new SpoongeTask(plugin, task, delay);
         addScheduled(plugin, spoongeTask);
@@ -35,16 +34,16 @@ public class SpoongeScheduler implements Scheduler
     }
 
     @Override
-    public Optional<RepeatingTask> runRepeatingTask(PluginContainer plugin, Runnable task, long interval)
+    public Optional<RepeatingTask> runRepeatingTask(Object plugin, Runnable task, long interval)
     {
         RepeatingTask spoongeTask = new SpoongeRepeatingTask(plugin, task, 0L, interval);
-        //TODO:  spoongeTask.run();
+        spoongeTask.getRunnable().run();
         addScheduled(plugin, spoongeTask);
         return Optional.of(spoongeTask);
     }
 
     @Override
-    public Optional<RepeatingTask> runRepeatingTaskAfter(PluginContainer plugin, Runnable task, long interval, long delay)
+    public Optional<RepeatingTask> runRepeatingTaskAfter(Object plugin, Runnable task, long interval, long delay)
     {
         RepeatingTask spoongeTask = new SpoongeRepeatingTask(plugin, task, delay, interval);
         addScheduled(plugin, spoongeTask);
@@ -63,17 +62,17 @@ public class SpoongeScheduler implements Scheduler
     }
 
     @Override
-    public Collection<Task> getScheduledTasks(PluginContainer plugin)
+    public Collection<Task> getScheduledTasks(Object plugin)
     {
         return scheduled.get(plugin);
     }
 
-    public void removeScheduled(PluginContainer plugin, Task task)
+    public void removeScheduled(Object plugin, Task task)
     {
         scheduled.get(plugin).remove(task);
     }
 
-    public void addScheduled(PluginContainer plugin, Task task)
+    public void addScheduled(Object plugin, Task task)
     {
         if(!scheduled.containsKey(plugin))
         {
@@ -86,4 +85,12 @@ public class SpoongeScheduler implements Scheduler
     {
         ;
     }
+
+    @Override
+    public Optional<Task> getTaskById(UUID id)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

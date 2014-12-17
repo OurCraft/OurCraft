@@ -96,14 +96,14 @@ public class SpoongeTitle implements Title
     //===========================================================
 
     @Override
-    public Optional<Message<?>> getTitle()
+    public Optional<Message> getTitle()
     {
         //return Optional.of(Messages.of(getRawTitle()));
         return Optional.absent();
     }
 
     @Override
-    public Optional<Message<?>> getSubtitle()
+    public Optional<Message> getSubtitle()
     {
         //return Optional.of(Messages.of(getRawSubTitle()));
         return Optional.absent();

@@ -197,4 +197,32 @@ public class SpoongeWorld implements World
 
     }
 
+    @Override
+    public WorldBorder getWorldBorder()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Optional<String> getGameRule(String gameRule)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setGameRule(String gameRule, String value)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Map<String, String> getGameRules()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

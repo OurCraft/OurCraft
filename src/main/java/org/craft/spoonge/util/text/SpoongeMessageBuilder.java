@@ -4,77 +4,70 @@ import org.spongepowered.api.text.action.*;
 import org.spongepowered.api.text.format.*;
 import org.spongepowered.api.text.message.*;
 
-public class SpoongeMessageBuilder<T> implements MessageBuilder<T>
+public class SpoongeMessageBuilder implements MessageBuilder
 {
 
-    private SpoongeMessage<T> message;
+    private SpoongeMessage message;
 
     public SpoongeMessageBuilder()
     {
-        message = new SpoongeMessage<T>();
+        message = new SpoongeMessage();
     }
 
     @Override
-    public MessageBuilder<T> append(Message<?>... children)
+    public MessageBuilder append(Message... children)
     {
         message.append(children);
         return this;
     }
 
     @Override
-    public MessageBuilder<T> append(Iterable<Message<?>> children)
+    public MessageBuilder append(Iterable<Message> children)
     {
         message.append(children);
         return this;
     }
 
     @Override
-    public MessageBuilder<T> content(T content)
-    {
-        message.setContent(content);
-        return this;
-    }
-
-    @Override
-    public MessageBuilder<T> color(TextColor color)
+    public MessageBuilder color(TextColor color)
     {
         message.setColor(color);
         return this;
     }
 
     @Override
-    public MessageBuilder<T> style(TextStyle... styles)
+    public MessageBuilder style(TextStyle... styles)
     {
-        message.setStyle(new SpoongeTextStyle(styles));
+        message.setStyle(new TextStyle().and(styles));
         return this;
     }
 
     @Override
-    public MessageBuilder<T> onClick(ClickAction<?> action)
+    public MessageBuilder onClick(ClickAction<?> action)
     {
         message.setOnClickAction(action);
         return this;
     }
 
     @Override
-    public MessageBuilder<T> onHover(HoverAction<?> action)
+    public MessageBuilder onHover(HoverAction<?> action)
     {
         message.setOnHoverAction(action);
         return this;
     }
 
     @Override
-    public MessageBuilder<T> onShiftClick(ShiftClickAction<?> action)
+    public MessageBuilder onShiftClick(ShiftClickAction<?> action)
     {
         message.setOnShiftClickAction(action);
         return this;
     }
 
     @Override
-    public Message<T> build()
+    public Message build()
     {
-        Message<T> built = message;
-        message = new SpoongeMessage<T>();
+        Message built = message;
+        message = new SpoongeMessage();
         return built;
     }
 

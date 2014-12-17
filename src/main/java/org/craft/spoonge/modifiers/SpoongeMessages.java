@@ -16,24 +16,25 @@ public class SpoongeMessages
     }
 
     @Overwrite
-    public static <T> MessageBuilder<T> builder(T content)
+    public static MessageBuilder.Text builder(String content)
     {
-        return new SpoongeMessageBuilder<T>().content(content);
+        SpoongeMessageBuilder builder = new SpoongeMessageBuilder();
+        throw new UnsupportedOperationException();
     }
 
     @Overwrite
-    public static MessageBuilder<Translation> builder(Translation translation, Object... args)
+    public static MessageBuilder builder(Translation translation, Object... args)
     {
-        SpoongeMessageBuilder<Translation> builder = new SpoongeMessageBuilder<Translation>();
-        SpoongeMessage<Translation> message = new SpoongeTranslationMessage(translation, args);
+        SpoongeMessageBuilder builder = new SpoongeMessageBuilder();
+        SpoongeMessage message = new SpoongeTranslationMessage(translation, args);
         builder.append(message);
         return builder;
     }
 
     @Overwrite
-    public static MessageBuilder<Object> builder(Object score, String override)
+    public static MessageBuilder builder(Object score, String override)
     {
-        return builder(score);
+        return builder(override);
     }
 
 }

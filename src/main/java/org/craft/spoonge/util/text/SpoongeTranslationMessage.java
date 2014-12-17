@@ -2,7 +2,7 @@ package org.craft.spoonge.util.text;
 
 import org.spongepowered.api.text.translation.*;
 
-public class SpoongeTranslationMessage extends SpoongeMessage<Translation>
+public class SpoongeTranslationMessage extends SpoongeMessage
 {
 
     private Object[] args;

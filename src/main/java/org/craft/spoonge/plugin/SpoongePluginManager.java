@@ -14,7 +14,7 @@ public class SpoongePluginManager implements IAddonManager<Plugin>, PluginManage
 
     private HashMap<String, PluginContainer> plugins;
     private HashMap<PluginContainer, Logger> loggers;
-    private SpoongeAddonHandler               handler;
+    private SpoongeAddonHandler              handler;
 
     public SpoongePluginManager()
     {
@@ -84,6 +84,13 @@ public class SpoongePluginManager implements IAddonManager<Plugin>, PluginManage
                 return Optional.of(container);
         }
         return Optional.absent();
+    }
+
+    @Override
+    public boolean isLoaded(String id)
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

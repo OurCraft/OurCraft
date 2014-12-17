@@ -7,12 +7,12 @@ import org.spongepowered.api.text.title.*;
 public class SpoongeTitleBuilder implements TitleBuilder
 {
 
-    private long       displayDuration;
-    private long       fadeInDuration;
-    private long       fadeOutDuration;
-    private boolean    visible;
-    private Message<?> title;
-    private Message<?> subtitle;
+    private long    displayDuration;
+    private long    fadeInDuration;
+    private long    fadeOutDuration;
+    private boolean visible;
+    private Message title;
+    private Message subtitle;
 
     public SpoongeTitleBuilder()
     {
@@ -20,14 +20,14 @@ public class SpoongeTitleBuilder implements TitleBuilder
     }
 
     @Override
-    public TitleBuilder title(Message<?> message)
+    public TitleBuilder title(Message message)
     {
         this.title = message;
         return this;
     }
 
     @Override
-    public TitleBuilder subtitle(Message<?> message)
+    public TitleBuilder subtitle(Message message)
     {
         this.subtitle = message;
         return this;

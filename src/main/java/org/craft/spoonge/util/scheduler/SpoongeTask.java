@@ -1,27 +1,32 @@
 package org.craft.spoonge.util.scheduler;
 
+import java.util.*;
+
 import org.spongepowered.api.plugin.*;
 import org.spongepowered.api.service.scheduler.*;
 
 public class SpoongeTask implements Task
 {
 
-    private PluginContainer plugin;
-    private Runnable        task;
-    protected boolean       cancelled;
-    private boolean         done;
-    private long            delay;
+    private Object    plugin;
+    private Runnable  task;
+    protected boolean cancelled;
+    private boolean   done;
+    private long      delay;
+    private UUID      uuid;
 
-    public SpoongeTask(PluginContainer plugin, Runnable task)
+    public SpoongeTask(Object plugin, Runnable task)
     {
         this(plugin, task, 0L);
     }
 
-    public SpoongeTask(PluginContainer plugin, Runnable task, long delay)
+    public SpoongeTask(Object plugin, Runnable task, long delay)
     {
         this.plugin = plugin;
         this.task = task;
         this.delay = delay;
+
+        uuid = UUID.randomUUID();
     }
 
     // TODO: @Override
@@ -40,7 +45,7 @@ public class SpoongeTask implements Task
     @Override
     public PluginContainer getOwner()
     {
-        return plugin;
+        return null;
     }
 
     @Override
@@ -60,6 +65,12 @@ public class SpoongeTask implements Task
     public Runnable getRunnable()
     {
         return task;
+    }
+
+    @Override
+    public UUID getUniqueId()
+    {
+        return uuid;
     }
 
 }
