@@ -3,6 +3,7 @@ package org.craft.utils;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
+import org.craft.*;
 import org.craft.client.*;
 import org.craft.utils.Log.NonLoggable;
 import org.craft.utils.crash.*;
@@ -109,8 +110,8 @@ public final class Log
     @NonLoggable
     public static void fatal(String msg)
     {
-        if(OurCraft.getOurCraft() != null)
-            OurCraft.getOurCraft().crash(new CrashReport(msg));
+        if(CommonHandler.getCurrentInstance() != null)
+            CommonHandler.getCurrentInstance().crash(new CrashReport(msg));
         else
         {
             new CrashReport(msg).printStack();

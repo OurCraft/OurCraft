@@ -10,6 +10,7 @@ public class SpoongeTransformers implements ASMTransformerPlugin
     @Override
     public void registerModifiers(ModifierClassTransformer trans)
     {
+        trans.addModifier(SpoongeEntity.class);
         trans.addModifier(SpoongeMessages.class);
         trans.addModifier(SpoongeTextStyles.class);
         trans.addModifier(SpoongeTitles.class);

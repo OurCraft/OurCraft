@@ -19,25 +19,25 @@ public class SpoongeBlockEventsListener
     }
 
     @OurModEventHandler
-    public void onBlockUpdate(ModBlockChangeEvent changeEvent)
+    public void onBlockChange(ModBlockChangeEvent changeEvent)
     {
         SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(changeEvent.getBlock(), changeEvent.getX(), changeEvent.getY(), changeEvent.getZ(), changeEvent.getWorld());
         SpoongeBlockState state = new SpoongeBlockState();
         state.setType((BlockType) changeEvent.getReplacementBlock());
-        mod.getEventManager().post(new SpoongeBlockChangeEvent(mod.getOurCraftInstance(), blockWrapper, new SpoongeBlockSnapshot(state)));
+        changeEvent.setCancelled(mod.getEventManager().post(new SpoongeBlockChangeEvent(mod.getOurCraftInstance(), blockWrapper, new SpoongeBlockSnapshot(state))));
     }
 
     @OurModEventHandler
-    public void onBlockInteract(ModBlockInteractEvent changeEvent)
+    public void onBlockInteract(ModBlockInteractEvent interactEvent)
     {
-        SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(changeEvent.getBlock(), changeEvent.getX(), changeEvent.getY(), changeEvent.getZ(), changeEvent.getWorld());
-        mod.getEventManager().post(new SpoongeBlockInteractEvent(mod.getOurCraftInstance(), blockWrapper));
+        SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(interactEvent.getBlock(), interactEvent.getX(), interactEvent.getY(), interactEvent.getZ(), interactEvent.getWorld());
+        interactEvent.setCancelled(mod.getEventManager().post(new SpoongeBlockInteractEvent(mod.getOurCraftInstance(), blockWrapper)));
     }
 
     @OurModEventHandler
-    public void onBlockUpdate(ModBlockUpdateEvent changeEvent)
+    public void onBlockUpdate(ModBlockUpdateEvent updateEvent)
     {
-        SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(changeEvent.getBlock(), changeEvent.getX(), changeEvent.getY(), changeEvent.getZ(), changeEvent.getWorld());
-        mod.getEventManager().post(new SpoongeBlockUpdateEvent(mod.getOurCraftInstance(), blockWrapper, (BlockType) changeEvent.getCauseBlock()));
+        SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(updateEvent.getBlock(), updateEvent.getX(), updateEvent.getY(), updateEvent.getZ(), updateEvent.getWorld());
+        updateEvent.setCancelled(mod.getEventManager().post(new SpoongeBlockUpdateEvent(mod.getOurCraftInstance(), blockWrapper, (BlockType) updateEvent.getCauseBlock())));
     }
 }

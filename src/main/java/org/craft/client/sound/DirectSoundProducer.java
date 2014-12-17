@@ -118,8 +118,11 @@ public class DirectSoundProducer implements IAudioHandler
     public void setSoundVolume(float volume)
     {
         List<Sound> toRemove = Lists.newArrayList();
-        for(Sound playing : playingSounds)
+        for(int i = 0; i < playingSounds.size(); i++ )
         {
+            Sound playing = playingSounds.get(i);
+            if(playing == null)
+                continue;
             sndSystem.setVolume(playing.getSourceName(), volume);
             if(!isPlaying(playing.getSourceName()))
                 toRemove.add(playing);

@@ -12,6 +12,7 @@ import org.craft.blocks.states.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.modding.events.block.*;
+import org.craft.modding.events.entity.*;
 import org.craft.sound.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
@@ -152,6 +153,7 @@ public class World implements IParticleHandler, IAudioHandler
 
             if(e.isDead())
             {
+                CommonHandler.getCurrentInstance().getEventBus().fireEvent(new ModEntityDeathEvent(CommonHandler.getCurrentInstance(), e));
                 deadEntities.add(e);
             }
         }
@@ -254,7 +256,8 @@ public class World implements IParticleHandler, IAudioHandler
      */
     public void spawn(Entity e)
     {
-        this.spawingQueue.add(e);
+        if(!CommonHandler.getCurrentInstance().getEventBus().fireEvent(new ModEntitySpawnEvent(CommonHandler.getCurrentInstance(), e, e)))
+            this.spawingQueue.add(e);
     }
 
     /**

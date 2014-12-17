@@ -23,6 +23,7 @@ import org.craft.resources.*;
 import org.craft.server.commands.*;
 import org.craft.server.network.*;
 import org.craft.utils.*;
+import org.craft.utils.crash.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
 import org.spongepowered.api.entity.player.*;
@@ -304,5 +305,12 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
     public AssetLoader getAssetsLoader()
     {
         return assetsLoader;
+    }
+
+    @Override
+    public void crash(CrashReport crashReport)
+    {
+        crashReport.printStack();
+        System.exit(-1);
     }
 }

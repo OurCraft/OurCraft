@@ -2,6 +2,7 @@ package org.craft.utils.crash;
 
 import java.nio.charset.*;
 
+import org.craft.*;
 import org.craft.client.*;
 import org.craft.resources.*;
 
@@ -36,10 +37,10 @@ public class CrashReport
         this.exception = throwable;
         try
         {
-            if(OurCraft.getOurCraft() != null && comments[0] == null)
+            if(CommonHandler.getCurrentInstance() != null && comments[0] == null)
             {
-                comments[0] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
-                comments[1] = new String(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+                comments[0] = new String(CommonHandler.getCurrentInstance().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/crackedFloppy.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
+                comments[1] = new String(CommonHandler.getCurrentInstance().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "text/deadFace.ascii")).getData(), Charset.forName("utf-8")).replace("\n       -jglrxavpok", "");
             }
         }
         catch(Exception e)
@@ -78,7 +79,7 @@ public class CrashReport
         buffer.append(CrashInfos.SECTION_START + " Game " + CrashInfos.SECTION_END + "\n\tName: OurCraft\n");
         add(buffer, new DateInfos());
         add(buffer, new SystemInfos());
-        if(OurCraft.getOurCraft() != null)
+        if(CommonHandler.getCurrentInstance() != null)
         {
             add(buffer, new OpenALInfos());
             add(buffer, new OpenGLInfos());

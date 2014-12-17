@@ -85,6 +85,7 @@ public class SpoongeMod implements Game
         addonsLoader.exclude();
 
         gameInstance.getEventBus().register(new SpoongeBlockEventsListener(this));
+        gameInstance.getEventBus().register(new SpoongeEntityEventsListener(this));
     }
 
     @OurModEventHandler

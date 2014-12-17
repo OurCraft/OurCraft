@@ -7,6 +7,7 @@ import org.craft.items.*;
 import org.craft.modding.*;
 import org.craft.modding.events.*;
 import org.craft.resources.*;
+import org.craft.utils.crash.*;
 
 public interface OurCraftInstance
 {
@@ -34,5 +35,7 @@ public interface OurCraftInstance
     void registerItem(Item item);
 
     AssetLoader getAssetsLoader();
+
+    void crash(CrashReport crashReport);
 
 }
