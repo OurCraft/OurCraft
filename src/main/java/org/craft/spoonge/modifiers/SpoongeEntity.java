@@ -9,6 +9,7 @@ import com.google.common.collect.*;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.craft.modding.modifiers.*;
+import org.craft.spoonge.entity.*;
 import org.craft.spoonge.util.*;
 import org.craft.spoonge.world.*;
 import org.spongepowered.api.block.*;
@@ -130,8 +131,7 @@ public class SpoongeEntity implements Entity, EntityType
     @Override
     public EntitySnapshot getSnapshot()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new SpoongeEntitySnapshot(this, this);
     }
 
     @Override
