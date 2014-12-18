@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
+import org.craft.blocks.*;
+
 public class Biomes
 {
 
@@ -13,23 +15,19 @@ public class Biomes
     private static float                       minTemperature;
 
     public static final Biome                  BASE           = new BiomeBase();
+    public static final Biome                  MOUNTAINS      = new BiomeMountains("mountains", 273f - 2f, 100, Blocks.grass);
     public static final Biome                  BASE_TEST      = new BiomeTest();
     public static final Biome                  BASE_TEST2     = new BiomeTest2();
     public static final Biome                  BASE_TEST3     = new BiomeTest3();
-    public static final Biome                  BASE_TEST4     = new BiomeTest4();
-    public static final Biome                  BASE_TEST5     = new BiomeTest5();
-    public static final Biome                  BASE_TEST6     = new BiomeTest6();
 
     public static void init()
     {
         minTemperature = Float.POSITIVE_INFINITY;
         register(BASE);
+        register(MOUNTAINS);
         register(BASE_TEST);
         register(BASE_TEST2);
         register(BASE_TEST3);
-        register(BASE_TEST4);
-        register(BASE_TEST5);
-        register(BASE_TEST6);
 
         for(short i = 0; i < biomeByID.size(); i++ )
         {
@@ -50,6 +48,7 @@ public class Biomes
         }
         BIOME_REGISTRY.put(biome.getID(), biome);
         biomeByID.add(biome);
+        biome.initPopulators();
         if(maxTemperature < biome.getTemperature())
             maxTemperature = biome.getTemperature();
         if(minTemperature > biome.getTemperature())

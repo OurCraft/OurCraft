@@ -13,6 +13,8 @@ import org.craft.client.render.fonts.*;
 import org.craft.entity.*;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
+import org.craft.world.*;
+import org.craft.world.biomes.*;
 import org.lwjgl.input.*;
 
 public class GuiIngame extends Gui
@@ -44,6 +46,15 @@ public class GuiIngame extends Gui
     {
         super.render(mx, my, renderEngine);
         getFontRenderer().drawString("Playing as \"" + oc.getClientUsername() + "\" and password is " + TextFormatting.OBFUSCATED + "LOL_THERE'S_NO_PASSWORD_HERE", 0xFFFFFFFF, 2, 0, renderEngine);
+        EntityPlayer player = oc.getClientPlayer();
+        Biome biome = null;
+
+        if(player.worldObj.doesChunkExists((int) player.posX / 16, (int) player.posY / 16, (int) player.posZ / 16))
+        {
+            Chunk chunk = player.worldObj.getChunk((int) player.posX, (int) player.posY, (int) player.posZ);
+            biome = chunk.getBiome();
+            getFontRenderer().drawString("Biome: " + biome.getID(), 0xFFFFFFFF, 2, 20, renderEngine);
+        }
 
         CollisionInfos infos = oc.getObjectInFront();
         if(infos != null && infos.type == CollisionType.BLOCK)
@@ -66,7 +77,6 @@ public class GuiIngame extends Gui
             }
         }
 
-        EntityPlayer player = oc.getClientPlayer();
         org.craft.inventory.Stack stack = player.getHeldItem();
         if(stack != null)
         {

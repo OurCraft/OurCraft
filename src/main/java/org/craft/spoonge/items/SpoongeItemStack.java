@@ -21,7 +21,7 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
     //               START OF SHADOW METHODS
     //===========================================================
     @Shadow
-    public int compareTo(Stack s)
+    public int compareTo(org.craft.inventory.Stack s)
     {
         return 0;
     }
@@ -81,7 +81,7 @@ public class SpoongeItemStack implements ItemStack, ItemBlock
     @Override
     public int compareTo(ItemStack o)
     {
-        return compareTo((Stack) o);
+        return compareTo((org.craft.inventory.Stack) o);
     }
 
     @Override

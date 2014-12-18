@@ -40,7 +40,7 @@ public class TreePopulator implements IWorldPopulator
                         }
                     }
                 }
-                for(int j = 1; j < 4; j++ )
+                for(int j = 1; j < 4 && y + j < 16; j++ )
                 {
                     c.setChunkBlock(x, y + j, z, Blocks.log);
                     c.setChunkBlockState(x, y + j, z, BlockStates.logOrientation, EnumLogBlockStates.UP);

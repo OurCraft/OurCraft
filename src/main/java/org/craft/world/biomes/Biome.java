@@ -19,7 +19,6 @@ public abstract class Biome
         this.temperature = temp;
         this.id = id;
         populators = Lists.newArrayList();
-        initPopulators();
     }
 
     public float getTemperature()

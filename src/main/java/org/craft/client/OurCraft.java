@@ -191,7 +191,6 @@ public class OurCraft implements Runnable, OurCraftInstance
                 fontRenderer = new TrueTypeFontRenderer(settings.font.getValue());
 
             EntityRegistry.init();
-            Biomes.init();
             Blocks.init();
             BlockStates.init();
             Items.init();
@@ -199,6 +198,7 @@ public class OurCraft implements Runnable, OurCraftInstance
             I18n.init(assetsLoader);
             I18n.setCurrentLanguage(settings.lang.getValue());
             ParticleRegistry.init();
+            Biomes.init();
             eventBus.fireEvent(new ModInitEvent(this), null, null);
 
             modelLoader = new ModelLoader();
@@ -500,27 +500,27 @@ public class OurCraft implements Runnable, OurCraftInstance
                         else if(clientWorld == null)
                             running = false;
                     }
-                    if(id == Keyboard.KEY_RETURN)
-                    {
-                        try
-                        {
-                            setResourcesPack("test.zip");
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                            try
-                            {
-                                modelLoader.clearModels();
-                                renderEngine.loadShaders();
-                                renderEngine.reloadLocations();
-                            }
-                            catch(Exception e1)
-                            {
-                                ;
-                            }
-                        }
-                    }
+                    /*                    if(id == Keyboard.KEY_RETURN)
+                                        {
+                                            try
+                                            {
+                                                setResourcesPack("test.zip");
+                                            }
+                                            catch(Exception e)
+                                            {
+                                                e.printStackTrace();
+                                                try
+                                                {
+                                                    modelLoader.clearModels();
+                                                    renderEngine.loadShaders();
+                                                    renderEngine.reloadLocations();
+                                                }
+                                                catch(Exception e1)
+                                                {
+                                                    ;
+                                                }
+                                            }
+                                        }*/
                     currentMenu.keyReleased(id, c);
                 }
             }
