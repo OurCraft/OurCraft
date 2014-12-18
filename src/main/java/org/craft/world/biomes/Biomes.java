@@ -23,6 +23,7 @@ public class Biomes
     public static void init()
     {
         minTemperature = Float.POSITIVE_INFINITY;
+        maxTemperature = Float.NEGATIVE_INFINITY;
         register(BASE);
         register(MOUNTAINS);
         register(BASE_TEST);
