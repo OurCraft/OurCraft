@@ -2,12 +2,12 @@ package org.craft.world.biomes;
 
 import org.craft.world.populators.*;
 
-public class BiomeBase extends Biome
+public class BiomeForest extends Biome
 {
 
-    public BiomeBase()
+    public BiomeForest()
     {
-        super("base", 273f + 15f);
+        super("forest", 273f + 15f);
     }
 
     @Override

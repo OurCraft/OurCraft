@@ -66,6 +66,8 @@ public class VanillaWorldLoader extends WorldLoader
                 DataInputStream input = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(loader.getResource(res).getData()))));
                 NBTCompoundTag chunkData = (NBTCompoundTag) NBTTag.readNamedTag(input);
                 Biome biome = Biomes.get(chunkData.getString("biomeType"));
+                if(biome == null)
+                    biome = Biomes.FOREST;
                 chunk.setBiome(biome);
                 int readChunkX = chunkData.getInt("xCoord");
                 int readChunkY = chunkData.getInt("yCoord");
@@ -140,7 +142,7 @@ public class VanillaWorldLoader extends WorldLoader
                     BlockStatesObject o = chunk.getBlockStates(x, y, z);
                     if(o == null)
                     {
-
+                        ;
                     }
                     else
                     {
@@ -196,6 +198,7 @@ public class VanillaWorldLoader extends WorldLoader
         NBTTag.writeCompoundToFile(entitiesFile, entitiesTag);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public NBTListTag<NBTCompoundTag> loadPlayersInfos(World w) throws IOException
     {
@@ -207,6 +210,7 @@ public class VanillaWorldLoader extends WorldLoader
         return (NBTListTag<NBTCompoundTag>) tag;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public NBTListTag<NBTCompoundTag> loadEntitiesInfos(World world) throws IOException
     {

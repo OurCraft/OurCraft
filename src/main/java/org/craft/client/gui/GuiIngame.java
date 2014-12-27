@@ -53,7 +53,8 @@ public class GuiIngame extends Gui
         {
             Chunk chunk = player.worldObj.getChunk((int) player.posX, (int) player.posY, (int) player.posZ);
             biome = chunk.getBiome();
-            getFontRenderer().drawString("Biome: " + biome.getID(), 0xFFFFFFFF, 2, 20, renderEngine);
+            if(biome != null)
+                getFontRenderer().drawString("Biome: " + biome.getID(), 0xFFFFFFFF, 2, 20, renderEngine);
         }
 
         CollisionInfos infos = oc.getObjectInFront();

@@ -14,7 +14,7 @@ public class Biomes
     private static float                       maxTemperature;
     private static float                       minTemperature;
 
-    public static final Biome                  BASE           = new BiomeBase();
+    public static final Biome                  FOREST           = new BiomeForest();
     public static final Biome                  MOUNTAINS      = new BiomeMountains("mountains", 273f - 2f, 100, Blocks.grass);
     public static final Biome                  BASE_TEST      = new BiomeTest();
     public static final Biome                  BASE_TEST2     = new BiomeTest2();
@@ -24,7 +24,7 @@ public class Biomes
     {
         minTemperature = Float.POSITIVE_INFINITY;
         maxTemperature = Float.NEGATIVE_INFINITY;
-        register(BASE);
+        register(FOREST);
         register(MOUNTAINS);
         register(BASE_TEST);
         register(BASE_TEST2);
@@ -62,7 +62,7 @@ public class Biomes
     public static Biome get(String string)
     {
         if(string == null)
-            return BASE;
+            return FOREST;
         return BIOME_REGISTRY.get(string);
     }
 
@@ -73,7 +73,7 @@ public class Biomes
     {
         Biome b = biomeByID.get(id);
         if(b == null)
-            b = BASE;
+            b = FOREST;
         return b;
     }
 
