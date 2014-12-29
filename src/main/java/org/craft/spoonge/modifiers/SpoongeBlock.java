@@ -67,14 +67,14 @@ public class SpoongeBlock implements BlockType
     @Override
     public boolean getTickRandomly()
     {
-        // TODO Auto-generated method stub
+        // TODO Implement
         return false;
     }
 
     @Override
     public void setTickRandomly(boolean tickRandomly)
     {
-        // TODO Auto-generated method stub
+        // TODO Implement
 
     }
 }

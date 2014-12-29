@@ -99,14 +99,14 @@ public class SpoongeCommandsDispatcher implements CommandService
     @Override
     public Set<String> getPrimaryAliases()
     {
-        // TODO Auto-generated method stub
+        // TODO Implement
         return null;
     }
 
     @Override
     public Set<String> getAliases()
     {
-        // TODO Auto-generated method stub
+        // TODO Implement
         return null;
     }
 

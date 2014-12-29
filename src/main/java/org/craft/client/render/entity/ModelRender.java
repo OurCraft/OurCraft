@@ -11,7 +11,7 @@ import org.craft.entity.*;
 import org.craft.maths.*;
 import org.lwjgl.*;
 
-public class ModelRender<T extends Entity> extends AbstractRender<T>
+public class ModelRender extends AbstractRender
 {
 
     protected ModelBase                     model;
@@ -34,7 +34,7 @@ public class ModelRender<T extends Entity> extends AbstractRender<T>
     }
 
     @Override
-    public void render(RenderEngine engine, T e, float entX, float entY, float entZ)
+    public void render(RenderEngine engine, Entity e, float entX, float entY, float entZ)
     {
         Matrix4 tmpMatrix = Matrix4.get();
         for(ModelBox box : model.getChildren())

@@ -8,7 +8,7 @@ import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.resources.*;
 
-public class RenderPrimedTNT extends ModelRender<Entity>
+public class RenderPrimedTNT extends ModelRender
 {
 
     private Texture text;

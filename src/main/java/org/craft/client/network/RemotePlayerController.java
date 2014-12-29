@@ -19,8 +19,7 @@ public class RemotePlayerController extends PlayerController
     @Override
     public void onSneakRequested()
     {
-        // TODO Auto-generated method stub
-
+        ;
     }
 
     @Override
@@ -56,29 +55,25 @@ public class RemotePlayerController extends PlayerController
     @Override
     public void onLeftClick(CollisionInfos infos)
     {
-        // TODO Auto-generated method stub
-
+        ;
     }
 
     @Override
     public void onRightClick(CollisionInfos infos)
     {
-        // TODO Auto-generated method stub
-
+        ;
     }
 
     @Override
     public void onMouseWheelMoved(int amount)
     {
-        // TODO Auto-generated method stub
-
+        ;
     }
 
     @Override
     public void update()
     {
-        // TODO Auto-generated method stub
-
+        ;
     }
 
 }

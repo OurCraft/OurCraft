@@ -1,7 +1,6 @@
 package org.craft.client;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
 
 import java.awt.image.*;
 import java.io.*;
@@ -41,6 +40,7 @@ import org.craft.world.biomes.*;
 import org.lwjgl.*;
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.glu.*;
 
 public class OurCraft implements Runnable, OurCraftInstance
 {
@@ -58,7 +58,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private CollisionInfos                 objectInFront               = null;
     private OpenGLBuffer                   crosshairBuffer;
     private ResourceLocation               crosshairLocation;
-    private FallbackRender<Entity>         fallbackRenderer;
+    private FallbackRender                 fallbackRenderer;
     private Runtime                        runtime;
     private FontRenderer                   fontRenderer;
     private String                         username;
@@ -94,7 +94,6 @@ public class OurCraft implements Runnable, OurCraftInstance
     private HashMap<String, GuiDispatcher> guiMap;
     private ScreenTitle                    screenTitle;
     private ParticleRenderer               particleRenderer;
-    private ModelRender<Entity>            primedTNTRenderer;
     private DirectSoundProducer            sndProducer;
 
     public OurCraft()
@@ -205,9 +204,9 @@ public class OurCraft implements Runnable, OurCraftInstance
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
             renderItems = new RenderItems(renderEngine, modelLoader);
             renderEngine.createBlockAndItemMap(renderBlocks, renderItems);
-            fallbackRenderer = new FallbackRender<Entity>();
+            fallbackRenderer = new FallbackRender();
 
-            primedTNTRenderer = new RenderPrimedTNT();
+            AbstractRender.registerVanillaRenderers();
 
             particleRenderer = new ParticleRenderer(20000);
             openMenu(new GuiMainMenu(this));
@@ -707,12 +706,8 @@ public class OurCraft implements Runnable, OurCraftInstance
         {
             if(e != renderEngine.getRenderViewEntity())
             {
-                AbstractRender<Entity> renderer = null;
-                if(e instanceof EntityPrimedTNT) // TODO: Implement a map Entity<->Renderer
-                {
-                    renderer = primedTNTRenderer;
-                }
-                else
+                AbstractRender renderer = AbstractRender.getRenderer(e);
+                if(renderer == null)
                     renderer = fallbackRenderer;
                 renderer.render(renderEngine, e, (float) e.getPosX(), (float) e.getPosY(), (float) e.getPosZ());
             }
@@ -763,7 +758,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         if(errorFlag != GL_NO_ERROR)
         {
             // Print the error to System.err.
-            Log.error("[GL ERROR] " + gluErrorString(errorFlag));
+            Log.error("[GL ERROR] " + GLU.gluErrorString(errorFlag));
         }
     }
 

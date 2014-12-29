@@ -8,7 +8,7 @@ import org.craft.client.render.*;
 import org.craft.entity.*;
 import org.craft.resources.*;
 
-public class FallbackRender<T extends Entity> extends ModelRender<T>
+public class FallbackRender extends ModelRender
 {
 
     private Texture baseTexture;
