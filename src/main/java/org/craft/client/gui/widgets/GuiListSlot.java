@@ -38,4 +38,25 @@ public abstract class GuiListSlot
         return mx >= x && mx <= x + w && my >= y && my <= y + h;
     }
 
+    private Object data;
+
+    /**
+     * Stores an user-provided object to be retrieved from the slot
+     * @param userData Object provided by the user to be saved in this slot
+     * @see #getData()
+     */
+    public void setData(Object userData)
+    {
+        this.data = userData;
+    }
+
+    /**
+     * Gets the user-provided object saved in this slot. 
+     * @return Object provided by the user saved in this slot.
+     * @see #setData(Object)
+     */
+    public Object getData()
+    {
+        return data;
+    }
 }

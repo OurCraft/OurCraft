@@ -28,6 +28,8 @@ public abstract class GuiWidget
      */
     public boolean enabled;
 
+    private Object data;
+
     public GuiWidget(int id, int x, int y, int w, int h)
     {
         visible = true;
@@ -165,5 +167,25 @@ public abstract class GuiWidget
     public void update()
     {
 
+    }
+
+    /**
+     * Stores an user-provided object to be retrieved from the slot
+     * @param userData Object provided by the user to be saved in this slot
+     * @see #getData()
+     */
+    public void setData(Object userData)
+    {
+        this.data = userData;
+    }
+
+    /**
+     * Gets the user-provided object saved in this slot. 
+     * @return Object provided by the user saved in this slot.
+     * @see #setData(Object)
+     */
+    public Object getData()
+    {
+        return data;
     }
 }
