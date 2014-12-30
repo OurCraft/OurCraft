@@ -140,19 +140,18 @@ public class RenderBlocks
                     renderEngine.enableGLCap(GL_BLEND);
                     renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 }
+                HashMap<ChunkCoord, OffsettedOpenGLBuffer> map = null;
+                if(currentPass == EnumRenderPass.NORMAL)
+                {
+                    map = chunkBuffersPass0;
+                }
+                else if(currentPass == EnumRenderPass.ALPHA)
+                {
+                    map = chunkBuffersPass1;
+                }
                 for(Chunk c : visiblesChunks)
                 {
-                    OffsettedOpenGLBuffer buffer = null;
-                    HashMap<ChunkCoord, OffsettedOpenGLBuffer> map = null;
-                    if(currentPass == EnumRenderPass.NORMAL)
-                    {
-                        map = chunkBuffersPass0;
-                    }
-                    else if(currentPass == EnumRenderPass.ALPHA)
-                    {
-                        map = chunkBuffersPass1;
-                    }
-                    buffer = map.get(c.getCoords());
+                    OffsettedOpenGLBuffer buffer = map.get(c.getCoords());
                     if(buffer == null)
                     {
                         map.put(c.getCoords(), new OffsettedOpenGLBuffer());

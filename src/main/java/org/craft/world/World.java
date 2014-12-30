@@ -456,21 +456,6 @@ public class World implements IParticleHandler, IAudioHandler
         return false;
     }
 
-    public void cleanDirtiness(int x, int y, int z)
-    {
-        Chunk c = getChunk(x, y, z);
-        if(c != null)
-            c.cleanDirtiness(x, y, z);
-    }
-
-    public boolean isDirty(int x, int y, int z)
-    {
-        Chunk c = getChunk(x, y, z);
-        if(c != null)
-            return c.isDirty(x, y, z);
-        return false;
-    }
-
     protected boolean updateBlockFromNeighbor(int x, int y, int z, boolean force, List<Vector3> visited, Block from)
     {
         Block b = getBlockAt(x, y, z);

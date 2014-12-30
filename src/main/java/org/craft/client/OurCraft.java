@@ -384,8 +384,8 @@ public class OurCraft implements Runnable, OurCraftInstance
      */
     private void update(final double delta)
     {
-        renderEngine.blocksAndItemsMap.tick();
-        particleRenderer.getMap().tick();
+        /*  renderEngine.blocksAndItemsMap.tick();
+          particleRenderer.getMap().tick();*/
         sndProducer.setMasterVolume(settings.masterVolume.getValue());
         sndProducer.setSoundVolume(settings.soundVolume.getValue());
         sndProducer.setMusicVolume(settings.musicVolume.getValue());
@@ -659,7 +659,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         List<Chunk> visibleChunks = Lists.newArrayList();
         if(player != null)
         {
-            //AABB chunkBB = new AABB(Vector3.NULL, Vector3.get(16, 16, 16));
+            AABB chunkBB = new AABB(Vector3.NULL, Vector3.get(16, 16, 16));
             int renderDistance = 8;
             int ox = (int) renderEngine.getRenderViewEntity().getPosX();
             int oy = (int) renderEngine.getRenderViewEntity().getPosY();
@@ -681,17 +681,18 @@ public class OurCraft implements Runnable, OurCraftInstance
                         Chunk c = clientWorld.getChunkProvider().get(clientWorld, (int) Math.floor((float) fx / 16f), (int) Math.floor((float) fy / 16f), (int) Math.floor((float) fz / 16f));
                         if(c != null)
                         {
-                            //  AABB chunkBox = chunkBB.translate(x, y, z);
-                            //  if(renderEngine.getFrustum().boxIn(chunkBox))
+                            AABB chunkBox = chunkBB.translate(x, y, z);
+                            if(renderEngine.getFrustum().boxIn(chunkBox))
                             {
                                 visibleChunks.add(c);
                             }
-                            // chunkBox.dispose();
+                            chunkBox.dispose();
                         }
 
                     }
                 }
             }
+            chunkBB.dispose();
         }
         return visibleChunks;
     }
