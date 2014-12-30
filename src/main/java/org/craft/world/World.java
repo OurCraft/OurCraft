@@ -413,7 +413,7 @@ public class World implements IParticleHandler, IAudioHandler
             Log.error("Cannot generate a chunk on a chunk on " + x + ", " + y + ", " + z);
         else
         {
-            chunkProvider.create(this, x, y, z);
+            addChunk(chunkProvider.create(this, x, y, z));
         }
     }
 

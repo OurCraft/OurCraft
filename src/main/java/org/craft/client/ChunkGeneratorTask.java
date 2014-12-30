@@ -30,13 +30,16 @@ public class ChunkGeneratorTask implements Runnable
     public void run()
     {
         //System.out.println(genQueue.size());
-        while(genQueue.size() != 0)
+        while(!genQueue.isEmpty())
         {
-            Vector3 vec = genQueue.poll();
             if(world == null)
                 break;
-            world.createChunk((int) vec.getX(), (int) vec.getY(), (int) vec.getZ());
+            final Vector3 vec = genQueue.poll();
+            final int x = (int) vec.getX();
+            final int y = (int) vec.getY();
+            final int z = (int) vec.getZ();
             vec.dispose();
+            world.createChunk(x, y, z);
         }
     }
 
@@ -54,6 +57,7 @@ public class ChunkGeneratorTask implements Runnable
                 if(entry.equals(vec))
                 {
                     //Log.debug("REJECTED " + vec);
+                    vec.dispose();
                     needed = false;
                     break;
                 }

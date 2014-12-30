@@ -50,17 +50,17 @@ public class Frustum
         planes[TOP].setNormalAndPoint(normal, nearCenter.add(yAxis.mul(nearPlaneH)));
 
         aux = (nearCenter.sub(yAxis.mul(nearPlaneH))).sub(camPos);
-        aux.normalize();
+        aux = aux.normalize();
         normal = xAxis.mul(aux);
         planes[BOTTOM].setNormalAndPoint(normal, nearCenter.sub(yAxis.mul(nearPlaneH)));
 
         aux = (nearCenter.sub(xAxis.mul(nearPlaneW))).sub(camPos);
-        aux.normalize();
+        aux = aux.normalize();
         normal = aux.cross(yAxis);
         planes[LEFT].setNormalAndPoint(normal, nearCenter.sub(xAxis.mul(nearPlaneW)));
 
         aux = (nearCenter.add(xAxis.mul(nearPlaneW))).sub(camPos);
-        aux.normalize();
+        aux = aux.normalize();
         normal = yAxis.cross(aux);
         planes[RIGHT].setNormalAndPoint(normal, nearCenter.add(xAxis.mul(nearPlaneW)));
 

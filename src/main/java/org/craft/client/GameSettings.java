@@ -2,24 +2,26 @@ package org.craft.client;
 
 import java.io.*;
 
+import org.craft.client.render.*;
 import org.craft.modding.*;
 import org.lwjgl.input.*;
 
 public class GameSettings
 {
 
-    public GameOption<Integer> jumpKey;
-    public GameOption<Integer> forwardKey;
-    public GameOption<Integer> backwardsKey;
-    public GameOption<Integer> leftKey;
-    public GameOption<Integer> rightKey;
-    public GameOption<String>  lang;
-    public GameOption<String>  font;
-    public GameOption<Float>   sensitivity;
-    public GameOption<Float>   musicVolume;
-    public GameOption<Float>   soundVolume;
-    public GameOption<Float>   masterVolume;
-    private Configuration      configuration;
+    public GameOption<Integer>            jumpKey;
+    public GameOption<Integer>            forwardKey;
+    public GameOption<Integer>            backwardsKey;
+    public GameOption<Integer>            leftKey;
+    public GameOption<Integer>            rightKey;
+    public GameOption<String>             lang;
+    public GameOption<String>             font;
+    public GameOption<Float>              sensitivity;
+    public GameOption<Float>              musicVolume;
+    public GameOption<Float>              soundVolume;
+    public GameOption<Float>              masterVolume;
+    public GameOption<EnumFullscreenType> fullscreenType;
+    private Configuration                 configuration;
 
     public GameSettings()
     {
@@ -34,6 +36,8 @@ public class GameSettings
         musicVolume = new GameOption<Float>("musicVolume", GameOptionType.RANGE);
         soundVolume = new GameOption<Float>("soundVolume", GameOptionType.RANGE);
         masterVolume = new GameOption<Float>("masterVolume", GameOptionType.RANGE);
+
+        fullscreenType = new GameOption<EnumFullscreenType>("fullscreenType", GameOptionType.PLAIN_TEXT);
     }
 
     public void loadFrom(File file) throws IOException
@@ -50,6 +54,8 @@ public class GameSettings
         musicVolume.setValue(configuration.getFloat(musicVolume.getID(), 1f));
         soundVolume.setValue(configuration.getFloat(soundVolume.getID(), 1f));
         masterVolume.setValue(configuration.getFloat(masterVolume.getID(), 1f));
+
+        fullscreenType.setValue(EnumFullscreenType.valueOf(configuration.get(fullscreenType.getID(), EnumFullscreenType.NATIVE.name())));
     }
 
     public void saveTo(File file) throws IOException
@@ -67,6 +73,8 @@ public class GameSettings
             configuration.setFloat(musicVolume.getID(), musicVolume.getValue());
             configuration.setFloat(soundVolume.getID(), soundVolume.getValue());
             configuration.setFloat(masterVolume.getID(), masterVolume.getValue());
+
+            configuration.set(fullscreenType.getID(), fullscreenType.getValue().name());
             configuration.save();
         }
     }

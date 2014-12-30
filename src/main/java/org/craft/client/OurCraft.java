@@ -2,13 +2,16 @@ package org.craft.client;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.nio.*;
 import java.util.*;
+import java.util.List;
 
 import javax.imageio.*;
+import javax.swing.*;
 
 import com.google.common.collect.*;
 
@@ -40,6 +43,7 @@ import org.craft.world.biomes.*;
 import org.lwjgl.*;
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.*;
 
 public class OurCraft implements Runnable, OurCraftInstance
@@ -95,6 +99,10 @@ public class OurCraft implements Runnable, OurCraftInstance
     private ScreenTitle                    screenTitle;
     private ParticleRenderer               particleRenderer;
     private DirectSoundProducer            sndProducer;
+    private boolean                        fullscreen;
+    private JFrame                         renderWindow;
+    private int                            oldWidth;
+    private int                            oldHeight;
 
     public OurCraft()
     {
@@ -279,10 +287,10 @@ public class OurCraft implements Runnable, OurCraftInstance
         if(crosshairBuffer != null)
             crosshairBuffer.dispose();
         crosshairBuffer = new OpenGLBuffer();
-        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 - 8, 0), Vector2.get(0, 0)));
-        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 - 8, 0), Vector2.get(1, 0)));
-        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 + 8, Display.getHeight() / 2 + 8, 0), Vector2.get(1, 1)));
-        crosshairBuffer.addVertex(Vertex.get(Vector3.get(Display.getWidth() / 2 - 8, Display.getHeight() / 2 + 8, 0), Vector2.get(0, 1)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(displayWidth / 2 - 8, displayHeight / 2 - 8, 0), Vector2.get(0, 0)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(displayWidth / 2 + 8, displayHeight / 2 - 8, 0), Vector2.get(1, 0)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(displayWidth / 2 + 8, displayHeight / 2 + 8, 0), Vector2.get(1, 1)));
+        crosshairBuffer.addVertex(Vertex.get(Vector3.get(displayWidth / 2 - 8, displayHeight / 2 + 8, 0), Vector2.get(0, 1)));
 
         crosshairBuffer.addIndex(0);
         crosshairBuffer.addIndex(1);
@@ -330,24 +338,11 @@ public class OurCraft implements Runnable, OurCraftInstance
             if(Display.isCloseRequested())
                 running = false;
 
-            if(Display.wasResized())
+            if(Display.wasResized() && !fullscreen)
             {
                 int w = Display.getWidth();
                 int h = Display.getHeight();
-                displayWidth = w;
-                displayHeight = h;
-
-                renderEngine.loadMatrices();
-                try
-                {
-                    renderEngine.loadShaders();
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                loadCrosshairBuffer();
-                currentMenu.build();
+                setDisplayMode(w, h);
             }
 
             lastRenderTime = now;
@@ -377,6 +372,25 @@ public class OurCraft implements Runnable, OurCraftInstance
                 now = System.nanoTime();
             }
         }
+    }
+
+    private void setDisplayMode(int w, int h)
+    {
+        oldWidth = displayWidth;
+        oldHeight = displayHeight;
+        displayWidth = w;
+        displayHeight = h;
+        renderEngine.loadMatrices();
+        try
+        {
+            renderEngine.loadShaders();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        loadCrosshairBuffer();
+        currentMenu.build();
     }
 
     /**
@@ -499,6 +513,10 @@ public class OurCraft implements Runnable, OurCraftInstance
                         else if(clientWorld == null)
                             running = false;
                     }
+                    else if(id == Keyboard.KEY_F11)
+                    {
+                        toggleFullscreen();
+                    }
                     /*                    if(id == Keyboard.KEY_RETURN)
                                         {
                                             try
@@ -570,6 +588,97 @@ public class OurCraft implements Runnable, OurCraftInstance
             {
                 clientWorld.update(delta);
                 clientWorld.updateAllParticles();
+            }
+        }
+    }
+
+    private void toggleFullscreen()
+    {
+        fullscreen = !fullscreen;
+        EnumFullscreenType type = settings.fullscreenType.getValue();
+        if(fullscreen)
+        {
+            switch(type)
+            {
+                case NATIVE:
+                    try
+                    {
+                        if(renderWindow != null)
+                        {
+                            renderWindow.dispose();
+                            renderWindow = null;
+                        }
+                        DisplayMode mode = Display.getDesktopDisplayMode();
+                        setDisplayMode(mode.getWidth(), mode.getHeight());
+                        Display.setDisplayModeAndFullscreen(mode);
+                    }
+                    catch(LWJGLException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                    break;
+                case NO_BORDERS:
+                    try
+                    {
+                        if(renderWindow == null)
+                        {
+                            renderWindow = new JFrame();
+                            renderWindow.setUndecorated(true);
+                        }
+                        else
+                            renderWindow.removeAll();
+                        Canvas parent = new Canvas();
+                        DisplayMode mode = Display.getDesktopDisplayMode();
+                        parent.setPreferredSize(new Dimension(mode.getWidth(), mode.getHeight()));
+                        renderWindow.add(parent);
+                        renderWindow.pack();
+                        renderWindow.setVisible(true);
+                        renderWindow.requestFocus();
+                        Display.setParent(parent);
+                        setDisplayMode(mode.getWidth(), mode.getHeight());
+                    }
+                    catch(LWJGLException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    break;
+                case BORDERS:
+                    try
+                    {
+                        if(renderWindow != null)
+                        {
+                            renderWindow.dispose();
+                            renderWindow = null;
+                        }
+                        DisplayMode mode = Display.getDesktopDisplayMode();
+                        setDisplayMode(mode.getWidth(), mode.getHeight());
+                        Display.setDisplayMode(mode);
+                        fullscreen = false;
+                    }
+                    catch(LWJGLException e1)
+                    {
+                        e1.printStackTrace();
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            try
+            {
+                Display.setParent(null);
+                Display.setFullscreen(false);
+                Display.setDisplayMode(new DisplayMode(oldWidth, oldHeight));
+                setDisplayMode(oldWidth, oldHeight);
+            }
+            catch(LWJGLException e)
+            {
+                e.printStackTrace();
+            }
+            if(renderWindow != null)
+            {
+                renderWindow.dispose();
+                renderWindow = null;
             }
         }
     }
