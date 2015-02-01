@@ -17,7 +17,7 @@ ext {
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 // Maven Artefacts Info
 group = "org.craft"
@@ -85,6 +85,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.1'
     compile 'org.apache.logging.log4j:log4j-core:2.1'
     compile project(':SpongeAPI')
+    compile project(':NovaCore')
 }
 
 jar
