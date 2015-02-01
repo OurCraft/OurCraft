@@ -1,5 +1,6 @@
 package org.craft.spoonge.plugin;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 import com.google.common.base.Optional;
@@ -73,6 +74,16 @@ public class SpoongePluginManager implements IAddonManager<Plugin>, PluginManage
     public IAddonHandler<Plugin> getHandler()
     {
         return handler;
+    }
+
+    @Override public Constructor getAddonConstructor(Class<?> clazz)
+    {
+        return clazz.getConstructors()[0];
+    }
+
+    @Override public Object[] getConstructorArgs()
+    {
+        return new Object[0];
     }
 
     @Override

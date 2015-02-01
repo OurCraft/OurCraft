@@ -1,5 +1,6 @@
 package org.craft.modding;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 import com.google.common.collect.*;
@@ -37,6 +38,16 @@ public class ModManager implements IAddonManager<Mod>
     public IAddonHandler<Mod> getHandler()
     {
         return handler;
+    }
+
+    @Override public Constructor getAddonConstructor(Class<?> clazz) throws NoSuchMethodException
+    {
+        return clazz.getConstructor();
+    }
+
+    @Override public Object[] getConstructorArgs()
+    {
+        return new Object[0];
     }
 
     @Override

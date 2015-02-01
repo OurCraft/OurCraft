@@ -55,7 +55,7 @@ public class AddonsLoader
         handlers.put(annot, handler);
     }
 
-    public void loadAddon(Class<?> clazz) throws InstantiationException, IllegalAccessException
+    public void loadAddon(Class<?> clazz) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
         boolean added = false;
         //        if(loaded.contains(clazz))
@@ -79,7 +79,7 @@ public class AddonsLoader
                     loaded.add(clazz);
                     IAddonManager<Annotation> manager = handlers.get(c);
                     IAddonHandler<Annotation> handler = manager.getHandler();
-                    Object instance = clazz.newInstance();
+                    Object instance = manager.getAddonConstructor(clazz).newInstance(manager.getConstructorArgs());
                     for(Field f : clazz.getDeclaredFields())
                     {
                         if(f.isAnnotationPresent(Instance.class))

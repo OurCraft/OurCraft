@@ -1,6 +1,7 @@
 package org.craft.modding;
 
 import java.lang.annotation.*;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 public interface IAddonManager<T extends Annotation>
@@ -13,4 +14,8 @@ public interface IAddonManager<T extends Annotation>
     void loadAddon(AddonContainer<T> container);
 
     IAddonHandler<T> getHandler();
+
+    Constructor getAddonConstructor(Class<?> clazz) throws NoSuchMethodException;
+
+    Object[] getConstructorArgs();
 }
