@@ -60,15 +60,15 @@ compileJava.dependsOn processVersion
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.1'
-    compile 'org.lwjgl.lwjgl:lwjgl:2.9.1'
-    compile 'io.netty:netty-all:4.0.24.Final'
+    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
+    compile 'io.netty:netty-all:4.0.25.Final'
     compile 'com.google.guava:guava:18.0'
-    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.reflections:reflections:0.9.9'
-    compile 'org.javassist:javassist:3.18.2-GA'
+    compile 'org.javassist:javassist:3.19.0-GA'
     compile 'org.luaj:luaj-jse:3.0'
-    compile 'trove:trove:1.0.2'
+    compile 'net.sf.trove4j:trove4j:3.0.3'
     compile 'org.ow2.asm:asm-all:5.0.3'
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.1'
     compile 'org.apache.logging.log4j:log4j-core:2.1'

@@ -1,11 +1,11 @@
 package org.craft.client.render;
 
 import static org.lwjgl.opengl.GL15.*;
-import gnu.trove.*;
 
 import java.nio.*;
 import java.util.*;
 
+import gnu.trove.list.array.TIntArrayList;
 import org.craft.maths.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
@@ -15,11 +15,11 @@ import com.google.common.collect.Lists;
 public class OpenGLBuffer
 {
 
-    private int               vboID;
-    private int               iboID;
+    private int          vboID;
+    private int          iboID;
     private List<Vertex> vertices;
-    private TIntArrayList     indices  = new TIntArrayList();
-    private int               verticesLength;
+    private TIntArrayList indices = new TIntArrayList();
+    private int verticesLength;
 
     /**
      * Creates an empty OpenGLBuffer instance
