@@ -101,7 +101,7 @@ task runClient(type: JavaExec, dependsOn: 'classes') {
     main = config.clientProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
-    jvmArgs(config.jvmArgs)
+	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
     standardInput = System.in
 }
 
@@ -109,7 +109,7 @@ task runClientDev(type: JavaExec, dependsOn: 'classes') {
     main = config.clientDevMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
-    jvmArgs(config.jvmArgs)
+    jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
     standardInput = System.in
 }
 
@@ -117,6 +117,6 @@ task runServer(type: JavaExec, dependsOn: 'classes') {
     main = config.serverProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
-    jvmArgs(config.jvmArgs)
+	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
     standardInput = System.in
 }
