@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureAtlas;
+import org.craft.client.render.texture.TextureRegion;
 import org.craft.resources.*;
 
 public class GuiLanguage extends Gui
@@ -42,9 +44,9 @@ public class GuiLanguage extends Gui
     private Gui                  parent;
     private GuiList<GuiLangSlot> langsList;
 
-    private TextureAtlas         atlas;
-    private float                animCounter;
-    private ResourceLocation     earthLoc;
+    private TextureAtlas     atlas;
+    private float            animCounter;
+    private ResourceLocation earthLoc;
 
     public GuiLanguage(OurCraft game, Gui parent)
     {
@@ -78,7 +80,7 @@ public class GuiLanguage extends Gui
             {
                 langsList.setSelectedIndex(i);
             }
-            i++ ;
+            i++;
         }
         addWidget(langsList);
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));

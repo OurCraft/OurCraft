@@ -49,7 +49,7 @@ public class SpoongeMod implements Game
     }
 
     @SuppressWarnings("unchecked")
-    @OurModEventHandler
+    @ModEventHandler
     public void onPreInit(ModPreInitEvent event)
     {
         AddonData addonData = event.getContainer().getAddonData();
@@ -88,49 +88,49 @@ public class SpoongeMod implements Game
         gameInstance.getEventBus().register(new SpoongeEntityEventsListener(this));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onInit(ModInitEvent event)
     {
         eventManager.post(new SpoongeInitEvent(event.getOurCraftInstance()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onPostInit(ModPostInitEvent event)
     {
         eventManager.post(new SpoongePostInitEvent(event.getOurCraftInstance()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onWorldLoad(WorldLoadEvent event)
     {
         eventManager.post(new SpoongeWorldLoadEvent(event.getOurCraftInstance(), (World) event.getWorld()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onServerAboutStarting(ModServerAboutStartingEvent event)
     {
         eventManager.post(new SpoongeServerAboutToStartEvent(event.getOurCraftInstance()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onServerStopping(ModServerStoppingEvent event)
     {
         eventManager.post(new SpoongeServerStoppingEvent(event.getOurCraftInstance()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onServerStopped(ModServerStoppedEvent event)
     {
         eventManager.post(new SpoongeServerStoppedEvent(event.getOurCraftInstance()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onServerStarted(ModServerStartedEvent event)
     {
         eventManager.post(new SpoongeServerStartedEvent(event.getOurCraftInstance()));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onServerStarting(ModServerStartingEvent event)
     {
         eventManager.post(new SpoongeServerStartingEvent(event.getOurCraftInstance()));

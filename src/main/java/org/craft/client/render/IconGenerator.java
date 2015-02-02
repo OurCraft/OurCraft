@@ -1,5 +1,6 @@
 package org.craft.client.render;
 
+import org.craft.client.render.texture.TextureIcon;
 import org.craft.resources.*;
 
 public interface IconGenerator

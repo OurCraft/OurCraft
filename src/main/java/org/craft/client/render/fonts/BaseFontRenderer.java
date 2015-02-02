@@ -3,7 +3,7 @@ package org.craft.client.render.fonts;
 import java.io.*;
 
 import org.craft.client.*;
-import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureAtlas;
 import org.craft.resources.*;
 
 public class BaseFontRenderer extends FontRenderer

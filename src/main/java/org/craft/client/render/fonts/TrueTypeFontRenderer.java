@@ -3,7 +3,8 @@ package org.craft.client.render.fonts;
 import java.awt.*;
 
 import org.craft.client.*;
-import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureAtlas;
+import org.craft.client.render.texture.TextureMap;
 import org.craft.resources.*;
 
 public class TrueTypeFontRenderer extends FontRenderer

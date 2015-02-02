@@ -14,13 +14,13 @@ public class SpoongeEntityEventsListener
         this.mod = mod;
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onEntityDeath(ModEntityDeathEvent evt)
     {
         evt.setCancelled(mod.getEventManager().post(new SpoongeEntityDeathEvent(mod.getOurCraftInstance(), (org.spongepowered.api.entity.Entity) evt.getEntity())));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onEntitySpawn(ModEntitySpawnEvent evt)
     {
         evt.setCancelled(mod.getEventManager().post(new SpoongeEntitySpawnEvent(mod.getOurCraftInstance(), (org.spongepowered.api.entity.Entity) evt.getEntity(), evt.getEntity())));

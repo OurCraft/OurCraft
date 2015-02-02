@@ -16,7 +16,7 @@ public class ModTest
     {
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onPreInit(ModPreInitEvent evt)
     {
         logger = evt.getLogger();
@@ -25,25 +25,25 @@ public class ModTest
         evt.getOurCraftInstance().registerBlock(block);
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onPostInit(ModPostInitEvent evt)
     {
         logger.debug("PostInit!!! " + getClass());
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onWorldLoad(WorldLoadEvent evt)
     {
         logger.debug("Loading world " + evt.getWorld().getName());
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onWorldUnload(WorldUnloadEvent evt)
     {
         logger.debug("Unloading world " + evt.getWorld().getName());
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onInit(ModInitEvent evt)
     {
         logger.debug("Init!!!");

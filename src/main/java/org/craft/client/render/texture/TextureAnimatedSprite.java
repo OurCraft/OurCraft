@@ -1,4 +1,6 @@
-package org.craft.client.render;
+package org.craft.client.render.texture;
+
+import org.craft.client.render.AnimatedIcon;
 
 public class TextureAnimatedSprite extends TextureMapSprite
 {

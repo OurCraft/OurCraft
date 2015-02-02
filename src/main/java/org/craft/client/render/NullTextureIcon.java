@@ -1,5 +1,7 @@
 package org.craft.client.render;
 
+import org.craft.client.render.texture.TextureIcon;
+
 public class NullTextureIcon implements TextureIcon
 {
 

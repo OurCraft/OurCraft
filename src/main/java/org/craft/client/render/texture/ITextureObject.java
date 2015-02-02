@@ -1,4 +1,4 @@
-package org.craft.client.render;
+package org.craft.client.render.texture;
 
 public interface ITextureObject
 {

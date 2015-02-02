@@ -1,6 +1,7 @@
 package org.craft.client.models;
 
 import org.craft.client.render.*;
+import org.craft.client.render.texture.Texture;
 import org.craft.maths.*;
 
 public class ModelBox

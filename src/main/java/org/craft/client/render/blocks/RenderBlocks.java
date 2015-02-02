@@ -1,4 +1,4 @@
-package org.craft.client.render;
+package org.craft.client.render.blocks;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -9,6 +9,10 @@ import com.google.common.collect.*;
 import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.client.models.*;
+import org.craft.client.render.EnumRenderPass;
+import org.craft.client.render.OffsettedOpenGLBuffer;
+import org.craft.client.render.OpenGLBuffer;
+import org.craft.client.render.RenderEngine;
 import org.craft.client.render.blocks.*;
 import org.craft.resources.*;
 import org.craft.utils.*;

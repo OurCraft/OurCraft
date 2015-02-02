@@ -11,6 +11,11 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
+import org.craft.client.render.blocks.RenderBlocks;
+import org.craft.client.render.items.RenderItems;
+import org.craft.client.render.texture.ITextureObject;
+import org.craft.client.render.texture.Texture;
+import org.craft.client.render.texture.TextureMap;
 import org.craft.entity.*;
 import org.craft.items.*;
 import org.craft.maths.*;
@@ -47,8 +52,8 @@ public class RenderEngine implements IDisposable
     private float                                     farDist;
     private int                                       displayWidth;
     private int                                       displayHeight;
-    public TextureMap                                 blocksAndItemsMap;
-    public ResourceLocation                           blocksAndItemsMapLocation;
+    public  TextureMap                                blocksAndItemsMap;
+    public  ResourceLocation                          blocksAndItemsMapLocation;
 
     public RenderEngine(ResourceLoader loader) throws IOException
     {

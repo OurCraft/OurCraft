@@ -18,7 +18,7 @@ public class SpoongeBlockEventsListener
         this.mod = mod;
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onBlockChange(ModBlockChangeEvent changeEvent)
     {
         SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(changeEvent.getBlock(), changeEvent.getX(), changeEvent.getY(), changeEvent.getZ(), changeEvent.getWorld());
@@ -27,14 +27,14 @@ public class SpoongeBlockEventsListener
         changeEvent.setCancelled(mod.getEventManager().post(new SpoongeBlockChangeEvent(mod.getOurCraftInstance(), blockWrapper, new SpoongeBlockSnapshot(state))));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onBlockInteract(ModBlockInteractEvent interactEvent)
     {
         SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(interactEvent.getBlock(), interactEvent.getX(), interactEvent.getY(), interactEvent.getZ(), interactEvent.getWorld());
         interactEvent.setCancelled(mod.getEventManager().post(new SpoongeBlockInteractEvent(mod.getOurCraftInstance(), blockWrapper)));
     }
 
-    @OurModEventHandler
+    @ModEventHandler
     public void onBlockUpdate(ModBlockUpdateEvent updateEvent)
     {
         SpoongeBlockWrapper blockWrapper = new SpoongeBlockWrapper(updateEvent.getBlock(), updateEvent.getX(), updateEvent.getY(), updateEvent.getZ(), updateEvent.getWorld());

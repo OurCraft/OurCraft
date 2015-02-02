@@ -4,7 +4,7 @@ import java.io.*;
 
 import org.craft.client.*;
 import org.craft.client.models.entities.*;
-import org.craft.client.render.*;
+import org.craft.client.render.texture.Texture;
 import org.craft.entity.*;
 import org.craft.resources.*;
 

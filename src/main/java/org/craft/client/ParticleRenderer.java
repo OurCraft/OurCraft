@@ -6,6 +6,9 @@ import com.google.common.collect.*;
 
 import org.craft.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureIcon;
+import org.craft.client.render.texture.TextureMap;
+import org.craft.client.render.texture.TextureMapSprite;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.world.*;

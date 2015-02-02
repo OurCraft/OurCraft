@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 import java.nio.*;
 import java.util.*;
 
-import org.craft.client.render.*;
+import org.craft.client.render.texture.Texture;
 import org.craft.resources.*;
 import org.craft.utils.*;
 import org.lwjgl.opengl.*;

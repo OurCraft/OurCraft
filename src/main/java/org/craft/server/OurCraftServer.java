@@ -113,7 +113,7 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
 
         Log.message("Loading addons...");
         List<Class<? extends Annotation>> annots = Lists.newArrayList();
-        annots.add(OurModEventHandler.class);
+        annots.add(ModEventHandler.class);
         eventBus = new EventBus(new Class<?>[]
         {
                 ModEvent.class

@@ -1,4 +1,4 @@
-package org.craft.client.render;
+package org.craft.client.render.texture;
 
 import static org.lwjgl.opengl.GL11.*;
 

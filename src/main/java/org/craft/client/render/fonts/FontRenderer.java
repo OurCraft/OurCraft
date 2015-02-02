@@ -3,6 +3,8 @@ package org.craft.client.render.fonts;
 import java.util.*;
 
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureAtlas;
+import org.craft.client.render.texture.TextureRegion;
 import org.craft.maths.*;
 import org.craft.utils.*;
 
@@ -51,12 +53,12 @@ public abstract class FontRenderer implements IDisposable
 
     }
 
-    protected TextureAtlas                   atlas;
-    protected String                         supportedChars;
-    protected OpenGLBuffer                   buffer;
-    private HashMap<TextInfos, OpenGLBuffer> cache;
-    private TextInfos                        textInfos;
-    private float                            scale;
+    protected TextureAtlas                     atlas;
+    protected String                           supportedChars;
+    protected OpenGLBuffer                     buffer;
+    private   HashMap<TextInfos, OpenGLBuffer> cache;
+    private   TextInfos                        textInfos;
+    private   float                            scale;
 
     /**
      * Creates font renderer for given supportedChars and given texture atlas

@@ -4,13 +4,14 @@ import org.craft.client.*;
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
+import org.craft.client.render.texture.TextureIcon;
 import org.craft.resources.*;
 
 public class GuiPopupElement extends GuiListSlot
 {
 
-    public int               w;
-    public int               h;
+    public  int              w;
+    public  int              h;
     private String           txt;
     private FontRenderer     font;
     private int              id;

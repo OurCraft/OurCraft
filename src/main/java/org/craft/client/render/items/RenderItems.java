@@ -1,4 +1,4 @@
-package org.craft.client.render;
+package org.craft.client.render.items;
 
 import java.util.*;
 
@@ -6,6 +6,8 @@ import com.google.common.collect.*;
 
 import org.craft.client.*;
 import org.craft.client.models.*;
+import org.craft.client.render.OffsettedOpenGLBuffer;
+import org.craft.client.render.RenderEngine;
 import org.craft.client.render.items.*;
 import org.craft.inventory.Stack;
 import org.craft.items.*;

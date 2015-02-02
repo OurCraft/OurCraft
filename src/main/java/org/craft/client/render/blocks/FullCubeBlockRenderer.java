@@ -2,6 +2,7 @@ package org.craft.client.render.blocks;
 
 import org.craft.blocks.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureIcon;
 import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;

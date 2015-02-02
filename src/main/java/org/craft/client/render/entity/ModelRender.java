@@ -7,6 +7,7 @@ import com.google.common.collect.*;
 
 import org.craft.client.models.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.Texture;
 import org.craft.entity.*;
 import org.craft.maths.*;
 import org.lwjgl.*;
@@ -14,9 +15,9 @@ import org.lwjgl.*;
 public class ModelRender extends AbstractRender
 {
 
-    protected ModelBase                     model;
-    private HashMap<ModelBox, OpenGLBuffer> buffers;
-    protected static Texture                defaultTexture;
+    protected        ModelBase                       model;
+    private          HashMap<ModelBox, OpenGLBuffer> buffers;
+    protected static Texture                         defaultTexture;
 
     public ModelRender(ModelBase model)
     {

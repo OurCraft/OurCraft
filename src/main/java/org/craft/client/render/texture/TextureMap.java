@@ -1,4 +1,4 @@
-package org.craft.client.render;
+package org.craft.client.render.texture;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -12,6 +12,10 @@ import com.google.common.collect.*;
 import com.google.gson.*;
 
 import org.craft.client.*;
+import org.craft.client.render.AnimatedIcon;
+import org.craft.client.render.ITickable;
+import org.craft.client.render.IconGenerator;
+import org.craft.client.render.Stitcher;
 import org.craft.resources.*;
 import org.craft.utils.*;
 

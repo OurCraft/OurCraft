@@ -8,6 +8,8 @@ import com.google.common.collect.*;
 import org.craft.client.*;
 import org.craft.client.models.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureIcon;
+import org.craft.client.render.texture.TextureMap;
 import org.craft.inventory.Stack;
 import org.craft.items.*;
 import org.craft.maths.*;
@@ -15,9 +17,9 @@ import org.craft.maths.*;
 public class ItemModelRenderer extends ItemRenderer
 {
 
-    private HashMap<String, TextureIcon> icons;
-    private Model                        itemModel;
-    private static Quaternion            rotationQuaternion;
+    private        HashMap<String, TextureIcon> icons;
+    private        Model                        itemModel;
+    private static Quaternion                   rotationQuaternion;
 
     /**
      * Creates a new renderer for given item model

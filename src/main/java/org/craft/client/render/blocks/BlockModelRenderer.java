@@ -10,6 +10,8 @@ import org.craft.blocks.states.*;
 import org.craft.client.*;
 import org.craft.client.models.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureIcon;
+import org.craft.client.render.texture.TextureMap;
 import org.craft.maths.*;
 import org.craft.utils.*;
 import org.craft.world.*;
@@ -17,9 +19,9 @@ import org.craft.world.*;
 public class BlockModelRenderer extends AbstractBlockRenderer
 {
 
-    private HashMap<BlockVariant, HashMap<String, TextureIcon>> icons;
-    private List<BlockVariant>                                  blockVariants;
-    private static Quaternion                                   rotationQuaternion;
+    private        HashMap<BlockVariant, HashMap<String, TextureIcon>> icons;
+    private        List<BlockVariant>                                  blockVariants;
+    private static Quaternion                                          rotationQuaternion;
 
     /**
      * Creates a new renderer for given block variants

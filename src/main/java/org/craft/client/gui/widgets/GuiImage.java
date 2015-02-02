@@ -5,6 +5,8 @@ import java.io.*;
 import org.craft.client.*;
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
+import org.craft.client.render.texture.Texture;
+import org.craft.client.render.texture.TextureRegion;
 import org.craft.resources.*;
 
 public class GuiImage extends GuiWidget

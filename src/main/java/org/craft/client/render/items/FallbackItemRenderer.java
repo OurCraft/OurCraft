@@ -1,6 +1,7 @@
 package org.craft.client.render.items;
 
 import org.craft.client.render.*;
+import org.craft.client.render.texture.TextureIcon;
 import org.craft.inventory.*;
 import org.craft.items.*;
 import org.craft.maths.*;
