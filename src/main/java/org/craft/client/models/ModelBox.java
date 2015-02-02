@@ -274,7 +274,6 @@ public class ModelBox
 
         index += 4;
         buffer.upload();
-        buffer.clearAndDisposeVertices();
     }
 
     public void prepareWireframeBuffer(OpenGLBuffer buffer)
@@ -352,7 +351,6 @@ public class ModelBox
         buffer.addIndex(23);
 
         buffer.upload();
-        buffer.clearAndDisposeVertices();
     }
 
     public void setWidth(float value)

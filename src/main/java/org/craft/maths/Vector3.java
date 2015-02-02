@@ -28,7 +28,7 @@ public class Vector3 extends AbstractReference implements IDisposable, IBufferWr
         this.z = z;
     }
 
-    private Vector3()
+    public Vector3()
     {
         ;
     }

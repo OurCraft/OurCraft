@@ -259,7 +259,6 @@ public class OurCraft implements Runnable, OurCraftInstance
             selectionBoxBuffer.addIndex(3);
 
             selectionBoxBuffer.upload();
-            selectionBoxBuffer.clearAndDisposeVertices();
 
             eventBus.fireEvent(new ModPostInitEvent(this), null, null);
 

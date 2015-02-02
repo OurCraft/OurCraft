@@ -10,9 +10,11 @@ public class DefaultObjectFactory<T> implements ObjectFactory<T>
     {
         try
         {
+            /*System.out.println(typeClass.getName());
             Constructor<T> cons = typeClass.getDeclaredConstructor(new Class<?>[0]);
             cons.setAccessible(true);
-            return cons.newInstance(new Object[0]);
+            return cons.newInstance(new Object[0]);*/
+            return typeClass.getDeclaredConstructor().newInstance();
         }
         catch(Exception e)
         {

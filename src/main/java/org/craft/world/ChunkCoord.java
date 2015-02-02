@@ -9,11 +9,6 @@ public class ChunkCoord extends AbstractReference
     public int y;
     public int z;
 
-    private ChunkCoord()
-    {
-
-    }
-
     @Override
     public int hashCode()
     {

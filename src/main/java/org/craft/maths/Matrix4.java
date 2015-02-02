@@ -9,7 +9,7 @@ public final class Matrix4 extends AbstractReference implements IDisposable
 
     private float[][] m;
 
-    private Matrix4()
+    public Matrix4()
     {
         m = new float[4][4];
     }

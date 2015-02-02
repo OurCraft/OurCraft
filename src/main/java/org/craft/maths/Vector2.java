@@ -13,7 +13,7 @@ public final class Vector2 extends AbstractReference implements IDisposable
     public float                x;
     public float                y;
 
-    private Vector2()
+    public Vector2()
     {
         ;
     }
