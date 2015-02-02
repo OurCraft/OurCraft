@@ -8,7 +8,6 @@ import com.google.common.collect.*;
 import com.google.common.reflect.*;
 
 import org.craft.utils.*;
-import org.spongepowered.api.util.event.*;
 
 public class EventBus
 {
@@ -158,15 +157,10 @@ public class EventBus
         }
         boolean cancelled = false;
         boolean cancellable = false;
-        if(e instanceof Cancellable)
+        if(e instanceof ICancellable)
         {
-            cancelled = ((Cancellable) e).isCancelled();
+            cancelled = ((ICancellable) e).isCancelled();
             cancellable = true;
-        }
-        if(e instanceof ModEvent)
-        {
-            cancellable = ((ModEvent) e).isCancellable();
-            cancelled = ((ModEvent) e).isCancelled();
         }
         return cancelled && cancellable;
     }

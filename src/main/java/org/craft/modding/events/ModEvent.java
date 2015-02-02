@@ -2,7 +2,7 @@ package org.craft.modding.events;
 
 import org.craft.*;
 
-public abstract class ModEvent
+public abstract class ModEvent implements ICancellable
 {
 
     private boolean          cancelled;

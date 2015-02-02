@@ -1,4 +1,3 @@
 rootProject.name = 'OurCraft'
-include 'SpongeAPI'
 include 'CodecJLayerMP3'
 include 'NovaCore'

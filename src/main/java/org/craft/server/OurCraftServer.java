@@ -26,7 +26,6 @@ import org.craft.utils.*;
 import org.craft.utils.crash.*;
 import org.craft.world.*;
 import org.craft.world.loaders.*;
-import org.spongepowered.api.entity.player.*;
 
 public class OurCraftServer implements OurCraftInstance, ICommandSender
 {
@@ -37,7 +36,6 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
     private EventBus                       eventBus;
     private int                            maxPlayers;
 
-    private List<Player>                   onlinePlayers;
     private AddonsLoader                   addonsLoader;
     private boolean                        nogui;
     private ServerGui                      serverGui;
@@ -68,7 +66,6 @@ public class OurCraftServer implements OurCraftInstance, ICommandSender
         EnumVanillaGuis.register(guiMap, NetworkSide.SERVER);
         instance = this;
         assetsLoader = new AssetLoader(new ClasspathSimpleResourceLoader("assets"));
-        onlinePlayers = Lists.newArrayList();
         this.maxPlayers = maxPlayers;
         WorldGenerator gen = new WorldGenerator();
         worldLoader = new VanillaWorldLoader(new ResourceLocation("worlds"), new DiskSimpleResourceLoader());

@@ -3,7 +3,6 @@ package org.craft.items;
 import org.craft.entity.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.*;
-import org.spongepowered.api.item.inventory.*;
 
 public interface IStackable
 {
@@ -19,7 +18,7 @@ public interface IStackable
     String getId();
 
     /**
-     * Get the default maximum quantity for {@link ItemStack}s
+     * Get the default maximum quantity for ItemStacks
      * of this item.
      *
      * @return Max stack quantity

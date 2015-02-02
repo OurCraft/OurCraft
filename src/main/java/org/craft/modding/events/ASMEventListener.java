@@ -9,7 +9,6 @@ import com.google.common.collect.*;
 import org.craft.utils.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
-import org.spongepowered.api.util.event.*;
 
 public class ASMEventListener implements IEventListener, Opcodes
 {
@@ -36,14 +35,10 @@ public class ASMEventListener implements IEventListener, Opcodes
         {
             boolean cancelled = false;
             boolean cancellable = false;
-            if(event instanceof Cancellable)
+            if(event instanceof ICancellable)
             {
-                cancelled = ((Cancellable) event).isCancelled();
+                cancelled = ((ICancellable) event).isCancelled();
                 cancellable = true;
-            }
-            if(event instanceof ModEvent)
-            {
-                cancellable = ((ModEvent) event).isCancellable();
             }
             if(!cancellable || !cancelled)
             {

@@ -41,11 +41,11 @@ task processVersion(type: Copy) {
     }
 }
 
-sourceSets {  
-    filtered { 
-        java { 
-            srcDirs = ['CodecJLayerMP3/src', filteredSourceDir] 
-        } 
+sourceSets {
+    jlayer {
+        java {
+            srcDir 'CodecJLayerMP3/src'
+        }
     }
 } 
 
@@ -53,8 +53,7 @@ sourceSets {
 compileJava.options.encoding = 'UTF-8'
 
 // tell the compileJava task to compile the filtered source 
-compileJava.source = sourceSets.filtered.java 
-
+compileJava.source = sourceSets.jlayer.java 
 // Add dependencies processVersion to compileJava task
 compileJava.dependsOn processVersion 
 
@@ -72,8 +71,8 @@ dependencies {
     compile 'org.ow2.asm:asm-all:5.0.3'
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.1'
     compile 'org.apache.logging.log4j:log4j-core:2.1'
-    compile project(':SpongeAPI')
-    compile project(':NovaCore')
+    //compile project(':SpongeAPI')
+    //compile project(':NovaCore')
 }
 
 jar
@@ -89,7 +88,7 @@ task runClient(type: JavaExec, dependsOn: 'classes') {
     main = clientProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
-	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
+    jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
     standardInput = System.in
 }
 
@@ -105,6 +104,6 @@ task runServer(type: JavaExec, dependsOn: 'classes') {
     main = serverProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
-	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
+    jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
     standardInput = System.in
 }
