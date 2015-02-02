@@ -1,6 +1,3 @@
 [submodule "CodecJLayerMP3"]
 	path = CodecJLayerMP3
 	url = https://github.com/fireandfuel/CodecJLayerMP3
-[submodule "NovaCore"]
-	path = NovaCore
-	url = https://github.com/NOVAAPI/NovaCore.git
