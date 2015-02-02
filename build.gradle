@@ -3,17 +3,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 def filteredSourceDir = file("${buildDir}/filtered")
 
-// Read properties file
-ext {
-    configFile = file "build.properties"
-
-    configFile.withReader {
-        // Load config.  It shall from now be referenced as simply config or project.config
-        def prop = new Properties()
-        prop.load(it)
-        config = new ConfigSlurper().parse(prop)
-    }
-}
 
 apply plugin: 'java'
 
@@ -22,7 +11,6 @@ sourceCompatibility = 1.8
 // Maven Artefacts Info
 group = "org.craft"
 archivesBaseName = 'OurCraft'
-version = config.version
 
 //IDE
 apply plugin: 'eclipse'
@@ -91,14 +79,14 @@ dependencies {
 jar
 {
     manifest {
-        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': config.clientProdMainClass
+        attributes 'Implementation-Title': 'OurCraft', 'Implementation-Version': version, 'Main-Class': clientProdMainClass
     }
 }
 
 // ------------------------------- RUN CONFIG ------------------------------- //
 
 task runClient(type: JavaExec, dependsOn: 'classes') {
-    main = config.clientProdMainClass
+    main = clientProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
 	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
@@ -106,7 +94,7 @@ task runClient(type: JavaExec, dependsOn: 'classes') {
 }
 
 task runClientDev(type: JavaExec, dependsOn: 'classes') {
-    main = config.clientDevMainClass
+    main = clientDevMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
     jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
@@ -114,7 +102,7 @@ task runClientDev(type: JavaExec, dependsOn: 'classes') {
 }
 
 task runServer(type: JavaExec, dependsOn: 'classes') {
-    main = config.serverProdMainClass
+    main = serverProdMainClass
     classpath = configurations.runtime
     classpath += sourceSets.main.runtimeClasspath
 	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
