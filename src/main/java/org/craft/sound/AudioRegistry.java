@@ -16,7 +16,6 @@ public class AudioRegistry
 
     public static void init()
     {
-        registerSubs("explode", new ResourceLocation("minecraft", "sound/explode"), EnumSoundFormats.VORBIS);
         register(new ResourceLocation("ourcraft", "musics/BlitZEcho-Hanging_On.mp3"));
     }
 

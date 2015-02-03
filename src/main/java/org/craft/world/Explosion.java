@@ -153,7 +153,7 @@ public class Explosion implements Runnable, ILocatable
             }
         }
         center.dispose();
-        world.playSound("explode", this);
+        //world.playSound("explode", this);
     }
 
     @Override
