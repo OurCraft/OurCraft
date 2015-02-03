@@ -2,7 +2,8 @@ language: java
 notifications:
   email: false
 install: true
-matrix:
-  include:
-  - jdk: oraclejdk8
-  - script: gradle build
+jdk: oraclejdk8
+script: gradle build
+cache:
+  directories:
+    - ~/.gradle
