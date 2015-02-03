@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.google.common.collect.*;
 
+import com.sun.javafx.sg.prism.NGShape;
 import org.craft.blocks.*;
 import org.craft.client.*;
 import org.craft.client.models.*;
@@ -75,6 +76,14 @@ public class RenderBlocks
                 renderers.put(block, modelLoader.createBlockRenderer(res, renderEngine.blocksAndItemsMap));
                 if(Dev.debug())
                     Log.message(res.getFullPath() + " loaded.");
+            }
+            else if(block.isStandardCube())
+            {
+                BlockVariant variant = new BlockVariant();
+
+                variant.addBlockModel(modelLoader.loadModel(OurCraft.getOurCraft().getAssetsLoader().getResource(new ResourceLocation("ourcraft", "models/block/" + block.getUnlocalizedID().replace("block.", "") + ".json")), renderEngine.blocksAndItemsMap, Block.class));
+                variant.setPass(block.getDefaultRenderPass());
+                renderers.put(block, modelLoader.createDefaultBlockRenderer(variant, renderEngine.blocksAndItemsMap));
             }
             else
             {

@@ -21,21 +21,22 @@ public class Block implements IStackable
     {
         normalCubeAABB = new AABB(Vector3.NULL.copy(), Vector3.get(1, 1, 1));
     }
-    protected static AABB     normalCubeAABB;
+
+    protected static AABB normalCubeAABB;
 
     /**
      * The string id of this block
      */
-    private String            id;
+    private String id;
 
     /**
      * An id given at launch of the game used to identify the block.
      */
-    private short             uniqueID;
+    private short uniqueID;
 
     private AddonContainer<?> container;
 
-    private float             explosionResistance;
+    private float explosionResistance;
 
     /**
      * Block constructor. Takes in an ID to identify the block
@@ -256,5 +257,15 @@ public class Block implements IStackable
     public void onDestroyedByExplosion(Explosion explosion, World world, int blockX, int blockY, int blockZ)
     {
         ;
+    }
+
+    public boolean isStandardCube()
+    {
+        return true;
+    }
+
+    public EnumRenderPass getDefaultRenderPass()
+    {
+        return EnumRenderPass.NORMAL;
     }
 }

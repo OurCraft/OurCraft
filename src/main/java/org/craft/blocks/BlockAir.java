@@ -41,4 +41,10 @@ public class BlockAir extends Block
     {
         return false;
     }
+
+    @Override
+    public boolean isStandardCube()
+    {
+        return false;
+    }
 }

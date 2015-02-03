@@ -117,4 +117,10 @@ public class BlockCable extends Block implements IPowerableBlock
         return conState;
     }
 
+    @Override
+    public boolean isStandardCube()
+    {
+        return false;
+    }
+
 }

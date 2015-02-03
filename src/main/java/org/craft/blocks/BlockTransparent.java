@@ -36,4 +36,10 @@ public class BlockTransparent extends Block
     {
         return true;
     }
+
+    @Override
+    public EnumRenderPass getDefaultRenderPass()
+    {
+        return EnumRenderPass.ALPHA;
+    }
 }

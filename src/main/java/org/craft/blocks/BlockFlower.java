@@ -60,4 +60,11 @@ public class BlockFlower extends Block
     {
         return false;
     }
+
+    @Override
+    public EnumRenderPass getDefaultRenderPass()
+    {
+        return EnumRenderPass.ALPHA;
+    }
+
 }

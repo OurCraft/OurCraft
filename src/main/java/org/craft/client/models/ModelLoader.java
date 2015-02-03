@@ -45,6 +45,13 @@ public class ModelLoader
         return new BlockModelRenderer(loadBlockVariants(modelFile, blockMap));
     }
 
+    public AbstractBlockRenderer createDefaultBlockRenderer(BlockVariant blockVariant, IconGenerator blockMap)
+    {
+        List<BlockVariant> variants = new ArrayList<>();
+        variants.add(blockVariant);
+        return new BlockModelRenderer(variants);
+    }
+
     /**
      * Load a list of block variant from given resource
      */
