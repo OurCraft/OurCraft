@@ -150,4 +150,9 @@ public class DirectSoundProducer implements IAudioHandler
     {
         playSound(id, location.getWorld(), location.getPosX(), location.getPosY(), location.getPosZ());
     }
+
+    public void cleanUp()
+    {
+        sndSystem.cleanup();
+    }
 }

@@ -1180,6 +1180,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     public void cleanup()
     {
         renderEngine.dispose();
+        sndProducer.cleanUp();
         Display.destroy();
     }
 
