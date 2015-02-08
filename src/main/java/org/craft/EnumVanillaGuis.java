@@ -6,7 +6,8 @@ import org.craft.network.*;
 
 public enum EnumVanillaGuis
 {
-    POWER_SOURCE_MODIFIER(0);
+    POWER_SOURCE_MODIFIER(0),
+	INVENTORY(1);
 
     private int id;
 
