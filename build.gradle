@@ -111,3 +111,11 @@ task runServer(type: JavaExec, dependsOn: 'classes') {
     jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
     standardInput = System.in
 }
+
+task runServerDev(type: JavaExec, dependsOn: 'classes') {
+	main = serverDevMainClass
+	classpath = configurations.runtime
+	classpath += sourceSets.main.runtimeClasspath
+	jvmArgs = ['-XX:+UseConcMarkSweepGC', '-XX:+CMSClassUnloadingEnabled', '-Djava.system.class.loader=org.craft.OurClassLoader']
+	standardInput = System.in
+}
