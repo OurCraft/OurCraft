@@ -7,7 +7,7 @@ import java.util.*;
 
 import org.craft.maths.*;
 import org.craft.utils.*;
-import org.craft.utils.io.IOUtils;
+import org.craft.utils.io.*;
 
 public class Shader implements IDisposable
 {
@@ -15,12 +15,14 @@ public class Shader implements IDisposable
     private static Shader            current = null;
     private int                      program;
     private HashMap<String, Integer> locsMap;
+    private ShaderInfo               infos;
     private static FloatBuffer       floatBuffer8;
     private static FloatBuffer       floatBuffer12;
     private static FloatBuffer       floatBuffer16;
 
     public Shader(String vert, String frag)
     {
+        infos = new ShaderInfo(this);
         locsMap = new HashMap<String, Integer>();
         program = glCreateProgram();
         int vertexId = glCreateShader(GL_VERTEX_SHADER);
@@ -65,6 +67,10 @@ public class Shader implements IDisposable
         glUseProgram(program);
     }
 
+    /**
+     * @deprecated: You should try to respect OOP a bit more
+     */
+    @Deprecated
     public static Shader getCurrentlyBound()
     {
         return current;
@@ -142,5 +148,10 @@ public class Shader implements IDisposable
     public void dispose()
     {
         glDeleteProgram(program);
+    }
+
+    public ShaderInfo getInfos()
+    {
+        return infos;
     }
 }

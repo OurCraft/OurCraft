@@ -11,11 +11,9 @@ import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
-import org.craft.client.render.blocks.RenderBlocks;
-import org.craft.client.render.items.RenderItems;
-import org.craft.client.render.texture.ITextureObject;
-import org.craft.client.render.texture.Texture;
-import org.craft.client.render.texture.TextureMap;
+import org.craft.client.render.blocks.*;
+import org.craft.client.render.items.*;
+import org.craft.client.render.texture.*;
 import org.craft.entity.*;
 import org.craft.items.*;
 import org.craft.maths.*;
@@ -52,8 +50,9 @@ public class RenderEngine implements IDisposable
     private float                                     farDist;
     private int                                       displayWidth;
     private int                                       displayHeight;
-    public  TextureMap                                blocksAndItemsMap;
-    public  ResourceLocation                          blocksAndItemsMapLocation;
+    public TextureMap                                 blocksAndItemsMap;
+    public ResourceLocation                           blocksAndItemsMapLocation;
+    private ShaderBatch                               shaderBatch;
 
     public RenderEngine(ResourceLoader loader) throws IOException
     {
@@ -68,6 +67,21 @@ public class RenderEngine implements IDisposable
         glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
         this.frustum = new Frustum();
+
+        try
+        {
+            Shader testShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "negative.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "negative.fsh")).getData(), "UTF-8"));
+            shaderBatch = new ShaderBatch(postRenderShader, testShader);
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -450,12 +464,12 @@ public class RenderEngine implements IDisposable
      */
     public void end()
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClearColor(0, 0, 0, 0);
-        glViewport(0, 0, displayWidth, displayHeight);
-        postRenderShader.bind();
-        bindTexture(colorBuffer, 0);
-        renderBuffer(renderBuffer);
+        //        glViewport(0, 0, displayWidth, displayHeight);
+        shaderBatch.apply(0, colorBuffer, renderBuffer, this);
+        //        bindTexture(colorBuffer, 0);
+        //        renderBuffer(renderBuffer);
         currentShader.bind();
     }
 
