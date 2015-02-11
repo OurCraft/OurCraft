@@ -23,15 +23,19 @@ public class GuiVanillaDispatcher extends GuiDispatcher
             case POWER_SOURCE_MODIFIER:
             {
                 if(isClient())
+                {
                     OurCraft.getOurCraft().openMenu(new GuiPowerSourceModifier(OurCraft.getOurCraft(), player.worldObj, (int) Math.floor(infos.x), (int) Math.floor(infos.y), (int) Math.floor(infos.z)));
+                }
                 break;
             }
 
-	        case INVENTORY:
-	        {
-		        if(isClient())
-			        OurCraft.getOurCraft().openMenu(new GuiInventory(OurCraft.getOurCraft(), player));
-	        }
+            case INVENTORY:
+            {
+                if(isClient())
+                {
+                    OurCraft.getOurCraft().openMenu(new GuiInventory(OurCraft.getOurCraft(), player));
+                }
+            }
         }
     }
 }
