@@ -22,10 +22,10 @@ import org.craft.client.gui.*;
 import org.craft.client.models.*;
 import org.craft.client.network.*;
 import org.craft.client.render.*;
-import org.craft.client.render.blocks.RenderBlocks;
+import org.craft.client.render.blocks.*;
 import org.craft.client.render.entity.*;
 import org.craft.client.render.fonts.*;
-import org.craft.client.render.items.RenderItems;
+import org.craft.client.render.items.*;
 import org.craft.client.sound.*;
 import org.craft.entity.*;
 import org.craft.items.*;
@@ -51,48 +51,48 @@ import org.lwjgl.util.glu.*;
 public class OurCraft implements Runnable, OurCraftInstance
 {
 
-    private int          displayWidth  = 960;
-    private int          displayHeight = 540;
-    private boolean      running       = true;
-    private RenderEngine renderEngine  = null;
-    private        AssetLoader  assetsLoader;
-    private        RenderBlocks renderBlocks;
-    private        World        clientWorld;
-    private        MouseHandler mouseHandler;
-    private        EntityPlayer player;
-    private static OurCraft     instance;
-    private CollisionInfos objectInFront = null;
-    private OpenGLBuffer     crosshairBuffer;
-    private ResourceLocation crosshairLocation;
-    private FallbackRender   fallbackRenderer;
-    private Runtime          runtime;
-    private FontRenderer     fontRenderer;
-    private String           username;
+    private int                            displayWidth                = 960;
+    private int                            displayHeight               = 540;
+    private boolean                        running                     = true;
+    private RenderEngine                   renderEngine                = null;
+    private AssetLoader                    assetsLoader;
+    private RenderBlocks                   renderBlocks;
+    private World                          clientWorld;
+    private MouseHandler                   mouseHandler;
+    private EntityPlayer                   player;
+    private static OurCraft                instance;
+    private CollisionInfos                 objectInFront               = null;
+    private OpenGLBuffer                   crosshairBuffer;
+    private ResourceLocation               crosshairLocation;
+    private FallbackRender                 fallbackRenderer;
+    private Runtime                        runtime;
+    private FontRenderer                   fontRenderer;
+    private String                         username;
 
-    private Gui                      currentMenu;
-    private Gui                      newMenu;
-    private OpenGLBuffer             selectionBoxBuffer;
-    private DiskSimpleResourceLoader gameFolderLoader;
-    private PlayerController         playerController;
-    private GlobalRegistry           gameRegistry;
-    private EventBus                 eventBus;
-    private Session                  session;
-    private RenderItems              renderItems;
-    private AddonsLoader             addonsLoader;
+    private Gui                            currentMenu;
+    private Gui                            newMenu;
+    private OpenGLBuffer                   selectionBoxBuffer;
+    private DiskSimpleResourceLoader       gameFolderLoader;
+    private PlayerController               playerController;
+    private GlobalRegistry                 gameRegistry;
+    private EventBus                       eventBus;
+    private Session                        session;
+    private RenderItems                    renderItems;
+    private AddonsLoader                   addonsLoader;
 
-    private int frame;
-    private int fps;
-    private       double expectedFrameRate      = 60.0;
-    private       double timeBetweenUpdates     = 1000000000 / expectedFrameRate;
-    private final int    maxUpdatesBeforeRender = 3;
-    private       double lastUpdateTime         = System.nanoTime();
-    private       double lastRenderTime         = System.nanoTime();
+    private int                            frame;
+    private int                            fps;
+    private double                         expectedFrameRate           = 60.0;
+    private double                         timeBetweenUpdates          = 1000000000 / expectedFrameRate;
+    private final int                      maxUpdatesBeforeRender      = 3;
+    private double                         lastUpdateTime              = System.nanoTime();
+    private double                         lastRenderTime              = System.nanoTime();
 
     // If we are able to get as high as this FPS, don't render again.
-    private final double TARGET_FPS                  = 60;
-    private final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
+    private final double                   TARGET_FPS                  = 60;
+    private final double                   TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
-    private int lastSecondTime = (int) (lastUpdateTime / 1000000000);
+    private int                            lastSecondTime              = (int) (lastUpdateTime / 1000000000);
     private ClientNetHandler               netHandler;
     private WorldLoader                    worldLoader;
     private GameSettings                   settings;
@@ -139,8 +139,8 @@ public class OurCraft implements Runnable, OurCraftInstance
             ContextAttribs context = new ContextAttribs(3, 2).withProfileCompatibility(true).withDebug(true);
             Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
             Display.setIcon(new ByteBuffer[]
-                    {
-                            ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_128.png")),
+            {
+                    ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_128.png")),
                     ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_32.png"))
             });
             Display.setResizable(true);
@@ -152,7 +152,10 @@ public class OurCraft implements Runnable, OurCraftInstance
             catch(LWJGLException e)
             {
                 if(e.getMessage().contains("Could not create context"))
+                {
+                    Log.error("Failing to create LWJGL context, falling back to classic context");
                     Display.create();
+                }
             }
             if(!GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
             {
