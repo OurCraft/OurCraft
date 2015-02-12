@@ -46,4 +46,15 @@ public class ShaderInfo
         return this;
     }
 
+    public ShaderInfo setShader(Shader shader)
+    {
+        this.shader = shader;
+        return this;
+    }
+
+    public ShaderInfo copy()
+    {
+        return new ShaderInfo(getShader(), width, height);
+    }
+
 }

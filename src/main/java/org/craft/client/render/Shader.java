@@ -58,6 +58,13 @@ public class Shader implements IDisposable
         }
     }
 
+    public Shader(Shader other)
+    {
+        infos = other.getInfos().copy().setShader(this);
+        locsMap = other.locsMap;
+        program = other.program;
+    }
+
     /**
      * Binds this program to OpenGL
      */

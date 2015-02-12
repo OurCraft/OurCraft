@@ -43,55 +43,85 @@ public class ShaderBatch
         this.shaders = shaders;
     }
 
+    public ShaderBatch add(Shader info)
+    {
+        shaders.add(info.getInfos());
+        return this;
+    }
+
+    public ShaderBatch add(ShaderInfo info)
+    {
+        shaders.add(info);
+        return this;
+    }
+
+    public ShaderBatch remove(Shader info)
+    {
+        shaders.remove(info.getInfos());
+        return this;
+    }
+
+    public ShaderBatch remove(ShaderInfo info)
+    {
+        shaders.remove(info);
+        return this;
+    }
+
     public void apply(int targetFramebuffer, Texture texture, OpenGLBuffer buffer, RenderEngine engine)
     {
+        Texture renderTexture = texture;
         for(int i = 0; i < shaders.size(); i++ )
         {
-            OpenGLBuffer renderBuffer = buffer;
-            Texture colorTexture = texture;
+            engine.pushState();
             ShaderInfo info = shaders.get(i);
-            if(i != 0)
-            {
-                engine.setProjectFromEntity(false);
-                //                engine.setModelviewMatrix(new Matrix4().initIdentity());
-                engine.setProjectionMatrix(new Matrix4().initOrthographic(0, colorTexture.getWidth(), colorTexture.getHeight(), 0, 0, 1));
-            }
+
             engine.setCurrentShader(info.getShader());
+            engine.bindTexture(renderTexture, 0);
             if(i == shaders.size() - 1)
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, targetFramebuffer);
+                engine.switchToOrtho();
+                engine.renderBuffer(buffer, GL_TRIANGLES);
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
             else
             {
-                FramebufferInfo frameBuffer = getFrameBuffer(info.getWidth(), info.getHeight());
-                glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getID());
-                renderBuffer = frameBuffer.getBuffer();
-                colorTexture = frameBuffer.getColorBuffer();
-            }
-            glViewport(0, 0, colorTexture.getWidth(), colorTexture.getHeight());
-            //            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                FramebufferInfo framebuffer = null;
+                framebuffer = getFrameBuffer(info, info.getWidth(), info.getHeight());
+                glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.getID());
+                glClearColor(0, 0, 0, 0);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                OurCraft.printIfGLError("after clearing framebuffer in ShaderBatch");
+                engine.switchToOrtho(framebuffer.getWidth(), framebuffer.getHeight());
+                engine.renderBuffer(framebuffer.getBuffer(), GL_TRIANGLES);
+                renderTexture = framebuffer.getColorBuffer();
 
-            engine.bindTexture(colorTexture);
-            engine.renderBuffer(renderBuffer);
+            }
+            engine.popState();
         }
     }
 
-    private FramebufferInfo getFrameBuffer(int width, int height)
+    FramebufferInfo getFrameBuffer(ShaderInfo shader, int width, int height)
     {
-        if(width <= 0)
+        return getFrameBuffer(shader, width, height, GL_NEAREST);
+    }
+
+    FramebufferInfo getFrameBuffer(ShaderInfo shader, int width, int height, int filter)
+    {
+        if(width == -1)
             width = OurCraft.getOurCraft().getDisplayWidth();
-        if(height <= 0)
+        if(height == -1)
             height = OurCraft.getOurCraft().getDisplayHeight();
         for(FramebufferInfo info : framebuffers)
         {
-            if(info.getWidth() == width && info.getHeight() == height)
+            if(info.getShader() == shader && info.getWidth() == width && info.getHeight() == height)
                 return info;
         }
         OpenGLBuffer buffer = new OpenGLBuffer();
-        buffer.addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 0)));
-        buffer.addVertex(Vertex.get(Vector3.get(width, 0, 0), Vector2.get(1, 0)));
-        buffer.addVertex(Vertex.get(Vector3.get(width, height, 0), Vector2.get(1, 1)));
-        buffer.addVertex(Vertex.get(Vector3.get(0, height, 0), Vector2.get(0, 1)));
+        buffer.addVertex(Vertex.get(Vector3.get(0, 0, 0), Vector2.get(0, 1)));
+        buffer.addVertex(Vertex.get(Vector3.get(width, 0, 0), Vector2.get(1, 1)));
+        buffer.addVertex(Vertex.get(Vector3.get(width, height, 0), Vector2.get(1, 0)));
+        buffer.addVertex(Vertex.get(Vector3.get(0, height, 0), Vector2.get(0, 0)));
 
         buffer.addIndex(0);
         buffer.addIndex(1);
@@ -106,7 +136,6 @@ public class ShaderBatch
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        Texture colorBuffer = new Texture(width, height, null);
 
         int depthBuffer = glGenRenderbuffers();
         glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
@@ -114,6 +143,7 @@ public class ShaderBatch
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
         int framebufferId = glGenFramebuffers();
+        Texture colorBuffer = new Texture(width, height, null, filter);
         glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer.getTextureID(), 0);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
@@ -126,7 +156,7 @@ public class ShaderBatch
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        FramebufferInfo info = new FramebufferInfo(framebufferId, width, height, colorBuffer, buffer);
+        FramebufferInfo info = new FramebufferInfo(framebufferId, width, height, colorBuffer, buffer, shader);
         framebuffers.add(info);
         return info;
     }

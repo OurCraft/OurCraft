@@ -71,4 +71,9 @@ public abstract class AbstractResource
     {
         throw new UnsupportedOperationException();
     }
+
+    public String readContent() throws UnsupportedEncodingException
+    {
+        return new String(getData(), "UTF-8");
+    }
 }

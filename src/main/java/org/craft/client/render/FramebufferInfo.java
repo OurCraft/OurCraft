@@ -10,14 +10,21 @@ public class FramebufferInfo
     private int          height;
     private OpenGLBuffer buffer;
     private Texture      colorBuffer;
+    private ShaderInfo   shader;
 
-    public FramebufferInfo(int framebufferID, int width, int height, Texture colorBuffer, OpenGLBuffer buffer)
+    public FramebufferInfo(int framebufferID, int width, int height, Texture colorBuffer, OpenGLBuffer buffer, ShaderInfo shader)
     {
         this.id = framebufferID;
         this.width = width;
         this.height = height;
         this.colorBuffer = colorBuffer;
         this.buffer = buffer;
+        this.shader = shader;
+    }
+
+    public ShaderInfo getShader()
+    {
+        return shader;
     }
 
     public Texture getColorBuffer()
