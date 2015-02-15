@@ -29,7 +29,7 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onMoveLeftRequested()
     {
-        float speed = 1f / 10f;
+        float speed = 1f / 15f;
         if(!player.isOnGround())
             speed /= 1.25f;
         player.moveLeft(speed);
@@ -38,7 +38,7 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onMoveRightRequested()
     {
-        float speed = 1f / 10f;
+        float speed = 1f / 15f;
         if(!player.isOnGround())
             speed /= 1.25f;
         player.moveRight(speed);
@@ -47,7 +47,7 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onMoveForwardRequested()
     {
-        float speed = 1f / 10f;
+        float speed = 1f / 15f;
         if(!player.isOnGround())
             speed /= 1.25f;
         player.moveForward(speed);
@@ -56,7 +56,7 @@ public class LocalPlayerController extends PlayerController
     @Override
     public void onMoveBackwardsRequested()
     {
-        float speed = 1f / 10f;
+        float speed = 1f / 15f;
         if(!player.isOnGround())
             speed /= 1.25f;
         player.moveBackwards(speed);

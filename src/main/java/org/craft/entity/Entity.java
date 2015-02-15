@@ -1,14 +1,16 @@
 package org.craft.entity;
 
-import java.util.*;
-
-import com.mojang.nbt.*;
-
-import org.craft.blocks.*;
-import org.craft.maths.*;
-import org.craft.utils.*;
+import com.mojang.nbt.NBTCompoundTag;
+import org.craft.blocks.Block;
+import org.craft.maths.AABB;
+import org.craft.maths.Quaternion;
+import org.craft.maths.Vector3;
+import org.craft.utils.CollisionInfos;
 import org.craft.utils.CollisionInfos.CollisionType;
-import org.craft.world.*;
+import org.craft.world.ILocatable;
+import org.craft.world.World;
+
+import java.util.UUID;
 
 public abstract class Entity implements ILocatable
 {
@@ -320,7 +322,7 @@ public abstract class Entity implements ILocatable
     {
         if(onGround)
         {
-            velY = 0.25f;
+            velY = 0.20f;
         }
     }
 

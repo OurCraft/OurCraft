@@ -1,21 +1,31 @@
 package org.craft.world;
 
-import java.io.*;
-import java.util.*;
-
-import com.google.common.collect.*;
-import com.mojang.nbt.*;
-
-import org.craft.*;
-import org.craft.blocks.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mojang.nbt.NBTCompoundTag;
+import com.mojang.nbt.NBTListTag;
+import org.craft.CommonHandler;
+import org.craft.IParticleHandler;
+import org.craft.blocks.Block;
+import org.craft.blocks.Blocks;
 import org.craft.blocks.states.*;
-import org.craft.entity.*;
-import org.craft.maths.*;
-import org.craft.modding.events.block.*;
-import org.craft.modding.events.entity.*;
-import org.craft.sound.*;
+import org.craft.entity.Entity;
+import org.craft.entity.EntityPlayer;
+import org.craft.entity.EntityRegistry;
+import org.craft.maths.AABB;
+import org.craft.maths.Vector3;
+import org.craft.modding.events.block.ModBlockChangeEvent;
+import org.craft.modding.events.block.ModBlockUpdateEvent;
+import org.craft.modding.events.entity.ModEntityDeathEvent;
+import org.craft.modding.events.entity.ModEntitySpawnEvent;
+import org.craft.sound.IAudioHandler;
+import org.craft.sound.Music;
+import org.craft.sound.Sound;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
+
+import java.io.IOException;
+import java.util.*;
 
 public class World implements IParticleHandler, IAudioHandler
 {
@@ -95,7 +105,7 @@ public class World implements IParticleHandler, IAudioHandler
         this.name = name;
         this.generator = generator;
         this.chunkProvider = prov;
-        this.gravity = 9.81f / 360f;
+        this.gravity = 3.92f / 360f;
         spawingQueue = Lists.newArrayList();
         entities = new LinkedList<Entity>();
         if(worldLoader != null) // Load all player data
