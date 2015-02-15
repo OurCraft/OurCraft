@@ -5,6 +5,7 @@ varying vec2 texCoord0;
 uniform sampler2D texture;
 
 const vec3 #palette#;
+const vec3 #hsbcolors#;
 
 vec3 toHSB(vec3 c)
 {
@@ -52,11 +53,17 @@ void main()
     for(int i = 0;i<palette.length();i++)
     {
     	vec3 color1 = palette[i];
-        vec3 coords1 = getCoords(color1);
+        vec3 coords1 = hsbcolors[i];
         float x1 = coords1.x;
         float y1 = coords1.y;
         float z1 = coords1.z;
-        if(length(color1-color) < minDist)
+        float l = length(color1-color);
+        if(l == 0)
+        {
+            closestColor = color1;
+            break;
+        }
+        if(l < minDist)
         {
             minDist = length(color1-color);
             closestColor = color1;

@@ -1,5 +1,6 @@
 package org.craft.client.render;
 
+import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.util.*;
@@ -62,7 +63,8 @@ public class ColorPalette
         try
         {
             String palette = createGLSLPalette();
-            shader = new Shader(craft.getAssetsLoader().getResource(new ResourceLocation("ourcraft", "shaders/palette.vsh")).readContent().replace("#palette#", palette), craft.getAssetsLoader().getResource(new ResourceLocation("ourcraft", "shaders/palette.fsh")).readContent().replace("#palette#", palette));
+            String hsbPalette = createPaletteHSB();
+            shader = new Shader(craft.getAssetsLoader().getResource(new ResourceLocation("ourcraft", "shaders/palette.vsh")).readContent().replace("#palette#", palette).replace("#hsbcolors#", hsbPalette), craft.getAssetsLoader().getResource(new ResourceLocation("ourcraft", "shaders/palette.fsh")).readContent().replace("#palette#", palette).replace("#hsbcolors#", hsbPalette));
         }
         catch(UnsupportedEncodingException e)
         {
@@ -72,6 +74,30 @@ public class ColorPalette
         {
             e.printStackTrace();
         }
+    }
+
+    private String createPaletteHSB()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("hsbcolors[" + colors.length + "] = vec3[](");
+        int index = 0;
+        for(int color : colors)
+        {
+            if(index++ != 0)
+                buffer.append(",");
+            String vec3 = "vec3(";
+            double r = ((double) ((color >> 16) & 0xFF) / 255.0);
+            double g = ((double) ((color >> 8) & 0xFF) / 255.0);
+            double b = ((double) ((color >> 0) & 0xFF) / 255.0);
+            float[] vals = Color.RGBtoHSB((int) (r * 255), (int) (g * 255), (int) (b * 255), null);
+            vec3 += vals[0];
+            vec3 += "," + vals[1];
+            vec3 += "," + vals[2];
+            buffer.append(vec3).append(")");
+        }
+        buffer.append(")");
+        String result = buffer.toString();
+        return result;
     }
 
     private String createGLSLPalette()
@@ -91,7 +117,6 @@ public class ColorPalette
         }
         buffer.append(")");
         String result = buffer.toString();
-        //        System.out.println(result);
         return result;
     }
 
