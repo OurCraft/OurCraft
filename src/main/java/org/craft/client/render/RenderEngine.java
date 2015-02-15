@@ -6,22 +6,18 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.io.*;
-import java.nio.*;
 import java.util.*;
 
 import org.craft.blocks.*;
 import org.craft.client.*;
-import org.craft.client.render.blocks.RenderBlocks;
-import org.craft.client.render.items.RenderItems;
-import org.craft.client.render.texture.ITextureObject;
-import org.craft.client.render.texture.Texture;
-import org.craft.client.render.texture.TextureMap;
+import org.craft.client.render.blocks.*;
+import org.craft.client.render.items.*;
+import org.craft.client.render.texture.*;
 import org.craft.entity.*;
 import org.craft.items.*;
 import org.craft.maths.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
-import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
 public class RenderEngine implements IDisposable
@@ -37,11 +33,8 @@ public class RenderEngine implements IDisposable
     private Matrix4                                   projection;
     private boolean                                   projectFromEntity;
     private ResourceLoader                            loader;
-    private int                                       framebufferId;
     private OpenGLBuffer                              renderBuffer;
-    private int                                       depthBuffer;
-    private Texture                                   colorBuffer;
-    private Shader                                    postRenderShader;
+    private Shader                                    blitShader;
     private RenderState                               renderState;
     private Stack<RenderState>                        renderStatesStack;
     private Matrix4                                   translationMatrix;
@@ -52,17 +45,21 @@ public class RenderEngine implements IDisposable
     private float                                     farDist;
     private int                                       displayWidth;
     private int                                       displayHeight;
-    public  TextureMap                                blocksAndItemsMap;
-    public  ResourceLocation                          blocksAndItemsMapLocation;
+    public TextureMap                                 blocksAndItemsMap;
+    public ResourceLocation                           blocksAndItemsMapLocation;
+    private ShaderBatch                               shaderBatch;
+    private ShaderBatch                               guiShaderBatch;
+    private Framebuffer                               frameBuffer;
+    private boolean                                   guiRendering;
+    private ITextureObject                            lastBoundTexture;
 
     public RenderEngine(ResourceLoader loader) throws IOException
     {
+        renderStatesStack = new Stack<>();
         renderState = new RenderState();
         this.loader = loader;
         texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
         projectFromEntity = true;
-        depthBuffer = -1;
-        framebufferId = -1;
         loadMatrices();
         loadShaders();
         glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
@@ -92,6 +89,24 @@ public class RenderEngine implements IDisposable
      */
     public void renderBuffer(OpenGLBuffer buffer, int mode)
     {
+        ITextureObject last = lastBoundTexture;
+        if(guiRendering)
+        {
+            frameBuffer.bind();// FIXME: Use guiShaderBatch
+        }
+
+        flushBuffer(buffer, mode);
+
+        if(guiRendering)
+        {
+            guiShaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
+            bindTexture(last);
+            lastBoundTexture = last;
+        }
+    }
+
+    public void flushBuffer(OpenGLBuffer buffer, int mode)
+    {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -102,9 +117,9 @@ public class RenderEngine implements IDisposable
         glVertexAttribPointer(2, 4, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 20);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.getIboID());
-        OurCraft.printIfGLError();
+        OurCraft.printIfGLError("Before drawing buffer");
         glDrawElements(mode, buffer.getIndicesCount(), GL_UNSIGNED_INT, 0);
-        OurCraft.printIfGLError();
+        OurCraft.printIfGLError("After drawing buffer");
 
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
@@ -223,6 +238,7 @@ public class RenderEngine implements IDisposable
     public void setProjectionMatrix(Matrix4 projection)
     {
         this.projection = projection;
+        renderState.setProjection(projection);
         updateOpenGL();
     }
 
@@ -234,13 +250,23 @@ public class RenderEngine implements IDisposable
         return projection;
     }
 
-    /**
-     * Sets the projection matrix to an orthogonal matrix
-     */
     public void switchToOrtho()
     {
+        switchToOrtho(displayWidth, displayHeight);
+    }
+
+    /**
+     * Sets the projection matrix to an orthogonal matrix
+     * @param j 
+     * @param i 
+     */
+    public void switchToOrtho(int w, int h)
+    {
+        projectionHud = new Matrix4().initOrthographic(0, w, h, 0, -1, 1f);
+        glViewport(0, 0, w, h);
         projectFromEntity = false;
         setProjectionMatrix(projectionHud);
+        OurCraft.printIfGLError("After switching to ortho, size is " + w + ", " + h);
     }
 
     /**
@@ -294,16 +320,9 @@ public class RenderEngine implements IDisposable
         {
             GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
             object.bind();
+            lastBoundTexture = object;
         }
-    }
-
-    /**
-     * Binds given texture to given texture unit slot
-     */
-    public void bindTexture(int texId, int slot)
-    {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, texId);
+        OurCraft.printIfGLError("after texture bind");
     }
 
     /**
@@ -315,11 +334,11 @@ public class RenderEngine implements IDisposable
     {
         if(loc == null)
         {
-            bindTexture(0, 0);
+            bindTexture(null, 0);
         }
         else if(!texturesLocs.containsKey(loc))
         {
-            bindTexture(0, 0);
+            bindTexture(null, 0);
             try
             {
                 texturesLocs.put(loc, OpenGLHelper.loadTexture(loader.getResource(loc)));
@@ -336,10 +355,7 @@ public class RenderEngine implements IDisposable
         else
         {
             ITextureObject texObject = texturesLocs.get(loc);
-            if(texObject != null)
-                texObject.bind();
-            else
-                bindTexture(0, 0);
+            bindTexture(texObject);
         }
     }
 
@@ -418,45 +434,75 @@ public class RenderEngine implements IDisposable
         glUseProgram(0);
         if(basicShader != null)
             basicShader.dispose();
-        if(postRenderShader != null)
-            postRenderShader.dispose();
+        if(blitShader != null)
+            blitShader.dispose();
         basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
         basicShader.bind();
         basicShader.setUniform("projection", projectionHud);
         basicShader.setUniform("modelview", modelMatrix);
 
         currentShader = basicShader;
-        postRenderShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
-        postRenderShader.bind();
-        postRenderShader.setUniform("projection", projectionHud);
-        postRenderShader.setUniform("modelview", modelMatrix);
+        blitShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
+        blitShader.bind();
+        blitShader.setUniform("projection", projectionHud);
+        blitShader.setUniform("modelview", modelMatrix);
+
+        try
+        {
+            shaderBatch = new ShaderBatch(blitShader);
+            guiShaderBatch = new ShaderBatch(blitShader);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public ShaderBatch getPostWorldRenderBatch()
+    {
+        return shaderBatch;
+    }
+
+    public ShaderBatch getPostGuiRenderBatch()
+    {
+        return guiShaderBatch;
     }
 
     /**
      * Starts World rendering
      */
-    public void begin()
+    public void beginWorldRendering()
     {
+        OurCraft.printIfGLError("before rendering world");
         currentShader.bind();
-        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+        frameBuffer.bind();
         glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     /**
      * Ends World rendering
      */
-    public void end()
+    public void flushWorldRendering()
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glClearColor(0, 0, 0, 0);
-        glViewport(0, 0, displayWidth, displayHeight);
-        postRenderShader.bind();
-        bindTexture(colorBuffer, 0);
-        renderBuffer(renderBuffer);
-        currentShader.bind();
+        OurCraft.printIfGLError("after rendering world");
+        disableGLCap(GL_DEPTH_TEST);
+        switchToOrtho();
+        shaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
+        enableGLCap(GL_DEPTH_TEST);
+        OurCraft.printIfGLError("after post-processing world");
+    }
+
+    public void beginGuiRendering()
+    {
+        guiRendering = true;
+    }
+
+    public void flushGuiRendering()
+    {
+        // We don't really flush here. Sorry I lied to you ;(
+        guiRendering = false;
     }
 
     /**
@@ -466,6 +512,7 @@ public class RenderEngine implements IDisposable
     {
         renderStatesStack.push(renderState);
         renderState = renderState.clone();
+        OurCraft.printIfGLError("after pushing render engine state");
         return this;
     }
 
@@ -477,6 +524,7 @@ public class RenderEngine implements IDisposable
         RenderState pop = renderStatesStack.pop();
         pop.apply(this);
         renderState = pop;
+        OurCraft.printIfGLError("After popping render engine state");
         return this;
     }
 
@@ -502,6 +550,7 @@ public class RenderEngine implements IDisposable
     public RenderEngine enableGLCap(int cap)
     {
         glEnable(cap);
+        OurCraft.printIfGLError("after enabling GL cap: " + OpenGLHelper.getCapName(cap));
         renderState.setGLCap(cap, true);
         return this;
     }
@@ -512,6 +561,7 @@ public class RenderEngine implements IDisposable
     public RenderEngine disableGLCap(int cap)
     {
         glDisable(cap);
+        OurCraft.printIfGLError("after disabling GL cap: " + OpenGLHelper.getCapName(cap));
         renderState.setGLCap(cap, false);
         return this;
     }
@@ -549,7 +599,7 @@ public class RenderEngine implements IDisposable
      */
     public Texture getColorBuffer()
     {
-        return colorBuffer;
+        return frameBuffer.getColorBuffer();
     }
 
     /**
@@ -614,31 +664,7 @@ public class RenderEngine implements IDisposable
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        if(colorBuffer != null)
-            colorBuffer.dispose();
-        if(depthBuffer != -1)
-            glDeleteRenderbuffers(depthBuffer);
-        if(framebufferId != -1)
-            glDeleteFramebuffers(framebufferId);
-        colorBuffer = new Texture(OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight(), null);
-
-        depthBuffer = glGenRenderbuffers();
-        glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, OurCraft.getOurCraft().getDisplayWidth(), OurCraft.getOurCraft().getDisplayHeight());
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-        framebufferId = glGenFramebuffers();
-        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer.getTextureID(), 0);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-        glDrawBuffers((IntBuffer) BufferUtils.createIntBuffer(2).put(GL_COLOR_ATTACHMENT0).put(GL_NONE).flip());
-
-        int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if(status != GL_FRAMEBUFFER_COMPLETE)
-        {
-            Log.fatal("Framebuffer could not be created, status code: " + status);
-        }
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        frameBuffer = new Framebuffer(displayWidth, displayHeight);
 
     }
 }

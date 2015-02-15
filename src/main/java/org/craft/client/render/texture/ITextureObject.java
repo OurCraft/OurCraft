@@ -1,9 +1,7 @@
 package org.craft.client.render.texture;
 
-public interface ITextureObject
+import org.craft.client.*;
+
+public interface ITextureObject extends IBindable
 {
-    /**
-     * Binds the ITextureObject to the current OpenGL Context
-     */
-    public void bind();
 }

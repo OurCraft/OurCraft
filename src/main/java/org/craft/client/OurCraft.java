@@ -163,6 +163,8 @@ public class OurCraft implements Runnable, OurCraftInstance
             }
 
             //Init the RenderEngine
+            ColorPalette.init(this);
+
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
             renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -701,7 +703,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private void render(double delta, boolean drawGui)
     {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        renderEngine.begin();
+        renderEngine.beginWorldRendering();
         List<Chunk> visiblesChunks = getVisibleChunks();
         glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 0.6666667f, 1, 1);
@@ -736,15 +738,16 @@ public class OurCraft implements Runnable, OurCraftInstance
             }
         }
         renderEngine.setModelviewMatrix(Matrix4.get().initIdentity());
-        renderEngine.end();
-        renderEngine.switchToOrtho();
+        renderEngine.flushWorldRendering();
         renderEngine.enableGLCap(GL_BLEND);
         glClear(GL_DEPTH_BUFFER_BIT);
-        renderEngine.switchToOrtho();
         renderEngine.disableGLCap(GL_DEPTH_TEST);
+        renderEngine.switchToOrtho();
+        printIfGLError("After world rendering");
 
         if(drawGui)
         {
+            renderEngine.beginGuiRendering();
             if(clientWorld != null)
             {
                 renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
@@ -760,8 +763,12 @@ public class OurCraft implements Runnable, OurCraftInstance
             {
                 currentMenu.render(mx, displayHeight - my, renderEngine);
             }
+
+            renderEngine.flushGuiRendering();
+
+            printIfGLError("After gui rendering");
         }
-        printIfGLError();
+        printIfGLError("After global rendering");
     }
 
     /**
@@ -864,15 +871,22 @@ public class OurCraft implements Runnable, OurCraftInstance
     /**
      * Print an error log only if OpenGL <code>getError()</code> returns an error
      */
+
     @NonLoggable
     public static void printIfGLError()
+    {
+        printIfGLError("");
+    }
+
+    @NonLoggable
+    public static void printIfGLError(String trailer)
     {
         int errorFlag = glGetError();
         // If an error has occurred...
         if(errorFlag != GL_NO_ERROR)
         {
             // Print the error to System.err.
-            Log.error("[GL ERROR] " + GLU.gluErrorString(errorFlag));
+            Log.error("[GL ERROR] " + GLU.gluErrorString(errorFlag) + (trailer == null ? "" : " " + trailer));
         }
     }
 

@@ -4,18 +4,22 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.*;
 
+import org.craft.client.*;
+import org.craft.maths.*;
+
 public class RenderState implements Cloneable
 {
 
-    private HashMap<Integer, Boolean> glCaps = new HashMap<Integer, Boolean>();
-    private int                       blendFuncSrc;
-    private int                       blendFuncDst;
-    private int                       alphaFunc;
-    private float                     alphaRef;
+    private HashMap<Integer, Boolean> glCaps       = new HashMap<Integer, Boolean>();
+    private int                       blendFuncSrc = -1;
+    private int                       blendFuncDst = -1;
+    private int                       alphaFunc    = -1;
+    private float                     alphaRef     = -1;
     private float                     clearColorR;
     private float                     clearColorG;
     private float                     clearColorB;
     private float                     clearColorA;
+    private Matrix4                   projection;
 
     @Override
     public RenderState clone()
@@ -30,6 +34,7 @@ public class RenderState implements Cloneable
         copy.clearColorR = clearColorR;
         copy.clearColorG = clearColorG;
         copy.clearColorB = clearColorB;
+        copy.projection = projection;
         return copy;
     }
 
@@ -85,10 +90,23 @@ public class RenderState implements Cloneable
                 else
                     glDisable(cap);
             }
-            glBlendFunc(blendFuncSrc, blendFuncDst);
-            glAlphaFunc(alphaFunc, alphaRef);
+            OurCraft.printIfGLError("after setting up capability from renderState");
+            if(blendFuncSrc != -1)
+            {
+                glBlendFunc(blendFuncSrc, blendFuncDst);
+                OurCraft.printIfGLError("after setting up blend func from renderState");
+            }
+
+            if(alphaFunc != -1)
+            {
+                glAlphaFunc(alphaFunc, alphaRef);
+                OurCraft.printIfGLError("after setting up alpha func from renderState");
+            }
 
             glClearColor(clearColorR, clearColorG, clearColorG, clearColorA);
+            OurCraft.printIfGLError("after setting up clear color from renderState");
+
+            renderEngine.setProjectionMatrix(projection);
         }
     }
 
@@ -110,5 +128,15 @@ public class RenderState implements Cloneable
         this.clearColorG = g;
         this.clearColorB = b;
         this.clearColorA = a;
+    }
+
+    public void setProjection(Matrix4 projection)
+    {
+        this.projection = projection;
+    }
+
+    public Matrix4 getProjection()
+    {
+        return projection;
     }
 }
