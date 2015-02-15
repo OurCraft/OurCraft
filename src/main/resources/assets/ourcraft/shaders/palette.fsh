@@ -41,7 +41,8 @@ vec3 getCoords(vec3 color)
 
 void main()
 {
-	vec3 color = texture2D(texture, texCoord0).rgb;
+    vec4 sample = texture2D(texture, texCoord0);
+	vec3 color = sample.rgb;
 	vec3 coords = getCoords(color);
     float x = coords.x;
     float y = coords.y;
@@ -61,5 +62,5 @@ void main()
             closestColor = color1;
         }
     }
-	gl_FragColor = vec4(closestColor, 1);
+	gl_FragColor = vec4(closestColor, sample.w);
 }

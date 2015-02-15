@@ -92,7 +92,9 @@ public class RenderEngine implements IDisposable
         ITextureObject last = lastBoundTexture;
         if(guiRendering)
         {
-            frameBuffer.bind();// FIXME: Use guiShaderBatch
+            frameBuffer.bind();
+            glClearColor(0, 0, 0, 0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
         flushBuffer(buffer, mode);
@@ -320,7 +322,8 @@ public class RenderEngine implements IDisposable
         {
             GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
             object.bind();
-            lastBoundTexture = object;
+            if(guiRendering) // hacks, hacks everywhere!
+                lastBoundTexture = object;
         }
         OurCraft.printIfGLError("after texture bind");
     }
@@ -441,11 +444,11 @@ public class RenderEngine implements IDisposable
         basicShader.setUniform("projection", projectionHud);
         basicShader.setUniform("modelview", modelMatrix);
 
-        currentShader = basicShader;
         blitShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
         blitShader.bind();
         blitShader.setUniform("projection", projectionHud);
         blitShader.setUniform("modelview", modelMatrix);
+        currentShader = blitShader;
 
         try
         {
@@ -473,6 +476,7 @@ public class RenderEngine implements IDisposable
      */
     public void beginWorldRendering()
     {
+        setCurrentShader(blitShader);
         OurCraft.printIfGLError("before rendering world");
         currentShader.bind();
         frameBuffer.bind();
@@ -490,7 +494,6 @@ public class RenderEngine implements IDisposable
         disableGLCap(GL_DEPTH_TEST);
         switchToOrtho();
         shaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
-        enableGLCap(GL_DEPTH_TEST);
         OurCraft.printIfGLError("after post-processing world");
     }
 
