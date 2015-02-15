@@ -1,21 +1,35 @@
 package org.craft.client.models;
 
-import java.util.*;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.craft.blocks.Block;
+import org.craft.blocks.states.BlockState;
+import org.craft.blocks.states.BlockStates;
+import org.craft.blocks.states.IBlockStateValue;
+import org.craft.client.OurCraft;
+import org.craft.client.render.EnumRenderPass;
+import org.craft.client.render.IconGenerator;
+import org.craft.client.render.blocks.AbstractBlockRenderer;
+import org.craft.client.render.blocks.BlockModelRenderer;
+import org.craft.client.render.items.ItemModelRenderer;
+import org.craft.client.render.items.ItemRenderer;
+import org.craft.items.IStackable;
+import org.craft.items.Item;
+import org.craft.maths.Vector2;
+import org.craft.maths.Vector3;
+import org.craft.resources.AbstractResource;
+import org.craft.resources.ResourceLocation;
+import org.craft.utils.Dev;
+import org.craft.utils.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
-
-import com.google.common.collect.*;
-import com.google.gson.*;
-
-import org.craft.blocks.*;
-import org.craft.blocks.states.*;
-import org.craft.client.*;
-import org.craft.client.render.*;
-import org.craft.client.render.blocks.*;
-import org.craft.client.render.items.*;
-import org.craft.items.*;
-import org.craft.maths.*;
-import org.craft.resources.*;
-import org.craft.utils.*;
 
 public class ModelLoader
 {
@@ -47,7 +61,7 @@ public class ModelLoader
 
     public AbstractBlockRenderer createDefaultBlockRenderer(BlockVariant blockVariant, IconGenerator blockMap)
     {
-        List<BlockVariant> variants = new ArrayList<>();
+        List<BlockVariant> variants = new ArrayList<BlockVariant>();
         variants.add(blockVariant);
         return new BlockModelRenderer(variants);
     }

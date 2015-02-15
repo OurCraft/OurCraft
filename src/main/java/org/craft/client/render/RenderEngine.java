@@ -55,7 +55,7 @@ public class RenderEngine implements IDisposable
 
     public RenderEngine(ResourceLoader loader) throws IOException
     {
-        renderStatesStack = new Stack<>();
+        renderStatesStack = new Stack<RenderState>();
         renderState = new RenderState();
         this.loader = loader;
         texturesLocs = new HashMap<ResourceLocation, ITextureObject>();
