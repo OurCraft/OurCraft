@@ -120,6 +120,15 @@ public class LocalPlayerController extends PlayerController
         if(infos != null && infos.type == CollisionType.BLOCK)
         {
             Block block = ((Block) infos.value);
+            PlayerInventory inventory = (PlayerInventory) player.getInventory();
+
+            for (int i = 0; i < inventory.getSizeInventory(); i++)
+            {
+                Stack stack = inventory.getStackInSlot(i);
+                if (stack != null)
+                    if (block.getClass().isInstance(stack.getStackable())) inventory.setSelectedIndex((byte) i);
+            }
+
             player.getInventory().setInventorySlotContents(((PlayerInventory) player.getInventory()).getSelectedIndex(), new Stack(block));
         }
     }
