@@ -35,6 +35,7 @@ public class GuiVanillaDispatcher extends GuiDispatcher
                 {
                     OurCraft.getOurCraft().openMenu(new GuiInventory(OurCraft.getOurCraft(), player));
                 }
+                break;
             }
         }
     }

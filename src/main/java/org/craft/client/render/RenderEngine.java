@@ -264,7 +264,7 @@ public class RenderEngine implements IDisposable
      */
     public void switchToOrtho(int w, int h)
     {
-        projectionHud = new Matrix4().initOrthographic(0, w, h, 0, -1, 1f);
+        projectionHud = new Matrix4().initOrthographic(0, w, h, 0, 0, 1f);
         glViewport(0, 0, w, h);
         projectFromEntity = false;
         setProjectionMatrix(projectionHud);

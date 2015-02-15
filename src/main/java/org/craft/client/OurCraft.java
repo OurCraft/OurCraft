@@ -621,6 +621,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                         DisplayMode mode = Display.getDesktopDisplayMode();
                         setDisplayMode(mode.getWidth(), mode.getHeight());
                         Display.setDisplayModeAndFullscreen(mode);
+                        Display.setResizable(true);
                     }
                     catch(LWJGLException e1)
                     {
@@ -680,6 +681,7 @@ public class OurCraft implements Runnable, OurCraftInstance
                 Display.setFullscreen(false);
                 Display.setDisplayMode(new DisplayMode(oldWidth, oldHeight));
                 setDisplayMode(oldWidth, oldHeight);
+                Display.setResizable(true);
             }
             catch(LWJGLException e)
             {
@@ -877,7 +879,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     @NonLoggable
     public static void printIfGLError()
     {
-        printIfGLError("");
+        printIfGLError(null);
     }
 
     @NonLoggable
@@ -887,7 +889,7 @@ public class OurCraft implements Runnable, OurCraftInstance
         // If an error has occurred...
         if(errorFlag != GL_NO_ERROR)
         {
-            // Print the error to System.err.
+            // Log the error.
             Log.error("[GL ERROR] " + GLU.gluErrorString(errorFlag) + (trailer == null ? "" : " " + trailer));
         }
     }
