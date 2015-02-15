@@ -1,9 +1,11 @@
 package org.craft.client;
 
-import org.craft.blocks.*;
-import org.craft.entity.*;
-import org.craft.inventory.*;
-import org.craft.utils.*;
+import org.craft.blocks.Block;
+import org.craft.blocks.Blocks;
+import org.craft.entity.EntityPlayer;
+import org.craft.inventory.PlayerInventory;
+import org.craft.inventory.Stack;
+import org.craft.utils.CollisionInfos;
 import org.craft.utils.CollisionInfos.CollisionType;
 
 public class LocalPlayerController extends PlayerController
@@ -108,5 +110,17 @@ public class LocalPlayerController extends PlayerController
         if(newIndex >= 10)
             newIndex = (byte) (newIndex - 10);
         inv.setSelectedIndex(newIndex);
+    }
+
+    @Override
+    public void onMouseWheelClicked()
+    {
+        OurCraft ourCraft = OurCraft.getOurCraft();
+        CollisionInfos infos = ourCraft.getObjectInFront();
+        if(infos != null && infos.type == CollisionType.BLOCK)
+        {
+            Block block = ((Block) infos.value);
+            player.getInventory().setInventorySlotContents(((PlayerInventory) player.getInventory()).getSelectedIndex(), new Stack(block));
+        }
     }
 }

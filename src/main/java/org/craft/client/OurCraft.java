@@ -1,52 +1,76 @@
 package org.craft.client;
 
-import static org.lwjgl.opengl.GL11.*;
-
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.lang.annotation.*;
-import java.nio.*;
-import java.util.*;
-import java.util.List;
-
-import javax.imageio.*;
-import javax.swing.*;
-
-import com.google.common.collect.*;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.craft.*;
-import org.craft.blocks.*;
-import org.craft.blocks.states.*;
-import org.craft.client.gui.*;
-import org.craft.client.models.*;
-import org.craft.client.network.*;
+import org.craft.blocks.Block;
+import org.craft.blocks.Blocks;
+import org.craft.blocks.states.BlockStates;
+import org.craft.client.gui.Gui;
+import org.craft.client.gui.GuiMainMenu;
+import org.craft.client.gui.GuiPauseMenu;
+import org.craft.client.gui.ScreenTitle;
+import org.craft.client.models.ModelLoader;
+import org.craft.client.network.ClientNetHandler;
 import org.craft.client.render.*;
-import org.craft.client.render.blocks.*;
-import org.craft.client.render.entity.*;
-import org.craft.client.render.fonts.*;
-import org.craft.client.render.items.*;
-import org.craft.client.sound.*;
-import org.craft.entity.*;
-import org.craft.items.*;
+import org.craft.client.render.blocks.RenderBlocks;
+import org.craft.client.render.entity.AbstractRender;
+import org.craft.client.render.entity.FallbackRender;
+import org.craft.client.render.fonts.BaseFontRenderer;
+import org.craft.client.render.fonts.FontRenderer;
+import org.craft.client.render.fonts.TrueTypeFontRenderer;
+import org.craft.client.render.items.RenderItems;
+import org.craft.client.sound.DirectSoundProducer;
+import org.craft.entity.Entity;
+import org.craft.entity.EntityPlayer;
+import org.craft.entity.EntityPrimedTNT;
+import org.craft.entity.EntityRegistry;
+import org.craft.items.Item;
+import org.craft.items.Items;
 import org.craft.maths.*;
-import org.craft.modding.*;
-import org.craft.modding.events.*;
-import org.craft.modding.events.state.*;
-import org.craft.network.*;
+import org.craft.modding.AddonContainer;
+import org.craft.modding.AddonsLoader;
+import org.craft.modding.ModEventHandler;
+import org.craft.modding.events.EventBus;
+import org.craft.modding.events.ModEvent;
+import org.craft.modding.events.WorldLoadEvent;
+import org.craft.modding.events.WorldUnloadEvent;
+import org.craft.modding.events.state.ModInitEvent;
+import org.craft.modding.events.state.ModPostInitEvent;
+import org.craft.network.AbstractPacket;
+import org.craft.network.NetworkSide;
+import org.craft.network.PacketRegistry;
 import org.craft.resources.*;
-import org.craft.sound.*;
+import org.craft.sound.AudioRegistry;
 import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.utils.Log.NonLoggable;
-import org.craft.utils.crash.*;
-import org.craft.world.*;
-import org.craft.world.biomes.*;
-import org.lwjgl.*;
-import org.lwjgl.input.*;
+import org.craft.utils.crash.CrashReport;
+import org.craft.world.Chunk;
+import org.craft.world.World;
+import org.craft.world.WorldLoader;
+import org.craft.world.biomes.Biomes;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.glu.*;
+import org.lwjgl.util.glu.GLU;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.util.*;
+import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class OurCraft implements Runnable, OurCraftInstance
 {
@@ -580,6 +604,10 @@ public class OurCraft implements Runnable, OurCraftInstance
             if(Keyboard.isKeyDown(settings.jumpKey.getValue()))
             {
                 playerController.onJumpRequested();
+            }
+            if (Mouse.isButtonDown(2))
+            {
+                playerController.onMouseWheelClicked();
             }
             playerController.update();
         }

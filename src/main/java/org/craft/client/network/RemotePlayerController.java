@@ -71,6 +71,12 @@ public class RemotePlayerController extends PlayerController
     }
 
     @Override
+    public void onMouseWheelClicked()
+    {
+        ;
+    }
+
+    @Override
     public void update()
     {
         ;

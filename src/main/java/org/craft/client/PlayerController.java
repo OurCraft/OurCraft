@@ -64,6 +64,11 @@ public abstract class PlayerController
     public abstract void onMouseWheelMoved(int amount);
 
     /**
+     * Called when the mouse wheel is cliked
+     */
+    public abstract void onMouseWheelClicked();
+
+    /**
      * Called each tick
      */
     public abstract void update();
