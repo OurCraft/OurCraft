@@ -50,6 +50,8 @@ public class RenderEngine implements IDisposable
     private ShaderBatch                               shaderBatch;
     private ShaderBatch                               guiShaderBatch;
     private Framebuffer                               frameBuffer;
+    private boolean                                   guiRendering;
+    private ITextureObject                            lastBoundTexture;
 
     public RenderEngine(ResourceLoader loader) throws IOException
     {
@@ -86,6 +88,24 @@ public class RenderEngine implements IDisposable
      * Renders a buffer with given mode
      */
     public void renderBuffer(OpenGLBuffer buffer, int mode)
+    {
+        ITextureObject last = lastBoundTexture;
+        if(guiRendering)
+        {
+            frameBuffer.bind();// FIXME: Use guiShaderBatch
+        }
+
+        flushBuffer(buffer, mode);
+
+        if(guiRendering)
+        {
+            guiShaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
+            bindTexture(last);
+            lastBoundTexture = last;
+        }
+    }
+
+    public void flushBuffer(OpenGLBuffer buffer, int mode)
     {
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
@@ -300,6 +320,7 @@ public class RenderEngine implements IDisposable
         {
             GL13.glActiveTexture(GL13.GL_TEXTURE0 + slot);
             object.bind();
+            lastBoundTexture = object;
         }
         OurCraft.printIfGLError("after texture bind");
     }
@@ -428,15 +449,8 @@ public class RenderEngine implements IDisposable
 
         try
         {
-            //            Shader testShader = new Shader(blitShader);
-            //            testShader.getInfos().setWidth(256);
-            //            testShader.getInfos().setHeight(240);
-            //            TODO: Uncomment this block and comment the next uncommented line for a retro looking game! :3 ~xav
-            //            shaderBatch = new ShaderBatch(testShader, ColorPalette.NES_PALETTE.getShader(), blitShader);
-            //            shaderBatch.getFrameBuffer(testShader.getInfos(), testShader.getInfos().getWidth(), testShader.getInfos().getHeight(), GL_NEAREST);
             shaderBatch = new ShaderBatch(blitShader);
-
-            guiShaderBatch = new ShaderBatch(currentShader);
+            guiShaderBatch = new ShaderBatch(blitShader);
         }
         catch(Exception e)
         {
@@ -457,7 +471,7 @@ public class RenderEngine implements IDisposable
     /**
      * Starts World rendering
      */
-    public void begin()
+    public void beginWorldRendering()
     {
         OurCraft.printIfGLError("before rendering world");
         currentShader.bind();
@@ -478,6 +492,17 @@ public class RenderEngine implements IDisposable
         shaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
         enableGLCap(GL_DEPTH_TEST);
         OurCraft.printIfGLError("after post-processing world");
+    }
+
+    public void beginGuiRendering()
+    {
+        guiRendering = true;
+    }
+
+    public void flushGuiRendering()
+    {
+        // We don't really flush here. Sorry I lied to you ;(
+        guiRendering = false;
     }
 
     /**

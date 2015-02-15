@@ -37,6 +37,7 @@ public class GuiCreateWorld extends Gui
         String txt = I18n.format("menu.createworld.title");
         addWidget(new GuiLabel(-1, oc.getDisplayWidth() / 2 - (int) getFontRenderer().getTextWidth(txt) / 2, oc.getDisplayHeight() / 2 - 60, txt, getFontRenderer()));
         worldNameField = new GuiTextField(0, oc.getDisplayWidth() / 2 - 200, oc.getDisplayHeight() / 2 - 20, 400, 40, getFontRenderer());
+        worldNameField.setPlaceHolder(">Enter world name here<");
         addWidget(worldNameField);
 
         GuiButton back = new GuiButton(1, oc.getDisplayWidth() / 2 + 10, oc.getDisplayHeight() / 2 + 40, 190, 40, I18n.format("menu.back"), getFontRenderer());

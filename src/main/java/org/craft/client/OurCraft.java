@@ -703,7 +703,7 @@ public class OurCraft implements Runnable, OurCraftInstance
     private void render(double delta, boolean drawGui)
     {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        renderEngine.begin();
+        renderEngine.beginWorldRendering();
         List<Chunk> visiblesChunks = getVisibleChunks();
         glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 0.6666667f, 1, 1);
@@ -743,9 +743,11 @@ public class OurCraft implements Runnable, OurCraftInstance
         glClear(GL_DEPTH_BUFFER_BIT);
         renderEngine.disableGLCap(GL_DEPTH_TEST);
         renderEngine.switchToOrtho();
+        printIfGLError("After world rendering");
 
         if(drawGui)
         {
+            renderEngine.beginGuiRendering();
             if(clientWorld != null)
             {
                 renderEngine.enableGLCap(GL_COLOR_LOGIC_OP);
@@ -762,8 +764,11 @@ public class OurCraft implements Runnable, OurCraftInstance
                 currentMenu.render(mx, displayHeight - my, renderEngine);
             }
 
+            renderEngine.flushGuiRendering();
+
+            printIfGLError("After gui rendering");
         }
-        printIfGLError("After world rendering");
+        printIfGLError("After global rendering");
     }
 
     /**

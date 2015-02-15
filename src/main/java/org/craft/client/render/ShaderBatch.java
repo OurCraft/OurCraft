@@ -81,7 +81,7 @@ public class ShaderBatch
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, targetFramebuffer);
                 engine.switchToOrtho();
-                engine.renderBuffer(buffer, GL_TRIANGLES);
+                engine.flushBuffer(buffer, GL_TRIANGLES);
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
             else
@@ -93,7 +93,7 @@ public class ShaderBatch
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 OurCraft.printIfGLError("after clearing framebuffer in ShaderBatch");
                 engine.switchToOrtho(framebuffer.getWidth(), framebuffer.getHeight());
-                engine.renderBuffer(framebuffer.getBuffer(), GL_TRIANGLES);
+                engine.flushBuffer(framebuffer.getBuffer(), GL_TRIANGLES);
                 renderTexture = framebuffer.getColorBuffer();
 
             }
