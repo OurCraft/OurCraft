@@ -90,21 +90,9 @@ public class RenderEngine implements IDisposable
     public void renderBuffer(OpenGLBuffer buffer, int mode)
     {
         ITextureObject last = lastBoundTexture;
-        if(guiRendering)
-        {
-            frameBuffer.bind();
-            glClearColor(0, 0, 0, 0);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        }
 
         flushBuffer(buffer, mode);
 
-        if(guiRendering)
-        {
-            guiShaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
-            bindTexture(last);
-            lastBoundTexture = last;
-        }
     }
 
     public void flushBuffer(OpenGLBuffer buffer, int mode)
@@ -478,7 +466,7 @@ public class RenderEngine implements IDisposable
     {
         setCurrentShader(blitShader);
         OurCraft.printIfGLError("before rendering world");
-        currentShader.bind();
+        setCurrentShader(blitShader);
         frameBuffer.bind();
         glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 0, 0, 0);
@@ -495,17 +483,20 @@ public class RenderEngine implements IDisposable
         switchToOrtho();
         shaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
         OurCraft.printIfGLError("after post-processing world");
+        setCurrentShader(blitShader);
     }
 
     public void beginGuiRendering()
     {
-        guiRendering = true;
+        frameBuffer.bind();
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     public void flushGuiRendering()
     {
-        // We don't really flush here. Sorry I lied to you ;(
-        guiRendering = false;
+        guiShaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
+        setCurrentShader(blitShader);
     }
 
     /**
