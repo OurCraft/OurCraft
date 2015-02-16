@@ -10,6 +10,7 @@ Veni, vidi, bugi
 Smell my finger.
 I've got NaN errors in my code
 All my errors are Eclipse's fault!
+Internal error while showing an internal error.
 Long life to §cFF2C7EB6#LDJAM§r!
 RIP §cFF2C7EB6#LD48
 Salut, ça va?
@@ -21,3 +22,4 @@ Hallo! Hoe gaat het?
 Open Source!
 DRM free!
 Please buy the $80 DLC to get the splash text.
+Java8 Powered!

@@ -22,7 +22,7 @@ public abstract class AbstractResource
         return loader;
     }
 
-    protected InputStream getInputStream()
+    public InputStream getInputStream()
     {
         return inputStream;
     }

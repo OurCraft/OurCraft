@@ -27,7 +27,6 @@ public class RenderEngine implements IDisposable
     private Entity                                    renderViewEntity;
     private Matrix4                                   projection3dMatrix;
     private Shader                                    currentShader;
-    private Shader                                    basicShader;
     private Matrix4                                   projectionHud;
     private Matrix4                                   modelMatrix;
     private Matrix4                                   projection;
@@ -423,20 +422,13 @@ public class RenderEngine implements IDisposable
     public void loadShaders() throws IOException
     {
         glUseProgram(0);
-        if(basicShader != null)
-            basicShader.dispose();
         if(blitShader != null)
             blitShader.dispose();
-        basicShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "base.fsh")).getData(), "UTF-8"));
-        basicShader.bind();
-        basicShader.setUniform("projection", projectionHud);
-        basicShader.setUniform("modelview", modelMatrix);
-
         blitShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
         blitShader.bind();
         blitShader.setUniform("projection", projectionHud);
         blitShader.setUniform("modelview", modelMatrix);
-        currentShader = blitShader;
+        setCurrentShader(blitShader);
 
         try
         {

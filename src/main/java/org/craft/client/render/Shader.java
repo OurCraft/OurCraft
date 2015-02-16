@@ -2,10 +2,13 @@ package org.craft.client.render;
 
 import static org.lwjgl.opengl.GL20.*;
 
+import java.io.*;
 import java.nio.*;
 import java.util.*;
 
+import org.craft.client.*;
 import org.craft.maths.*;
+import org.craft.resources.*;
 import org.craft.utils.*;
 import org.craft.utils.io.*;
 
@@ -20,7 +23,26 @@ public class Shader implements IDisposable
     private static FloatBuffer       floatBuffer12;
     private static FloatBuffer       floatBuffer16;
 
+    public Shader(ResourceLocation vertexShader, ResourceLocation fragmentShader) throws IOException
+    {
+        this(OurCraft.getOurCraft().getAssetsLoader(), vertexShader, fragmentShader);
+    }
+
+    public Shader(ResourceLoader loader, ResourceLocation vertexShader, ResourceLocation fragmentShader) throws IOException
+    {
+        AbstractResource vertRes = loader.getResource(vertexShader);
+        AbstractResource fragRes = loader.getResource(fragmentShader);
+        String vert = IOUtils.readString(vertRes.getInputStream(), "UTF-8");
+        String frag = IOUtils.readString(fragRes.getInputStream(), "UTF-8");
+        init(vert, frag);
+    }
+
     public Shader(String vert, String frag)
+    {
+        init(vert, frag);
+    }
+
+    private void init(String vert, String frag)
     {
         infos = new ShaderInfo(this);
         locsMap = new HashMap<String, Integer>();

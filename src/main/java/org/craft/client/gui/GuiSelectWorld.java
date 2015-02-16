@@ -13,7 +13,7 @@ import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
-import org.craft.client.render.texture.Texture;
+import org.craft.client.render.texture.*;
 import org.craft.entity.*;
 import org.craft.resources.*;
 import org.craft.utils.*;
@@ -93,17 +93,12 @@ public class GuiSelectWorld extends Gui
 
         try
         {
-            worldSnapshotShader = new Shader(new String(oc.getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.vsh")).getData(), "UTF-8"), new String(oc.getAssetsLoader().getResource(new ResourceLocation("ourcraft/shaders", "worldSnap.fsh")).getData(), "UTF-8"));
+            worldSnapshotShader = new Shader(oc.getAssetsLoader(), new ResourceLocation("ourcraft/shaders", "worldSnap.vsh"), new ResourceLocation("ourcraft/shaders", "worldSnap.fsh"));
         }
-        catch(UnsupportedEncodingException e)
+        catch(IOException e)
         {
             e.printStackTrace();
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
