@@ -15,10 +15,10 @@ import org.craft.utils.io.*;
 public class Shader implements IDisposable
 {
 
-    private static Shader            current = null;
     private int                      program;
     private HashMap<String, Integer> locsMap;
     private ShaderInfo               infos;
+    private String                   name;
     private static FloatBuffer       floatBuffer8;
     private static FloatBuffer       floatBuffer12;
     private static FloatBuffer       floatBuffer16;
@@ -31,15 +31,22 @@ public class Shader implements IDisposable
     public Shader(ResourceLoader loader, ResourceLocation vertexShader, ResourceLocation fragmentShader) throws IOException
     {
         AbstractResource vertRes = loader.getResource(vertexShader);
+        this.name = vertRes.getResourceLocation().getName().replace("." + vertRes.getResourceLocation().getExtension(), "");
         AbstractResource fragRes = loader.getResource(fragmentShader);
-        String vert = IOUtils.readString(vertRes.getInputStream(), "UTF-8");
-        String frag = IOUtils.readString(fragRes.getInputStream(), "UTF-8");
+        String vert = new String(vertRes.getData(), "UTF-8");
+        String frag = new String(fragRes.getData(), "UTF-8");
         init(vert, frag);
     }
 
     public Shader(String vert, String frag)
     {
+        name = vert.substring(20, 80).replace("\n", "$%$").replace("\r", "$%$");
         init(vert, frag);
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     private void init(String vert, String frag)
@@ -56,14 +63,14 @@ public class Shader implements IDisposable
         glCompileShader(vertexId);
         if(glGetShaderi(vertexId, GL_COMPILE_STATUS) == 0)
         {
-            Log.error("Compilation of vertex shader failed: ");
+            Log.error("[Shader " + name + "] Compilation of vertex shader failed: ");
             Log.error(glGetShaderInfoLog(vertexId, 1024));
             return;
         }
         glCompileShader(fragmentId);
         if(glGetShaderi(fragmentId, GL_COMPILE_STATUS) == 0)
         {
-            Log.error("Compilation of fragment shader failed: ");
+            Log.error("[Shader " + name + "] Compilation of fragment shader failed: ");
             Log.error(glGetShaderInfoLog(fragmentId, 1024));
             return;
         }
@@ -74,7 +81,7 @@ public class Shader implements IDisposable
         glLinkProgram(program);
         if(glGetProgrami(program, GL_LINK_STATUS) == 0)
         {
-            Log.error("Linking of program failed: ");
+            Log.error("[Shader " + name + "] Linking of program failed: ");
             Log.error(glGetProgramInfoLog(program, 1024));
             return;
         }
@@ -92,17 +99,7 @@ public class Shader implements IDisposable
      */
     public void bind()
     {
-        current = this;
         glUseProgram(program);
-    }
-
-    /**
-     * @deprecated: You should try to respect OOP a bit more
-     */
-    @Deprecated
-    public static Shader getCurrentlyBound()
-    {
-        return current;
     }
 
     /**
@@ -111,6 +108,8 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Vector2 v)
     {
         int l = getLocation(uniform);
+        if(l == -1)
+            return this;
         if(floatBuffer8 == null)
         {
             floatBuffer8 = IOUtils.createFloatBuffer(4 * 2);
@@ -129,6 +128,8 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Vector3 v)
     {
         int l = getLocation(uniform);
+        if(l == -1)
+            return this;
         if(floatBuffer12 == null)
         {
             floatBuffer12 = IOUtils.createFloatBuffer(4 * 3);
@@ -147,6 +148,8 @@ public class Shader implements IDisposable
     public Shader setUniform(String uniform, Matrix4 m)
     {
         int l = getLocation(uniform);
+        if(l == -1)
+            return this;
         if(floatBuffer16 == null)
         {
             floatBuffer16 = IOUtils.createFloatBuffer(4 * 4);

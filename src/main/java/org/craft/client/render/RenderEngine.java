@@ -202,6 +202,10 @@ public class RenderEngine implements IDisposable
         currentShader.bind();
         currentShader.setUniform("modelview", this.modelMatrix);
         currentShader.setUniform("projection", getProjectedViewMatrix());
+
+        Vector2 screenSize = Vector2.get(displayWidth, displayHeight);
+        currentShader.setUniform("screenSize", screenSize);
+        screenSize.dispose();
     }
 
     /**
@@ -424,7 +428,7 @@ public class RenderEngine implements IDisposable
         glUseProgram(0);
         if(blitShader != null)
             blitShader.dispose();
-        blitShader = new Shader(new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.vsh")).getData(), "UTF-8"), new String(loader.getResource(new ResourceLocation("ourcraft/shaders", "blit.fsh")).getData(), "UTF-8"));
+        blitShader = new Shader(new ResourceLocation("ourcraft/shaders", "blit.vsh"), new ResourceLocation("ourcraft/shaders", "blit.fsh"));
         blitShader.bind();
         blitShader.setUniform("projection", projectionHud);
         blitShader.setUniform("modelview", modelMatrix);
@@ -432,6 +436,8 @@ public class RenderEngine implements IDisposable
 
         try
         {
+            //Shader testShader = new Shader(new ResourceLocation("ourcraft", "shaders/testOutline.vsh"), new ResourceLocation("ourcraft", "shaders/testOutline.fsh"));
+            //shaderBatch = new ShaderBatch(blitShader, testShader);
             shaderBatch = new ShaderBatch(blitShader);
             guiShaderBatch = new ShaderBatch(blitShader);
         }
