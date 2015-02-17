@@ -41,12 +41,19 @@ task processVersion(type: Copy) {
     }
 }
 
+sourceSets {
+    filtered {
+        java {
+            srcDirs = [filteredSourceDir]
+        }
+    }
+}
+
 //force UTF-8 to the compileJava task
 compileJava.options.encoding = 'UTF-8'
 
 // tell the compileJava task to compile the filtered source 
 compileJava.source = sourceSets.filtered.java
-compileJava.source += sourceSets.jlayer.java
 // Add dependencies processVersion to compileJava task
 compileJava.dependsOn processVersion 
 
