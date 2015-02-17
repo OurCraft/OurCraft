@@ -20,6 +20,8 @@ public class GuiTextField extends GuiWidget
     private int                    offset;
     private int                    offset2;
     private String                 placeHolder;
+    private boolean                editable;
+    private boolean                showText;
     public static ResourceLocation cursorLoc = new ResourceLocation("ourcraft", "textures/gui/cursor.png");
 
     public GuiTextField(int id, int x, int y, int w, int h, FontRenderer font)
@@ -30,6 +32,7 @@ public class GuiTextField extends GuiWidget
         this.txt = "";
         offset = 0;
         offset2 = getMaxDisplayableChars();
+        showText = true;
     }
 
     public GuiTextField setPlaceHolder(String placeHolder)
@@ -91,40 +94,41 @@ public class GuiTextField extends GuiWidget
                 secondCursorPos = 0;
             if(secondCursorPos > txt.length())
                 secondCursorPos = txt.length();
-            if(txt.isEmpty() && placeHolder != null && !focused)
-            {
-                font.drawShadowedString(placeHolder, color, getX() + 4, (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
-            }
-            else
-            {
-                String toDisplay = txt.substring(offset, Math.max(0, Math.min(offset2, txt.length())));
-                float cursor2Offset = font.getTextWidth(txt.substring(0, secondCursorPos)) - delta;
-                font.drawShadowedString(toDisplay, color, (int) (getX() + 4), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
-                int cx = (int) (getX() + 4 + cursorOffset);
-
-                if(cursorCounter % time <= time / 2 && focused || cursorPos != secondCursorPos)
+            if(showText)
+                if(txt.isEmpty() && placeHolder != null && !focused)
                 {
-                    engine.bindLocation(cursorLoc);
-                    if(cursorPos != secondCursorPos)
+                    font.drawShadowedString(placeHolder, color, getX() + 4, (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
+                }
+                else
+                {
+                    String toDisplay = txt.substring(offset, Math.max(0, Math.min(offset2, txt.length())));
+                    float cursor2Offset = font.getTextWidth(txt.substring(0, secondCursorPos)) - delta;
+                    font.drawShadowedString(toDisplay, color, (int) (getX() + 4), (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), engine);
+                    int cx = (int) (getX() + 4 + cursorOffset);
+
+                    if((cursorCounter % time <= time / 2 && focused || cursorPos != secondCursorPos) && editable)
                     {
-                        engine.enableGLCap(GL_COLOR_LOGIC_OP);
-                        glLogicOp(GL_XOR);
-                        Gui.drawTexturedRect(engine, cx, (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), (int) (getX() + 4 + cursor2Offset) - cx, 16, 0, 0, 0.25f, 1);
-                        engine.disableGLCap(GL_COLOR_LOGIC_OP);
-                    }
-                    else
-                    {
-                        float minU = 0.5f;
-                        float maxU = 0.75f;
-                        if(cursorPos == txt.length())
+                        engine.bindLocation(cursorLoc);
+                        if(cursorPos != secondCursorPos)
                         {
-                            minU += 0.25f;
-                            maxU += 0.25f;
+                            engine.enableGLCap(GL_COLOR_LOGIC_OP);
+                            glLogicOp(GL_XOR);
+                            Gui.drawTexturedRect(engine, cx, (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), (int) (getX() + 4 + cursor2Offset) - cx, 16, 0, 0, 0.25f, 1);
+                            engine.disableGLCap(GL_COLOR_LOGIC_OP);
                         }
-                        Gui.drawTexturedRect(engine, cx, (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), 8, 16, minU, 0, maxU, 1);
+                        else
+                        {
+                            float minU = 0.5f;
+                            float maxU = 0.75f;
+                            if(cursorPos == txt.length())
+                            {
+                                minU += 0.25f;
+                                maxU += 0.25f;
+                            }
+                            Gui.drawTexturedRect(engine, cx, (int) (getY() + getHeight() / 2 - font.getCharHeight(' ') / 2), 8, 16, minU, 0, maxU, 1);
+                        }
                     }
                 }
-            }
 
         }
     }
@@ -192,7 +196,7 @@ public class GuiTextField extends GuiWidget
     @Override
     public boolean keyReleased(int id, char c)
     {
-        if(focused)
+        if(focused && editable)
         {
             if(id == Keyboard.KEY_RIGHT)
             {
@@ -336,5 +340,25 @@ public class GuiTextField extends GuiWidget
     public static boolean isLetter(char c)
     {
         return c >= 'a' && c <= 'z' && c >= 'A' && c <= 'Z';
+    }
+
+    public void setEditable(boolean b)
+    {
+        this.editable = b;
+    }
+
+    public boolean isEditable()
+    {
+        return editable;
+    }
+
+    public void setShowText(boolean b)
+    {
+        this.showText = b;
+    }
+
+    public boolean showsText()
+    {
+        return showText;
     }
 }

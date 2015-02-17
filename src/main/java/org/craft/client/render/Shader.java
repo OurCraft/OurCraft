@@ -94,6 +94,12 @@ public class Shader implements IDisposable
         program = other.program;
     }
 
+    public Shader(String name, String vert, String frag)
+    {
+        this.name = name;
+        init(vert, frag);
+    }
+
     /**
      * Binds this program to OpenGL
      */

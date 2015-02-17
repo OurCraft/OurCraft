@@ -10,6 +10,14 @@ public abstract class GuiListSlot
     public abstract void render(int index, int x, int y, int w, int h, int mx, int my, boolean selected, RenderEngine engine, GuiList<?> owner);
 
     /**
+     * Handles an event where the mouse wheel is moved
+     */
+    public boolean onMouseWheelMoved(int index, int x, int y, int w, int h, int mx, int my, int dwheel, GuiList<?> owner)
+    {
+        return false;
+    }
+
+    /**
      * Handles an event where a mouse button is pressed
      */
     public void onButtonPressed(int index, int x, int y, int w, int h, int mx, int my, int button, GuiList<?> owner)

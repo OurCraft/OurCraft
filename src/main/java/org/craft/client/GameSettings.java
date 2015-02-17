@@ -9,6 +9,7 @@ import org.lwjgl.input.*;
 public class GameSettings
 {
 
+    public GameOption<String>             palette;
     public GameOption<Integer>            jumpKey;
     public GameOption<Integer>            forwardKey;
     public GameOption<Integer>            backwardsKey;
@@ -38,6 +39,8 @@ public class GameSettings
         masterVolume = new GameOption<Float>("masterVolume", GameOptionType.RANGE);
 
         fullscreenType = new GameOption<EnumFullscreenType>("fullscreenType", GameOptionType.PLAIN_TEXT);
+
+        palette = new GameOption<>("palette", GameOptionType.CHOICE);
     }
 
     public void loadFrom(File file) throws IOException
@@ -56,6 +59,8 @@ public class GameSettings
         masterVolume.setValue(configuration.getFloat(masterVolume.getID(), 1f));
 
         fullscreenType.setValue(EnumFullscreenType.valueOf(configuration.get(fullscreenType.getID(), EnumFullscreenType.NATIVE.name())));
+
+        palette.setValue(configuration.get(palette.getID(), "none"));
     }
 
     public void saveTo(File file) throws IOException
@@ -75,6 +80,8 @@ public class GameSettings
             configuration.setFloat(masterVolume.getID(), masterVolume.getValue());
 
             configuration.set(fullscreenType.getID(), fullscreenType.getValue().name());
+
+            configuration.set(palette.getID(), palette.getValue());
             configuration.save();
         }
     }

@@ -2,21 +2,21 @@ package org.craft.client.gui.widgets;
 
 import java.util.*;
 
+import com.google.common.collect.*;
+
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
-
-import com.google.common.collect.Lists;
 
 public class GuiList<T extends GuiListSlot> extends GuiWidget
 {
 
     private List<T> list;
-    private int          scroll;
-    private int          selectedIndex;
-    private int          slotHeight;
-    private int          ySpacing;
-    private boolean      scrollable;
-    private boolean      showScrollBar;
+    private int     scroll;
+    private int     selectedIndex;
+    private int     slotHeight;
+    private int     ySpacing;
+    private boolean scrollable;
+    private boolean showScrollBar;
 
     public GuiList(int id, int x, int y, int w, int h, int slotHeight)
     {
@@ -187,6 +187,10 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
     {
         if(isMouseOver(mx, my) && scrollable)
         {
+            int index = getSlotIndex(mx, my);
+            if(index != -1)
+                if(getSlot(index).onMouseWheelMoved(index, getX(), getY() - scroll + ySpacing * index, getWidth(), slotHeight, mx, my, deltaWheel, this))
+                    return true;
             scroll += -(Math.signum(deltaWheel) * 15);
 
             if(-scroll + getSize() * slotHeight + getSize() * ySpacing + slotHeight <= getHeight())
@@ -205,6 +209,15 @@ public class GuiList<T extends GuiListSlot> extends GuiWidget
             return true;
         }
         return false;
+    }
+
+    private int getSlotIndex(int mx, int my)
+    {
+        int y = my + scroll - getY();
+        int index = y / slotHeight;
+        if(index < 0 || index >= getSize())
+            index = -1;
+        return index;
     }
 
     public int getSelectedIndex()

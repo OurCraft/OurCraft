@@ -63,4 +63,14 @@ public class GuiDualTextSlot extends GuiListSlot
         subLabel.render(mx, my, engine);
     }
 
+    public GuiLabel getSubLabel()
+    {
+        return subLabel;
+    }
+
+    public GuiLabel getMainLabel()
+    {
+        return mainLabel;
+    }
+
 }

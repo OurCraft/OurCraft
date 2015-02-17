@@ -30,6 +30,17 @@ public class GuiPanel extends GuiWidget
         this.oc = oc;
     }
 
+    public void setLocation(int x, int y)
+    {
+        int dx = getX() - x;
+        int dy = getY() - y;
+        for(GuiWidget widget : widgets)
+        {
+            widget.setLocation(widget.getX() - dx, widget.getY() - dy);
+        }
+        super.setLocation(x, y);
+    }
+
     public void addWidget(GuiWidget widget)
     {
         widget.setLocation(widget.getX() + getX(), widget.getY() + getY());

@@ -30,6 +30,17 @@ public class GuiSettings extends Gui
                 if(option.getValue() instanceof Float)
                     ((GuiSlider) widget).setValue((Float) option.getValue());
             }
+            else if(option.getType() == GameOptionType.CHOICE)
+            {
+                widget = new GuiComboBox(0, 0, 0, 200, 40, oc, fontRenderer);
+                String[] values = new String[ColorPalette.getPalettes().size()];
+                for(int i = 0; i < ColorPalette.getPalettes().size(); i++ )
+                {
+                    values[i] = ColorPalette.getPalettes().get(i).getName();
+                }
+                ((GuiComboBox) widget).setValues(values);
+                ((GuiComboBox) widget).setSelected((String) option.getValue());
+            }
         }
 
         public void setValue(T v)
@@ -79,6 +90,19 @@ public class GuiSettings extends Gui
                 this.widget.onButtonReleased(mx, my, button);
                 option.setValue((T) Float.valueOf(((GuiSlider) widget).getValue()));
             }
+            else
+            {
+                widget.onButtonReleased(mx, my, button);
+                if(option.getType() == GameOptionType.CHOICE)
+                {
+                    option.setValue((T) ((GuiComboBox) widget).getSelected());
+                }
+            }
+        }
+
+        public boolean onMouseWheelMoved(int index, int x, int y, int w, int h, int mx, int my, int dwheel, GuiList<?> owner)
+        {
+            return widget.handleMouseWheelMovement(mx, my, dwheel);
         }
 
         @Override
@@ -138,6 +162,7 @@ public class GuiSettings extends Gui
         optionsList.addSlot(new GuiOptionSlot<Float>(oc.getGameSettings().masterVolume));
         optionsList.addSlot(new GuiOptionSlot<Float>(oc.getGameSettings().musicVolume));
         optionsList.addSlot(new GuiOptionSlot<Float>(oc.getGameSettings().soundVolume));
+        optionsList.addSlot(new GuiOptionSlot<String>(oc.getGameSettings().palette));
         addWidget(optionsList);
         addWidget(new GuiButton(10, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() - 40, 300, 40, I18n.format("menu.back"), getFontRenderer()));
     }
