@@ -41,19 +41,6 @@ task processVersion(type: Copy) {
     }
 }
 
-sourceSets {
-    jlayer {
-        java {
-            srcDir 'CodecJLayerMP3/src'
-        }
-    }
-    filtered { 
-        java { 
-            srcDirs = ['CodecJLayerMP3/src', filteredSourceDir] 
-        } 
-    }
-} 
-
 //force UTF-8 to the compileJava task
 compileJava.options.encoding = 'UTF-8'
 
