@@ -3,7 +3,7 @@ notifications:
   email: false
 install: true
 jdk: oraclejdk8
-script: gradle build
+script: gradle clean build
 cache:
   directories:
     - ~/.gradle
