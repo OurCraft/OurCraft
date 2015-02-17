@@ -659,4 +659,9 @@ public class RenderEngine implements IDisposable
         frameBuffer = new Framebuffer(displayWidth, displayHeight);
 
     }
+
+    public Shader getBlitShader()
+    {
+        return blitShader;
+    }
 }

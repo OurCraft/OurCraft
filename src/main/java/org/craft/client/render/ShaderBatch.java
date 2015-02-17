@@ -160,4 +160,10 @@ public class ShaderBatch
         framebuffers.add(info);
         return info;
     }
+
+    public void clear()
+    {
+        shaders.clear();
+        framebuffers.clear();
+    }
 }

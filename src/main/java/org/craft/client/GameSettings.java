@@ -41,6 +41,30 @@ public class GameSettings
         fullscreenType = new GameOption<EnumFullscreenType>("fullscreenType", GameOptionType.PLAIN_TEXT);
 
         palette = new GameOption<>("palette", GameOptionType.CHOICE);
+
+        String[] values = new String[ColorPalette.getPalettes().size() + 1];
+        for(int i = 0; i < ColorPalette.getPalettes().size(); i++ )
+        {
+            values[i + 1] = ColorPalette.getPalettes().get(i).getName();
+        }
+        values[0] = "None";
+        palette.setPossibleValues(values);
+        palette.registerCallback(new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                ShaderBatch postWorldBatch = OurCraft.getOurCraft().getRenderEngine().getPostWorldRenderBatch();
+                postWorldBatch.clear();
+                ColorPalette colorPalette = ColorPalette.fromName(palette.getValue());
+                if(colorPalette == null)
+                    postWorldBatch.add(OurCraft.getOurCraft().getRenderEngine().getBlitShader());
+                else
+                    postWorldBatch.add(colorPalette.getShader());
+            }
+        });
+
     }
 
     public void loadFrom(File file) throws IOException
@@ -61,6 +85,14 @@ public class GameSettings
         fullscreenType.setValue(EnumFullscreenType.valueOf(configuration.get(fullscreenType.getID(), EnumFullscreenType.NATIVE.name())));
 
         palette.setValue(configuration.get(palette.getID(), "none"));
+
+        ShaderBatch postWorldBatch = OurCraft.getOurCraft().getRenderEngine().getPostWorldRenderBatch();
+        postWorldBatch.clear();
+        ColorPalette colorPalette = ColorPalette.fromName(palette.getValue());
+        if(colorPalette == null)
+            postWorldBatch.add(OurCraft.getOurCraft().getRenderEngine().getBlitShader());
+        else
+            postWorldBatch.add(colorPalette.getShader());
     }
 
     public void saveTo(File file) throws IOException

@@ -23,7 +23,7 @@ public class GuiComboBox extends GuiPanel
         textField.setEditable(false);
         addWidget(textField);
 
-        this.dropDownButton = new GuiIconButton(1, x + w - 32, y + 4, new ResourceLocation("dzqdq"));
+        this.dropDownButton = new GuiIconButton(1, x + w - 32, y + 4, new ResourceLocation("ourcraft", "textures/gui/down.png"));
         addWidget(dropDownButton);
 
         this.list = new GuiList<>(2, 4, h - h / 4, w - 8, h, 20);
@@ -34,7 +34,7 @@ public class GuiComboBox extends GuiPanel
 
     public void actionPerformed(GuiWidget widget)
     {
-        if(widget.getID() == 1)
+        if(widget.getID() == 0 || widget.getID() == 1)
         {
             list.visible = !list.visible;
             list.enabled = list.visible;
@@ -82,6 +82,19 @@ public class GuiComboBox extends GuiPanel
         list.clear();
         for(String val : values)
             list.addSlot(new GuiSimpleTextSlot(new GuiLabel(-1, 0, 0, val, fontRenderer)));
+    }
+
+    public boolean onButtonReleased(int mx, int my, int button)
+    {
+        boolean result = super.onButtonReleased(mx, my, button);
+
+        if(!result)
+        {
+            list.visible = false;
+            list.enabled = false;
+            textField.setShowText(true);
+        }
+        return result;
     }
 
     public String[] getValues()
