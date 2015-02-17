@@ -33,10 +33,10 @@ public class GuiSettings extends Gui
             else if(option.getType() == GameOptionType.CHOICE)
             {
                 widget = new GuiComboBox(0, 0, 0, 200, 40, oc, fontRenderer);
-                String[] values = new String[ColorPalette.getPalettes().size()];
-                for(int i = 0; i < ColorPalette.getPalettes().size(); i++ )
+                String[] values = new String[option.getPossibleValues().length];
+                for(int i = 0; i < option.getPossibleValues().length; i++ )
                 {
-                    values[i] = ColorPalette.getPalettes().get(i).getName();
+                    values[i] = option.getPossibleValues()[i].toString();
                 }
                 ((GuiComboBox) widget).setValues(values);
                 ((GuiComboBox) widget).setSelected((String) option.getValue());
@@ -98,6 +98,9 @@ public class GuiSettings extends Gui
                     option.setValue((T) ((GuiComboBox) widget).getSelected());
                 }
             }
+
+            if(option.getCallback() != null)
+                option.getCallback().run();
         }
 
         public boolean onMouseWheelMoved(int index, int x, int y, int w, int h, int mx, int my, int dwheel, GuiList<?> owner)
