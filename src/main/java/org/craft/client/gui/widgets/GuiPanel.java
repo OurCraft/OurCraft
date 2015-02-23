@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.common.collect.*;
 
 import org.craft.client.*;
+import org.craft.client.gui.layout.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.modding.events.gui.*;
@@ -16,6 +17,7 @@ public class GuiPanel extends GuiWidget
     protected OurCraft        oc;
     protected FontRenderer    fontRenderer;
     protected boolean         forceDrawAll;
+    private IGuiLayout        layout;
 
     public GuiPanel(int x, int y, int w, int h, OurCraft oc, FontRenderer fontRenderer)
     {
@@ -25,6 +27,7 @@ public class GuiPanel extends GuiWidget
     public GuiPanel(int id, int x, int y, int w, int h, OurCraft oc, FontRenderer fontRenderer)
     {
         super(id, x, y, w, h);
+        layout = new GuiAbsoluteLayout();
         this.fontRenderer = fontRenderer;
         widgets = Lists.newArrayList();
         this.oc = oc;
@@ -41,10 +44,48 @@ public class GuiPanel extends GuiWidget
         super.setLocation(x, y);
     }
 
+    public IGuiLayout getLayout()
+    {
+        return layout;
+    }
+
+    public void setLayout(IGuiLayout layout)
+    {
+        this.layout = layout;
+    }
+
     public void addWidget(GuiWidget widget)
     {
-        widget.setLocation(widget.getX() + getX(), widget.getY() + getY());
+        layout.onAdd(widget, this);
         widgets.add(widget);
+    }
+
+    public void pack()
+    {
+        float minX = Float.POSITIVE_INFINITY;
+        float minY = Float.POSITIVE_INFINITY;
+        float maxX = Float.NEGATIVE_INFINITY;
+        float maxY = Float.NEGATIVE_INFINITY;
+        for(GuiWidget widget : widgets)
+        {
+            int relMinX = widget.getX() - getX();
+            int relMinY = widget.getY() - getY();
+
+            int relMaxX = (widget.getX() + widget.getWidth()) - getX();
+            int relMaxY = (widget.getY() + widget.getHeight()) - getY();
+
+            if(relMinX < minX)
+                minX = relMinX;
+            if(relMinY < minY)
+                minY = relMinY;
+            if(relMaxX > maxX)
+                maxX = relMaxX;
+            if(relMaxY > maxY)
+                maxY = relMaxY;
+        }
+
+        this.setWidth((int) (maxX - minX));
+        this.setHeight((int) (maxY - minY));
     }
 
     @Override

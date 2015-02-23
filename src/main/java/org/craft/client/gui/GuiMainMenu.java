@@ -39,6 +39,7 @@ public class GuiMainMenu extends Gui
     @Override
     public void init()
     {
+        //   setLayout(new GuiFlowLayout());
         if(!oc.getSoundProducer().isMusicPlaying())
             oc.getSoundProducer().playBackgroundMusic("BlitZEcho-Hanging_On");
         addWidget(new GuiButton(0, oc.getDisplayWidth() / 2 - 150, oc.getDisplayHeight() / 2, 300, 40, I18n.format("main.play.singleplayer"), getFontRenderer()));

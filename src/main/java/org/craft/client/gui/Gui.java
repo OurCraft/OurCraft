@@ -7,7 +7,7 @@ import java.io.*;
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
-import org.craft.client.render.texture.Texture;
+import org.craft.client.render.texture.*;
 import org.craft.maths.*;
 import org.craft.modding.events.gui.*;
 import org.craft.resources.*;
@@ -16,9 +16,9 @@ public abstract class Gui extends GuiPanel
 {
 
     public static ResourceLocation widgetsTexture = new ResourceLocation("ourcraft", "textures/gui/widgets.png");
-    private static OpenGLBuffer buffer;
-    private static Texture      backgroundTexture;
-    private        GuiPopupMenu popupMenu;
+    private static OpenGLBuffer    buffer;
+    private static Texture         backgroundTexture;
+    private GuiPopupMenu           popupMenu;
 
     public Gui(OurCraft game)
     {
@@ -119,6 +119,12 @@ public abstract class Gui extends GuiPanel
     public boolean pausesGame()
     {
         return false;
+    }
+
+    @Override
+    public void pack()
+    {
+        ;
     }
 
     /**
