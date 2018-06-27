@@ -1,5 +1,8 @@
 package org.craft.client.gui;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_T;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.glfwGetKey;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.util.*;
@@ -15,7 +18,6 @@ import org.craft.utils.*;
 import org.craft.utils.CollisionInfos.CollisionType;
 import org.craft.world.*;
 import org.craft.world.biomes.*;
-import org.lwjgl.input.*;
 
 public class GuiIngame extends Gui
 {
@@ -140,7 +142,7 @@ public class GuiIngame extends Gui
 
                 renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             }
-            if(Keyboard.isKeyDown(Keyboard.KEY_T))
+            if(glfwGetKey(OurCraft.getOurCraft().windowPointer, GLFW_KEY_T) == GLFW_PRESS)
             {
                 title.setFadeInDuration(2000);
                 title.setFadeOutDuration(2000);

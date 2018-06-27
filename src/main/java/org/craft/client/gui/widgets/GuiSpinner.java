@@ -2,7 +2,7 @@ package org.craft.client.gui.widgets;
 
 import org.craft.client.*;
 import org.craft.client.render.fonts.*;
-import org.lwjgl.input.*;
+import org.lwjgl.glfw.GLFW;
 
 public class GuiSpinner extends GuiPanel
 {
@@ -74,12 +74,12 @@ public class GuiSpinner extends GuiPanel
         if(textInput.isFocused())
             if(GuiTextField.isLetter(c) && c < '0' || c > '9')
                 return false;
-            else if(id == Keyboard.KEY_UP)
+            else if(id == GLFW.GLFW_KEY_UP)
             {
                 value += step;
                 updateDisplay();
             }
-            else if(id == Keyboard.KEY_DOWN)
+            else if(id == GLFW.GLFW_KEY_DOWN)
             {
                 value -= step;
                 updateDisplay();

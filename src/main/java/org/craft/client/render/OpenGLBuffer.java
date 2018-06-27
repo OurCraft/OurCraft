@@ -1,6 +1,8 @@
 package org.craft.client.render;
 
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.nio.*;
 import java.util.*;
@@ -15,6 +17,7 @@ import com.google.common.collect.Lists;
 public class OpenGLBuffer
 {
 
+    private final int vaoID;
     private int          vboID;
     private int          iboID;
     private List<Vertex> vertices;
@@ -28,6 +31,7 @@ public class OpenGLBuffer
     {
         vboID = glGenBuffers();
         iboID = glGenBuffers();
+        vaoID = glGenVertexArrays();
         vertices = Lists.newArrayList();
     }
 
@@ -46,6 +50,7 @@ public class OpenGLBuffer
      */
     public void upload()
     {
+        glBindVertexArray(vaoID);
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(verticesLength * Vertex.SIZE_IN_FLOATS);
         for(int i = 0; i < verticesLength; i++ )
@@ -78,6 +83,7 @@ public class OpenGLBuffer
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
     }
 
     /**
@@ -309,5 +315,9 @@ public class OpenGLBuffer
     public int getIndex(int indexIndex)
     {
         return indices.get(indexIndex);
+    }
+
+    public int getVaoID() {
+        return vaoID;
     }
 }

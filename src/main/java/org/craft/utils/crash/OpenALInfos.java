@@ -9,8 +9,8 @@ public class OpenALInfos implements CrashInfos
     public String getInfos()
     {
         String s = SECTION_START + " OpenAL " + SECTION_END;
-        s += "\n\tVersion: " + AL10.alGetString(AL10.AL_VERSION);
-        s += "\n\tVendor: " + AL10.alGetString(AL10.AL_VENDOR);
+//        s += "\n\tVersion: " + AL10.alGetString(AL10.AL_VERSION);
+//        s += "\n\tVendor: " + AL10.alGetString(AL10.AL_VENDOR);
         return s;
     }
 

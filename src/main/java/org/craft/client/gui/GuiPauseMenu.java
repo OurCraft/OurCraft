@@ -2,7 +2,7 @@ package org.craft.client.gui;
 
 import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
-import org.lwjgl.input.*;
+import org.lwjgl.glfw.GLFW;
 
 public class GuiPauseMenu extends Gui
 {
@@ -53,7 +53,7 @@ public class GuiPauseMenu extends Gui
     public boolean keyReleased(int id, char c)
     {
         super.keyReleased(id, c);
-        if(id == Keyboard.KEY_ESCAPE)
+        if(id == GLFW.GLFW_KEY_ESCAPE)
         {
             oc.openMenu(new GuiIngame(oc));
         }

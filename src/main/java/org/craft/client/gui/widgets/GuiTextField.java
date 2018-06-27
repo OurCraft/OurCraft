@@ -1,12 +1,13 @@
 package org.craft.client.gui.widgets;
 
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
+import org.craft.client.OurCraft;
 import org.craft.client.gui.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
 import org.craft.resources.*;
-import org.lwjgl.input.*;
 
 public class GuiTextField extends GuiWidget
 {
@@ -198,9 +199,9 @@ public class GuiTextField extends GuiWidget
     {
         if(focused && editable)
         {
-            if(id == Keyboard.KEY_RIGHT)
+            if(id == GLFW_KEY_RIGHT)
             {
-                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+                if(glfwGetKey(OurCraft.getOurCraft().windowPointer, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(OurCraft.getOurCraft().windowPointer, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
                 {
                     incrementSecondCursorPos();
                 }
@@ -210,9 +211,9 @@ public class GuiTextField extends GuiWidget
                     secondCursorPos = cursorPos;
                 }
             }
-            else if(id == Keyboard.KEY_LEFT)
+            else if(id == GLFW_KEY_LEFT)
             {
-                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+                if(glfwGetKey(OurCraft.getOurCraft().windowPointer, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(OurCraft.getOurCraft().windowPointer, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
                 {
                     decrementSecondCursorPos();
                 }
@@ -222,14 +223,14 @@ public class GuiTextField extends GuiWidget
                     secondCursorPos = cursorPos;
                 }
             }
-            else if(id == Keyboard.KEY_DELETE)
+            else if(id == GLFW_KEY_DELETE)
             {
                 if(cursorPos == secondCursorPos)
                     deleteBetweenPos(cursorPos, cursorPos + 1);
                 else
                     deleteBetweenPos(cursorPos, secondCursorPos);
             }
-            else if(id == Keyboard.KEY_BACK)
+            else if(id == GLFW_KEY_BACKSPACE)
             {
                 if(cursorPos == secondCursorPos)
                     deleteBetweenPos(cursorPos - 1, cursorPos);

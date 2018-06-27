@@ -1,6 +1,10 @@
 package org.craft.client;
 
-import org.lwjgl.input.*;
+import org.lwjgl.glfw.GLFW;
+
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_NORMAL;
 
 public class MouseHandler
 {
@@ -11,31 +15,33 @@ public class MouseHandler
 
     public void update()
     {
-        dx = Mouse.getDX();
-        dy = Mouse.getDY();
+        //dx = Mouse.getDX();
+        //dy = Mouse.getDY();
     }
 
     public int getDX()
     {
-        return dx;
+        return OurCraft.getOurCraft().mouseDX;
     }
 
     public int getDY()
     {
-        return dy;
+        return -OurCraft.getOurCraft().mouseDY;
     }
 
     public void grab()
     {
-        if(!grabbed)
-            Mouse.setGrabbed(true);
+        GLFW.glfwSetInputMode(OurCraft.getOurCraft().windowPointer, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
+        // TODO if(!grabbed)
+            //Mouse.setGrabbed(true);
         grabbed = true;
     }
 
     public void ungrab()
     {
-        if(grabbed)
-            Mouse.setGrabbed(false);
+        GLFW.glfwSetInputMode(OurCraft.getOurCraft().windowPointer, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        // TODO if(grabbed)
+        //    Mouse.setGrabbed(false);
         grabbed = false;
     }
 }

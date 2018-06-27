@@ -116,15 +116,7 @@ public class Shader implements IDisposable
         int l = getLocation(uniform);
         if(l == -1)
             return this;
-        if(floatBuffer8 == null)
-        {
-            floatBuffer8 = IOUtils.createFloatBuffer(4 * 2);
-        }
-        floatBuffer8.clear();
-        FloatBuffer buffer = floatBuffer8;
-        v.write(buffer);
-        buffer.flip();
-        glUniform2(l, buffer);
+        glUniform2f(l, v.x, v.y);
         return this;
     }
 
@@ -136,15 +128,7 @@ public class Shader implements IDisposable
         int l = getLocation(uniform);
         if(l == -1)
             return this;
-        if(floatBuffer12 == null)
-        {
-            floatBuffer12 = IOUtils.createFloatBuffer(4 * 3);
-        }
-        floatBuffer12.clear();
-        FloatBuffer buffer = floatBuffer12;
-        v.write(buffer);
-        buffer.flip();
-        glUniform3(l, buffer);
+        glUniform3f(l, v.getX(), v.getY(), v.getZ());
         return this;
     }
 
@@ -164,7 +148,7 @@ public class Shader implements IDisposable
         FloatBuffer buffer = floatBuffer16;
         m.write(buffer);
         buffer.flip();
-        glUniformMatrix4(l, true, buffer);
+        glUniformMatrix4fv(l, true, buffer);
         return this;
     }
 

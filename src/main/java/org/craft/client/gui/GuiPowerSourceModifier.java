@@ -10,7 +10,7 @@ import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.maths.*;
 import org.craft.world.*;
-import org.lwjgl.input.*;
+import org.lwjgl.glfw.GLFW;
 
 public class GuiPowerSourceModifier extends Gui
 {
@@ -200,7 +200,7 @@ public class GuiPowerSourceModifier extends Gui
     @Override
     public boolean keyReleased(int id, char c)
     {
-        if(id == Keyboard.KEY_ESCAPE)
+        if(id == GLFW.GLFW_KEY_ESCAPE)
         {
             oc.openMenu(new GuiIngame(oc));
             return true;

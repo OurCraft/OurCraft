@@ -4,7 +4,8 @@ import java.io.*;
 
 import org.craft.client.render.*;
 import org.craft.modding.*;
-import org.lwjgl.input.*;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class GameSettings
 {
@@ -70,11 +71,11 @@ public class GameSettings
     public void loadFrom(File file) throws IOException
     {
         configuration = new Configuration(file);
-        jumpKey.setValue(configuration.getInt(jumpKey.getID(), Keyboard.KEY_SPACE));
-        leftKey.setValue(configuration.getInt(leftKey.getID(), Keyboard.KEY_A));
-        rightKey.setValue(configuration.getInt(rightKey.getID(), Keyboard.KEY_D));
-        forwardKey.setValue(configuration.getInt(forwardKey.getID(), Keyboard.KEY_W));
-        backwardsKey.setValue(configuration.getInt(backwardsKey.getID(), Keyboard.KEY_S));
+        jumpKey.setValue(configuration.getInt(jumpKey.getID(), GLFW_KEY_SPACE));
+        leftKey.setValue(configuration.getInt(leftKey.getID(), GLFW_KEY_A));
+        rightKey.setValue(configuration.getInt(rightKey.getID(), GLFW_KEY_D));
+        forwardKey.setValue(configuration.getInt(forwardKey.getID(), GLFW_KEY_W));
+        backwardsKey.setValue(configuration.getInt(backwardsKey.getID(), GLFW_KEY_S));
         lang.setValue(configuration.get(lang.getID(), "en_US"));
         font.setValue(configuration.get(font.getID(), "default"));
         sensitivity.setValue(configuration.getFloat(sensitivity.getID(), 1f));

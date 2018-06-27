@@ -1,5 +1,6 @@
 package org.craft.client.render;
 
+import static org.craft.client.OurCraft.printIfGLError;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -96,19 +97,22 @@ public class RenderEngine implements IDisposable
 
     public void flushBuffer(OpenGLBuffer buffer, int mode)
     {
+        printIfGLError("pre flush buffer");
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
 
+        printIfGLError("Before drawing buffer0");
         glBindBuffer(GL_ARRAY_BUFFER, buffer.getVboID());
         glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 0);
         glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 12);
         glVertexAttribPointer(2, 4, GL_FLOAT, false, Vertex.SIZE_IN_FLOATS * 4, 20);
+        printIfGLError("post attrib pointer");
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.getIboID());
-        OurCraft.printIfGLError("Before drawing buffer");
+        printIfGLError("Before drawing buffer");
         glDrawElements(mode, buffer.getIndicesCount(), GL_UNSIGNED_INT, 0);
-        OurCraft.printIfGLError("After drawing buffer");
+        printIfGLError("After drawing buffer");
 
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
@@ -199,12 +203,19 @@ public class RenderEngine implements IDisposable
      */
     public void updateOpenGL()
     {
+        printIfGLError("pre shader projections");
+
         currentShader.bind();
+        printIfGLError("After shader bind");
+
         currentShader.setUniform("modelview", this.modelMatrix);
         currentShader.setUniform("projection", getProjectedViewMatrix());
+        printIfGLError("After matrix projections");
 
         Vector2 screenSize = Vector2.get(displayWidth, displayHeight);
         currentShader.setUniform("screenSize", screenSize);
+        printIfGLError("After screen size");
+
         screenSize.dispose();
     }
 
@@ -257,9 +268,12 @@ public class RenderEngine implements IDisposable
     {
         projectionHud = new Matrix4().initOrthographic(0, w, h, 0, 0, 1f);
         glViewport(0, 0, w, h);
+        printIfGLError("before switching to ortho, viewport");
         projectFromEntity = false;
+
+        printIfGLError("before switching to ortho, viewport2");
         setProjectionMatrix(projectionHud);
-        OurCraft.printIfGLError("After switching to ortho, size is " + w + ", " + h);
+        printIfGLError("After switching to ortho, size is " + w + ", " + h);
     }
 
     /**
@@ -316,7 +330,7 @@ public class RenderEngine implements IDisposable
             if(guiRendering) // hacks, hacks everywhere!
                 lastBoundTexture = object;
         }
-        OurCraft.printIfGLError("after texture bind");
+        printIfGLError("after texture bind");
     }
 
     /**
@@ -463,7 +477,7 @@ public class RenderEngine implements IDisposable
     public void beginWorldRendering()
     {
         setCurrentShader(blitShader);
-        OurCraft.printIfGLError("before rendering world");
+        printIfGLError("before rendering world");
         setCurrentShader(blitShader);
         frameBuffer.bind();
         glViewport(0, 0, displayWidth, displayHeight);
@@ -476,11 +490,11 @@ public class RenderEngine implements IDisposable
      */
     public void flushWorldRendering()
     {
-        OurCraft.printIfGLError("after rendering world");
+        printIfGLError("after rendering world");
         disableGLCap(GL_DEPTH_TEST);
         switchToOrtho();
         shaderBatch.apply(0, getColorBuffer(), renderBuffer, this);
-        OurCraft.printIfGLError("after post-processing world");
+        printIfGLError("after post-processing world");
         setCurrentShader(blitShader);
     }
 
@@ -504,7 +518,7 @@ public class RenderEngine implements IDisposable
     {
         renderStatesStack.push(renderState);
         renderState = renderState.clone();
-        OurCraft.printIfGLError("after pushing render engine state");
+        printIfGLError("after pushing render engine state");
         return this;
     }
 
@@ -516,7 +530,7 @@ public class RenderEngine implements IDisposable
         RenderState pop = renderStatesStack.pop();
         pop.apply(this);
         renderState = pop;
-        OurCraft.printIfGLError("After popping render engine state");
+        printIfGLError("After popping render engine state");
         return this;
     }
 
@@ -542,7 +556,7 @@ public class RenderEngine implements IDisposable
     public RenderEngine enableGLCap(int cap)
     {
         glEnable(cap);
-        OurCraft.printIfGLError("after enabling GL cap: " + OpenGLHelper.getCapName(cap));
+        printIfGLError("after enabling GL cap: " + OpenGLHelper.getCapName(cap));
         renderState.setGLCap(cap, true);
         return this;
     }
@@ -553,7 +567,7 @@ public class RenderEngine implements IDisposable
     public RenderEngine disableGLCap(int cap)
     {
         glDisable(cap);
-        OurCraft.printIfGLError("after disabling GL cap: " + OpenGLHelper.getCapName(cap));
+        printIfGLError("after disabling GL cap: " + OpenGLHelper.getCapName(cap));
         renderState.setGLCap(cap, false);
         return this;
     }
@@ -615,6 +629,7 @@ public class RenderEngine implements IDisposable
      */
     public void loadMatrices()
     {
+        printIfGLError("Pre matrix load");
         this.displayWidth = OurCraft.getOurCraft().getDisplayWidth();
         this.displayHeight = OurCraft.getOurCraft().getDisplayHeight();
         if(modelMatrix != null)
@@ -656,8 +671,11 @@ public class RenderEngine implements IDisposable
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        printIfGLError("pre framebuffer load");
         frameBuffer = new Framebuffer(displayWidth, displayHeight);
 
+        printIfGLError("Post matrix load");
     }
 
     public Shader getBlitShader()

@@ -1,3 +1,4 @@
+import org.gradle.internal.os.OperatingSystem
 import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 
@@ -55,12 +56,37 @@ compileJava.options.encoding = 'UTF-8'
 // tell the compileJava task to compile the filtered source 
 compileJava.source = sourceSets.filtered.java
 // Add dependencies processVersion to compileJava task
-compileJava.dependsOn processVersion 
+compileJava.dependsOn processVersion
+
+project.ext.lwjglVersion = "3.1.6"
+
+
+switch ( OperatingSystem.current() ) {
+    case OperatingSystem.WINDOWS:
+        project.ext.lwjglNatives = "natives-windows"
+        break
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.lwjglNatives = "natives-macos"
+        break
+}
 
 dependencies {
+    // LWJGL
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
+
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
-    compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
     compile 'io.netty:netty-all:4.0.25.Final'
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.code.gson:gson:2.3.1'

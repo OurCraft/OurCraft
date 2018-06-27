@@ -1,5 +1,6 @@
 package org.craft.client;
 
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
@@ -43,10 +44,9 @@ import org.craft.utils.crash.*;
 import org.craft.world.*;
 import org.craft.world.biomes.*;
 import org.lwjgl.*;
-import org.lwjgl.input.*;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.glu.*;
+import org.lwjgl.system.MemoryUtil;
 
 public class OurCraft implements Runnable, OurCraftInstance
 {
@@ -105,6 +105,12 @@ public class OurCraft implements Runnable, OurCraftInstance
     private JFrame                         renderWindow;
     private int                            oldWidth;
     private int                            oldHeight;
+    public long windowPointer;
+    private int mouseX;
+    private int mouseY;
+    protected int mouseDX;
+    protected int mouseDY;
+    private int mouseDWheel;
 
     public OurCraft()
     {
@@ -136,8 +142,21 @@ public class OurCraft implements Runnable, OurCraftInstance
             System.setProperty("org.lwjgl.input.Mouse.allowNegativeMouseCoords", "true");
 
             //Init OpenGL context and settings up the display
-            ContextAttribs context = new ContextAttribs(3, 2).withProfileCompatibility(true).withDebug(true);
-            Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
+            if(!glfwInit()) {
+                throw new RuntimeException("GLFW init failed");
+            }
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+            windowPointer = glfwCreateWindow(displayWidth, displayHeight, "OurCraft - "+getVersion(), MemoryUtil.NULL, MemoryUtil.NULL);
+
+            glfwShowWindow(windowPointer);
+
+            glfwMakeContextCurrent(windowPointer);
+            GL.createCapabilities();
+
+            /*Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
             Display.setIcon(new ByteBuffer[]
             {
                     ImageUtils.getPixels(ImageUtils.getFromClasspath("/assets/ourcraft/textures/favicon_128.png")),
@@ -156,11 +175,11 @@ public class OurCraft implements Runnable, OurCraftInstance
                     Log.error("Failing to create LWJGL context, falling back to classic context");
                     Display.create();
                 }
-            }
-            if(!GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
+            }*/
+            /*if(!GLContext.getCapabilities().GL_ARB_vertex_buffer_object)
             {
                 Log.fatal("Sorry, but this game only works with Vertex Buffer Objects and it seems your graphical card can't support it. :(");
-            }
+            }*/
 
             //Init the RenderEngine
             ColorPalette.init(this);
@@ -168,9 +187,172 @@ public class OurCraft implements Runnable, OurCraftInstance
             renderEngine = new RenderEngine(assetsLoader);
             renderEngine.enableGLCap(GL_BLEND);
             renderEngine.setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            printIfGLError("post blend func");
             renderEngine.switchToOrtho();
             renderEngine.renderSplashScreen();
-            Display.update();
+            printIfGLError("post splash func");
+
+            glfwSetWindowSizeCallback(windowPointer, new GLFWWindowSizeCallback() {
+                @Override
+                public void invoke(long window, int width, int height) {
+                    setDisplayMode(width, height);
+                }
+            });
+
+            glfwSetCursorPosCallback(windowPointer, new GLFWCursorPosCallback() {
+                @Override
+                public void invoke(long window, double xpos, double ypos) {
+                    mouseDX = (int)xpos - mouseX;
+                    mouseDY = (int)ypos - mouseY;
+                    mouseX = (int)xpos;
+                    mouseY = (int)ypos;
+                }
+            });
+
+            glfwSetScrollCallback(windowPointer, new GLFWScrollCallback() {
+                @Override
+                public void invoke(long window, double xoffset, double yoffset) {
+                    mouseDWheel = (int)yoffset;
+                }
+            });
+
+            glfwSetMouseButtonCallback(windowPointer, new GLFWMouseButtonCallback() {
+                @Override
+                public void invoke(long window, int button, int action, int mods) {
+                    int mouseButton = button;
+                    boolean state = action == GLFW_PRESS;
+                    int x = mouseX;
+                    int y = mouseY;
+                    int dx = mouseDX;
+                    int dy = mouseDY;
+                    int deltaWheel = mouseDWheel;
+                    if(currentMenu != null)
+                    {
+                        if(mouseButton != -1)
+                        {
+                            if(state)
+                                currentMenu.onButtonPressed(x, y, mouseButton);
+                            else
+                                currentMenu.onButtonReleased(x, y, mouseButton);
+                        }
+
+                        if(deltaWheel != 0)
+                        {
+                            currentMenu.handleMouseWheelMovement(x, y, deltaWheel);
+                        }
+                        else
+                        {
+                            currentMenu.handleMouseMovement(x, y, dx, dy);
+                        }
+                    }
+                    if(playerController != null && (currentMenu == null || !currentMenu.requiresMouse()))
+                    {
+                        if(!state)
+                        {
+                            if(mouseButton == 0)
+                            {
+                                playerController.onLeftClick(getObjectInFront());
+                            }
+                            else if(mouseButton == 1)
+                            {
+                                playerController.onRightClick(getObjectInFront());
+                            }
+                        }
+                        if(deltaWheel != 0)
+                        {
+                            playerController.onMouseWheelMoved(deltaWheel);
+                        }
+                    }
+                }
+            });
+
+            glfwSetCharCallback(windowPointer, new GLFWCharCallback() {
+                @Override
+                public void invoke(long window, int codepoint) {
+                    currentMenu.keyReleased(0, Character.toChars(codepoint)[0]);
+                }
+            });
+
+            glfwSetKeyCallback(windowPointer, new GLFWKeyCallback() {
+                @Override
+                public void invoke(long window, int key, int scancode, int action, int mods) {
+                    int id = key;
+                    char c = '\0';
+                    boolean state = action == GLFW_PRESS;
+                    if(currentMenu != null)
+                    {
+                        if(!state)
+                        {
+                            currentMenu.keyPressed(id, c);
+                            if(id == GLFW_KEY_F2)
+                            {
+                                File out = new File(SystemUtils.getGameFolder(), "screenshots/" + System.currentTimeMillis() + ".png");
+                                try
+                                {
+                                    if(!out.getParentFile().exists())
+                                        out.getParentFile().mkdirs();
+                                    out.createNewFile();
+                                    ImageIO.write(takeScreenshot(), "png", out);
+                                }
+                                catch(Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else if(id == GLFW_KEY_F)
+                            {
+                                if(clientWorld != null)
+                                {
+                                    EntityPrimedTNT tnt = new EntityPrimedTNT(clientWorld);
+                                    tnt.setFuse(120L);
+                                    tnt.setSize(1, 1, 1);
+                                    tnt.setLocation(player.posX, player.posY, player.posZ);
+                                    clientWorld.spawn(tnt);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if(id == GLFW_KEY_ESCAPE)
+                            {
+                                if(clientWorld != null && !(currentMenu instanceof GuiPauseMenu))
+                                {
+                                    openMenu(new GuiPauseMenu(OurCraft.this));
+                                }
+                                else if(clientWorld == null)
+                                    running = false;
+                            }
+                            else if(id == GLFW_KEY_F11)
+                            {
+                                toggleFullscreen();
+                            }
+                    /*                    if(id == Keyboard.KEY_RETURN)
+                                        {
+                                            try
+                                            {
+                                                setResourcesPack("test.zip");
+                                            }
+                                            catch(Exception e)
+                                            {
+                                                e.printStackTrace();
+                                                try
+                                                {
+                                                    modelLoader.clearModels();
+                                                    renderEngine.loadShaders();
+                                                    renderEngine.reloadLocations();
+                                                }
+                                                catch(Exception e1)
+                                                {
+                                                    ;
+                                                }
+                                            }
+                                        }*/
+                            currentMenu.keyReleased(id, c);
+                        }
+                    }
+                }
+            });
+          //  Display.update();
 
             mouseHandler = new MouseHandler();
             //Init OpenGL CapNames for crash report system
@@ -215,18 +397,28 @@ public class OurCraft implements Runnable, OurCraftInstance
             Biomes.init();
             eventBus.fireEvent(new ModInitEvent(this), null, null);
 
+            printIfGLError("After registry inits");
+
             modelLoader = new ModelLoader();
             renderBlocks = new RenderBlocks(renderEngine, modelLoader, new ResourceLocation("ourcraft", "models/block/cube_all.json"));
             renderItems = new RenderItems(renderEngine, modelLoader);
             renderEngine.createBlockAndItemMap(renderBlocks, renderItems);
             fallbackRenderer = new FallbackRender();
 
+            printIfGLError("After renderers");
+
             AbstractRender.registerVanillaRenderers();
 
+            printIfGLError("After vanilla renderers");
+
             particleRenderer = new ParticleRenderer(20000);
+
+            printIfGLError("After particle renderer init");
             openMenu(new GuiMainMenu(this));
 
             loadCrosshairBuffer();
+
+            printIfGLError("After crosshair buffer");
 
             selectionBoxBuffer = new OpenGLBuffer();
             selectionBoxBuffer.addVertex(Vertex.get(Vector3.get(0, 0, 0))); //0
@@ -272,6 +464,8 @@ public class OurCraft implements Runnable, OurCraftInstance
             CommonHandler.setCurrentContainer(null);
 
             running = true;
+
+            printIfGLError("After init");
             while(running)
             {
                 tick();
@@ -325,6 +519,9 @@ public class OurCraft implements Runnable, OurCraftInstance
         double now = System.nanoTime();
         int updateCount = 0;
         {
+            mouseDX = 0;
+            mouseDY = 0;
+            glfwPollEvents();
             double delta = timeBetweenUpdates / 1000000000;
             while(now - lastUpdateTime > timeBetweenUpdates && updateCount < maxUpdatesBeforeRender)
             {
@@ -339,17 +536,19 @@ public class OurCraft implements Runnable, OurCraftInstance
             }
 
             render(delta);
-            Display.update();
+            glfwSwapBuffers(windowPointer);
+            //Display.update();
 
-            if(Display.isCloseRequested())
+
+            if(glfwWindowShouldClose(windowPointer))
                 running = false;
 
-            if(Display.wasResized() && !fullscreen)
+            /*if(Display.wasResized() && !fullscreen)
             {
                 int w = Display.getWidth();
                 int h = Display.getHeight();
                 setDisplayMode(w, h);
-            }
+            }*/
 
             lastRenderTime = now;
             // Update the frames we got.
@@ -358,7 +557,8 @@ public class OurCraft implements Runnable, OurCraftInstance
             if(thisSecond > lastSecondTime)
             {
                 fps = frame;
-                Display.setTitle("OurCraft - " + getVersion() + " - " + fps + " FPS");
+                //Display.setTitle("OurCraft - " + getVersion() + " - " + fps + " FPS");
+                glfwSetWindowTitle(windowPointer, "OurCraft - " + getVersion() + " - " + fps + " FPS");
                 frame = 0;
                 lastSecondTime = thisSecond;
             }
@@ -382,6 +582,8 @@ public class OurCraft implements Runnable, OurCraftInstance
 
     private void setDisplayMode(int w, int h)
     {
+        if(w <= 0 || h <= 0)
+            return;
         oldWidth = displayWidth;
         oldHeight = displayHeight;
         displayWidth = w;
@@ -424,130 +626,6 @@ public class OurCraft implements Runnable, OurCraftInstance
                 currentMenu.build();
             }
         }
-        while(Mouse.next())
-        {
-            int mouseButton = Mouse.getEventButton();
-            boolean state = Mouse.getEventButtonState();
-            int x = Mouse.getEventX();
-            int y = displayHeight - Mouse.getEventY();
-            int dx = Mouse.getEventDX();
-            int dy = Mouse.getEventDY();
-            int deltaWheel = Mouse.getEventDWheel();
-            if(currentMenu != null)
-            {
-                if(mouseButton != -1)
-                {
-                    if(state)
-                        currentMenu.onButtonPressed(x, y, mouseButton);
-                    else
-                        currentMenu.onButtonReleased(x, y, mouseButton);
-                }
-
-                if(deltaWheel != 0)
-                {
-                    currentMenu.handleMouseWheelMovement(x, y, deltaWheel);
-                }
-                else
-                {
-                    currentMenu.handleMouseMovement(x, y, dx, dy);
-                }
-            }
-            if(playerController != null && (currentMenu == null || !currentMenu.requiresMouse()))
-            {
-                if(!state)
-                {
-                    if(mouseButton == 0)
-                    {
-                        playerController.onLeftClick(getObjectInFront());
-                    }
-                    else if(mouseButton == 1)
-                    {
-                        playerController.onRightClick(getObjectInFront());
-                    }
-                }
-                if(deltaWheel != 0)
-                {
-                    playerController.onMouseWheelMoved(deltaWheel);
-                }
-            }
-        }
-        while(Keyboard.next())
-        {
-            int id = Keyboard.getEventKey();
-            char c = Keyboard.getEventCharacter();
-            boolean state = Keyboard.getEventKeyState();
-            if(currentMenu != null)
-            {
-                if(!state)
-                {
-                    currentMenu.keyPressed(id, c);
-                    if(id == Keyboard.KEY_F2)
-                    {
-                        File out = new File(SystemUtils.getGameFolder(), "screenshots/" + System.currentTimeMillis() + ".png");
-                        try
-                        {
-                            if(!out.getParentFile().exists())
-                                out.getParentFile().mkdirs();
-                            out.createNewFile();
-                            ImageIO.write(takeScreenshot(), "png", out);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                    else if(id == Keyboard.KEY_F)
-                    {
-                        if(clientWorld != null)
-                        {
-                            EntityPrimedTNT tnt = new EntityPrimedTNT(clientWorld);
-                            tnt.setFuse(120L);
-                            tnt.setSize(1, 1, 1);
-                            tnt.setLocation(player.posX, player.posY, player.posZ);
-                            clientWorld.spawn(tnt);
-                        }
-                    }
-                }
-                else
-                {
-                    if(id == Keyboard.KEY_ESCAPE)
-                    {
-                        if(clientWorld != null && !(currentMenu instanceof GuiPauseMenu))
-                        {
-                            openMenu(new GuiPauseMenu(this));
-                        }
-                        else if(clientWorld == null)
-                            running = false;
-                    }
-                    else if(id == Keyboard.KEY_F11)
-                    {
-                        toggleFullscreen();
-                    }
-                    /*                    if(id == Keyboard.KEY_RETURN)
-                                        {
-                                            try
-                                            {
-                                                setResourcesPack("test.zip");
-                                            }
-                                            catch(Exception e)
-                                            {
-                                                e.printStackTrace();
-                                                try
-                                                {
-                                                    modelLoader.clearModels();
-                                                    renderEngine.loadShaders();
-                                                    renderEngine.reloadLocations();
-                                                }
-                                                catch(Exception e1)
-                                                {
-                                                    ;
-                                                }
-                                            }
-                                        }*/
-                    currentMenu.keyReleased(id, c);
-                }
-            }
-        }
         if(currentMenu != null)
         {
             currentMenu.update();
@@ -561,27 +639,27 @@ public class OurCraft implements Runnable, OurCraftInstance
         mouseHandler.update();
         if(playerController != null && (currentMenu == null || !currentMenu.pausesGame()))
         {
-            if(Keyboard.isKeyDown(settings.forwardKey.getValue()))
+            if(isKeyDown(settings.forwardKey.getValue()))
             {
                 playerController.onMoveForwardRequested();
             }
-            if(Keyboard.isKeyDown(settings.backwardsKey.getValue()))
+            if(isKeyDown(settings.backwardsKey.getValue()))
             {
                 playerController.onMoveBackwardsRequested();
             }
-            if(Keyboard.isKeyDown(settings.leftKey.getValue()))
+            if(isKeyDown(settings.leftKey.getValue()))
             {
                 playerController.onMoveLeftRequested();
             }
-            if(Keyboard.isKeyDown(settings.rightKey.getValue()))
+            if(isKeyDown(settings.rightKey.getValue()))
             {
                 playerController.onMoveRightRequested();
             }
-            if(Keyboard.isKeyDown(settings.jumpKey.getValue()))
+            if(isKeyDown(settings.jumpKey.getValue()))
             {
                 playerController.onJumpRequested();
             }
-            if(Mouse.isButtonDown(2))
+            if(isButtonDown(2))
             {
                 playerController.onMouseWheelClicked();
             }
@@ -602,9 +680,17 @@ public class OurCraft implements Runnable, OurCraftInstance
         }
     }
 
+    private boolean isButtonDown(int value) {
+        return glfwGetMouseButton(windowPointer, value) == GLFW_PRESS;
+    }
+
+    private boolean isKeyDown(int value) {
+        return glfwGetKey(windowPointer, value) == GLFW_PRESS;
+    }
+
     private void toggleFullscreen()
     {
-        fullscreen = !fullscreen;
+      /*  fullscreen = !fullscreen;
         EnumFullscreenType type = settings.fullscreenType.getValue();
         if(fullscreen)
         {
@@ -692,7 +778,9 @@ public class OurCraft implements Runnable, OurCraftInstance
                 renderWindow.dispose();
                 renderWindow = null;
             }
-        }
+        }*/
+
+      // TODO
     }
 
     /**
@@ -708,17 +796,23 @@ public class OurCraft implements Runnable, OurCraftInstance
      */
     private void render(double delta, boolean drawGui)
     {
+
+        printIfGLError("pre world clear");
         List<Chunk> visiblesChunks = getVisibleChunks();
         glViewport(0, 0, displayWidth, displayHeight);
         glClearColor(0, 0.6666667f, 1, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+        printIfGLError("After world clear");
         if(clientWorld != null)
         {
             renderEngine.enableGLCap(GL_DEPTH_TEST);
             renderEngine.switchToPerspective();
             renderEngine.beginWorldRendering();
             particleRenderer.renderAll(renderEngine);
+            printIfGLError("After particle render");
             renderWorld(visiblesChunks, delta, drawGui);
+            printIfGLError("After world render");
             if(player != null)
             {
                 if(player.getHeldItem() != null && player.getHeldItem().getStackable() != null)
@@ -740,6 +834,8 @@ public class OurCraft implements Runnable, OurCraftInstance
                     renderEngine.setProjectFromEntity(true);
                     m.dispose();
                 }
+
+                printIfGLError("After item in hand render");
             }
             renderEngine.setModelviewMatrix(Matrix4.get().initIdentity());
             renderEngine.flushWorldRendering();
@@ -761,8 +857,8 @@ public class OurCraft implements Runnable, OurCraftInstance
                 renderEngine.disableGLCap(GL_COLOR_LOGIC_OP);
             }
 
-            int mx = Mouse.getX();
-            int my = Mouse.getY();
+            int mx = mouseX;
+            int my = mouseY;
             if(currentMenu != null)
             {
                 currentMenu.render(mx, displayHeight - my, renderEngine);
@@ -890,7 +986,8 @@ public class OurCraft implements Runnable, OurCraftInstance
         if(errorFlag != GL_NO_ERROR)
         {
             // Log the error.
-            Log.error("[GL ERROR] " + GLU.gluErrorString(errorFlag) + (trailer == null ? "" : " " + trailer));
+            //Log.error("[GL ERROR] " + GLU.gluErrorString(errorFlag) + (trailer == null ? "" : " " + trailer));
+            Log.error("[GL ERROR] " + errorFlag + (trailer == null ? "" : " " + trailer));
         }
     }
 
@@ -1147,7 +1244,7 @@ public class OurCraft implements Runnable, OurCraftInstance
 
     public static BufferedImage takeScreenshot()
     {
-        return takeScreenshot(0, 0, Display.getWidth(), Display.getHeight());
+        return takeScreenshot(0, 0, OurCraft.getOurCraft().displayWidth, OurCraft.getOurCraft().displayHeight);
     }
 
     public static BufferedImage takeScreenshot(int x, int y, int w, int h)
@@ -1202,7 +1299,9 @@ public class OurCraft implements Runnable, OurCraftInstance
     {
         renderEngine.dispose();
         sndProducer.cleanUp();
-        Display.destroy();
+        //Display.destroy();
+        glfwDestroyWindow(windowPointer);
+        glfwTerminate();
     }
 
     public PlayerController getPlayerController()

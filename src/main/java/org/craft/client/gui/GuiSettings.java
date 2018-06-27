@@ -4,7 +4,9 @@ import org.craft.client.*;
 import org.craft.client.gui.widgets.*;
 import org.craft.client.render.*;
 import org.craft.client.render.fonts.*;
-import org.lwjgl.input.*;
+import org.lwjgl.system.MemoryUtil;
+
+import static org.lwjgl.glfw.GLFW.glfwGetKeyName;
 
 public class GuiSettings extends Gui
 {
@@ -21,7 +23,7 @@ public class GuiSettings extends Gui
             if(option.getType() == GameOptionType.INPUT)
             {
                 T v = option.getValue();
-                String value = Keyboard.getKeyName((Integer) v);
+                String value = glfwGetKeyName((Integer) v, 0);
                 widget = new GuiButton(0, 0, 0, 200, 40, value, oc.getFontRenderer());
             }
             else if(option.getType() == GameOptionType.RANGE)
@@ -48,7 +50,7 @@ public class GuiSettings extends Gui
             option.setValue(v);
             if(option.getType() == GameOptionType.INPUT)
             {
-                ((GuiButton) widget).setText(Keyboard.getKeyName((Integer) option.getValue()));
+                ((GuiButton) widget).setText(glfwGetKeyName((Integer) option.getValue(), 0));
             }
             else if(option.getType() == GameOptionType.INPUT)
             {
